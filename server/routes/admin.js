@@ -8,8 +8,8 @@ const { ensureAuth, ensureGuast } = require('../config/auth');
 const Admin = require('../models/Admin');
 
 
-
-router.post('/register',
+/* ⛏️⛏️ ALL ROUTES WILL BE PROTECTED EXCEPT LOGIN ROUTE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
+router.post('/register', 
     check('username', "Must input a name").notEmpty(),
     // username must be an email
     check('email', "Email must not empty and a valid email").notEmpty().isEmail(),
@@ -28,7 +28,7 @@ router.post('/register',
         Admin.findOne({ email }, (err, emailResult) => {
             if (err) throw err;
             if (emailResult) {
-                allErr.push("Email already exist")
+                allErr.push({msg: "Email already exist"})
                 return res.status(400).json({ errors: allErr });
             } else {
                 // SAVE ADMIN 
