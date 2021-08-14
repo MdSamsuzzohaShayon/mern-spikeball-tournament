@@ -2,6 +2,9 @@
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import Login from '../components/admin/Login';
+import { Redirect } from 'react-router-dom';
+
+
 
 
 class Admin extends Component {
@@ -12,7 +15,7 @@ class Admin extends Component {
             loginEmail: "",
             loginPassword: "",
             errors: [],
-            success: ""
+            success: "",
         };
 
 
@@ -47,10 +50,10 @@ class Admin extends Component {
                     password: this.state.loginPassword
                 })
             });
-            if(response.status === 200){
+            if (response.status === 200) {
                 const textRes = await response.text();
                 const jsonRes = await JSON.parse(textRes);
-                console.log("Json - ", jsonRes);
+                // console.log("Json - ", jsonRes);
                 // if (jsonRes.user) {
                 //     this.setState({
                 //         errors: [],
@@ -58,18 +61,22 @@ class Admin extends Component {
                 //     });
                 //     // REDIRECT FROM  HERE TO DASHBOARD 
                 // }
-    
+
                 this.setState({
                     errors: [],
                     success: "Login successfull"
                 });
+
+                this.props.authValidation(true);
             }
 
             if (response.status === 400 || response.status === 401) {
                 this.setState({
-                    errors: [...this.state.errors, {msg: "Your email or password is invalid"}],
-                    success: ""
-                  })
+                    errors: [...this.state.errors, { msg: "Your email or password is invalid" }],
+                    success: "",
+                });
+                this.props.authValidation(false);
+
             }
         } catch (error) {
             console.log(error);
@@ -85,7 +92,7 @@ class Admin extends Component {
         return (
             <div className="Admin">
                 <div className="container">
-                            <Login success={this.state.success} handleChange={this.handleChange} errors={this.state.errors} handleLogin={this.handleLogin} />
+                    <Login success={this.state.success} handleChange={this.handleChange} errors={this.state.errors} handleLogin={this.handleLogin} />
                 </div>
                 {/* {this.checkErrors()} */}
             </div>

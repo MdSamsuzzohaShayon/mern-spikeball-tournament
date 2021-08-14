@@ -10,10 +10,7 @@ const Admin = require('../models/Admin');
 
 
 
-
-
-// hi
-/* ⛏️⛏️ ALL ROUTES WILL BE PROTECTED EXCEPT LOGIN ROUTE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
+/* ⛏️⛏️ ALL ROUTES WILL BE PROTECTED EXCEPT LOGIN ROUTE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.post('/register', ensureAuth,
     check('username', "Must input a name").notEmpty(),
     // username must be an email
@@ -52,22 +49,32 @@ router.post('/register', ensureAuth,
 
 
 
+
+
+/* ⛏️⛏️ LOGIN USERS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.post('/login',
     passport.authenticate('local'),
     function (req, res) {
         // If this function gets called, authentication was successful.
         // `req.user` contains the authenticated user.
         // console.log("User - ", req.user);
-        res.status(200).json({ admin: sendUser(req.user) });
+        res.status(200).json({ user: sendUser(req.user) });
     });
 
 
 
+router.get('/logout', (req, res) => {
+    req.logout();
+    res.status(200).json({ user: null });
+})
 
 
-// LIST ALL ADMINS 
+
+
+
+/* ⛏️⛏️ LIST ALL ADMINS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.get('/dashboard', ensureAuth, (req, res, next) => {
-    res.status(200).json({ admin: sendUser(req.user) });
+    res.status(200).json({ user: sendUser(req.user) });
 });
 
 
