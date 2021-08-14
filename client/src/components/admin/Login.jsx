@@ -7,7 +7,7 @@ function Login(props) {
         </div>
     ));
     // const errorList = [{msg: "null"}]
-    console.log(props.errors);
+    // console.log(props.errors);
     return (
         <div className="Login"  >
             {/* ⛏️⛏️ LOGIN ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */}

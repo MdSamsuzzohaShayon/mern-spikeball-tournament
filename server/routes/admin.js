@@ -3,13 +3,18 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const { sendUser } = require('../utils/helpers');
 const { ensureAuth, ensureGuast } = require('../config/auth');
 
 const Admin = require('../models/Admin');
 
 
+
+
+
+// hi
 /* ⛏️⛏️ ALL ROUTES WILL BE PROTECTED EXCEPT LOGIN ROUTE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/register', 
+router.post('/register', ensureAuth,
     check('username', "Must input a name").notEmpty(),
     // username must be an email
     check('email', "Email must not empty and a valid email").notEmpty().isEmail(),
@@ -28,7 +33,7 @@ router.post('/register',
         Admin.findOne({ email }, (err, emailResult) => {
             if (err) throw err;
             if (emailResult) {
-                allErr.push({msg: "Email already exist"})
+                allErr.push({ msg: "Email already exist" })
                 return res.status(400).json({ errors: allErr });
             } else {
                 // SAVE ADMIN 
@@ -52,8 +57,8 @@ router.post('/login',
     function (req, res) {
         // If this function gets called, authentication was successful.
         // `req.user` contains the authenticated user.
-        console.log("User - ",req.user);
-        res.status(200).json({ "user": req.user.name });
+        // console.log("User - ", req.user);
+        res.status(200).json({ admin: sendUser(req.user) });
     });
 
 
@@ -61,11 +66,8 @@ router.post('/login',
 
 
 // LIST ALL ADMINS 
-router.get('/dashboard', ensureAuth ,(req, res, next) => {
-    console.log("Req, user - ",req.user);
-    // res.json({ "user": req.user });
-    // res.status(200).json({"msg": "Authenticated"});
-    res.send("req.user");
+router.get('/dashboard', ensureAuth, (req, res, next) => {
+    res.status(200).json({ admin: sendUser(req.user) });
 });
 
 

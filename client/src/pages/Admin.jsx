@@ -2,8 +2,6 @@
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import Login from '../components/admin/Login';
-import Register from '../components/admin/Register';
-import { Tabs, Tab } from 'react-bootstrap';
 
 
 class Admin extends Component {
@@ -11,9 +9,6 @@ class Admin extends Component {
         super(props);
 
         this.state = {
-            username: "",
-            registerEmail: "",
-            registerPassword: "",
             loginEmail: "",
             loginPassword: "",
             errors: [],
@@ -22,7 +17,6 @@ class Admin extends Component {
 
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleRegister = this.handleRegister.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
     }
 
@@ -34,62 +28,6 @@ class Admin extends Component {
 
 
 
-    async handleRegister(e) {
-        e.preventDefault();
-        try {
-            // console.log(this.state);
-            const response = await fetch(`${hostname}/api/admin/register`, {
-                method: "POST",
-                credentials: 'include',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: this.state.username,
-                    email: this.state.registerEmail,
-                    password: this.state.registerPassword
-                })
-            });
-            const textRes = await response.text();
-            const jsonRes = await JSON.parse(textRes);
-            // console.log(jsonRes.admin);
-            // console.log(jsonRes);
-            if (response.status === 201) {
-                this.setState({
-                    errors: [],
-                    success: "Register successfull"
-                });
-            }
-            // success response 
-            // admin:
-            // {    email: "admin10@gmail.com"
-            //     name: "admin10"
-            //     password: "$2a$10$5e/S4wd9LgOa3hNnP8o9Ke4gbisix5E4w8Zq8aaUJbOLYslIhlfiC"
-            //     role: "general"
-            //     _id: "61180913d314051345f5ee8e"}
-
-
-
-            // FAILURE RESPONSE 
-            // errors: Array(2)
-            // 0: {value: "adm", msg: "Email must not empty and a valid email", param: "email", location: "body"}
-            // 1: {value: "1234", msg: "Password should be more than 5 character long", param: "password", location: "body"}
-            // length: 2
-
-            // console.log("Response - ", JSON.parse(textRes));
-            if (jsonRes.errors) {
-                // this.state.errors = jsonRes.errors
-                this.setState({
-                    errors: jsonRes.errors,
-                    success: ""
-                })
-                // console.log(this.state.errors);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-
-    }
 
 
 
@@ -109,36 +47,29 @@ class Admin extends Component {
                     password: this.state.loginPassword
                 })
             });
-            const textRes = await response.text();
-            const jsonRes = await JSON.parse(textRes);
-            console.log("Response - ", response);
-            if (jsonRes.user) {
+            if(response.status === 200){
+                const textRes = await response.text();
+                const jsonRes = await JSON.parse(textRes);
+                console.log("Json - ", jsonRes);
+                // if (jsonRes.user) {
+                //     this.setState({
+                //         errors: [],
+                //         success: "Login successfull"
+                //     });
+                //     // REDIRECT FROM  HERE TO DASHBOARD 
+                // }
+    
                 this.setState({
                     errors: [],
                     success: "Login successfull"
                 });
-                // REDIRECT FROM  HERE TO DASHBOARD 
             }
 
-            // this.setState(state => {
-            //     const list = state.list.push(state.value);
-
-            //     return {
-            //       list,
-            //       value: '',
-            //     };
-            //   });
-
-            if (jsonRes.errors || response.status === 400) {
-                // this.state.errors = jsonRes.errors
-                this.setState(state => {
-                    const errors = state.errors.push({ msg: "Your email or password is invalid" });
-                    return {
-                        errors,
-                        success: ""
-                    }
-                });
-                // console.log(this.state.errors);
+            if (response.status === 400 || response.status === 401) {
+                this.setState({
+                    errors: [...this.state.errors, {msg: "Your email or password is invalid"}],
+                    success: ""
+                  })
             }
         } catch (error) {
             console.log(error);
@@ -148,37 +79,13 @@ class Admin extends Component {
 
 
 
-    checkErrors() {
-        if (this.state.errors.length === 0) {
-            return (
-                <div className="container">
-                    <Login loginVisible={this.state.loginVisible} handleChange={this.handleChange} handleLogin={this.handleLogin} errors={this.state.errors} handleRegister={this.handleRegister} />
-                    < Register registerVisible={this.state.registerVisible} handleChange={this.handleChange} errors={this.state.errors} handleRegister={this.handleRegister} />
-                </div>
-            );
-        } else {
-            // SHOW ERRORS 
-            // return (
-            //     < Register handleChange={this.handleChange} errors={this.state.errors} handleRegister={this.handleRegister} />
-            // );
-        }
-    }
 
 
     render() {
         return (
             <div className="Admin">
                 <div className="container">
-                    <Tabs defaultActiveKey="login" id="uncontrolled-tab-example" className="mb-3">
-                        <Tab eventKey="login" title="Login">
-                            {/* ⛏️⛏️ LOGIN ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */}
                             <Login success={this.state.success} handleChange={this.handleChange} errors={this.state.errors} handleLogin={this.handleLogin} />
-                        </Tab>
-                        <Tab eventKey="register" title="Register">
-                    // {/* ⛏️⛏️ REGISTER ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */}
-                            < Register success={this.state.success} handleChange={this.handleChange} errors={this.state.errors} handleRegister={this.handleRegister} />
-                        </Tab>
-                    </Tabs>
                 </div>
                 {/* {this.checkErrors()} */}
             </div>
