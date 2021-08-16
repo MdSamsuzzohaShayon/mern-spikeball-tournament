@@ -1,43 +1,84 @@
-/* ⛏️⛏️ SHOW ALL EVENTS USER  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
+/* ⛏️⛏️ SHOW ALL EVENTS, PARTICIPANT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 
 import React, { Component } from 'react';
-import {hostname} from '../utils/global';
+import { hostname } from '../utils/global';
+import Events from '../components/admin/Events';
+import Participants from '../components/admin/Participants';
+import Overview from '../components/admin/Overview';
+import "./Dashboard.css";
 
 export class Dashboard extends Component {
     constructor(props) {
         super(props);
 
-        this.handleLogout = this.handleLogout.bind(this);
-    }
-    async handleLogout() {
 
-        try {
-            const response = await fetch(`${hostname}/api/admin/logout`, {
-                method: "GET",
-                credentials: 'include',
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            if (response.status === 200) {
-                console.log(response);
-                // const textRes = await response.text();
-                // const jsonRes = await JSON.parse(textRes);
-                this.props.authValidation(false);
+        this.state = {
+            activeTab: "events",
+            currentEvent: null,
+            participants: "",
+            eventList: []
+        };
+
+        this.getSingleEvent = this.getSingleEvent.bind(this);
+    }
+
+
+
+
+    componentDidMount() {
+        // ⛏️⛏️ FETCH ALL EVENTS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+        const getAllEvents = async () => {
+            try {
+                const response = await fetch(`${hostname}/api/admin/dashboard/event`, { method: "GET", credentials: "include" });
+                const text = await response.text();
+                const jsonResponse = await JSON.parse(text);
+                console.log("JSON - ",jsonResponse);
+                this.setState({
+                    eventList: jsonResponse.events
+                });
+                // console.log("JSON - ", jsonResponse.events);
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
         }
-
+        getAllEvents();
     }
+
+
+
+
+    getSingleEvent(event){
+        this.setState({currentEvent: event});
+    }
+
+
+
+
+
+
+
+
+
     render() {
-        return (
-            <div>
-                Dashboard
-                <button className="btn btn-danger" onClick={this.handleLogout}>Logout</button>
-            </div>
-        )
+        if(this.state.currentEvent){
+            return(
+                <div className="Dashboard">
+                   <Overview event={this.state.currentEvent} />
+                </div>
+            )
+        }else{
+            return (
+                <div className="Dashboard">
+                    <div className="container">
+                        <Events selectedEvent={this.getSingleEvent} eventList={this.state.eventList}  />
+                    </div>
+                </div>
+            )
+        }
     }
 }
+
+
+
 
 export default Dashboard;

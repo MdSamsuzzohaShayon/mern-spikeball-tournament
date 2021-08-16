@@ -46,7 +46,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar />
+        <Navbar authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />
         <Switch>
           <Route exact path="/home"><Home /></Route>
           <Route exact path="/admin">
@@ -54,7 +54,6 @@ class App extends Component {
           </Route>
           <Route exact path="/admin/dashboard">
             {this.state.isAuthenticated ? <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
-
           </Route>
         </Switch>
       </div>

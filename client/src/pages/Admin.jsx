@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import Login from '../components/admin/Login';
-import { Redirect } from 'react-router-dom';
+import './Admin.css';
+
 
 
 
@@ -24,9 +25,20 @@ class Admin extends Component {
     }
 
 
-
+// ⛏️⛏️ VALUE IS COMING FROM CHILD COMPONENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
+    }
+
+
+    componentDidMount(){
+        console.log("Update");
+    }
+    componentDidUpdate(){
+        console.log("Update");
+    }
+    componentWillUnmount(){
+        console.log("Unmount");
     }
 
 
@@ -35,6 +47,7 @@ class Admin extends Component {
 
 
 
+    // ⛏️⛏️ LOGIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     async handleLogin(e) {
         e.preventDefault();
         try {
