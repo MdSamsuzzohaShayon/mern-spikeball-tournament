@@ -116,6 +116,21 @@ router.get('/dashboard/event', async (req, res, next) => {
 
 
 
+// ⛏️⛏️ GET SINGLE EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  
+router.get('/dashboard/event/:id', async (req, res, next) => {
+    try {
+        const event = await Event.findById({_id: req.params.id}).populate('participants').exec();
+        // Story.find().populate({ path: 'fans', select: 'name' }).populate({ path: 'fans', select: 'email' });
+
+
+        res.status(200).json({ msg: 'Get Single Events', events: event });
+    } catch (error) {
+        res.json(error);
+    }
+});
+
+
+
 
 
 
@@ -145,9 +160,9 @@ router.post('/dashboard/participant', check('name', "Name must not empty").notEm
 
 
 /* ⛏️⛏️ CREATE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.delete('/dashboard/participant', async (req, res, next) => {
+router.delete('/dashboard/participant/:id', async (req, res, next) => {
     try {
-        const docs = await Participant.findByIdAndDelete({ _id: req.body.id });
+        const docs = await Participant.findByIdAndDelete({ _id: req.params.id });
         res.status(200).json({ request: 'Deleted', participant: docs });
     } catch (error) {
         res.json(error)
