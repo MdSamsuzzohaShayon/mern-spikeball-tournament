@@ -8,6 +8,8 @@ const Participants = (props) => {
     
     
     const handleClose = () => setShow(false);
+
+    // ⛏️⛏️ ADD PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     const handleSaveParticipant = async (e) => {
         e.preventDefault();
         try {

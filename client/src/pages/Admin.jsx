@@ -101,11 +101,18 @@ class Admin extends Component {
 
 
 
+
+
     render() {
         return (
             <div className="Admin">
                 <div className="container">
-                    <Login success={this.state.success} handleChange={this.handleChange} errors={this.state.errors} handleLogin={this.handleLogin} />
+                    <Login 
+                    success={this.state.success} 
+                    handleChange={this.handleChange} 
+                    errors={this.state.errors} 
+                    handleLogin={this.handleLogin} 
+                    />
                 </div>
                 {/* {this.checkErrors()} */}
             </div>

@@ -3,12 +3,22 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-const { sendUser } = require('../utils/helpers');
+const formidable = require('formidable');
+const csv = require('csvtojson');
+
+
+const { sendUser, replaceKeys } = require('../utils/helpers');
 const { ensureAuth, ensureGuast } = require('../config/auth');
 
 const Admin = require('../models/Admin');
 const Event = require('../models/Event');
 const Participant = require('../models/Participant');
+
+
+
+
+
+
 
 
 
@@ -65,7 +75,7 @@ router.post('/login',
 
 
 /* ⛏️⛏️ LOGOUT USERS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.get('/logout', (req, res) => {
+router.get('/logout', ensureAuth, (req, res) => {
     req.logout();
     res.status(200).json({ user: null });
 });
@@ -83,7 +93,7 @@ router.get('/dashboard', ensureAuth, (req, res, next) => {
 
 
 /* ⛏️⛏️ CREATE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/dashboard/event',
+router.post('/dashboard/event', ensureAuth,
     check('title', "Title must not empty and a valid email").notEmpty(),
     (req, res, next) => {
         const valErrs = validationResult(req);
@@ -100,6 +110,14 @@ router.post('/dashboard/event',
             });
         }
     });
+
+
+/* ⛏️⛏️ DELETE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
+router.delete('/dashboard/event/:id', ensureAuth, async (req, res, next) => {
+    const event = await Event.findByIdAndDelete({ _id: req.params.id });
+    const participant = await Participant.deleteMany({ _id: { $in: event.participants } });
+    res.status(200).json({ msg: 'Event deleted', event, participant });
+});
 
 
 
@@ -119,7 +137,7 @@ router.get('/dashboard/event', async (req, res, next) => {
 // ⛏️⛏️ GET SINGLE EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  
 router.get('/dashboard/event/:id', async (req, res, next) => {
     try {
-        const event = await Event.findById({_id: req.params.id}).populate('participants').exec();
+        const event = await Event.findById({ _id: req.params.id }).populate('participants').exec();
         // Story.find().populate({ path: 'fans', select: 'name' }).populate({ path: 'fans', select: 'email' });
 
 
@@ -135,18 +153,23 @@ router.get('/dashboard/event/:id', async (req, res, next) => {
 
 
 
-
+// firstname,lastname,email,cell,birthdate,city
 /* ⛏️⛏️ CREATE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/dashboard/participant', check('name', "Name must not empty").notEmpty(), async (req, res, next) => {
+router.post('/dashboard/participant', ensureAuth, check('eventID', "Need to select an Event").notEmpty(), check('firstname', "Firstname must not empty").notEmpty(), async (req, res, next) => {
     const valErrs = validationResult(req);
-    const { name, address, eventID } = req.body;
+    const { firstname, lastname, email, cell, birthdate, city, eventID } = req.body;
     if (!valErrs.isEmpty()) {
         return res.status(400).json({ errors: valErrs.errors });
     } else {
         try {
             const newParticipant = new Participant({
-                name: name,
-                address: address
+                firstname,
+                lastname,
+                email,
+                cell,
+                birthdate,
+                city,
+                event: eventID
             });
             const participant = await newParticipant.save();
             const event = await Event.findByIdAndUpdate({ _id: eventID }, { $push: { participants: participant._id } }, { new: true });
@@ -159,11 +182,72 @@ router.post('/dashboard/participant', check('name', "Name must not empty").notEm
 
 
 
-/* ⛏️⛏️ CREATE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
+/* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
+router.post('/dashboard/many-participant', (req, res, next) => {
+
+
+    const form = formidable({ multiples: false });
+
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            next(err);
+            return;
+        }
+
+        csv()
+            .fromFile(files.file.path)
+            .then((jsonObj) => {
+                /**
+                 * [
+                 * 	{a:"1", b:"2", c:"3"},
+                 * 	{a:"4", b:"5". c:"6"}
+                 * ]
+                 */
+                const newParticipant = [];
+                for (let obj of jsonObj) {
+                    newParticipant.push(replaceKeys(obj));
+                }
+
+                console.log(req.body);
+                // Function call
+                Participant.insertMany(newParticipant).then(function (participant) {
+                    // console.log("Data inserted", participant)  // Success
+                    participant.forEach((p, i) => {
+                        Event.findByIdAndUpdate({ _id: fields.eventID }, { $push: { participants: p._id } }, { new: true }).then((data) => {
+                            // console.log(data);
+                        }).catch(eventErr => {
+                            console.log(eventErr);
+                        });
+                    })
+                    res.json({ eventID, fields, files: participant });
+                }).catch(function (error) {
+                    console.log(error)      // Failure
+                });
+            });
+
+    });
+
+    // const newParticipant = new Participant({
+    //     name: name,
+    //     address: address
+    // });
+    // const participant = await newParticipant.save();
+    // const event = await Event.findByIdAndUpdate({ _id: eventID }, { $push: { participants: participant._id } }, { new: true });
+    // res.status(200).json({ msg: 'Create partipipant and referancing to event', participant, event });
+});
+
+
+
+
+// doc.subdocs.push({ _id: 4815162342 })
+// doc.subdocs.pull({ _id: 4815162342 }) // removed
+/* ⛏️⛏️ DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.delete('/dashboard/participant/:id', async (req, res, next) => {
     try {
-        const docs = await Participant.findByIdAndDelete({ _id: req.params.id });
-        res.status(200).json({ request: 'Deleted', participant: docs });
+        const participant = await Participant.findByIdAndDelete({ _id: req.params.id });
+        // { $pull: { templates: { _id: templateid } } },
+        const event = await Event.findOneAndUpdate({ participants: participant._id }, { $pull: { participants: participant._id } }, { new: true });
+        res.status(200).json({ request: 'Deleted', participant, event });
     } catch (error) {
         res.json(error)
     }

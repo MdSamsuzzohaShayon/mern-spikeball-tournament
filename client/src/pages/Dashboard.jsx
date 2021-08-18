@@ -20,35 +20,43 @@ export class Dashboard extends Component {
         };
 
         this.getSingleEvent = this.getSingleEvent.bind(this);
+        this.getAllEvents = this.getAllEvents.bind(this);
     }
 
 
 
 
-    componentDidMount() {
-        // ⛏️⛏️ FETCH ALL EVENTS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-        const getAllEvents = async () => {
-            try {
-                const response = await fetch(`${hostname}/api/admin/dashboard/event`, { method: "GET", credentials: "include" });
-                const text = await response.text();
-                const jsonResponse = await JSON.parse(text);
-                console.log("JSON - ",jsonResponse);
-                this.setState({
-                    eventList: jsonResponse.events
-                });
-                // console.log("JSON - ", jsonResponse.events);
-            } catch (error) {
-                console.log(error);
-            }
+    // ⛏️⛏️ FETCH ALL EVENTS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+    async getAllEvents() {
+        try {
+            const response = await fetch(`${hostname}/api/admin/dashboard/event`, { method: "GET", credentials: "include" });
+            const text = await response.text();
+            const jsonResponse = await JSON.parse(text);
+            console.log("JSON - ", jsonResponse);
+            this.setState({
+                eventList: jsonResponse.events
+            });
+            // console.log("JSON - ", jsonResponse.events);
+        } catch (error) {
+            console.log(error);
         }
-        getAllEvents();
+    }
+    componentDidMount() {
+        this.getAllEvents();
+    }
+    
+    componentDidUpdate(){
+        this.getAllEvents();
     }
 
 
+    
 
 
-    getSingleEvent(event){
-        this.setState({currentEvent: event});
+
+
+    getSingleEvent(event) {
+        this.setState({ currentEvent: event });
     }
 
 
@@ -60,17 +68,17 @@ export class Dashboard extends Component {
 
 
     render() {
-        if(this.state.currentEvent){
-            return(
+        if (this.state.currentEvent) {
+            return (
                 <div className="Dashboard">
-                   <Overview event={this.state.currentEvent} />
+                    <Overview event={this.state.currentEvent} />
                 </div>
             )
-        }else{
+        } else {
             return (
                 <div className="Dashboard">
                     <div className="container">
-                        <Events selectedEvent={this.getSingleEvent} eventList={this.state.eventList}  />
+                        <Events selectedEvent={this.getSingleEvent} eventList={this.state.eventList} />
                     </div>
                 </div>
             )
