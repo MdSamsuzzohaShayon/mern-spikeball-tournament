@@ -75,8 +75,10 @@ router.post('/login',
 
 
 /* ⛏️⛏️ LOGOUT USERS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.get('/logout', ensureAuth, (req, res) => {
+router.get('/logout', (req, res) => {
+    req.session.destroy(null);
     req.logout();
+    console.log(req.user);
     res.status(200).json({ user: null });
 });
 
@@ -139,8 +141,6 @@ router.get('/dashboard/event/:id', async (req, res, next) => {
     try {
         const event = await Event.findById({ _id: req.params.id }).populate('participants').exec();
         // Story.find().populate({ path: 'fans', select: 'name' }).populate({ path: 'fans', select: 'email' });
-
-
         res.status(200).json({ msg: 'Get Single Events', events: event });
     } catch (error) {
         res.json(error);
@@ -205,10 +205,9 @@ router.post('/dashboard/many-participant', (req, res, next) => {
                  */
                 const newParticipant = [];
                 for (let obj of jsonObj) {
-                    newParticipant.push(replaceKeys(obj));
+                    newParticipant.push(replaceKeys(obj, fields.eventID));
                 }
 
-                console.log(req.body);
                 // Function call
                 Participant.insertMany(newParticipant).then(function (participant) {
                     // console.log("Data inserted", participant)  // Success
@@ -219,7 +218,7 @@ router.post('/dashboard/many-participant', (req, res, next) => {
                             console.log(eventErr);
                         });
                     })
-                    res.json({ eventID, fields, files: participant });
+                    res.json({ eventID: fields.eventID , files: participant });
                 }).catch(function (error) {
                     console.log(error)      // Failure
                 });
@@ -263,6 +262,11 @@ router.get('/dashboard/participant', async (req, res, next) => {
         res.json(error);
     }
 });
+
+
+
+
+
 
 
 

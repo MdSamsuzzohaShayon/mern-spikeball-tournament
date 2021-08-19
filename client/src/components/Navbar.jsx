@@ -15,9 +15,10 @@ const Navbar = (props) => {
                     "Content-Type": "application/json"
                 }
             });
+            props.authValidation(false);
             if (response.status === 200) {
-                console.log(response);
-                props.authValidation(false);
+                const text = await response.text();
+                console.log(JSON.parse(text));
             }
         } catch (error) {
             console.log(error);

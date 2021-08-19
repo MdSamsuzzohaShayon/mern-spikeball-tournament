@@ -26,6 +26,10 @@ Emojies - 📜 ⛏️ ➖ ✅
  - Make some public routes to show score and detail
 
 
+ ##### Problem
+  - Component did update - login automitically and get a user
+
+
 ### CSV Parser
  - __https://www.npmjs.com/package/csv-parser__
  - __https://www.npmjs.com/package/csvtojson__
@@ -38,6 +42,9 @@ Emojies - 📜 ⛏️ ➖ ✅
  - __https://kipalog.com/posts/Mongoose-One-to-Many-Relationship-Example__ - One to many relationship
 
 
+### File uplad
+ - __https://www.geeksforgeeks.org/file-uploading-in-react-js/__
+ - __https://www.laravelcode.com/post/how-to-upload-files-in-reactjs-with-example__
 
 __https://github.com/woodburydev/TypescriptPassportwReact/blob/main/backend/src/index.ts__
 __https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-to-method__

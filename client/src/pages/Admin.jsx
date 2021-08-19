@@ -13,6 +13,7 @@ class Admin extends Component {
         super(props);
 
         this.state = {
+            isLoading: false,
             loginEmail: "",
             loginPassword: "",
             errors: [],
@@ -25,21 +26,12 @@ class Admin extends Component {
     }
 
 
-// ⛏️⛏️ VALUE IS COMING FROM CHILD COMPONENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  
+    // ⛏️⛏️ VALUE IS COMING FROM CHILD COMPONENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
 
 
-    componentDidMount(){
-        console.log("Update");
-    }
-    componentDidUpdate(){
-        console.log("Update");
-    }
-    componentWillUnmount(){
-        console.log("Unmount");
-    }
 
 
 
@@ -51,6 +43,7 @@ class Admin extends Component {
     async handleLogin(e) {
         e.preventDefault();
         try {
+            this.setState({ isLoading: true });
             // console.log(this.state);
             const response = await fetch(`${hostname}/api/admin/login`, {
                 method: "POST",
@@ -63,17 +56,19 @@ class Admin extends Component {
                     password: this.state.loginPassword
                 })
             });
+            this.setState({ isLoading: false });
+
             if (response.status === 200) {
-                const textRes = await response.text();
-                const jsonRes = await JSON.parse(textRes);
-                // console.log("Json - ", jsonRes);
-                // if (jsonRes.user) {
-                //     this.setState({
-                //         errors: [],
-                //         success: "Login successfull"
-                //     });
-                //     // REDIRECT FROM  HERE TO DASHBOARD 
-                // }
+                // const textRes = await response.text();
+                // const jsonRes = await JSON.parse(textRes);
+                // // console.log("Json - ", jsonRes);
+                // // if (jsonRes.user) {
+                // //     this.setState({
+                // //         errors: [],
+                // //         success: "Login successfull"
+                // //     });
+                // //     // REDIRECT FROM  HERE TO DASHBOARD 
+                // // }
 
                 this.setState({
                     errors: [],
@@ -107,12 +102,17 @@ class Admin extends Component {
         return (
             <div className="Admin">
                 <div className="container">
-                    <Login 
-                    success={this.state.success} 
-                    handleChange={this.handleChange} 
-                    errors={this.state.errors} 
-                    handleLogin={this.handleLogin} 
-                    />
+                    {this.state.isLoading ? (
+                        <div className="spinner-border text-danger text-center" role="status">
+                        </div>
+                    ) : (
+                        <Login
+                            success={this.state.success}
+                            handleChange={this.handleChange}
+                            errors={this.state.errors}
+                            handleLogin={this.handleLogin}
+                        />
+                    )}
                 </div>
                 {/* {this.checkErrors()} */}
             </div>

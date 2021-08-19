@@ -8,19 +8,26 @@ import Admin from './pages/Admin';
 import Dashboard from './pages/Dashboard';
 import React, { Component } from 'react';
 import { hostname } from "./utils/global";
+import Page404 from './pages/Page404';
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.isMountedValue = false;
     this.state = { isAuthenticated: false };
+    this.getAuthenticatedUser = this.getAuthenticatedUser.bind(this);
   }
+
+
   authValidation = (isAuthenticated) => {
     this.setState({ isAuthenticated })
   }
 
-  async componentDidMount() {
-    // console.log("Authinticated - ", this.state.isAuthenticated);
-    // fetch()
+
+
+  // ⛏️⛏️ GET AUTHENTICATED USER ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+  async getAuthenticatedUser() {
+    this.isMountedValue = true;
     const response = await fetch(`${hostname}/api/admin/dashboard`, {
       method: "GET",
       credentials: 'include',
@@ -30,30 +37,58 @@ class App extends Component {
     });
     const textRes = await response.text();
     const jsonRes = await JSON.parse(textRes);
-    console.log(jsonRes.user);
-    if (jsonRes.user) {
-      this.setState({ isAuthenticated: true });
-    } else {
-      this.setState({ isAuthenticated: false });
+    // console.log("User - ",jsonRes.user);
+    if (this.isMountedValue) {
+      if (jsonRes.user) {
+        this.setState({ isAuthenticated: true });
+      } else {
+        this.setState({ isAuthenticated: false });
+      }
     }
-    // if(jsonRes.user !== "null" || jsonRes.user !== "" || jsonRes.user !== null){
-    //   console.log("Response - ", response);
-    //   console.log("JSON response - ", jsonRes);
-    // }else{
-    //   console.log("User null");
-    // }
+  }
+
+
+  componentDidMount() {
+    this.getAuthenticatedUser();
+  }
+
+
+
+  // NEVER UPDATE STATE INSIDE COMPONENT DID UPDATE 
+  // PROBLEM WITH THIS AS WELL 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // console.log("Previous props - ", prevProps);
+    // console.log("Previous State - ", prevState.isAuthenticated + " Current state - ", this.state.isAuthenticated);
+
+    // this.getAuthenticatedUser(); // INSIDE GET AUTHENTICATED STATE IS BEING UPDATING 
+    // check whether client has changed
+
+    if (prevState.isAuthenticated !== this.state.isAuthenticated) {
+      this.getAuthenticatedUser(); 
+    }
+    // debugger;
+  }
+
+  componentWillUnmount() {
+    console.log("Admin unmounted");
+    this.isMountedValue = false;
+    this.setState({ isAuthenticated: false });
   }
   render() {
     return (
       <div className="App">
         <Navbar authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />
         <Switch>
+          <Route exact path="/"><Home /></Route>
           <Route exact path="/home"><Home /></Route>
           <Route exact path="/admin">
             {this.state.isAuthenticated ? <Redirect to="/admin/dashboard" /> : <Admin authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}
           </Route>
           <Route exact path="/admin/dashboard">
             {this.state.isAuthenticated ? <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
+          </Route>
+          <Route path="*">
+            <Page404 />
           </Route>
         </Switch>
       </div>

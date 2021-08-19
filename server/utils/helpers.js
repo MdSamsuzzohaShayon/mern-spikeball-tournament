@@ -8,7 +8,7 @@ module.exports.sendUser = (user) => {
 }
 
 
-module.exports.replaceKeys = (object) => {
+module.exports.replaceKeys = (object, eventID) => {
     Object.keys(object).forEach(function (key) {
         // const twoLower = key.toLowerCase();
         const removeSpace = key.replace(/\s+/g, '');
@@ -21,5 +21,6 @@ module.exports.replaceKeys = (object) => {
             delete object[key];
         }
     });
+    object.event = eventID
     return object;
 }
