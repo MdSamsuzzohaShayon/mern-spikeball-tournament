@@ -16,14 +16,15 @@ Emojies - 📜 ⛏️ ➖ ✅
  - ✅ Json file key and value validation
  - ✅ And save json object to mongodb
  - ✅ Create event front end
- - Modify add participant and show participant - Add more fields for adding a participant
- - Delete event and delete all participant of that event - Delete event frontend
- - Delete participant 
- - Add participant with files
- - when participant is been deleted delete that from events participants
- - Assign players to net randomly
+ - ✅ Modify add participant and show participant - Add more fields for adding a participant
+ - ✅ Delete event and delete all participant of that event - Delete event frontend
+ - ✅ Delete participant 
+ - ✅ Add participant with files
+ - ✅ when participant is been deleted delete that from events participants
+ - ✅ Assign players to net randomly
  - Start round one to four 
  - Make some public routes to show score and detail
+ - Add some fileds for participant - point, point deferential
 
 
  ##### Problem
@@ -45,6 +46,8 @@ Emojies - 📜 ⛏️ ➖ ✅
 ### File uplad
  - __https://www.geeksforgeeks.org/file-uploading-in-react-js/__
  - __https://www.laravelcode.com/post/how-to-upload-files-in-reactjs-with-example__
+
+
 
 __https://github.com/woodburydev/TypescriptPassportwReact/blob/main/backend/src/index.ts__
 __https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-to-method__

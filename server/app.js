@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 
 const indexRoute = require('./routes/index');
 const adminRoute = require('./routes/admin');
-// const eventRoute = require('./routes/event');
+const eventRoute = require('./routes/event');
 
 
 
@@ -51,7 +51,7 @@ require('./config/passport')(passport);
 // ⛏️⛏️ ROUTES ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 app.use('/api', indexRoute);
 app.use('/api/admin', adminRoute);
-// app.use('/api/event', eventRoute);
+app.use('/api/event', eventRoute);
 
 
 

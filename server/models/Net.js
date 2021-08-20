@@ -5,6 +5,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // https://stackoverflow.com/questions/28357965/mongoose-auto-increment/68815559#68815559
 const netSchema = new Schema({
+    sl: {
+        type: Number,
+        required: true,
+
+    },
     participants: [
         {
             type: Schema.Types.ObjectId,
@@ -12,10 +17,10 @@ const netSchema = new Schema({
             ref: 'participant'
         }
     ],
-    sl: {
-        type: Number,
+    event: {
+        type: Schema.Types.ObjectId,
         required: true,
-
+        ref: 'event'
     },
     round: {
         type: Number,
