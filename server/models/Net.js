@@ -10,11 +10,10 @@ const netSchema = new Schema({
         required: true,
 
     },
-    participants: [
+    performance: [
         {
             type: Schema.Types.ObjectId,
-            required: true,
-            ref: 'participant'
+            ref: 'performance'
         }
     ],
     event: {

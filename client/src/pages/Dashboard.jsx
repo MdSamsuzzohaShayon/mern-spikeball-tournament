@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
-import Events from '../components/admin/Events';
+import EventList from '../components/EventList';
 import Overview from '../components/admin/Overview';
 import "./Dashboard.css";
 
@@ -61,7 +61,7 @@ export class Dashboard extends Component {
         if(this.props.isAuthenticated){
             try {
                 this.setState({isLoading: true});
-                const response = await fetch(`${hostname}/api/admin/dashboard/event`, { method: "GET", credentials: "include" });
+                const response = await fetch(`${hostname}/api/event`, { method: "GET", credentials: "include" });
                 const text = await response.text();
                 const jsonResponse = await JSON.parse(text);
                 if (this.isMountedValue) {
@@ -150,7 +150,7 @@ export class Dashboard extends Component {
             return (
                 <div className="Dashboard">
                     <div className="container">
-                        <Events isLoading={this.state.isLoading} pullEventID={this.getEventID} eventList={this.state.eventList} />
+                        <EventList isLoading={this.state.isLoading} pullEventID={this.getEventID} eventList={this.state.eventList} isAuthenticated={this.props.isAuthenticated} />
                     </div>
                 </div>
             );

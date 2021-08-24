@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../../utils/global';
+import { hostname } from '../utils/global';
 import { Modal, Button } from 'react-bootstrap';
 
 
-const Events = (props) => {
+const EventList = (props) => {
 
     const [show, setShow] = useState(false);
     const [event, setEvent] = useState({});
@@ -62,9 +62,9 @@ const Events = (props) => {
     }
 
     return (
-        <div className="Events ml-2">
-            <h2 className="h2">All Events</h2>
-            <div className="create-new-event mb-2">
+        <div className="EventList ml-2">
+            <h2 className="h2">All EventList</h2>
+            {props.isAuthenticated && <div className="create-new-event mb-2">
                 <Button variant="primary" onClick={handleShow}>  Create new event</Button>
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -92,6 +92,8 @@ const Events = (props) => {
                     </Modal.Footer>
                 </Modal>
             </div>
+            }
+
             {props.isLoading ? (
                 <div className="spinner-border text-danger text-center" role="status">
                 </div>
@@ -102,7 +104,7 @@ const Events = (props) => {
                             <th scope="col">Title</th>
                             <th scope="col">Date</th>
                             <th scope="col">Details</th>
-                            <th scope="col">Handle</th>
+                            {props.isAuthenticated && <th scope="col">Handle</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -111,7 +113,7 @@ const Events = (props) => {
                                 <th >{event.title}</th>
                                 <td>{new Date(event.date).getFullYear() + '-' + (new Date(event.date).getMonth() + 1) + '-' + new Date(event.date).getDate()}</td>
                                 <td><button className="btn btn-primary" onClick={e => handleEventID(e, event._id)} >View Details</button></td>
-                                <td><button className="btn btn-danger" onClick={e => deleteEvent(e, event._id)} >Delete</button></td>
+                                {props.isAuthenticated && <td><button className="btn btn-danger" onClick={e => deleteEvent(e, event._id)} >Delete</button></td>}
                             </tr>)
                         )}
                     </tbody>
@@ -122,4 +124,4 @@ const Events = (props) => {
     )
 }
 
-export default Events;
+export default EventList;

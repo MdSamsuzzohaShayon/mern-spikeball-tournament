@@ -124,31 +124,6 @@ router.delete('/dashboard/event/:id', ensureAuth, async (req, res, next) => {
 
 
 
-// ⛏️⛏️ GET ALL EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  
-router.get('/dashboard/event', async (req, res, next) => {
-    try {
-        const docs = await Event.find();
-        res.status(200).json({ msg: 'Get All Events', events: docs });
-    } catch (error) {
-        res.json(error);
-    }
-});
-
-
-
-// ⛏️⛏️ GET SINGLE EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  
-router.get('/dashboard/event/:id', async (req, res, next) => {
-    try {
-        const event = await Event.findById({ _id: req.params.id }).populate('participants').exec();
-        // Story.find().populate({ path: 'fans', select: 'name' }).populate({ path: 'fans', select: 'email' });
-        res.status(200).json({ msg: 'Get Single Events', events: event });
-    } catch (error) {
-        res.json(error);
-    }
-});
-
-
-
 
 
 

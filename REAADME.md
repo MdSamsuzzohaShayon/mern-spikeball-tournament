@@ -25,6 +25,11 @@ Emojies - 📜 ⛏️ ➖ ✅
  - Start round one to four 
  - Make some public routes to show score and detail
  - Add some fileds for participant - point, point deferential
+ - In net create 4 players and in player add point deferential, and many more
+ - Once round is increased create one more net for that round
+ - Make a relationship with round and net
+ - For every round create one round and more than one net
+ - After the foud round instead of creating a new net, we should update the existing net
 
 
  ##### Problem
