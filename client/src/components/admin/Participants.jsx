@@ -29,7 +29,8 @@ const Participants = (props) => {
                 },
                 body: JSON.stringify(participant)
             });
-            console.log(response);
+            console.log("Add participant - ",response);
+            props.updateEvent(true);
         } catch (error) {
             console.log(error);
         }
@@ -63,7 +64,8 @@ const Participants = (props) => {
                 }
             });
             if (response.status === 200) {
-                console.log(response);
+                console.log("Delete participant - ",response);
+                props.updateEvent(true);
             }
         } catch (error) {
             console.log(error);
@@ -93,7 +95,8 @@ const Participants = (props) => {
                 credentials: 'include',
                 body: formData
             });
-            console.log(response);
+            console.log("Upload multiple participant - ",response);
+            props.updateEvent(true);
         } catch (error) {
             console.log(error);
         }

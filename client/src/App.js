@@ -9,12 +9,17 @@ import Dashboard from './pages/Dashboard';
 import React, { Component } from 'react';
 import { hostname } from "./utils/global";
 import Page404 from './pages/Page404';
+import EventAdmin from './components/admin/EventAdmin';
+
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.isMountedValue = false;
-    this.state = { isAuthenticated: false };
+    this.state = {
+      isAuthenticated: false,
+      currentEventId: null
+    };
     this.getAuthenticatedUser = this.getAuthenticatedUser.bind(this);
   }
 
@@ -22,6 +27,7 @@ class App extends Component {
   authValidation = (isAuthenticated) => {
     this.setState({ isAuthenticated })
   }
+
 
 
 
@@ -64,17 +70,18 @@ class App extends Component {
     // check whether client has changed
 
     if (prevState.isAuthenticated !== this.state.isAuthenticated) {
-      this.getAuthenticatedUser(); 
+      this.getAuthenticatedUser();
     }
     // debugger;
   }
 
   componentWillUnmount() {
-    console.log("Admin unmounted");
+    // console.log("Appjs unmounted");
     this.isMountedValue = false;
     this.setState({ isAuthenticated: false });
   }
   render() {
+    console.log("Authenticated - " , this.state.isAuthenticated);
     return (
       <div className="App">
         <Navbar authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />
@@ -86,6 +93,9 @@ class App extends Component {
           </Route>
           <Route exact path="/admin/dashboard">
             {this.state.isAuthenticated ? <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
+          </Route>
+          <Route exact path="/admin/dashboard/event/:id" >
+             <EventAdmin isAuthenticated={this.state.isAuthenticated} /> 
           </Route>
           <Route path="*">
             <Page404 />
