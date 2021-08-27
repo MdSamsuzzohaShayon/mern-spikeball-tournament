@@ -3,15 +3,27 @@ import { hostname } from '../../utils/global';
 import { Button, Modal } from "react-bootstrap"
 
 const Participants = (props) => {
+
+    // ⛏️⛏️ MODAL EVENTS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    
-    const [csvShow, setCsvShow] = useState(false);
     const handleCsvClose = () => setCsvShow(false);
     const handleCsvShow = () => setCsvShow(true);
+    
 
+
+
+
+
+    // ⛏️⛏️ STATES FOR CSV FILE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+    const [csvShow, setCsvShow] = useState(false);
+
+
+
+    // ⛏️⛏️ SETTING DEFAULT STATE FOR SINGLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const [participant, setPartitipant] = useState({ eventID: props.event._id, firstname: "", lastname: "", email: "", cell: "", birthday: "", city: "" });
+    // ⛏️⛏️ SETTING DEFAULT STATE FOR PARTICIPANT'S EXCEL FILE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const [selectedFile, setSelectedFile] = useState(null);
 
 
@@ -51,6 +63,10 @@ const Participants = (props) => {
         });
     }
 
+
+
+
+
     // ⛏️⛏️DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     const deleteParticipant = async (e, id) => {
         e.preventDefault();
@@ -73,12 +89,18 @@ const Participants = (props) => {
     }
 
 
+
+
+
+    // ⛏️⛏️ ON CHANGE EVENT AND SET VALUE FOR A FILE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     function handleCsvChange(e) {
         e.preventDefault();
         // console.log("E - ",  e.target.files[0]);
         setSelectedFile(e.target.files[0]);
     }
 
+
+    // ⛏️⛏️ SUBMIT FILE TO THE DATABASE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     async function submitCsvUpload(e) {
         e.preventDefault();
         // console.log(participant);

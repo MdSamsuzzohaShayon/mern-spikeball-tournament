@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
 import Participants from './Participants';
+import Rounds from './Rounds'
 
 export class EventAdmin extends Component {
     constructor(props) {
@@ -30,6 +31,12 @@ export class EventAdmin extends Component {
         this.getSingleEvent(this.props.match.params.id);
     }
 
+
+
+
+
+
+
     // ⛏️⛏️ GET AN EVENT WITH DETAILS - AFTER GETTING SINGLE EVENT REDIRECT TO EVENT ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     async getSingleEvent(id) {
         try {
@@ -50,12 +57,16 @@ export class EventAdmin extends Component {
 
 
 
+
+    // ⛏️⛏️ MAKE ALL VALUE AS DEFAULT ON UNMOUNT AN COMPONENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     clickItemHandler(e, params) {
         this.setState({ activeTab: params });
     }
 
 
 
+
+    // ⛏️⛏️ FETCH EVERYTIME WEHN WE MADE CHANGE ON DATABASE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     updateEvent = (update) => { if (update) this.getSingleEvent(this.state.currentEventID) };
 
 
@@ -77,7 +88,7 @@ export class EventAdmin extends Component {
                     participants={this.state.currentEvent.participants}
                 /></div>);
             case "rounds":
-                return (<div className="tab-pane fade show active" >Rounds</div>);
+                return (<div className="tab-pane fade show active" ><Rounds eventID={this.state.currentEventID} /></div>);
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);
         }
@@ -87,10 +98,15 @@ export class EventAdmin extends Component {
 
 
 
+    // ⛏️⛏️ MAKE ALL VALUE AS DEFAULT ON UNMOUNT AN COMPONENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     componentWillUnmount() {
         this.is_mounted = false;
     }
 
+
+
+
+    
     render() {
         if (this.state.currentEventID) {
             return (
