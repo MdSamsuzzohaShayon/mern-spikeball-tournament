@@ -24,3 +24,35 @@ module.exports.replaceKeys = (object, eventID) => {
     object.event = eventID
     return object;
 }
+
+
+
+
+module.exports.updatedPerformance = (pu) => {
+    switch (pu.round) {
+        case 1:
+            return {
+                round1: {
+                    point: pu.point, pointDeferential: pu.pointDeferential
+                }
+            }
+        case 2:
+            return {
+                round2: {
+                    point: pu.point, pointDeferential: pu.pointDeferential
+                }
+            };
+        case 3:
+            return {
+                round3: {
+                    point: pu.point, pointDeferential: pu.pointDeferential
+                }
+            };
+        case 4:
+            return {
+                round4: {
+                    point: pu.point, pointDeferential: pu.pointDeferential
+                }
+            };
+    }
+}

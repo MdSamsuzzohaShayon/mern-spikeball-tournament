@@ -2,6 +2,7 @@ const express = require('express');
 const Event = require('../models/Event');
 const Net = require('../models/Net');
 const Performance = require('../models/Performance');
+const { updatedPerformance } = require('../utils/helpers');
 
 const router = express.Router();
 // arr[Math.floor(Math.random() * arr.length)];
@@ -122,7 +123,16 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
 router.get('/get-net/:eventID', async (req, res, next) => {
     try {
         // const findNets = await Net.find({ event: req.params.eventID }).populate([{ path: "performance", select: "participant net round", populate: { path: 'participant', select: 'firstname lastname' } }]).exec();
-        const findNets = await Net.find({ event: req.params.eventID, round: 1 }).populate([{ path: "performance", select: "participant net round", populate: { path: 'participant', select: 'firstname lastname' } }]).exec();
+        const findNets = await Net.find({ event: req.params.eventID, round: 1 })
+            .populate([{
+                path: "performance",
+                select: "participant net round1 round2 round3 round4 round5 round6 round7 round8 round9 round10 round11 round12 round13 round14 round15",
+                populate: {
+                    path: 'participant',
+                    select: 'firstname lastname'
+                }
+            }])
+            .exec();
 
         res.status(200).json({ msg: 'Getting performance', findNets });
     } catch (error) {
@@ -133,13 +143,25 @@ router.get('/get-net/:eventID', async (req, res, next) => {
 
 
 
+
+
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-one-to-four/:netID', async (req, res, next) => {
+router.put('/update-one-to-four/:eventID', (req, res, next) => {
     // FIND THE NET AND PERFORMANCE AND UPDATE PERFORMANCE
-    const net = await Net.findOne({ _id: req.params.netID }).populate({ path: "performance", populate: { path: "participant" } });
+    // const nets = await Net.findOne({ _id: req.params.netID }).populate({ path: "performance", populate: { path: "participant" } });
     // const net = await Net.findOne({ _id: req.params.netID }, {$pull: {performance: ["6120ccc897bd511d81fe9908"]}});
+    // console.log(req.body);
+    const performanceUpdate = req.body;
+    performanceUpdate.forEach((pu, i) => {
+        // console.log(pu);
+        Performance.findByIdAndUpdate(pu.performanceID, updatedPerformance(pu), (err, docs) => {
+            // console.log(pu);
+            if (err) throw err;
+            console.log("Found - ", docs);
+        });
+    });
     // UPDATE EXISTING PERFORMANCE
-    res.status(200).json({ msg: 'Get net and participant', net });
+    res.status(200).json({ msg: 'Get net and participant' });
 });
 
 
