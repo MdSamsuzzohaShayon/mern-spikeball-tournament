@@ -13,6 +13,8 @@ const { ensureAuth, ensureGuast } = require('../config/auth');
 const Admin = require('../models/Admin');
 const Event = require('../models/Event');
 const Participant = require('../models/Participant');
+const Performance = require('../models/Performance');
+const Net = require('../models/Net');
 
 
 
@@ -116,9 +118,15 @@ router.post('/dashboard/event', ensureAuth,
 
 /* ⛏️⛏️ DELETE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.delete('/dashboard/event/:id', ensureAuth, async (req, res, next) => {
-    const event = await Event.findByIdAndDelete({ _id: req.params.id });
-    const participant = await Participant.deleteMany({ _id: { $in: event.participants } });
-    res.status(200).json({ msg: 'Event deleted', event, participant });
+    try {
+        const event = await Event.findByIdAndDelete({ _id: req.params.id });
+        const participant = await Participant.deleteMany({ _id: { $in: event.participants } });
+        const performance = await Performance.deleteMany({ event: req.params.id });
+        const net = await Net.deleteMany({ event: req.params.id });
+        res.status(200).json({ msg: 'Event deleted', event, participant, performance, net });
+    } catch (error) {
+        console.log(error)
+    }
 });
 
 
@@ -193,7 +201,7 @@ router.post('/dashboard/many-participant', (req, res, next) => {
                             console.log(eventErr);
                         });
                     })
-                    res.json({ eventID: fields.eventID , files: participant });
+                    res.json({ eventID: fields.eventID, files: participant });
                 }).catch(function (error) {
                     console.log(error)      // Failure
                 });

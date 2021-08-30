@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const scoreSchema = new Schema({
-    point: Number,
-    pointDeferential: String,
+    point: { type: Number, default: 0 },
+    pointDeferential: { type: String, default: '0-0' },
 });
 
 
@@ -41,6 +41,7 @@ const performanceSchema = new Schema({
     round2: scoreSchema,
     round3: scoreSchema,
     round4: scoreSchema,
+    round124Total: scoreSchema,
     round5: scoreSchema,
     round6: scoreSchema,
     round7: scoreSchema,
