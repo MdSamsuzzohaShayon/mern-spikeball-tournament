@@ -118,7 +118,7 @@ const EventList = (props) => {
                             <tr key={index}>
                                 <th >{event.title}</th>
                                 <td>{new Date(event.date).getFullYear() + '-' + (new Date(event.date).getMonth() + 1) + '-' + new Date(event.date).getDate()}</td>
-                                <td>{props.isAuthenticated ? <Link to={`/admin/dashboard/event/${event._id}`} className='text-white btn btn-primary'>View Details</Link> : <button className="btn btn-primary">View Details Public</button>}</td>
+                                <td>{props.isAuthenticated ? <Link to={`/admin/dashboard/event/${event._id}`} className='text-white btn btn-primary'>View Details</Link> : <Link to={`/event/${event._id}`} className="btn btn-primary">View Details Public</Link> }</td>
                                 {props.isAuthenticated && <td><button className="btn btn-danger" onClick={e => deleteEvent(e, event._id)} >Delete</button></td>}
                             </tr>)
                         )}

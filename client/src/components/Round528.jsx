@@ -44,7 +44,7 @@ function Round528(props) {
         };
         // console.log(props.eventID);
 
-        const response = await fetch(`${hostname}/api/event/update-five-to-eight/${props.eventID}/${props.round}`, requestOptions);
+        const response = await fetch(`${hostname}/api/event/update-one-to-four/${props.eventID}/${props.round}`, requestOptions);
         console.log("Update - ", response);
         // console.log("Update - ", updatePerformance);
         setUpdatePerformance([]);

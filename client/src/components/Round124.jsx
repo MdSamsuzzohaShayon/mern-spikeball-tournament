@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../utils/global';
+import { totalPoint124 } from '../utils/addTotalPoint';
 
 function Round124(props) {
     const [isLoading, setIsLoading] = useState(false);
@@ -171,6 +172,19 @@ function Round124(props) {
     }
 
 
+
+    const getTotal = (net, round, score) => {
+        // console.log(score);
+        if (score === "point") {
+            return net.performance.map((p, j) => (
+                <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
+                    <div className="total">{totalPoint124(p)}</div>
+                </div>
+            ));
+        }
+    }
+
+
     return (
         <div className="Round124">
             {props.initialize && <button className="btn btn-primary" onClick={initializeNetHandler} >Initialize net for first round</button>}
@@ -178,7 +192,7 @@ function Round124(props) {
             {isLoading ? <div className="spinner-border text-danger" role="status"></div> : (
                 <div className="show-all-nets">
                     {!props.initialize && (
-                        <table className="table table-hover table-bordered">
+                        <table className="table table-hover table-bordered text-capitalize">
                             <thead className="table-dark">
                                 <tr>
                                     <th colSpan="2" scope="colgroup"></th>
@@ -186,6 +200,7 @@ function Round124(props) {
                                     <th colSpan="2" scope="colgroup">Round 2</th>
                                     <th colSpan="2" scope="colgroup">Round 3</th>
                                     <th colSpan="2" scope="colgroup">Round 4</th>
+                                    <th colSpan="2" scope="colgroup">Total</th>
                                 </tr>
                                 <tr>
                                     <th scope="col">Net</th>
@@ -198,6 +213,8 @@ function Round124(props) {
                                     <th scope="col">point deferential</th>
                                     <th scope="col">point</th>
                                     <th scope="col">point deferential</th>
+                                    <th scope="col">total point</th>
+                                    <th scope="col">total deferential</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -226,6 +243,10 @@ function Round124(props) {
 
                                         <td >{allPerformers(net, 4, "point")} </td>
                                         <td>{allPerformers(net, 4, "pointDeferential")}</td>
+
+
+                                        <td >{getTotal(net, "124", "point")}</td>
+                                        <td >{getTotal(net, "124", "pointDeferential")}</td>
 
 
                                     </tr>

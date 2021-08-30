@@ -142,7 +142,13 @@ const Rounds = (props) => {
                         </div>
                     );
                 } else {
-                    return (<div className="tab-pane fade show active" ><Round9212 /> </div>);
+                    return (<div className="tab-pane fade show active" >
+                        <Round9212 initialize={initialize}
+                            nets={nets}
+                            round={round}
+                            updateNets={updateFindNets}
+                            eventID={props.eventID} />
+                    </div>);
                 }
             case "r13215":
                 if (isLoading) {
