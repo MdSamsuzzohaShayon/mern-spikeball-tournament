@@ -7,19 +7,45 @@ import { hostname } from '../../utils/global';
 
 const Rounds = (props) => {
     const [activeItem, setActiveItem] = useState('r124');
+    const [round, setRound] = useState(1);
     const [initialize, setInitialize] = useState(false);
     const [nets, setNets] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    // const [reassignToNet, setReassignToNet] = useState(false);
 
     const activeItemHandler = (e, item) => {
         e.preventDefault();
+        // console.log(round);
         // console.log(item);
         setActiveItem(item);
+        switch (item) {
+            case "r124":
+                setRound(1);
+                // console.log("findAllNets round 1");
+                findAllNets(1);
+                break;
+            case "r528":
+                setRound(5);
+                // console.log("findAllNets called from round 5");
+                findAllNets(5);
+                break;
+            case "r9212":
+                setRound(9);
+                // console.log("findAllNets called from round 9");
+                findAllNets(9);
+                break;;
+            case "r13215":
+                setRound(13);
+                // console.log("findAllNets called from round 13");
+                findAllNets(13);
+                break;
+        }
     }
 
 
 
 
-    const findAllNets = async () => {
+    const findAllNets = async (r) => {
 
         const requestOptions = {
             method: 'GET',
@@ -27,11 +53,12 @@ const Rounds = (props) => {
             credentials: "include"
         };
         // console.log(props.eventID);
-
-        const response = await fetch(`${hostname}/api/event/get-net/${props.eventID}`, requestOptions);
+        setIsLoading(true);
+        // console.log(r);
+        const response = await fetch(`${hostname}/api/event/get-net/${props.eventID}/${r}`, requestOptions);
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
-        // console.log("JSON - ", jsonRes);
+        console.log("Get net - ", response);
         setNets(jsonRes.findNets);
         // ⛏️⛏️ CHECK FOR INITIAL NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
         if (jsonRes.findNets.length < 1) {
@@ -40,17 +67,21 @@ const Rounds = (props) => {
         } else {
             setInitialize(false);
         }
+        setIsLoading(false);
+        // console.log(round);
     }
 
 
 
     useEffect(() => {
-        findAllNets();
+        // console.log("findAllNets called from use effect");
+        findAllNets(round);
     }, []);
 
 
     const updateFindNets = (update) => {
-        if (update) findAllNets();
+        // console.log("findAllNets from update event");
+        if (update) findAllNets(round);
     }
 
 
@@ -63,22 +94,67 @@ const Rounds = (props) => {
 
 
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-    const showAllNavItem = () => {
+    const showTabContent = () => {
         switch (activeItem) {
             case "r124":
-                return (<div className="tab-pane fade show active" >
-                    <Round124
-                        initialize={initialize}
-                        nets={nets}
-                        updateNets={updateFindNets}
-                        eventID={props.eventID} />
-                </div>);
+                if (isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (<div className="tab-pane fade show active" >
+                        <Round124
+                            initialize={initialize}
+                            nets={nets}
+                            round={round}
+                            updateNets={updateFindNets}
+                            eventID={props.eventID} />
+                    </div>);
+                }
             case "r528":
-                return (<div className="tab-pane fade show active" > <Round528 /> </div>);
+                if (isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+
+                    return (<div className="tab-pane fade show active" >
+                        <Round528
+                            initialize={initialize}
+                            nets={nets}
+                            round={round}
+                            updateNets={updateFindNets}
+                            eventID={props.eventID} />
+                    </div>);
+                }
             case "r9212":
-                return (<div className="tab-pane fade show active" ><Round9212 /> </div>);
+                if (isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (<div className="tab-pane fade show active" ><Round9212 /> </div>);
+                }
             case "r13215":
-                return (<div className="tab-pane fade show active" ><Round13215 /> </div>);
+                if (isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (<div className="tab-pane fade show active" ><Round13215 /> </div>);
+                }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);
         }
@@ -93,10 +169,11 @@ const Rounds = (props) => {
                 {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
             </nav>
             <div className="tab-content" >
-                {showAllNavItem()}
+                {showTabContent()}
             </div>
         </div>
     )
 }
+
 
 export default Rounds;

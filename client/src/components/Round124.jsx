@@ -9,8 +9,10 @@ function Round124(props) {
 
 
     useEffect(() => {
-        console.log("All nets - ", props.nets);
-    });
+        // console.log("All nets - ", props.nets);
+        setUpdatePerformance([]);
+        setIsLoading(false);
+    }, []);
 
 
     // props.initialize
@@ -55,14 +57,15 @@ function Round124(props) {
         };
         // console.log(props.eventID);
 
-        const response = await fetch(`${hostname}/api/event/update-one-to-four/${props.eventID}`, requestOptions);
+        const response = await fetch(`${hostname}/api/event/update-one-to-four/${props.eventID}/${props.round}`, requestOptions);
         console.log("Update - ", response);
-        console.log("Update - ", updatePerformance);
+        // console.log("Update - ", updatePerformance);
         setUpdatePerformance([]);
+        props.updateNets(true);
     }
 
 
-    const handleInputChange = (e, id, round, score, netID) => {
+    const handleInputChange = (e, id, round, scoreType, netID) => {
         e.preventDefault();
         // console.log("Change - ", e);
         // console.log("Performance ID - ", id);
@@ -71,16 +74,32 @@ function Round124(props) {
         // console.log("Net ID - ", netID);
 
 
+
+
+
+
+
+
         const findItem = updatePerformance.find((elm, i) => elm.performanceID === id && elm.round === round);
         if (findItem) {
             // console.log("Find Item - ", findItem);
             updatePerformance.forEach((up, i) => {
-                if (up.performanceID === id && score === "point") up.point = e.target.value;
-                if (up.performanceID === id && score === "pointDeferential") up.pointDeferential = e.target.value;
+                if (up.performanceID === id && up.round === round && scoreType === "pointDeferential") up.score.pointDeferential = e.target.value;
+                if (up.performanceID === id && up.round === round && scoreType === "point") up.score.point = e.target.value;
             });
         } else {
-            setUpdatePerformance(oldState => [...oldState, { performanceID: id, round, score, point: e.target.value, pointDeferential: e.target.value, netID }]);
+            // CREATE NEW ONE 
+            if (scoreType === "point") {
+                setUpdatePerformance(oldState => [...oldState, { performanceID: id, round, score: { point: e.target.value }, netID }]);
+            }
+            if (scoreType === "pointDeferential") {
+                setUpdatePerformance(oldState => [...oldState, { performanceID: id, round, score: { pointDeferential: e.target.value }, netID }]);
+
+            }
         }
+
+
+        // console.log(updatePerformance);
 
 
 
@@ -119,11 +138,20 @@ function Round124(props) {
         }
     }
 
+
+
+
+
     const allPerformers = (net, round, score) => {
         // console.log("s - ", score);
         return net.performance.map((p, j) => (
             <div style={{ width: "100%", height: "100%" }} key={j}>
-                <input type="text" className="form-control my-3" defaultValue={getDefaultValue(p, score, round)} style={{ width: "80px" }} name={net.sl} onChange={e => handleInputChange(e, p._id, round, score, net._id)} />
+                <input
+                    type="text"
+                    className="form-control my-3"
+                    defaultValue={getDefaultValue(p, score, round)}
+                    style={{ width: "80px" }} name={net.sl}
+                    onChange={e => handleInputChange(e, p._id, round, score, net._id)} />
             </div>
         ));
         // if (score === "point") {
@@ -185,20 +213,17 @@ function Round124(props) {
                                         </td>
 
 
-                                        {/* ROUND ONE  */}
+                                        {/* ROUND ONE - POINT AND POINT DEFERENTIAL */}
                                         <td >{allPerformers(net, 1, "point")} </td>
                                         <td>{allPerformers(net, 1, "pointDeferential")}</td>
 
 
-                                        {/* ROUND TWO  */}
                                         <td >{allPerformers(net, 2, "point")} </td>
                                         <td>{allPerformers(net, 2, "pointDeferential")}</td>
 
-                                        {/* ROUND THREE  */}
                                         <td >{allPerformers(net, 3, "point")} </td>
                                         <td>{allPerformers(net, 3, "pointDeferential")}</td>
 
-                                        {/* ROUND FOUR  */}
                                         <td >{allPerformers(net, 4, "point")} </td>
                                         <td>{allPerformers(net, 4, "pointDeferential")}</td>
 
