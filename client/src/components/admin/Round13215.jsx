@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+
 
 function Round13215(props) {
     return (
@@ -8,4 +9,4 @@ function Round13215(props) {
     )
 }
 
-export default Round13215
+export default Round13215;

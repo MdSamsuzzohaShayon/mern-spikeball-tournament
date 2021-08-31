@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../utils/global';
+import { hostname } from '../../utils/global';
 
 function Round528(props) {
     const [isLoading, setIsLoading] = useState(false);

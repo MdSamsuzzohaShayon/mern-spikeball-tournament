@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../utils/global';
+import { hostname } from '../../utils/global';
+import { totalPoint124 } from '../../utils/addTotalPoint';
 
-function Round9212(props) {
+function Round124(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [updatePerformance, setUpdatePerformance] = useState([]);
 
@@ -15,20 +16,25 @@ function Round9212(props) {
     }, []);
 
 
-    // ⛏️⛏️ INITIALIZE TO NEW NET FOR ROUND 5 ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+    // props.initialize
+    // ⛏️⛏️ INITIALIZE TO NEW NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const initializeNetHandler = async () => {
+        // console.log("Initialize nets");
         setIsLoading(true);
+        // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
         const requestOptions = {
             method: 'POST',
             headers: { "Content-Type": 'application/json' },
             credentials: "include"
         };
+        // console.log(props.eventID);
 
-        const response = await fetch(`${hostname}/api/event/assign-nineth-net/${props.eventID}/${props.round}`, requestOptions);
-        console.log("Initialize net for round 5 - ", response);
+        const response = await fetch(`${hostname}/api/event/assign-initial-net/${props.eventID}`, requestOptions);
+        console.log("Initialize net - ", response);
         props.updateNets(true);
         setIsLoading(false);
     }
+    // console.log(props.nets);
 
 
 
@@ -36,6 +42,14 @@ function Round9212(props) {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+
+        // const uniqueData = [...updatePerformance.reduce((map, obj) => map.set(obj.performanceID, obj), new Map()).values()];
+        // reduce(function callbackFn(previousValue, currentValue) { ... })
+        // const uniqueData = updatePerformance.reduce((previousValue, currentValue) => {
+        //     console.log("Previous - ",previousValue);
+        //     console.log("Current - ",currentValue);
+        // });
+        // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
         const requestOptions = {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
@@ -60,6 +74,13 @@ function Round9212(props) {
         // console.log("score - ", score);
         // console.log("Net ID - ", netID);
 
+
+
+
+
+
+
+
         const findItem = updatePerformance.find((elm, i) => elm.performanceID === id && elm.round === round);
         if (findItem) {
             // console.log("Find Item - ", findItem);
@@ -77,6 +98,14 @@ function Round9212(props) {
 
             }
         }
+
+
+        // console.log(updatePerformance);
+
+
+
+
+        // SUBMIT AND SET TO DEFAULT STATE 
     }
 
 
@@ -84,28 +113,28 @@ function Round9212(props) {
     const getDefaultValue = (p, scoreType, round) => {
         if (scoreType === "point") {
             switch (round) {
-                case 5:
-                    if (p.round5 && p.round5 !== undefined) { return p.round5.point } else { return null };
-                case 6:
-                    if (p.round6 && p.round6 !== undefined) { return p.round6.point } else { return null };
-                case 7:
-                    if (p.round7 && p.round7 !== undefined) { return p.round7.point } else { return null };
-                case 8:
-                    if (p.round8 && p.round8 !== undefined) { return p.round8.point } else { return null };
+                case 1:
+                    if (p.round1 && p.round1 !== undefined) { return p.round1.point } else { return null };
+                case 2:
+                    if (p.round2 && p.round2 !== undefined) { return p.round2.point } else { return null };
+                case 3:
+                    if (p.round3 && p.round3 !== undefined) { return p.round3.point } else { return null };
+                case 4:
+                    if (p.round4 && p.round4 !== undefined) { return p.round4.point } else { return null };
             }
         }
 
         if (scoreType === "pointDeferential") {
             // console.log(p, round2.pointDeferential);
             switch (round) {
-                case 5:
-                    if (p.round5 && p.round5 !== undefined) { return p.round5.pointDeferential } else { return null };
-                case 6:
-                    if (p.round6 && p.round6 !== undefined) { return p.round6.pointDeferential } else { return null };
-                case 7:
-                    if (p.round7 && p.round7 !== undefined) { return p.round7.pointDeferential } else { return null };
-                case 8:
-                    if (p.round8 && p.round8 !== undefined) { return p.round8.pointDeferential } else { return null };
+                case 1:
+                    if (p.round1 && p.round1 !== undefined) { return p.round1.pointDeferential } else { return null };
+                case 2:
+                    if (p.round2 && p.round2 !== undefined) { return p.round2.pointDeferential } else { return null };
+                case 3:
+                    if (p.round3 && p.round3 !== undefined) { return p.round3.pointDeferential } else { return null };
+                case 4:
+                    if (p.round4 && p.round4 !== undefined) { return p.round4.pointDeferential } else { return null };
             }
         }
     }
@@ -126,27 +155,52 @@ function Round9212(props) {
                     onChange={e => handleInputChange(e, p._id, round, score, net._id)} />
             </div>
         ));
+        // if (score === "point") {
+        //     return net.performance.map((p, j) => (
+        //         <div style={{ width: "100%", height: "100%" }} key={j}>
+        //             <input type="text" className="form-control my-3" defaultValue={getDefaultValue(p, score, round)} style={{ width: "80px" }} name={net.sl} onChange={e => handleInputChange(e, p._id, round, score, net._id)} />
+        //         </div>
+        //     ));
+        // }
+        // if (score === "pointDeferential") {
+        //     return net.performance.map((p, j) => (
+        //         <div style={{ width: "100%", height: "100%" }} key={j}>
+        //             <input type="text" className="form-control my-3" defaultValue={getDefaultValue(p, score, round)} style={{ width: "80px" }} name={net.sl} onChange={e => handleInputChange(e, p._id, round, score, net._id)} />
+        //         </div>
+        //     ));
+        // }
+    }
+
+
+
+    const getTotal = (net, round, score) => {
+        // console.log(score);
+        if (score === "point") {
+            return net.performance.map((p, j) => (
+                <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
+                    <div className="total">{totalPoint124(p)}</div>
+                </div>
+            ));
+        }
     }
 
 
     return (
         <div className="Round124">
-            {props.initialize && <button className="btn btn-primary" onClick={initializeNetHandler} >Reassign net for round 9 to 12</button>}
+            {props.initialize && <button className="btn btn-primary" onClick={initializeNetHandler} >Initialize net for first round</button>}
             <br />
-            {isLoading ? (<div className="text-center spinner-parent">
-                <div className="spinner-border text-danger spinner-child" role="status">
-                </div>
-            </div>) : (
+            {isLoading ? <div className="spinner-border text-danger" role="status"></div> : (
                 <div className="show-all-nets">
                     {!props.initialize && (
-                        <table className="table table-hover table-bordered">
+                        <table className="table table-hover table-bordered text-capitalize">
                             <thead className="table-dark">
                                 <tr>
                                     <th colSpan="2" scope="colgroup"></th>
-                                    <th colSpan="2" scope="colgroup">Round 5</th>
-                                    <th colSpan="2" scope="colgroup">Round 6</th>
-                                    <th colSpan="2" scope="colgroup">Round 7</th>
-                                    <th colSpan="2" scope="colgroup">Round 8</th>
+                                    <th colSpan="2" scope="colgroup">Round 1</th>
+                                    <th colSpan="2" scope="colgroup">Round 2</th>
+                                    <th colSpan="2" scope="colgroup">Round 3</th>
+                                    <th colSpan="2" scope="colgroup">Round 4</th>
+                                    <th colSpan="2" scope="colgroup">Total</th>
                                 </tr>
                                 <tr>
                                     <th scope="col">Net</th>
@@ -159,6 +213,8 @@ function Round9212(props) {
                                     <th scope="col">point deferential</th>
                                     <th scope="col">point</th>
                                     <th scope="col">point deferential</th>
+                                    <th scope="col">total point</th>
+                                    <th scope="col">total deferential</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -175,18 +231,22 @@ function Round9212(props) {
 
 
                                         {/* ROUND ONE - POINT AND POINT DEFERENTIAL */}
-                                        <td >{allPerformers(net, 5, "point")} </td>
-                                        <td>{allPerformers(net, 5, "pointDeferential")}</td>
+                                        <td >{allPerformers(net, 1, "point")} </td>
+                                        <td>{allPerformers(net, 1, "pointDeferential")}</td>
 
 
-                                        <td >{allPerformers(net, 6, "point")} </td>
-                                        <td>{allPerformers(net, 6, "pointDeferential")}</td>
+                                        <td >{allPerformers(net, 2, "point")} </td>
+                                        <td>{allPerformers(net, 2, "pointDeferential")}</td>
 
-                                        <td >{allPerformers(net, 7, "point")} </td>
-                                        <td>{allPerformers(net, 7, "pointDeferential")}</td>
+                                        <td >{allPerformers(net, 3, "point")} </td>
+                                        <td>{allPerformers(net, 3, "pointDeferential")}</td>
 
-                                        <td >{allPerformers(net, 8, "point")} </td>
-                                        <td>{allPerformers(net, 8, "pointDeferential")}</td>
+                                        <td >{allPerformers(net, 4, "point")} </td>
+                                        <td>{allPerformers(net, 4, "pointDeferential")}</td>
+
+
+                                        <td >{getTotal(net, "124", "point")}</td>
+                                        <td >{getTotal(net, "124", "pointDeferential")}</td>
 
 
                                     </tr>
@@ -201,4 +261,4 @@ function Round9212(props) {
     )
 }
 
-export default Round9212;
+export default Round124;

@@ -27,7 +27,7 @@ const updatedPerformance = (pu, roundNum) => {
                 if (pu.score.pointDeferential) round4.pointDeferential = pu.score.pointDeferential;
                 return { round4 }
         }
-    }else if(roundNum == 5){        
+    } else if (roundNum == 5) {
         switch (pu.round) {
             case 5:
                 let round5 = new Object();
@@ -49,6 +49,29 @@ const updatedPerformance = (pu, roundNum) => {
                 if (pu.score.point) round8.point = pu.score.point;
                 if (pu.score.pointDeferential) round8.pointDeferential = pu.score.pointDeferential;
                 return { round8 }
+        }
+    } else if (roundNum == 9) {
+        switch (pu.round) {
+            case 9:
+                let round9 = new Object();
+                if (pu.score.point) round9.point = pu.score.point;
+                if (pu.score.pointDeferential) round9.pointDeferential = pu.score.pointDeferential;
+                return { round9 }
+            case 10:
+                let round10 = new Object();
+                if (pu.score.point) round10.point = pu.score.point;
+                if (pu.score.pointDeferential) round10.pointDeferential = pu.score.pointDeferential;
+                return { round10 }
+            case 11:
+                let round11 = new Object();
+                if (pu.score.point) round11.point = pu.score.point;
+                if (pu.score.pointDeferential) round11.pointDeferential = pu.score.pointDeferential;
+                return { round11 }
+            case 12:
+                let round12 = new Object();
+                if (pu.score.point) round12.point = pu.score.point;
+                if (pu.score.pointDeferential) round12.pointDeferential = pu.score.pointDeferential;
+                return { round12 }
         }
     }
 }

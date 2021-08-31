@@ -2,7 +2,7 @@ const express = require('express');
 const Event = require('../models/Event');
 const Net = require('../models/Net');
 const Performance = require('../models/Performance');
-const { rankingRound, wholeRanking } = require('../utils/ranking');
+const { rankingRound, wholeRanking, rankingRoundNine } = require('../utils/ranking');
 const updatedPerformance = require('../utils/updatedPerformance');
 
 const router = express.Router();
@@ -18,8 +18,8 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
     try {
         const docs = await Event.find();
-        console.log("Get all events");
-        console.log(docs);
+        // console.log("Get all events");
+        // console.log(docs);
         res.status(200).json({ msg: 'Get All Events', events: docs });
     } catch (error) {
         res.json(error);
@@ -247,10 +247,10 @@ router.post('/assign-nineth-net/:eventID/:round', async (req, res, next) => {
     try {
         const findPerformance = await Performance.find({ event: req.params.eventID });
         // console.log(findPerformance);
-        const ranking = findPerformance.sort(rankingRound);
+        const ranking = findPerformance.sort(rankingRoundNine);
 
         // CREATE NETS 
-        console.log(ranking);
+        // console.log(ranking);
         let net;
         let i, j, temporary, chunk = 4, netNo = 1;
         for (i = 0, j = ranking.length; i < j; i += chunk) {

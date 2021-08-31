@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Round124 from '../Round124';
-import Round528 from '../Round528';
-import Round9212 from '../Round9212';
-import Round13215 from '../Round13215';
+import Round124 from './Round124';
+import Round528 from './Round528';
+import Round9212 from './Round9212';
+import Round13215 from './Round13215';
 import { hostname } from '../../utils/global';
 
 const Rounds = (props) => {
@@ -59,6 +59,7 @@ const Rounds = (props) => {
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
         console.log("Get net - ", response);
+        console.log(jsonRes);
         setNets(jsonRes.findNets);
         // ⛏️⛏️ CHECK FOR INITIAL NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
         if (jsonRes.findNets.length < 1) {
@@ -169,8 +170,8 @@ const Rounds = (props) => {
         <div className="Rounds">
             <nav className="nav nav-pills">
                 <a className="nav-link active" className={activeItem === "r124" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r124")}>Round one to four</a>
-                <a className="nav-link active" className={activeItem === "r528" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r528")}>Round five to nine</a>
-                <a className="nav-link active" className={activeItem === "r9212" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r9212")}>Round ten to twelve</a>
+                <a className="nav-link active" className={activeItem === "r528" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r528")}>Round five to eight</a>
+                <a className="nav-link active" className={activeItem === "r9212" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r9212")}>Round nine to twelve</a>
                 <a className="nav-link active" className={activeItem === "r13215" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r13215")}>Round thirteen to fifteen</a>
                 {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
             </nav>
