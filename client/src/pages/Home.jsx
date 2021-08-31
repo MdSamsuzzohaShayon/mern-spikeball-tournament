@@ -25,11 +25,11 @@ class Home extends Component {
             const options = { method: "GET", headers: { "Content-Type": "application/json" }, credentials: "include" };
             this.setState({ isLoading: true });
             const response = await fetch(`${hostname}/api/event`, options);
-            console.log("Getting all event - ",response);
+            // console.log("Getting all event - ",response);
             const text = await response.text();
-            console.log("Text - ", text);
+            // console.log("Text - ", text);
             const jsonResponse = await JSON.parse(text);
-            console.log(jsonResponse);
+            // console.log(jsonResponse);
             this.setState({
                 eventList: jsonResponse.events,
                 isLoading: false

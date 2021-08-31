@@ -5,21 +5,27 @@ import { totalDeferential } from '../../utils/pointDeferential';
 const WholePerformance = (props) => {
     return (
         <React.Fragment>
-            <li className="list-group-item d-flex align-items-center justify-content-between bg-dark text-light" >
-                <div className="first-name">Ranking</div>
-                <div className="first-name">Name</div>
-                <div className="total-point">Total Point</div>
-                <div className="total-point">Total Deferential</div>
-            </li>
-            <ol className="list-group list-group-numbered">
+            <table className="table table-bordered table-striped table-hover">
+                <thead className="thead-dark bg-dark text-light">
+                    <tr>
+                        <th scope="col">Ranking</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Total Point</th>
+                        <th scope="col">Total Deferential</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {props.pp.map((p, i) => (
-                    <li className="list-group-item d-flex align-items-center justify-content-between" key={i}>
-                        <div className="first-name">{p.participant.firstname}</div>
-                        <div className="total-point">{totalPoint(p)}</div>
-                        <div className="total-point">{totalDeferential(p)}</div>
-                    </li>
-                ))}
-            </ol>
+                        <tr key={i}>
+                            <td>{i + 1}</td>
+                            <td>{p.participant.firstname}</td>
+                            <td>{totalPoint(p)}</td>
+                            <td>{totalDeferential(p)}</td>
+                        </tr>
+                    ))}
+
+                </tbody>
+            </table>
         </React.Fragment>
     );
 }

@@ -119,3 +119,149 @@ export const assending528 = (a, b) => {
     }
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const assending9212 = (a, b) => {
+
+    let pointA = 0, pointB = 0;
+    if (a.round9) pointA += a.round9.point;
+    if (a.round10) pointA += a.round10.point;
+    if (a.round11) pointA += a.round11.point;
+    if (a.round12) pointA += a.round12.point;
+
+
+
+    if (b.round9) pointB += b.round9.point;
+    if (b.round10) pointB += b.round10.point;
+    if (b.round11) pointB += b.round11.point;
+    if (b.round12) pointB += b.round12.point;
+
+
+
+    if (pointA > pointB) {
+        return -1;
+    }
+    if (pointB > pointA) {
+        return 1
+    }
+    if (pointA === pointB) {
+        // console.log();
+        let pdta = 0;
+        if (a.round9) { let pd = a.round9.pointDeferential.split('-'); pdta += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (a.round10) { let pd = a.round10.pointDeferential.split('-'); pdta += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (a.round11) { let pd = a.round11.pointDeferential.split('-'); pdta += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (a.round12) { let pd = a.round12.pointDeferential.split('-'); pdta += parseInt(pd[0]) - parseInt(pd[1]); }
+
+
+
+
+        let pdtb = 0;
+        if (b.round9) { let pd = b.round9.pointDeferential.split('-'); pdtb += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (b.round10) { let pd = b.round10.pointDeferential.split('-'); pdtb += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (b.round11) { let pd = b.round11.pointDeferential.split('-'); pdtb += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (b.round12) { let pd = b.round12.pointDeferential.split('-'); pdtb += parseInt(pd[0]) - parseInt(pd[1]); }
+
+
+
+
+
+        // console.log("PDTA - " + pdta + " ; PDTB - " + pdtb);
+
+
+
+        if (pdta > pdtb) {
+            return -1;
+        }
+        if (pdta < pdtb) {
+            return 1;
+        }
+        return 0;
+
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const assending13215 = (a, b) => {
+
+    let pointA = 0, pointB = 0;
+    if (a.round13) pointA += a.round13.point;
+    if (a.round14) pointA += a.round14.point;
+    if (a.round15) pointA += a.round15.point;
+
+
+
+    if (b.round13) pointB += b.round13.point;
+    if (b.round14) pointB += b.round14.point;
+    if (b.round15) pointB += b.round15.point;
+
+
+
+    if (pointA > pointB) {
+        return -1;
+    }
+    if (pointB > pointA) {
+        return 1
+    }
+    if (pointA === pointB) {
+        // console.log();
+        let pdta = 0;
+        if (a.round13) { let pd = a.round13.pointDeferential.split('-'); pdta += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (a.round14) { let pd = a.round14.pointDeferential.split('-'); pdta += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (a.round15) { let pd = a.round15.pointDeferential.split('-'); pdta += parseInt(pd[0]) - parseInt(pd[1]); }
+
+
+
+
+        let pdtb = 0;
+        if (b.round13) { let pd = b.round13.pointDeferential.split('-'); pdtb += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (b.round14) { let pd = b.round14.pointDeferential.split('-'); pdtb += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (b.round15) { let pd = b.round15.pointDeferential.split('-'); pdtb += parseInt(pd[0]) - parseInt(pd[1]); }
+
+
+
+
+
+        // console.log("PDTA - " + pdta + " ; PDTB - " + pdtb);
+
+
+
+        if (pdta > pdtb) {
+            return -1;
+        }
+        if (pdta < pdtb) {
+            return 1;
+        }
+        return 0;
+
+    }
+    return 0;
+}

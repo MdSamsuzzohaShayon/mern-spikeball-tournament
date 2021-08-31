@@ -16,6 +16,7 @@ export const totalDeferential = (performance) => {
         if (performance.round10) { let pd = performance.round10.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
         if (performance.round11) { let pd = performance.round11.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
         if (performance.round12) { let pd = performance.round12.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+
         if (performance.round13) { let pd = performance.round13.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
         if (performance.round14) { let pd = performance.round14.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
         if (performance.round15) { let pd = performance.round15.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
@@ -59,6 +60,44 @@ export const totalDeferential528 = (performance) => {
         if (performance.round6) { let pd = performance.round6.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
         if (performance.round7) { let pd = performance.round7.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
         if (performance.round8) { let pd = performance.round8.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+    } catch (error) {
+        console.log(error);
+    }
+    // console.log();
+
+
+    return deferential;
+}
+
+
+
+
+
+export const totalDeferential9212 = (performance) => {
+    let deferential = 0;
+    try {
+        if (performance.round9) { let pd = performance.round9.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.round10) { let pd = performance.round10.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.round11) { let pd = performance.round11.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.round12) { let pd = performance.round12.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+    } catch (error) {
+        console.log(error);
+    }
+    // console.log();
+
+
+    return deferential;
+}
+
+
+
+
+export const totalDeferential13215 = (performance) => {
+    let deferential = 0;
+    try {
+        if (performance.round13) { let pd = performance.round13.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.round14) { let pd = performance.round14.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.round15) { let pd = performance.round15.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
     } catch (error) {
         console.log(error);
     }

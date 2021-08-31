@@ -18,8 +18,8 @@ export const totalPoint = (performance) => {
     if (performance.round10) point += performance.round10.point;
     if (performance.round11) point += performance.round11.point;
     if (performance.round12) point += performance.round12.point;
+
     if (performance.round13) point += performance.round13.point;
-    if (performance.round14) point += performance.round14.point;
     if (performance.round14) point += performance.round14.point;
     if (performance.round15) point += performance.round15.point;
     return point;
@@ -53,5 +53,27 @@ export const totalPoint528 = (performance) => {
     if (performance.round6) point += performance.round6.point;
     if (performance.round7) point += performance.round7.point;
     if (performance.round8) point += performance.round8.point;
+    return point;
+}
+
+
+
+export const totalPoint9212 = (performance) => {
+    let point = 0;
+    if (performance.round9) point += performance.round9.point;
+    if (performance.round10) point += performance.round10.point;
+    if (performance.round11) point += performance.round11.point;
+    if (performance.round12) point += performance.round12.point;
+    return point;
+}
+
+
+
+
+export const totalPoint13215 = (performance) => {
+    let point = 0;
+    if (performance.round13) point += performance.round13.point;
+    if (performance.round14) point += performance.round14.point;
+    if (performance.round15) point += performance.round15.point;
     return point;
 }

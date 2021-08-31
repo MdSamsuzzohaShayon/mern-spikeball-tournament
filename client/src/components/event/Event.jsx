@@ -3,6 +3,8 @@ import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
 import Round124 from './Round124';
 import Round528 from './Round528';
+import Round9212 from './Round9212';
+import Round13215 from './Round13215';
 import WholePerformance from './WholePerformance';
 
 class Event extends Component {
@@ -89,6 +91,20 @@ class Event extends Component {
                             <div className="roundwise-ranking">
                                 <h2 className="h2">Round five to eight ranking</h2>
                                 <div className="performance-list"><Round528 pp={this.state.pp} /></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="roundwise-ranking">
+                                <h2 className="h2">Round nine to twelve ranking</h2>
+                                <div className="performance-list"><Round9212 pp={this.state.pp} /></div>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="roundwise-ranking">
+                                <h2 className="h2">Round thirteen to fifteen ranking</h2>
+                                <div className="performance-list"><Round13215 pp={this.state.pp} /></div>
                             </div>
                         </div>
                     </div>

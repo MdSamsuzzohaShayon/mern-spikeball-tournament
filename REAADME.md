@@ -2,6 +2,9 @@
 
 Emojies - 📜 ⛏️ ➖ ✅
 
+### Hosting
+ - __http://18.216.248.251/home__
+
 
 ### Planning
 
