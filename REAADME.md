@@ -37,6 +37,7 @@ Emojies - 📜 ⛏️ ➖ ✅
  - Assign the net for round 5 - rank 1 to 4 player in net 1, rank 5 to 8 in net 2 --- so on.
  - Validation - if there is point must have point deferential, two player mush have point for every round, if all round round is completed then go on
  - Make a scoring board
+ - SHOULD MAKE A CURRENT ROUND AND SAVE IT TO THE DATABASE 
 
 
 

@@ -168,7 +168,7 @@ module.exports.wholeRanking = (a, b) => {
 
 
 
-        console.log("PDTA - " + pdta + " ; PDTB - " + pdtb);
+        // console.log("PDTA - " + pdta + " ; PDTB - " + pdtb);
 
 
 

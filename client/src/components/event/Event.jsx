@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
-import { totalPoint } from '../../utils/addTotalPoint';
-import { totalDeferential } from '../../utils/pointDeferential';
+import Round124 from './Round124';
+import Round528 from './Round528';
+import WholePerformance from './WholePerformance';
 
 class Event extends Component {
     constructor(props) {
@@ -16,7 +17,6 @@ class Event extends Component {
 
 
         this.getSingleEvent = this.getSingleEvent.bind(this);
-        this.performanceList = this.performanceList.bind(this);
     }
 
 
@@ -47,27 +47,8 @@ class Event extends Component {
     // }
 
 
-    performanceList() {
-        return (
-            <>
-                <li className="list-group-item d-flex align-items-center justify-content-between bg-dark text-light" >
-                    <div className="first-name">Ranking</div>
-                    <div className="first-name">Name</div>
-                    <div className="total-point">Total Point</div>
-                    <div className="total-point">Total Deferential</div>
-                </li>
-                <ol className="list-group list-group-numbered">
-                    {this.state.pp.map((p, i) => (
-                        <li className="list-group-item d-flex align-items-center justify-content-between" key={i}>
-                            <div className="first-name">{p.participant.firstname}</div>
-                            <div className="total-point">{totalPoint(p)}</div>
-                            <div className="total-point">{totalDeferential(p)}</div>
-                        </li>
-                    ))}
-                </ol>
-            </>
-        );
-    }
+
+
 
 
     componentDidMount() {
@@ -90,11 +71,28 @@ class Event extends Component {
                 {this.state.isLoading ? (<div className="text-center spinner-parent">
                     <div className="spinner-border text-danger spinner-child" role="status">
                     </div>
-                </div>) : (<div className="display-event-details">
-                    <div className="whole-ranking container">
+                </div>) : (<div className="display-event-details container">
+                    <div className="whole-ranking">
                         <h2 className="h2">Overall ranking</h2>
-                        <div className="performance-list">{this.performanceList()}</div>
+                        <div className="performance-list"><WholePerformance pp={this.state.pp} /> </div>
                     </div>
+
+
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="roundwise-ranking">
+                                <h2 className="h2">Round one to four ranking</h2>
+                                <div className="performance-list"><Round124 pp={this.state.pp} /></div>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="roundwise-ranking">
+                                <h2 className="h2">Round five to eight ranking</h2>
+                                <div className="performance-list"><Round528 pp={this.state.pp} /></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>)}
             </div>
         )
