@@ -143,10 +143,10 @@ function Round9212(props) {
                             <thead className="table-dark">
                                 <tr>
                                     <th colSpan="2" scope="colgroup"></th>
-                                    <th colSpan="2" scope="colgroup">Round 5</th>
-                                    <th colSpan="2" scope="colgroup">Round 6</th>
-                                    <th colSpan="2" scope="colgroup">Round 7</th>
-                                    <th colSpan="2" scope="colgroup">Round 8</th>
+                                    <th colSpan="2" scope="colgroup">Round 9</th>
+                                    <th colSpan="2" scope="colgroup">Round 10</th>
+                                    <th colSpan="2" scope="colgroup">Round 11</th>
+                                    <th colSpan="2" scope="colgroup">Round 12</th>
                                 </tr>
                                 <tr>
                                     <th scope="col">Net</th>

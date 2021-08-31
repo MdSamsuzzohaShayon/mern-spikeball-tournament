@@ -24,7 +24,7 @@ function Round13215(props) {
             credentials: "include"
         };
 
-        const response = await fetch(`${hostname}/api/event/assign-nineth-net/${props.eventID}/${props.round}`, requestOptions);
+        const response = await fetch(`${hostname}/api/event/assign-thirteen-net/${props.eventID}/${props.round}`, requestOptions);
         console.log("Initialize net for round - ", response);
         props.updateNets(true);
         setIsLoading(false);
@@ -44,7 +44,7 @@ function Round13215(props) {
         };
         // console.log(props.eventID);
 
-        const response = await fetch(`${hostname}/api/event/assign-thirteen-net/${props.eventID}/${props.round}`, requestOptions);
+        const response = await fetch(`${hostname}/api/event/update-one-to-four/${props.eventID}/${props.round}`, requestOptions);
         console.log("Update - ", response);
         // console.log("Update - ", updatePerformance);
         setUpdatePerformance([]);
