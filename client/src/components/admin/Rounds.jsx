@@ -144,7 +144,8 @@ const Rounds = (props) => {
                     );
                 } else {
                     return (<div className="tab-pane fade show active" >
-                        <Round9212 initialize={initialize}
+                        <Round9212
+                            initialize={initialize}
                             nets={nets}
                             round={round}
                             updateNets={updateFindNets}
@@ -160,7 +161,13 @@ const Rounds = (props) => {
                         </div>
                     );
                 } else {
-                    return (<div className="tab-pane fade show active" ><Round13215 /> </div>);
+                    return (<div className="tab-pane fade show active" ><Round13215
+                        initialize={initialize}
+                        nets={nets}
+                        round={round}
+                        updateNets={updateFindNets}
+                        eventID={props.eventID}
+                    /> </div>);
                 }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);

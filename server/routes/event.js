@@ -2,7 +2,7 @@ const express = require('express');
 const Event = require('../models/Event');
 const Net = require('../models/Net');
 const Performance = require('../models/Performance');
-const { rankingRound, wholeRanking, rankingRoundNine } = require('../utils/ranking');
+const { rankingRound, wholeRanking, rankingRoundNine, rankingRoundThirteen} = require('../utils/ranking');
 const updatedPerformance = require('../utils/updatedPerformance');
 
 const router = express.Router();
@@ -251,6 +251,48 @@ router.post('/assign-nineth-net/:eventID/:round', async (req, res, next) => {
 
         // CREATE NETS 
         // console.log(ranking);
+        let net;
+        let i, j, temporary, chunk = 4, netNo = 1;
+        for (i = 0, j = ranking.length; i < j; i += chunk) {
+            temporary = ranking.slice(i, i + chunk);
+
+
+            const newNet = new Net({
+                sl: netNo,
+                $push: { performance: ranking._id },
+                event: req.params.eventID,
+                round: req.params.round
+            });
+            net = await newNet.save();
+
+            for (let k of temporary) {
+                const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { $push: { performance: k._id } }, { new: true });
+            }
+
+
+            netNo++;
+        }
+
+        res.status(201).json({ msg: "rank performance and inatilize performance", ranking, net })
+
+    } catch (error) {
+        console.log(error);
+    }
+
+});
+
+
+
+
+
+// ⛏️⛏️ ASSIGN PLAYER TO THE NET FOR ROUND ROUND 9 - CREATE CREATE MORE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+router.post('/assign-thirteen-net/:eventID/:round', async (req, res, next) => {
+    try {
+        const findPerformance = await Performance.find({ event: req.params.eventID });
+        // console.log(findPerformance);
+        const ranking = findPerformance.sort(rankingRoundThirteen);
+
+        // CREATE NETS 
         let net;
         let i, j, temporary, chunk = 4, netNo = 1;
         for (i = 0, j = ranking.length; i < j; i += chunk) {
