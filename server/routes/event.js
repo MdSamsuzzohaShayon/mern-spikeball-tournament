@@ -18,6 +18,8 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
     try {
         const docs = await Event.find();
+        console.log("Get all events");
+        console.log(docs);
         res.status(200).json({ msg: 'Get All Events', events: docs });
     } catch (error) {
         res.json(error);
