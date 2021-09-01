@@ -6,11 +6,19 @@ const participantSchema = new Schema({
         type: String,
         required: true
     },
-    lastname: String,
+    lastname: {
+        type: String,
+        required: true
+    },
     email: String,
     cell: String,
     birthdate: String,
-    city: String,
+    payment_amount: String,
+    payment_method: String,
+    city: {
+        type: String,
+        required: true
+    },
     event: {
         type: Schema.Types.ObjectId,
         required: true,

@@ -43,6 +43,11 @@ Emojies - 📜 ⛏️ ➖ ✅
  - SHOULD MAKE A CURRENT ROUND AND SAVE IT TO THE DATABASE 
 
 
+### Change requirements
+ - 5 round with 3 game for each round in total 15 games
+ - Add some filed for participant - payment amount, paid method (cash, check ), venmo slash (*confused*), (city, firstname, lastname) required
+
+
 
  ##### Problem
   - Component did update - login automitically and get a user
@@ -53,6 +58,7 @@ Emojies - 📜 ⛏️ ➖ ✅
  - __https://www.npmjs.com/package/csv-parser__
  - __https://www.npmjs.com/package/csvtojson__
  - __https://www.npmjs.com/package/fast-csv__
+ - __https://www.geeksforgeeks.org/how-to-convert-csv-to-json-file-having-comma-separated-values-in-node-js/__
 
 
 ### Mongoose

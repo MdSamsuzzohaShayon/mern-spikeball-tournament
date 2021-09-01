@@ -2,7 +2,7 @@ const express = require('express');
 const Event = require('../models/Event');
 const Net = require('../models/Net');
 const Performance = require('../models/Performance');
-const { rankingRound, wholeRanking, rankingRoundNine, rankingRoundThirteen} = require('../utils/ranking');
+const { rankingRound, wholeRanking, rankingRoundNine, rankingRoundThirteen } = require('../utils/ranking');
 const updatedPerformance = require('../utils/updatedPerformance');
 
 const router = express.Router();
@@ -130,7 +130,7 @@ router.get('/get-net/:eventID/:round', async (req, res, next) => {
         const findNets = await Net.find({ event: req.params.eventID, round: req.params.round })
             .populate([{
                 path: "performance",
-                select: "participant net round1 round2 round3 round4 round5 round6 round7 round8 round9 round10 round11 round12 round13 round14 round15",
+                select: "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15",
                 populate: {
                     path: 'participant',
                     select: 'firstname lastname'
@@ -167,6 +167,7 @@ router.put('/update-one-to-four/:eventID/:round', (req, res, next) => {
     // const nets = await Net.findOne({ _id: req.params.netID }).populate({ path: "performance", populate: { path: "participant" } });
     // const net = await Net.findOne({ _id: req.params.netID }, {$pull: {performance: ["6120ccc897bd511d81fe9908"]}});
     // console.log("Round - ",req.params.round);
+
     const performanceUpdate = req.body;
     // console.log("Updated performance", performanceUpdate);
     performanceUpdate.forEach((pu, i) => {

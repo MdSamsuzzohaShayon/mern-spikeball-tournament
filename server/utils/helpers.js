@@ -12,12 +12,17 @@ module.exports.replaceKeys = (object, eventID) => {
     Object.keys(object).forEach(function (key) {
         // const twoLower = key.toLowerCase();
         const removeSpace = key.replace(/\s+/g, '');
-        const newKey = removeSpace.toString().toLowerCase();
+        let newKey = removeSpace.toString().toLowerCase();
+        if(newKey === "mobilenumber")newKey = "cell";
+        if(newKey === "totalamount") newKey = "payment_amount";
+        // console.log(newKey);
         if (object[key] && typeof object[key] === 'object') {
             replaceKeys(object[key]);
         }
         if (key !== newKey) {
             object[newKey] = object[key];
+            if(object[newKey].mobilenumber){
+            }
             delete object[key];
         }
     });

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Round124 from './Round124';
-import Round528 from './Round528';
-import Round9212 from './Round9212';
-import Round13215 from './Round13215';
+import Round1 from './Round1';
+import Round2 from './Round2';
+import Round3 from './Round3';
+import Round4 from './Round4';
+import Round5 from './Round5';
 import { hostname } from '../../utils/global';
 
 const Rounds = (props) => {
-    const [activeItem, setActiveItem] = useState('r124');
-    const [round, setRound] = useState(1);
+    const [activeItem, setActiveItem] = useState(1);
+    // const [round, setRound] = useState(1);
     const [initialize, setInitialize] = useState(false);
     const [nets, setNets] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -18,28 +19,9 @@ const Rounds = (props) => {
         // console.log(round);
         // console.log(item);
         setActiveItem(item);
-        switch (item) {
-            case "r124":
-                setRound(1);
-                // console.log("findAllNets round 1");
-                findAllNets(1);
-                break;
-            case "r528":
-                setRound(5);
-                // console.log("findAllNets called from round 5");
-                findAllNets(5);
-                break;
-            case "r9212":
-                setRound(9);
-                // console.log("findAllNets called from round 9");
-                findAllNets(9);
-                break;;
-            case "r13215":
-                setRound(13);
-                // console.log("findAllNets called from round 13");
-                findAllNets(13);
-                break;
-        }
+        // setRound(item);
+        // console.log("findAllNets round 1");
+        findAllNets(item);
     }
 
 
@@ -58,8 +40,8 @@ const Rounds = (props) => {
         const response = await fetch(`${hostname}/api/event/get-net/${props.eventID}/${r}`, requestOptions);
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
-        console.log("Get net - ", response);
-        console.log(jsonRes);
+        // console.log("Get net - ", response);
+        // console.log(jsonRes);
         setNets(jsonRes.findNets);
         // ⛏️⛏️ CHECK FOR INITIAL NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
         if (jsonRes.findNets.length < 1) {
@@ -76,13 +58,14 @@ const Rounds = (props) => {
 
     useEffect(() => {
         // console.log("findAllNets called from use effect");
-        findAllNets(round);
+        findAllNets(activeItem);
+        console.log("Round - ", activeItem);
     }, []);
 
 
     const updateFindNets = (update) => {
         // console.log("findAllNets from update event");
-        if (update) findAllNets(round);
+        if (update) findAllNets(activeItem);
     }
 
 
@@ -97,7 +80,7 @@ const Rounds = (props) => {
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
     const showTabContent = () => {
         switch (activeItem) {
-            case "r124":
+            case 1:
                 if (isLoading) {
                     return (
                         <div className="text-center spinner-parent">
@@ -107,15 +90,15 @@ const Rounds = (props) => {
                     );
                 } else {
                     return (<div className="tab-pane fade show active" >
-                        <Round124
+                        <Round1
                             initialize={initialize}
                             nets={nets}
-                            round={round}
+                            round={activeItem}
                             updateNets={updateFindNets}
                             eventID={props.eventID} />
                     </div>);
                 }
-            case "r528":
+            case 2:
                 if (isLoading) {
                     return (
                         <div className="text-center spinner-parent">
@@ -126,15 +109,15 @@ const Rounds = (props) => {
                 } else {
 
                     return (<div className="tab-pane fade show active" >
-                        <Round528
+                        <Round2
                             initialize={initialize}
                             nets={nets}
-                            round={round}
+                            round={activeItem}
                             updateNets={updateFindNets}
                             eventID={props.eventID} />
                     </div>);
                 }
-            case "r9212":
+            case 3:
                 if (isLoading) {
                     return (
                         <div className="text-center spinner-parent">
@@ -144,15 +127,15 @@ const Rounds = (props) => {
                     );
                 } else {
                     return (<div className="tab-pane fade show active" >
-                        <Round9212
+                        <Round3
                             initialize={initialize}
                             nets={nets}
-                            round={round}
+                            round={activeItem}
                             updateNets={updateFindNets}
                             eventID={props.eventID} />
                     </div>);
                 }
-            case "r13215":
+            case 4:
                 if (isLoading) {
                     return (
                         <div className="text-center spinner-parent">
@@ -161,10 +144,27 @@ const Rounds = (props) => {
                         </div>
                     );
                 } else {
-                    return (<div className="tab-pane fade show active" ><Round13215
+                    return (<div className="tab-pane fade show active" ><Round4
                         initialize={initialize}
                         nets={nets}
-                        round={round}
+                        round={activeItem}
+                        updateNets={updateFindNets}
+                        eventID={props.eventID}
+                    /> </div>);
+                }
+            case 5:
+                if (isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (<div className="tab-pane fade show active" ><Round5
+                        initialize={initialize}
+                        nets={nets}
+                        round={activeItem}
                         updateNets={updateFindNets}
                         eventID={props.eventID}
                     /> </div>);
@@ -176,10 +176,11 @@ const Rounds = (props) => {
     return (
         <div className="Rounds">
             <nav className="nav nav-pills">
-                <a className="nav-link active" className={activeItem === "r124" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r124")}>Round one to four</a>
-                <a className="nav-link active" className={activeItem === "r528" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r528")}>Round five to eight</a>
-                <a className="nav-link active" className={activeItem === "r9212" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r9212")}>Round nine to twelve</a>
-                <a className="nav-link active" className={activeItem === "r13215" ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, "r13215")}>Round thirteen to fifteen</a>
+                <a className="nav-link active" className={activeItem === 1 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 1)}>Round 1</a>
+                <a className="nav-link active" className={activeItem === 2 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 2)}>Round 2</a>
+                <a className="nav-link active" className={activeItem === 3 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 3)}>Round 3</a>
+                <a className="nav-link active" className={activeItem === 4 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 4)}>Round 4</a>
+                <a className="nav-link active" className={activeItem === 5 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 5)}>Round 5</a>
                 {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
             </nav>
             <div className="tab-content" >

@@ -1,9 +1,9 @@
 import React from 'react';
-import { totalPoint124 } from '../../utils/addTotalPoint';
-import { totalDeferential124 } from '../../utils/pointDeferential';
+import { round1Total } from '../../utils/addTotalPoint';
+import { round1TD } from '../../utils/pointDeferential';
 import { assending124 } from '../../utils/ranking';
 
-const Round124 = (props) => {
+const Round1 = (props) => {
     const assendingPerformance = props.pp.sort(assending124);
     // console.log(assendingPerformance);
     return (
@@ -22,8 +22,8 @@ const Round124 = (props) => {
                         <tr key={i}>
                             <td>{i + 1}</td>
                             <td>{p.participant.firstname}</td>
-                            <td>{totalPoint124(p)}</td>
-                            <td>{totalDeferential124(p)}</td>
+                            <td>{round1Total(p)}</td>
+                            <td>{round1TD(p)}</td>
                         </tr>
                     ))}
 
@@ -33,4 +33,4 @@ const Round124 = (props) => {
     );
 }
 
-export default Round124;
+export default Round1;

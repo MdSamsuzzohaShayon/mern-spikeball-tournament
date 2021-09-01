@@ -2,7 +2,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Switch, Route, Redirect } from "react-router-dom";
-import Navbar from './components/Navbar';
+import Menu from './components/Menu';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
 import Dashboard from './pages/Dashboard';
@@ -85,7 +85,7 @@ class App extends Component {
     console.log("Authenticated - " , this.state.isAuthenticated);
     return (
       <div className="App">
-        <Navbar authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />
+        <Menu authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />
         <Switch>
           <Route exact path="/"><Home /></Route>
           <Route exact path="/home"><Home /></Route>

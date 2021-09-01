@@ -29,7 +29,7 @@ export const totalPoint = (performance) => {
 
 
 
-export const totalPoint124 = (performance) => {
+export const round1Total = (performance) => {
     // console.log(performance);
     // net: "612ba44101aa740bfefc8ded"
     // participant: { _id: "612ba43701aa740bfefc8dcc", firstname: "Jaren", lastname: "Haggard" }
@@ -38,7 +38,9 @@ export const totalPoint124 = (performance) => {
     // pointDeferential: "12-11"
     // _id: "612ce5111666e55142b7e83a"
     let point = 0;
-    if (performance.round1) point += performance.round1.point; if (performance.round2) point += performance.round2.point; if (performance.round3) point += performance.round3.point; if (performance.round4) point += performance.round4.point;
+    if (performance.game1) point += performance.game1.point; 
+    if (performance.game2) point += performance.game2.point; 
+    if (performance.game3) point += performance.game3.point;
 
     return point;
 }

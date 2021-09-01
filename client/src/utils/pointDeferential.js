@@ -32,14 +32,13 @@ export const totalDeferential = (performance) => {
 
 
 
-export const totalDeferential124 = (performance) => {
+export const round1TD = (performance) => {
     let deferential = 0;
     try {
 
-        if (performance.round1) { let pd = performance.round1.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
-        if (performance.round2) { let pd = performance.round2.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
-        if (performance.round3) { let pd = performance.round3.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
-        if (performance.round4) { let pd = performance.round4.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.game1) { let pd = performance.game1.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.game2) { let pd = performance.game2.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.game3) { let pd = performance.game3.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
     } catch (error) {
         console.log(error);
     }

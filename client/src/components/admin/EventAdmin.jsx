@@ -86,6 +86,7 @@ export class EventAdmin extends Component {
                     event={this.state.currentEvent}
                     updateEvent={this.updateEvent}
                     participants={this.state.currentEvent.participants}
+                    eventID={this.state.currentEventID}
                 /></div>);
             case "rounds":
                 return (<div className="tab-pane fade show active" ><Rounds eventID={this.state.currentEventID} /></div>);
