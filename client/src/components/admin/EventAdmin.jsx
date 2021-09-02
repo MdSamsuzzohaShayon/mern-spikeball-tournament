@@ -42,6 +42,7 @@ export class EventAdmin extends Component {
         try {
             // console.log(id);
             // console.log(participants);
+            this.setState({ isLoading: true });
             const response = await fetch(`${hostname}/api/event/${id}`, { method: "GET", credentials: "include" });
             const text = await response.text();
             const jsonResponse = await JSON.parse(text);
@@ -49,6 +50,7 @@ export class EventAdmin extends Component {
                 this.setState({ currentEvent: jsonResponse.events });
                 // console.log(jsonResponse);
             }
+            this.setState({ isLoading: false });
         } catch (error) {
             console.log(error);
         }
@@ -80,16 +82,43 @@ export class EventAdmin extends Component {
     showAllNavItem() {
         switch (this.state.activeTab) {
             case "event":
-                return (<div className="tab-pane fade show active" >Overview How Many Events, How Many Rounds, Score, Participants</div>);
+                if (this.state.isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (<div className="tab-pane fade show active" >Overview How Many Events, How Many Rounds, Score, Participants</div>);
+                }
             case "participants":
-                return (<div className="tab-pane fade show active" ><Participants
-                    event={this.state.currentEvent}
-                    updateEvent={this.updateEvent}
-                    participants={this.state.currentEvent.participants}
-                    eventID={this.state.currentEventID}
-                /></div>);
+                if (this.state.isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (<div className="tab-pane fade show active" ><Participants
+                        event={this.state.currentEvent}
+                        updateEvent={this.updateEvent}
+                        participants={this.state.currentEvent.participants}
+                        eventID={this.state.currentEventID}
+                    /></div>);
+                }
             case "rounds":
-                return (<div className="tab-pane fade show active" ><Rounds eventID={this.state.currentEventID} /></div>);
+                if (this.state.isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (<div className="tab-pane fade show active" ><Rounds eventID={this.state.currentEventID} /></div>);
+                }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);
         }
@@ -107,7 +136,7 @@ export class EventAdmin extends Component {
 
 
 
-    
+
     render() {
         if (this.state.currentEventID) {
             return (

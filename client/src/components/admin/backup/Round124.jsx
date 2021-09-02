@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../../utils/global';
-import { totalPoint124 } from '../../utils/addTotalPoint';
+import { hostname } from '../../../utils/global';
+import { totalPoint124 } from '../../../utils/addTotalPoint';
 
 function Round124(props) {
     const [isLoading, setIsLoading] = useState(false);

@@ -1,0 +1,41 @@
+
+.show-all-nets{
+    .r-table {
+
+        tbody{
+            tr{
+                // background: #000;
+                .f-rival-item{
+                    height: 40px;
+                }
+                .f-point-differential{
+                    height: 40px;
+                }
+                .f-net{
+                    // height: 240px;
+                }
+                .f-point{
+                    // height: 240px;
+                    // height: 60px;
+                    .form-check-input{
+                        // height: 30px;
+                        margin-top: 14px;
+                    }
+                }
+                .two-participant{
+                    height: 120px;
+                    border-bottom: 1px solid rgb(201, 192, 192);
+                    .form-control{
+                        width: 90px;
+                        margin-top: 5px;
+                    }
+                }
+                .vs{
+                    color: blue;
+                    height: 25px;
+                    // margin: 10px 0;
+                }
+            }
+        }
+    }
+}

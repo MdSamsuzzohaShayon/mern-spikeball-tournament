@@ -5,6 +5,9 @@ import Round3 from './Round3';
 import Round4 from './Round4';
 import Round5 from './Round5';
 import { hostname } from '../../utils/global';
+import "./Rounds.css";
+
+
 
 const Rounds = (props) => {
     const [activeItem, setActiveItem] = useState(1);

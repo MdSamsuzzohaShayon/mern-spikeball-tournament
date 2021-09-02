@@ -8,19 +8,24 @@ const updatedPerformance = (pu, roundNum) => {
         switch (pu.game) {
             case 1:
                 let game1 = new Object();
-                if (pu.score.point) game1.point = pu.score.point;
-                if (pu.score.pointDeferential) game1.pointDeferential = pu.score.pointDeferential;
-                // console.log(game1);
+                if (pu.score.point && pu.score.pointDeferential) {
+                    game1.point = pu.score.point;
+                    game1.pointDeferential = pu.score.pointDeferential;
+                };
                 return { game1 }
             case 2:
                 let game2 = new Object();
-                if (pu.score.point) game2.point = pu.score.point;
-                if (pu.score.pointDeferential) game2.pointDeferential = pu.score.pointDeferential;
+                if (pu.score.point && pu.score.pointDeferential) {
+                    game2.point = pu.score.point;
+                    game2.pointDeferential = pu.score.pointDeferential;
+                };
                 return { game2 }
             case 3:
                 let game3 = new Object();
-                if (pu.score.point) game3.point = pu.score.point;
-                if (pu.score.pointDeferential) game3.pointDeferential = pu.score.pointDeferential;
+                if (pu.score.point && pu.score.pointDeferential) {
+                    game3.point = pu.score.point;
+                    game3.pointDeferential = pu.score.pointDeferential;
+                };
                 return { game3 }
         }
     } else if (roundNum == 2) {

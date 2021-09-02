@@ -1,0 +1,23 @@
+.show-all-nets .r-table tbody tr .f-rival-item {
+  height: 40px;
+}
+.show-all-nets .r-table tbody tr .f-point-differential {
+  height: 40px;
+}
+.show-all-nets .r-table tbody tr .f-point .form-check-input {
+  margin-top: 14px;
+}
+.show-all-nets .r-table tbody tr .two-participant {
+  height: 120px;
+  border-bottom: 1px solid #c9c0c0;
+}
+.show-all-nets .r-table tbody tr .two-participant .form-control {
+  width: 90px;
+  margin-top: 5px;
+}
+.show-all-nets .r-table tbody tr .vs {
+  color: blue;
+  height: 25px;
+}
+
+/*# sourceMappingURL=Rounds.css.map */

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { round1Total } from '../../utils/addTotalPoint';
-import {round1TD} from '../../utils/pointDeferential';
+import { round1TD } from '../../utils/pointDeferential';
 
 
 function Round1(props) {
@@ -11,8 +11,10 @@ function Round1(props) {
 
 
 
+    // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     useEffect(() => {
         // console.log("All nets - ", props.nets);
+        // console.log("Round - ", props.round);
         setUpdatePerformance([]);
         setIsLoading(false);
     }, []);
@@ -42,6 +44,9 @@ function Round1(props) {
 
 
 
+
+
+    // ⛏️⛏️ UPDATE GAME POINT AND POINT DIFERENTIAL ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const handleUpdate = async (e) => {
         e.preventDefault();
 
@@ -68,19 +73,20 @@ function Round1(props) {
     }
 
 
+
+
+
+
+
+
+    // ⛏️⛏️ INPUT VALUE CHANGE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const handleInputChange = (e, id, game, scoreType, netID) => {
-        e.preventDefault();
-        // console.log("Change - ", e);
+        // e.preventDefault();
+        // console.log("Change - ", e.target.checked);
         // console.log("Performance ID - ", id);
         // console.log("round - ", round);
         // console.log("score - ", score);
         // console.log("Net ID - ", netID);
-
-
-
-
-
-
 
 
         const findItem = updatePerformance.find((elm, i) => elm.performanceID === id && elm.game === game);
@@ -93,7 +99,9 @@ function Round1(props) {
         } else {
             // CREATE NEW ONE 
             if (scoreType === "point") {
-                setUpdatePerformance(oldState => [...oldState, { performanceID: id, game, score: { point: e.target.value }, netID }]);
+                let point = null;
+                if (e.target.checked) { point = 1 } else { point = 0 }
+                setUpdatePerformance(oldState => [...oldState, { performanceID: id, game, score: { point }, netID }]);
             }
             if (scoreType === "pointDeferential") {
                 setUpdatePerformance(oldState => [...oldState, { performanceID: id, game, score: { pointDeferential: e.target.value }, netID }]);
@@ -101,17 +109,18 @@ function Round1(props) {
             }
         }
 
-
         // console.log(updatePerformance);
-
-
-
-
-        // SUBMIT AND SET TO DEFAULT STATE 
     }
 
 
 
+
+
+
+
+
+
+    // ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const getDefaultValue = (p, scoreType, gameNum) => {
         if (scoreType === "point") {
             switch (gameNum) {
@@ -141,32 +150,72 @@ function Round1(props) {
 
 
 
+
+
+
+
+    // ⛏️⛏️ INPUT FIELD FOR ALL PARTICIPANT OR PERFORMANCE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const allPerformers = (net, game, score) => {
+        console.log(net.performance);
         // console.log("s - ", score);
-        return net.performance.map((p, j) => (
-            <div style={{ width: "100%", height: "100%" }} key={j}>
-                <input
-                    type="text"
-                    className="form-control my-3"
-                    defaultValue={getDefaultValue(p, score, game)}
-                    style={{ width: "80px" }} name={net.sl}
-                    onChange={e => handleInputChange(e, p._id, game, score, net._id)} />
-            </div>
-        ));
-        // if (score === "point") {
-        //     return net.performance.map((p, j) => (
-        //         <div style={{ width: "100%", height: "100%" }} key={j}>
-        //             <input type="text" className="form-control my-3" defaultValue={getDefaultValue(p, score, round)} style={{ width: "80px" }} name={net.sl} onChange={e => handleInputChange(e, p._id, round, score, net._id)} />
-        //         </div>
-        //     ));
-        // }
-        // if (score === "pointDeferential") {
-        //     return net.performance.map((p, j) => (
-        //         <div style={{ width: "100%", height: "100%" }} key={j}>
-        //             <input type="text" className="form-control my-3" defaultValue={getDefaultValue(p, score, round)} style={{ width: "80px" }} name={net.sl} onChange={e => handleInputChange(e, p._id, round, score, net._id)} />
-        //         </div>
-        //     ));
-        // }
+        // console.log(props.round);
+        if (score === "point") {
+            if (net.performance.length < 4) {
+                return net.performance.map((p, j) => (
+                    <div className="f-point d-flex flex-column" key={j}>
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            onChange={e => handleInputChange(e, p._id, game, score, net._id)}
+                            defaultChecked={getDefaultValue(p, score, game) === 1 ? true : false}
+                        />
+
+                    </div>
+                ));
+            } else {
+                return (<div className="f-point d-flex flex-column">
+                    <div className="two-participant">
+                        <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[0], score, game) === 1 ? true : false} />
+                        <div className="vs"></div>
+                        <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[1], score, game) === 1 ? true : false} />
+                    </div>
+
+                    <div className="two-participant">
+                        <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[2], score, game) === 1 ? true : false} />
+                        <div className="vs"></div>
+                        <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[3], score, game) === 1 ? true : false} />
+                    </div>
+                </div>);
+            }
+        }
+        if (score === "pointDeferential") {
+            if (net.performance.length < 4) {
+                return net.performance.map((p, j) => (
+                    <div className="f-point-differential" key={j}>
+                        <input
+                            type="text"
+                            className="form-control my-3"
+                            defaultValue={getDefaultValue(p, score, game)}
+                            style={{ width: "80px" }} name={net.sl}
+                            onChange={e => handleInputChange(e, p._id, game, score, net._id)} />
+                    </div>
+                ));
+            } else {
+                return (<div className="f-point d-flex flex-column">
+                    <div className="two-participant">
+                        <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[0], score, game)} />
+                        <div className="vs"></div>
+                        <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[1], score, game)} />
+                    </div>
+
+                    <div className="two-participant">
+                        <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[2], score, game)} />
+                        <div className="vs"></div>
+                        <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[3], score, game)} />
+                    </div>
+                </div>);
+            }
+        }
     }
 
 
@@ -190,6 +239,40 @@ function Round1(props) {
     }
 
 
+
+
+    const arrangingPerformer = (performer) => {
+
+        if (performer.length < 4) {
+            // console.log(performer);
+
+            return (
+                <div>
+                    {performer.map((p, j) => (
+                        <div className="player-name" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
+                    ))
+                    }
+                </div>);
+        } else {
+            // console.log(performer[0]);
+            return (
+                <div className="f-net d-flex flex-column text-center justify-space-between">
+                    <div className="two-participant">
+                        <div className="f-rival-item">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
+                        <div className="vs text-uppercase">VS</div>
+                        <div className="f-rival-item">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
+                    </div>
+                    <div className="two-participant">
+                        <div className="f-rival-item">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
+                        <div className="vs text-uppercase">VS</div>
+                        <div className="f-rival-item">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
+                    </div>
+                </div>);
+        }
+
+    }
+
+
     return (
         <div className="Round1">
             {props.initialize && <button className="btn btn-primary" onClick={initializeNetHandler} >Initialize net for first round</button>}
@@ -197,8 +280,8 @@ function Round1(props) {
             {isLoading ? <div className="spinner-border text-danger" role="status"></div> : (
                 <div className="show-all-nets">
                     {!props.initialize && (
-                        <table className="table table-hover table-bordered text-capitalize">
-                            <thead className="table-dark">
+                        <table className="table r-table table-bordered">
+                            <thead className="r-thead bg-dark text-light">
                                 <tr>
                                     <th colSpan="2" scope="colgroup"></th>
                                     <th colSpan="2" scope="colgroup">Game 1</th>
@@ -224,11 +307,7 @@ function Round1(props) {
                                     <tr key={net.sl}>
                                         <th scope="row">Net {net.sl}</th>
                                         <td>
-                                            {net.performance.map((p, j) => (
-                                                <ul key={j}>
-                                                    <li className="list-group-item">{p.participant.firstname} {p.participant.lastname}</li>
-                                                </ul>
-                                            ))}
+                                            {arrangingPerformer(net.performance)}
                                         </td>
 
 
@@ -253,7 +332,7 @@ function Round1(props) {
                             </tbody>
                         </table>
                     )}
-                    <button onClick={handleUpdate} className="btn btn-primary">Update</button>
+                    <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
                 </div>
             )}
         </div>
