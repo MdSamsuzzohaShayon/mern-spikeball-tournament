@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { Button, Modal } from "react-bootstrap";
 
@@ -29,6 +29,14 @@ const Participants = (props) => {
     // ⛏️⛏️ SETTING DEFAULT STATE FOR PARTICIPANT'S EXCEL FILE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const [selectedFile, setSelectedFile] = useState(null);
     const [errors, setErrors] = useState([]);
+
+
+
+    // useEffect(()=>{
+    //     setPartitipant({});
+    //     setSelectedFile(null);
+    //     setErrors([]);
+    // }, []);
 
 
 

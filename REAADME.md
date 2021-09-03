@@ -44,8 +44,14 @@ Emojies - 📜 ⛏️ ➖ ✅
 
 
 ### Change requirements
+ - Add ranking section in admin as well
+ - When someone submit redirect to next round - all player will be listed initially 
+ - Add participant informations - and reassign again - 
  - 5 round with 3 game for each round in total 15 games
  - Add some filed for participant - payment amount, paid method (cash, check ), venmo slash (*confused*), (city, firstname, lastname) required
+ - Assign and Reassign participant button
+ - Create only one route for assign and one route for reassign
+ - Create only one round instead of all five round
 
 
 

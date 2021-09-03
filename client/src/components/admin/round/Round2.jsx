@@ -1,22 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../../utils/global';
-import { round1Total } from '../../utils/addTotalPoint';
-import { round1TD } from '../../utils/pointDeferential';
+import { hostname } from '../../../utils/global';
+import { round1Total } from '../../../utils/addTotalPoint';
+import { round1TD } from '../../../utils/pointDeferential';
 
 
-function Round1(props) {
+function Round2(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [updatePerformance, setUpdatePerformance] = useState([]);
 
 
 
 
+    const getAllPerformance = async () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { "Content-Type": 'application/json' },
+            credentials: "include"
+        };
+        // console.log(props.eventID);
+
+        const response = await fetch(`${hostname}/api/event/assign-initial-net/${props.eventID}`, requestOptions);
+        console.log("Initialize net - ", response);
+    }
+
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     useEffect(() => {
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
         setUpdatePerformance([]);
-        setIsLoading(false);
     }, []);
 
 
@@ -65,7 +76,7 @@ function Round1(props) {
         };
         // console.log(props.eventID);
 
-        const response = await fetch(`${hostname}/api/event/update-one-to-four/${props.eventID}/${props.round}`, requestOptions);
+        const response = await fetch(`${hostname}/api/event/update-performance/${props.eventID}/${props.round}`, requestOptions);
         console.log("Update - ", response);
         // console.log("Update - ", updatePerformance);
         setUpdatePerformance([]);
@@ -88,19 +99,25 @@ function Round1(props) {
         // console.log("score - ", score);
         // console.log("Net ID - ", netID);
 
+        console.log(e.target.checked);
+
 
         const findItem = updatePerformance.find((elm, i) => elm.performanceID === id && elm.game === game);
         if (findItem) {
             // console.log("Find Item - ", findItem);
             updatePerformance.forEach((up, i) => {
                 if (up.performanceID === id && up.game === game && scoreType === "pointDeferential") up.score.pointDeferential = e.target.value;
-                if (up.performanceID === id && up.game === game && scoreType === "point") up.score.point = e.target.value;
+                if (up.performanceID === id && up.game === game && scoreType === "point") {
+                    let point = null;
+                    e.target.checked || e.target.checked == "on" ? point = 1 : point = 0;
+                    up.score.point = point
+                };
             });
         } else {
             // CREATE NEW ONE 
             if (scoreType === "point") {
                 let point = null;
-                if (e.target.checked) { point = 1 } else { point = 0 }
+                e.target.checked || e.target.checked == "on" ? point = 1 : point = 0;
                 setUpdatePerformance(oldState => [...oldState, { performanceID: id, game, score: { point }, netID }]);
             }
             if (scoreType === "pointDeferential") {
@@ -109,7 +126,7 @@ function Round1(props) {
             }
         }
 
-        // console.log(updatePerformance);
+        console.log(updatePerformance);
     }
 
 
@@ -156,7 +173,7 @@ function Round1(props) {
 
     // ⛏️⛏️ INPUT FIELD FOR ALL PARTICIPANT OR PERFORMANCE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const allPerformers = (net, game, score) => {
-        console.log(net.performance);
+        // console.log(net.performance);
         // console.log("s - ", score);
         // console.log(props.round);
         if (score === "point") {
@@ -339,4 +356,4 @@ function Round1(props) {
     )
 }
 
-export default Round1;
+export default Round2;

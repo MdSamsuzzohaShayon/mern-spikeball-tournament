@@ -22,9 +22,8 @@ const netSchema = new Schema({
         ref: 'event'
     },
     round: {
-        type: Number,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'round'
     }
-
 });
 module.exports = mongoose.model('net', netSchema);

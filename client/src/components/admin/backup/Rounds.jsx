@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Round1 from './round/Round1';
-import Round2 from './round/Round2';
-import Round3 from './round/Round3';
-import Round4 from './round/Round4';
-import Round5 from './round/Round5';
+import Round from './Round';
+// import Round1 from './Round1';
+// import Round2 from './Round2';
+// import Round3 from './Round3';
+// import Round4 from './Round4';
+// import Round5 from './Round5';
 import { hostname } from '../../utils/global';
 import "./style/Rounds.css";
 
@@ -13,7 +14,7 @@ const Rounds = (props) => {
     const [activeItem, setActiveItem] = useState(1);
     // const [round, setRound] = useState(1);
     const [initialize, setInitialize] = useState(false);
-    const [round, setRounds] = useState([]);
+    const [nets, setNets] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     // const [reassignToNet, setReassignToNet] = useState(false);
 
@@ -23,16 +24,14 @@ const Rounds = (props) => {
         // console.log(item);
         setActiveItem(item);
         // setRound(item);
-        // console.log("findRound round 1");
-        findRound(item);
+        // console.log("findAllNets round 1");
+        findAllNets(item);
     }
 
 
 
 
-
-    // ⛏️⛏️ GET ALL NETS FROM A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const findRound = async (r) => {
+    const findAllNets = async (r) => {
 
         const requestOptions = {
             method: 'GET',
@@ -41,41 +40,36 @@ const Rounds = (props) => {
         };
         // console.log(props.eventID);
         setIsLoading(true);
-        // console.log("Loading - ",isLoading);
         // console.log(r);
-        const response = await fetch(`${hostname}/api/event/get-single-round/${props.eventID}/${r}`, requestOptions);
-        console.log("Get nets from round - ", response);
+        const response = await fetch(`${hostname}/api/event/get-net/${props.eventID}/${r}`, requestOptions);
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
-        // console.log(jsonRes.findRound);
-        // CHECK FOR INITIAL NET 
-        if (jsonRes.findRound) {
-            setRounds(jsonRes.findRound);
-            if (jsonRes.findRound.nets || jsonRes.findRound.nets.length < 1) {
-                setInitialize(false);
-            } else {
-                setInitialize(true);
-            }
-        } else {
+        // console.log("Get net - ", response);
+        // console.log(jsonRes);
+        setNets(jsonRes.findNets);
+        // ⛏️⛏️ CHECK FOR INITIAL NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+        if (jsonRes.findNets.length < 1) {
+            // console.log("JSON - ", jsonRes.findNets.length );
             setInitialize(true);
+        } else {
+            setInitialize(false);
         }
-
         setIsLoading(false);
-        // console.log("Loading - ",isLoading);
+        // console.log(round);
     }
 
 
 
     useEffect(() => {
-        // console.log("findRound called from use effect");
-        findRound(activeItem);
-        // console.log("Round - ", activeItem);
+        // console.log("findAllNets called from use effect");
+        findAllNets(activeItem);
+        console.log("Round - ", activeItem);
     }, []);
 
 
     const updateFindNets = (update) => {
-        // console.log("findRound from update event");
-        if (update) findRound(activeItem);
+        // console.log("findAllNets from update event");
+        if (update) findAllNets(activeItem);
     }
 
 
@@ -89,11 +83,9 @@ const Rounds = (props) => {
 
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
     const showTabContent = () => {
-        // console.log("Loading - ", isLoading);
         switch (activeItem) {
             case 1:
                 if (isLoading) {
-                    // console.log("Loading (true) - ", isLoading);
                     return (
                         <div className="text-center spinner-parent">
                             <div className="spinner-border text-danger spinner-child" role="status">
@@ -101,12 +93,11 @@ const Rounds = (props) => {
                         </div>
                     );
                 } else {
-                    // console.log("Loading(false) - ", isLoading);
                     return (<div className="tab-pane fade show active" >
-                        <Round1
+                        <Rounds
                             initialize={initialize}
-                            round={round}
-                            roundNum={activeItem}
+                            nets={nets}
+                            round={activeItem}
                             updateNets={updateFindNets}
                             eventID={props.eventID} />
                     </div>);
@@ -124,8 +115,8 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <Round2
                             initialize={initialize}
-                            round={round}
-                            roundNum={activeItem}
+                            nets={nets}
+                            round={activeItem}
                             updateNets={updateFindNets}
                             eventID={props.eventID} />
                     </div>);
@@ -142,8 +133,8 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <Round3
                             initialize={initialize}
-                            round={round}
-                            roundNum={activeItem}
+                            nets={nets}
+                            round={activeItem}
                             updateNets={updateFindNets}
                             eventID={props.eventID} />
                     </div>);
@@ -159,8 +150,8 @@ const Rounds = (props) => {
                 } else {
                     return (<div className="tab-pane fade show active" ><Round4
                         initialize={initialize}
-                        round={round}
-                        roundNum={activeItem}
+                        nets={nets}
+                        round={activeItem}
                         updateNets={updateFindNets}
                         eventID={props.eventID}
                     /> </div>);
@@ -176,8 +167,8 @@ const Rounds = (props) => {
                 } else {
                     return (<div className="tab-pane fade show active" ><Round5
                         initialize={initialize}
-                        round={round}
-                        roundNum={activeItem}
+                        nets={nets}
+                        round={activeItem}
                         updateNets={updateFindNets}
                         eventID={props.eventID}
                     /> </div>);

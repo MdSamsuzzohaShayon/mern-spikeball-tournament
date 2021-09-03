@@ -18,7 +18,7 @@ const WholePerformance = (props) => {
                 {props.pp.map((p, i) => (
                         <tr key={i}>
                             <td>{i + 1}</td>
-                            <td>{p.participant.firstname}</td>
+                            <td>{p.participant.firstname} {p.participant.lastname}</td>
                             <td>{totalPoint(p)}</td>
                             <td>{totalDeferential(p)}</td>
                         </tr>

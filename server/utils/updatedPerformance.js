@@ -3,28 +3,49 @@ const updatedPerformance = (pu, roundNum) => {
     // console.log(roundNum);
     // console.log(pu);
     if (roundNum == 1) {
-        // console.log("Update performance");
-        // console.log(pu);
+        console.log("Update performance");
+        console.log(pu);
+        const exmple = [{
+            performanceID: '612ffa1cc6266f842260bed6',
+            game: 1,
+            score: { point: 1, pointDeferential: '15' },
+            netID: '612ffa1ac6266f842260bece'
+        },
+        {
+            performanceID: '612ffa1cc6266f842260bed6',
+            game: 2,
+            score: { point: 1, pointDeferential: '12-11' },
+            netID: '612ffa1ac6266f842260bece'
+        },
+        {
+            performanceID: '612ffa1fc6266f842260bee4',
+            game: 1,
+            score: { point: 'on', pointDeferential: '12-1' },
+            netID: '612ffa1dc6266f842260bedc'
+        }];
+
+
         switch (pu.game) {
             case 1:
                 let game1 = new Object();
                 if (pu.score.point && pu.score.pointDeferential) {
                     game1.point = pu.score.point;
-                    game1.pointDeferential = pu.score.pointDeferential;
+                    // console.log(pu.score.pointDeferential.includes('-'));
+                    pu.score.pointDeferential.includes('-') ? game1.pointDeferential = pu.score.pointDeferential : game1.pointDeferential = pu.score.pointDeferential + "-0";
                 };
                 return { game1 }
             case 2:
                 let game2 = new Object();
                 if (pu.score.point && pu.score.pointDeferential) {
                     game2.point = pu.score.point;
-                    game2.pointDeferential = pu.score.pointDeferential;
+                    pu.score.pointDeferential.includes('-') ? game2.pointDeferential = pu.score.pointDeferential : game2.pointDeferential = pu.score.pointDeferential + "-0";
                 };
                 return { game2 }
             case 3:
                 let game3 = new Object();
                 if (pu.score.point && pu.score.pointDeferential) {
                     game3.point = pu.score.point;
-                    game3.pointDeferential = pu.score.pointDeferential;
+                    pu.score.pointDeferential.includes('-') ? game3.pointDeferential = pu.score.pointDeferential : game3.pointDeferential = pu.score.pointDeferential + "-0";
                 };
                 return { game3 }
         }

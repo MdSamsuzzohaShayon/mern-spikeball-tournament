@@ -16,6 +16,9 @@ const Event = require('../models/Event');
 const Participant = require('../models/Participant');
 const Performance = require('../models/Performance');
 const Net = require('../models/Net');
+const Round = require('../models/Round');
+
+
 const { json } = require('express');
 
 
@@ -126,6 +129,7 @@ router.delete('/dashboard/event/:id', ensureAuth, async (req, res, next) => {
         // console.log("Deleted participant - ", participant);
         const performance = await Performance.deleteMany({ event: req.params.id });
         const net = await Net.deleteMany({ event: req.params.id });
+        const round = await Round.deleteMany({event: req.params.id});
         res.status(200).json({ msg: 'Event deleted', event, participant, performance, net });
     } catch (error) {
         console.log(error)

@@ -1,3 +1,7 @@
+.Rounds .nav-link {
+  cursor: pointer;
+}
+
 .show-all-nets .r-table tbody tr .f-rival-item {
   height: 40px;
 }

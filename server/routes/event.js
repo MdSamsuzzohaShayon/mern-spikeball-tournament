@@ -2,6 +2,9 @@ const express = require('express');
 const Event = require('../models/Event');
 const Net = require('../models/Net');
 const Performance = require('../models/Performance');
+const Round = require('../models/Round');
+
+
 const { rankingRound, wholeRanking, rankingRoundNine, rankingRoundThirteen } = require('../utils/ranking');
 const updatedPerformance = require('../utils/updatedPerformance');
 
@@ -25,6 +28,8 @@ router.get('/', async (req, res, next) => {
         res.json(error);
     }
 });
+
+
 
 
 
@@ -52,9 +57,11 @@ router.get('/:id', async (req, res, next) => {
 // ⛏️⛏️ ASSIGN PLAYER TO THE NET FOR THE FIRST ROUND - CREATE PERFORMANCE FOR ALL PLAYER  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.post('/assign-initial-net/:eventID', async (req, res, next) => {
     try {
-        console.log(req.params.eventID);
+        // console.log("Hit");
+        // console.log(req.params.eventID);
         // const findNets = "Nets";
         const findNets = await Net.find({ event: req.params.eventID });
+        // console.log("True - l65", findNets);
         if (findNets.length < 1) {
             // RANDOMIZE PARTICIPANT 
             const event = await Event.findById({ _id: req.params.eventID }).populate('participants').exec();
@@ -70,7 +77,11 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
 
 
             // CREATING NET AND PERFORMANCE OF THE PLAYER 
-            let net;
+            const allNetsIds = [];
+            const allPerformanceIds = [];
+
+
+
             let i, j, temporary, chunk = 4, netNo = 1;
             for (i = 0, j = randomParticipant.length; i < j; i += chunk) {
                 temporary = randomParticipant.slice(i, i + chunk);
@@ -80,9 +91,9 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
                     sl: netNo,
                     // performance: performanceIds,
                     event: event._id,
-                    round: 1
                 });
-                net = await newNet.save();
+                const net = await newNet.save();
+                allNetsIds.push(net._id);
 
 
                 for (let k of temporary) {
@@ -93,16 +104,28 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
                         round: 1
                     });
                     const performance = await newPerformance.save();
+                    allPerformanceIds.push(performance._id);
                     const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { $push: { performance: performance._id } }, { new: true });
                 }
-
-
-
                 netNo++;
             }
 
 
-            res.status(200).json({ msg: 'Assign to initial net randomly', net });
+
+            const new_round = new Round({
+                no: 1,
+                event: event._id,
+                performances: allPerformanceIds,
+                nets: allNetsIds
+            });
+            console.log(new_round);
+            const round = await new_round.save();
+            const updateNetRound = await Net.updateMany({ event: event._id }, { round: round._id }, { new: true });
+
+            
+
+
+            res.status(200).json({ msg: 'Assign to initial net randomly',  round });
         } else {
             res.status(201).json({ msg: "Have already assigned nets", findNets });
         }
@@ -115,6 +138,29 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
 
 
 
+// get-net 
+// ⛏️⛏️ GET PERFORMANCE AND NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
+    try {
+        const findRound = await Round.findOne({event: req.params.eventID, no: req.params.round})
+            .populate([{
+                path: "nets",
+                select: "performance",
+                populate: {
+                    path: 'performance',
+                    select: 'participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15',
+                    populate: {
+                        path: "participant",
+                        select: "firstname lastname"
+                    }
+                }
+            }])
+            .exec();
+        res.status(200).json({ msg: 'Getting Rounds', findRound });
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 
 
@@ -146,11 +192,12 @@ router.get('/get-net/:eventID/:round', async (req, res, next) => {
 
 
 // ⛏️⛏️ GET PERFORMANCE AND NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.delete('/delete-net/:eventID/:round', async (req, res, next) => {
+router.delete('/delete-round/:eventID/:roundID', async (req, res, next) => {
     try {
-        // const deleteNets = await Net.deleteMany({ event: req.params.eventID, round: req.params.round });
-        const deleteNet = await Net.deleteMany({ event: req.params.eventID, round: req.params.round })
-        res.status(200).json({ msg: 'Getting performance', deleteNet });
+        const deleteRound = await Round.findOneAndDelete({event: req.params.eventID, _id: req.params.roundID});
+        const deleteNets = await Net.deleteMany({round: deleteRound._id});
+        console.log(req.params);
+        res.status(200).json({ msg: 'Getting performance', deleteRound, deleteNets });
     } catch (error) {
         console.log(error);
     }
@@ -162,7 +209,7 @@ router.delete('/delete-net/:eventID/:round', async (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-one-to-four/:eventID/:round', (req, res, next) => {
+router.put('/update-performance/:eventID/:round', (req, res, next) => {
     // FIND THE NET AND PERFORMANCE AND UPDATE PERFORMANCE
     // const nets = await Net.findOne({ _id: req.params.netID }).populate({ path: "performance", populate: { path: "participant" } });
     // const net = await Net.findOne({ _id: req.params.netID }, {$pull: {performance: ["6120ccc897bd511d81fe9908"]}});
@@ -200,9 +247,10 @@ router.put('/update-one-to-four/:eventID/:round', (req, res, next) => {
 
 
 
-// ⛏️⛏️ ASSIGN PLAYER TO THE NET FOR ROUND ROUND 5 - CREATE CREATE MORE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.post('/assign-fifth-net/:eventID/:round', async (req, res, next) => {
+// ⛏️⛏️ ASSIGN PLAYER TO THE NET - CREATE CREATE MORE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+router.post('/reassign-net/:eventID/:round', async (req, res, next) => {
     try {
+        // AT FIRST FIND NET AND CHECK FOR NET ALREADY EXIST OR NOT 
         const findPerformance = await Performance.find({ event: req.params.eventID });
         // console.log(findPerformance);
         const ranking = findPerformance.sort(rankingRound);
@@ -236,8 +284,13 @@ router.post('/assign-fifth-net/:eventID/:round', async (req, res, next) => {
     } catch (error) {
         console.log(error);
     }
-
 });
+
+
+// ⛏️⛏️ RANDOM REASSIGN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+
+
+
 
 
 
