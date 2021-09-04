@@ -1,55 +1,125 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../../../utils/global';
-import { round1Total } from '../../../utils/addTotalPoint';
-import { round1TD } from '../../../utils/pointDeferential';
+import { hostname } from '../../utils/global';
+import { round1Total } from '../../utils/addTotalPoint';
+import { round1TD } from '../../utils/pointDeferential';
+import AddParticipant from '../participant/AddParticipant';
 
 
 function Round2(props) {
     const [isLoading, setIsLoading] = useState(false);
+    const [performances, setPerformances] = useState([]); // PARTICIPANTS
     const [updatePerformance, setUpdatePerformance] = useState([]);
+    const [showPerformances, setShowPerformances] = useState(true);
+    const [leftedPerformance, setLeftedPerformance] = useState([]);
 
+
+
+
+    // console.log(props);
+    const { nets } = props.round;
+    // console.log("Found Round");
+    // console.log(props);
 
 
 
     const getAllPerformance = async () => {
         const requestOptions = {
-            method: 'POST',
+            method: 'GET',
             headers: { "Content-Type": 'application/json' },
             credentials: "include"
         };
         // console.log(props.eventID);
-
-        const response = await fetch(`${hostname}/api/event/assign-initial-net/${props.eventID}`, requestOptions);
-        console.log("Initialize net - ", response);
+        setIsLoading(true);
+        // console.log("Loading - ",isLoading);
+        // console.log(r);
+        const response = await fetch(`${hostname}/api/event/get-performance/${props.eventID}`, requestOptions);
+        console.log("Get nets from round - ", response);
+        const text = await response.text();
+        const jsonRes = await JSON.parse(text);
+        setPerformances([...jsonRes.rankingPerformance]);
+        // console.log(jsonRes);
+        setIsLoading(false);
     }
+
+
 
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     useEffect(() => {
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
+        if (props.round.length === 0) {
+            getAllPerformance();
+        } else {
+            setShowPerformances(false);
+            setPerformances([]);
+        }
         setUpdatePerformance([]);
     }, []);
 
 
+
+
+
+    const leftNet = (e, pId) => {
+        // console.log(e);
+        // console.log(pId);
+        e.preventDefault();
+        console.log(performances);
+        // console.log();
+        setPerformances(performances.filter(p => p._id !== pId));
+        setLeftedPerformance([...leftedPerformance, ...performances.filter(p => p._id === pId)]);
+    }
+
+
+
+
+    // ⛏️⛏️ ADD A PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+    const handleSaveParticipant = (res) => {
+        try {
+            const new_performance = {
+                event: props.eventID,
+                participant:{
+                    _id: res.participant._id,
+                    firstname: res.participant.firstname,
+                    lastname: res.participant.lastname,
+                },
+                _id: res.performance._id
+            }
+            setPerformances([...performances, new_performance]);
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
     // props.initialize
     // ⛏️⛏️ INITIALIZE TO NEW NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const initializeNetHandler = async () => {
+    const assignNetHandler = async () => {
         // console.log("Initialize nets");
         setIsLoading(true);
         // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
         const requestOptions = {
             method: 'POST',
             headers: { "Content-Type": 'application/json' },
-            credentials: "include"
+            credentials: "include",
+            body: JSON.stringify({ performances, leftedPerformance })
         };
         // console.log(props.eventID);
 
-        const response = await fetch(`${hostname}/api/event/assign-initial-net/${props.eventID}`, requestOptions);
+        const response = await fetch(`${hostname}/api/net/assign-net/${props.eventID}/${props.roundNum}`, requestOptions);
         console.log("Initialize net - ", response);
         props.updateNets(true);
         setIsLoading(false);
     }
     // console.log(props.nets);
+
+
+
+
+    const randomAssignOrReAssign=()=>{
+        console.log("random");
+    }
 
 
 
@@ -60,14 +130,6 @@ function Round2(props) {
     // ⛏️⛏️ UPDATE GAME POINT AND POINT DIFERENTIAL ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const handleUpdate = async (e) => {
         e.preventDefault();
-
-        // const uniqueData = [...updatePerformance.reduce((map, obj) => map.set(obj.performanceID, obj), new Map()).values()];
-        // reduce(function callbackFn(previousValue, currentValue) { ... })
-        // const uniqueData = updatePerformance.reduce((previousValue, currentValue) => {
-        //     console.log("Previous - ",previousValue);
-        //     console.log("Current - ",currentValue);
-        // });
-        // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
         const requestOptions = {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
@@ -76,7 +138,10 @@ function Round2(props) {
         };
         // console.log(props.eventID);
 
-        const response = await fetch(`${hostname}/api/event/update-performance/${props.eventID}/${props.round}`, requestOptions);
+
+        console.log(props.round._id);
+
+        const response = await fetch(`${hostname}/api/event/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         console.log("Update - ", response);
         // console.log("Update - ", updatePerformance);
         setUpdatePerformance([]);
@@ -292,66 +357,98 @@ function Round2(props) {
 
     return (
         <div className="Round1">
-            {props.initialize && <button className="btn btn-primary" onClick={initializeNetHandler} >Initialize net for first round</button>}
-            <br />
-            {isLoading ? <div className="spinner-border text-danger" role="status"></div> : (
-                <div className="show-all-nets">
-                    {!props.initialize && (
-                        <table className="table r-table table-bordered">
-                            <thead className="r-thead bg-dark text-light">
-                                <tr>
-                                    <th colSpan="2" scope="colgroup"></th>
-                                    <th colSpan="2" scope="colgroup">Game 1</th>
-                                    <th colSpan="2" scope="colgroup">Game 2</th>
-                                    <th colSpan="2" scope="colgroup">Game 3</th>
-                                    <th colSpan="2" scope="colgroup">Total</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Net</th>
-                                    <th scope="col">Participant</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point deferential</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point deferential</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point deferential</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point deferential</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {props.nets.map((net, i) => (
-                                    <tr key={net.sl}>
-                                        <th scope="row">Net {net.sl}</th>
-                                        <td>
-                                            {arrangingPerformer(net.performance)}
-                                        </td>
+            <div className="d-flex">
+                {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
+                <button className="btn btn-primary" onClick={assignNetHandler} >Reassign</button>
+                <button className="btn btn-primary" onClick={assignNetHandler} >Random Reassign</button>
+            </div>
+            {showPerformances ? (<React.Fragment>
+                <h2 className="h2">All players in the tournament</h2>
+                <div className="performance-list list-group">
+                    {performances && performances.map((p, i) => (<div key={i} className="list-group-item d-flex justify-content-between align-items-center">
+                        <p>{p.participant.firstname + " " + p.participant.lastname}</p>
+                        <button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button>
+                    </div>))}
+                </div>
+                <br />
+                <br />
+                <h2 className="h2">Players leave</h2>
+                <div className="left-performance-list list-group">
+                    {leftedPerformance && leftedPerformance.map((p, i) => (<div key={i} className="list-group-item d-flex justify-content-between align-items-center">
+                        <p>{p.participant.firstname + " " + p.participant.lastname}</p>
+                        <button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button>
+                    </div>))}
+                </div>
+                <AddParticipant
+                    roundNum={props.roundNum}
+                    eventID={props.eventID}
+                    handleSaveParticipant={handleSaveParticipant}
+                />
+
+            </React.Fragment>) : (
+                <div className="show table">
+                    {isLoading ? <div className="spinner-border text-danger" role="status"></div> : (
+                        <div className="show-all-nets">
+                            {!props.initialize && (
+                                <table className="table r-table table-bordered">
+                                    <thead className="r-thead bg-dark text-light">
+                                        <tr>
+                                            <th colSpan="2" scope="colgroup"></th>
+                                            <th colSpan="2" scope="colgroup">Game 1</th>
+                                            <th colSpan="2" scope="colgroup">Game 2</th>
+                                            <th colSpan="2" scope="colgroup">Game 3</th>
+                                            <th colSpan="2" scope="colgroup">Total</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">Net</th>
+                                            <th scope="col">Participant</th>
+                                            <th scope="col">point</th>
+                                            <th scope="col">point deferential</th>
+                                            <th scope="col">point</th>
+                                            <th scope="col">point deferential</th>
+                                            <th scope="col">point</th>
+                                            <th scope="col">point deferential</th>
+                                            <th scope="col">point</th>
+                                            <th scope="col">point deferential</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {nets && nets.map((net, i) => (
+                                            <tr key={i}>
+                                                <th scope="row">Net {net.sl}</th>
+                                                <td>
+                                                    {arrangingPerformer(net.performance)}
+                                                </td>
 
 
-                                        {/* ROUND ONE - POINT AND POINT DEFERENTIAL */}
-                                        <td >{allPerformers(net, 1, "point")} </td>
-                                        <td>{allPerformers(net, 1, "pointDeferential")}</td>
+                                                {/* ROUND ONE - POINT AND POINT DEFERENTIAL */}
+                                                <td >{allPerformers(net, 1, "point")} </td>
+                                                <td>{allPerformers(net, 1, "pointDeferential")}</td>
 
 
-                                        <td >{allPerformers(net, 2, "point")} </td>
-                                        <td>{allPerformers(net, 2, "pointDeferential")}</td>
+                                                <td >{allPerformers(net, 2, "point")} </td>
+                                                <td>{allPerformers(net, 2, "pointDeferential")}</td>
 
-                                        <td >{allPerformers(net, 3, "point")} </td>
-                                        <td>{allPerformers(net, 3, "pointDeferential")}</td>
-
-
-                                        <td >{getTotal(net, 1, "point")}</td>
-                                        <td >{getTotal(net, 1, "pointDeferential")}</td>
+                                                <td >{allPerformers(net, 3, "point")} </td>
+                                                <td>{allPerformers(net, 3, "pointDeferential")}</td>
 
 
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                                <td >{getTotal(net, 1, "point")}</td>
+                                                <td >{getTotal(net, 1, "pointDeferential")}</td>
+
+
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                            <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
+                        </div>
                     )}
-                    <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
                 </div>
             )}
+            <br />
+
         </div>
     )
 }

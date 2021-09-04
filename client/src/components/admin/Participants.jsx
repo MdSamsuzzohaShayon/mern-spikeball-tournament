@@ -4,8 +4,18 @@ import { Button, Modal } from "react-bootstrap";
 
 const Participants = (props) => {
 
-    // ⛏️⛏️ MODAL EVENTS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+
     const [show, setShow] = useState(false);
+    const [csvShow, setCsvShow] = useState(false);
+    const [participant, setPartitipant] = useState({});
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [errors, setErrors] = useState([]);
+
+
+
+
+
+
     const handleClose = () => {
         setErrors([]);
         setShow(false)
@@ -19,16 +29,7 @@ const Participants = (props) => {
 
 
 
-    // ⛏️⛏️ STATES FOR CSV FILE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const [csvShow, setCsvShow] = useState(false);
 
-
-
-    // ⛏️⛏️ SETTING DEFAULT STATE FOR SINGLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const [participant, setPartitipant] = useState({});
-    // ⛏️⛏️ SETTING DEFAULT STATE FOR PARTICIPANT'S EXCEL FILE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [errors, setErrors] = useState([]);
 
 
 
@@ -206,6 +207,7 @@ const Participants = (props) => {
 
 
                 <div className="upload-single-participant">
+
                     <h3 className="h3">Add participants for this events</h3>
                     {errors && [...new Set(errors)].map((e, i) => <p key={i} className="text-warning">{e.msg}</p>)}
 
@@ -272,6 +274,7 @@ const Participants = (props) => {
                             </Button>
                         </Modal.Footer>
                     </Modal>
+
                 </div>
                 <div className="upload-multiple-participant">
                     <h3 className="h3">Add participants From CSV</h3>

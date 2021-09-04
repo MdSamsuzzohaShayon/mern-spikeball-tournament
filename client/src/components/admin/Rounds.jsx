@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Round1 from './round/Round1';
-import Round2 from './round/Round2';
-import Round3 from './round/Round3';
-import Round4 from './round/Round4';
-import Round5 from './round/Round5';
+import Round1 from '../round/Round1';
+import Round2 from '../round/Round2';
+import Round3 from '../round/Round3';
+import Round4 from '../round/Round4';
+import Round5 from '../round/Round5';
 import { hostname } from '../../utils/global';
 import "./style/Rounds.css";
 
@@ -31,6 +31,8 @@ const Rounds = (props) => {
 
 
 
+
+
     // ⛏️⛏️ GET ALL NETS FROM A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const findRound = async (r) => {
 
@@ -47,7 +49,8 @@ const Rounds = (props) => {
         console.log("Get nets from round - ", response);
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
-        // console.log(jsonRes.findRound);
+        // console.log("JSON");
+        // console.log(jsonRes);
         // CHECK FOR INITIAL NET 
         if (jsonRes.findRound) {
             setRounds(jsonRes.findRound);
@@ -57,6 +60,7 @@ const Rounds = (props) => {
                 setInitialize(true);
             }
         } else {
+            setRounds([]);
             setInitialize(true);
         }
 

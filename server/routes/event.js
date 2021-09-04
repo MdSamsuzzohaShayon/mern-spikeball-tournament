@@ -156,6 +156,7 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
                 }
             }])
             .exec();
+            console.log(findRound);
         res.status(200).json({ msg: 'Getting Rounds', findRound });
     } catch (error) {
         console.log(error);
@@ -167,7 +168,7 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
 
 
 
-
+/*
 // ⛏️⛏️ GET PERFORMANCE AND NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.get('/get-net/:eventID/:round', async (req, res, next) => {
     try {
@@ -188,6 +189,7 @@ router.get('/get-net/:eventID/:round', async (req, res, next) => {
         console.log(error);
     }
 });
+*/
 
 
 
@@ -233,61 +235,6 @@ router.put('/update-performance/:eventID/:round', (req, res, next) => {
 
 
 
-// // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-// router.put('/update-one-to-four/:netID', async (req, res, next) => {
-//     // FIND THE NET AND PERFORMANCE AND UPDATE PERFORMANCE
-//     const net = await Net.findOne({ _id: req.params.netID }).populate({ path: "performance", populate: { path: "participant" } });
-//     // const net = await Net.findOne({ _id: req.params.netID }, {$pull: {performance: ["6120ccc897bd511d81fe9908"]}});
-//     // UPDATE EXISTING PERFORMANCE
-//     res.status(200).json({ msg: 'Get net and participant', net });
-// });
-
-
-
-
-
-
-// ⛏️⛏️ ASSIGN PLAYER TO THE NET - CREATE CREATE MORE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.post('/reassign-net/:eventID/:round', async (req, res, next) => {
-    try {
-        // AT FIRST FIND NET AND CHECK FOR NET ALREADY EXIST OR NOT 
-        const findPerformance = await Performance.find({ event: req.params.eventID });
-        // console.log(findPerformance);
-        const ranking = findPerformance.sort(rankingRound);
-
-        // CREATE NETS 
-        // console.log(ranking);
-        let net;
-        let i, j, temporary, chunk = 4, netNo = 1;
-        for (i = 0, j = ranking.length; i < j; i += chunk) {
-            temporary = ranking.slice(i, i + chunk);
-
-
-            const newNet = new Net({
-                sl: netNo,
-                $push: { performance: ranking._id },
-                event: req.params.eventID,
-                round: req.params.round
-            });
-            net = await newNet.save();
-
-            for (let k of temporary) {
-                const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { $push: { performance: k._id } }, { new: true });
-            }
-
-
-            netNo++;
-        }
-
-        res.status(201).json({ msg: "rank performance and inatilize performance", ranking, net })
-
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-
-// ⛏️⛏️ RANDOM REASSIGN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 
 
 
@@ -388,6 +335,7 @@ router.post('/assign-thirteen-net/:eventID/:round', async (req, res, next) => {
 
 // ⛏️⛏️ GET ALL PERFORMANCES OF ALL NETS OF A SINGLE EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.get('/get-performance/:eventID', async (req, res, next) => {
+    // console.log("Get performance");
     const performances = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
     const rankingPerformance = performances.sort(wholeRanking)
     // console.log(performances.length);

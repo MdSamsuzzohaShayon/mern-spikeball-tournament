@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../../../utils/global';
-import { round1Total } from '../../../utils/addTotalPoint';
-import { round1TD } from '../../../utils/pointDeferential';
+import { hostname } from '../../utils/global';
+import { round1Total } from '../../utils/addTotalPoint';
+import { round1TD } from '../../utils/pointDeferential';
 
 
 function Round1(props) {
@@ -37,7 +37,7 @@ function Round1(props) {
         // console.log(props.eventID);
 
         const response = await fetch(`${hostname}/api/event/assign-initial-net/${props.eventID}`, requestOptions);
-        // console.log("Initialize net - ", response);
+        console.log("Initialize net - ", response);
         props.updateNets(true);
         setIsLoading(false);
     }
@@ -69,7 +69,7 @@ function Round1(props) {
         // console.log(props.eventID);
 
 
-        console.log(props.round._id);
+        // console.log(props.round._id);
 
         const response = await fetch(`${hostname}/api/event/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         console.log("Update - ", response);

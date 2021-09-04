@@ -12,6 +12,8 @@ const mongoose = require('mongoose');
 const indexRoute = require('./routes/index');
 const adminRoute = require('./routes/admin');
 const eventRoute = require('./routes/event');
+const performanceRoute = require('./routes/performance');
+const netRoute = require('./routes/net');
 
 
 
@@ -52,6 +54,8 @@ require('./config/passport')(passport);
 app.use('/api', indexRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/event', eventRoute);
+app.use('/api/net', netRoute);
+app.use('/api/performance', performanceRoute );
 
 
 

@@ -34,7 +34,6 @@ const performanceSchema = new Schema({
     },
     net: {
         type: Schema.Types.ObjectId,
-        required: true,
         ref: 'net'
     },
     game1: scoreSchema,
