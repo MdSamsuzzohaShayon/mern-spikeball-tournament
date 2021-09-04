@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import { hostname } from "./utils/global";
 import Page404 from './pages/Page404';
 import EventAdmin from './components/admin/EventAdmin';
-import Score from './components/event/Score';
+import Score from './components/score/Score';
 
 
 class App extends Component {

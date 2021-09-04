@@ -1,101 +1,137 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
+import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
-import Point from '../event/Point';
+import Point from './Point';
 
 
+class Score extends Component {
+    constructor(props) {
+        super(props);
+        this.is_mounted = false;
+        this.state = {
+            currentEventID: this.props.match.params.id,
+            isLoading: false,
+            round1: [],
+            round2: [],
+            round3: [],
+            round4: [],
+            allRank: [],
+        }
 
-const Score = (props) => {
-    const [round1, setRound1] = useState([]);
-    const [round2, setRound2] = useState([]);
-    const [round3, setRound3] = useState([]);
-    const [round4, setRound4] = useState([]);
-    const [allRank, setAllRank] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    // const [reassignToNet, setReassignToNet] = useState(false);
 
-    const activeItemHandler = (e, item) => {
-        e.preventDefault();
-        findRound();
+        this.findRound = this.findRound.bind(this);
     }
 
-
-
-
-
-
-
     // ⛏️⛏️ GET ALL NETS FROM A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const findRound = async () => {
+    async findRound() {
 
         const requestOptions = {
             method: 'GET',
             headers: { "Content-Type": 'application/json' },
             credentials: "include"
         };
-        // console.log(props.eventID);
-        setIsLoading(true);
-        // console.log("Loading - ",isLoading);
-        // console.log(r);
-        const response = await fetch(`${hostname}/api/round/ranking/${props.eventID}`, requestOptions);
+
+        this.setState({ isLoading: true });
+
+
+        console.log(this.state.currentEventID);
+        const response = await fetch(`${hostname}/api/round/ranking/${this.state.currentEventID}`, requestOptions);
         console.log("Get nets from round - ", response);
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
         // console.log("JSON");
         // console.log(jsonRes);
-        if (jsonRes.round1 && jsonRes.round1.length > 0) setRound1(jsonRes.round1);
-        if (jsonRes.round2 && jsonRes.round2.length > 0) setRound2(jsonRes.round2);
-        if (jsonRes.round3 && jsonRes.round3.length > 0) setRound3(jsonRes.round3);
-        if (jsonRes.round4 && jsonRes.round4.length > 0) setRound4(jsonRes.round4);
-        if (jsonRes.allPerformances && jsonRes.allPerformances.length > 0) setAllRank(jsonRes.allPerformances);
+        if (jsonRes.round1 && jsonRes.round1.length > 0) this.setState({ round1: jsonRes.round1 });
+        if (jsonRes.round2 && jsonRes.round2.length > 0) this.setState({ round2: jsonRes.round2 });
+        if (jsonRes.round3 && jsonRes.round3.length > 0) this.setState({ round3: jsonRes.round3 });
+        if (jsonRes.round4 && jsonRes.round4.length > 0) this.setState({ round4: jsonRes.round4 });
+        if (jsonRes.allPerformances && jsonRes.allPerformances.length > 0) this.setState({ allRank: jsonRes.allPerformances });
 
         // CHECK FOR INITIAL NET 
-        // if (jsonRes.findRound) {
-        //     setRounds(jsonRes.findRound);
-        //     if (jsonRes.findRound.nets || jsonRes.findRound.nets.length < 1) {
-        //         setInitialize(false);
-        //     } else {
-        //         setInitialize(true);
-        //     }
-        // } else {
-        //     setRounds([]);
-        //     setInitialize(true);
-        // }
-
-        setIsLoading(false);
+        this.setState({ isLoading: false });
     }
 
 
 
-    useEffect(() => {
-        findRound();
-        console.log(round1);
-        console.log(round2);
-        console.log(round3);
-        console.log(round4);
-        console.log(allRank);
-    }, []);
+
+
+    // componentDidUpdate(){
+    //     console.log(this.state.pp);
+    // }
 
 
 
 
 
 
+    componentDidMount() {
+        this.is_mounted = true;
+        this.findRound();
+    }
+
+
+    componentWillUnmount() {
+        this.is_mounted = false;
+    }
 
 
 
 
+    render() {
+        return (
+            <div className="Event">
+                {this.state.isLoading ? (<div className="text-center spinner-parent">
+                    <div className="spinner-border text-danger spinner-child" role="status">
+                    </div>
+                </div>) : (<div className="display-event-details container">
+                    <div className="whole-ranking">
+                        <h2 className="h2">Overall ranking</h2>
+                        <Point roundNum={5} pp={this.state.allRank} />
+                    </div>
 
 
+                    <div className="row">
+                        {this.state.round1 && this.state.round1.length > 1 && (
+                            <div className="col-md-6">
+                                <div className="roundwise-ranking">
+                                    <h2 className="h2">Round 1</h2>
+                                    <Point roundNum={1} pp={this.state.round1} />
+                                </div>
+                            </div>
+                        )}
+                        {this.state.round2 && this.state.round2.length > 1 && (
+                            <div className="col-md-6">
+                                <div className="roundwise-ranking">
+                                    <h2 className="h2">Round 2</h2>
+                                    <Point roundNum={2} pp={this.state.round2} />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <div className="row">
+                        {this.state.round3 && this.state.round3.length > 1 && (
+                            <div className="col-md-6">
+                                <div className="roundwise-ranking">
+                                    <h2 className="h2">Round 3</h2>
+                                    <Point roundNum={3} pp={this.state.round3} />
+                                </div>
+                            </div>
+                        )}
 
-    return (
-        <div className="Score">
-            <div className="overall-ranking">
-                <h2 className="h2">Overall Ranking</h2>
-                <Point pp={round1} />
+                        {this.state.round4 && this.state.round4.length > 1 && (
+                            <div className="col-md-6">
+                                <div className="roundwise-ranking">
+                                    <h2 className="h2">Round 4</h2>
+                                    <Point roundNum={4} pp={this.state.round4} />
+                                </div>
+                            </div>
+                        )}
+
+                    </div>
+                </div>)}
             </div>
-        </div>
-    )
+        )
+    }
 }
 
-
-export default Score;
+export default withRouter(Score);

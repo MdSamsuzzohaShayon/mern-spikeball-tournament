@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
-import { round1Total } from '../../utils/addTotalPoint';
-import { round1TD } from '../../utils/pointDeferential';
+import { getDefaultValue, getTotal } from '../../utils/helpers';
 import AddParticipant from '../participant/AddParticipant';
 
 
@@ -22,6 +21,10 @@ function Round2(props) {
 
 
 
+
+
+
+    // ⛏️⛏️ GET ALL PERFORMERS FROM THIS CURRENT ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const getAllPerformance = async () => {
         const requestOptions = {
             method: 'GET',
@@ -37,9 +40,17 @@ function Round2(props) {
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
         setPerformances([...jsonRes.rankingPerformance]);
+        // console.log("JSON");
         // console.log(jsonRes);
         setIsLoading(false);
     }
+
+
+
+
+
+
+
 
 
 
@@ -47,6 +58,8 @@ function Round2(props) {
     useEffect(() => {
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
+        setLeftedPerformance(props.leftRound);
+        // console.log(leftedPerformance);
         if (props.round.length === 0) {
             getAllPerformance();
         } else {
@@ -60,11 +73,14 @@ function Round2(props) {
 
 
 
+
+
+    // ⛏️⛏️ SET LIST FOR WHO LEFT THE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const leftNet = (e, pId) => {
         // console.log(e);
         // console.log(pId);
         e.preventDefault();
-        console.log(performances);
+        // console.log(performances);
         // console.log();
         setPerformances(performances.filter(p => p._id !== pId));
         setLeftedPerformance([...leftedPerformance, ...performances.filter(p => p._id === pId)]);
@@ -78,7 +94,7 @@ function Round2(props) {
         try {
             const new_performance = {
                 event: props.eventID,
-                participant:{
+                participant: {
                     _id: res.participant._id,
                     firstname: res.participant.firstname,
                     lastname: res.participant.lastname,
@@ -93,7 +109,8 @@ function Round2(props) {
     };
 
 
-    // props.initialize
+
+
     // ⛏️⛏️ INITIALIZE TO NEW NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const assignNetHandler = async () => {
         // console.log("Initialize nets");
@@ -117,7 +134,7 @@ function Round2(props) {
 
 
 
-    const randomAssignOrReAssign=()=>{
+    const randomAssignOrReAssign = () => {
         console.log("random");
     }
 
@@ -139,11 +156,11 @@ function Round2(props) {
         // console.log(props.eventID);
 
 
-        console.log(props.round._id);
+        // console.log(props.round._id);
 
         const response = await fetch(`${hostname}/api/event/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         console.log("Update - ", response);
-        // console.log("Update - ", updatePerformance);
+        console.log("Update Performance - ", updatePerformance);
         setUpdatePerformance([]);
         props.updateNets(true);
     }
@@ -202,32 +219,6 @@ function Round2(props) {
 
 
 
-    // ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const getDefaultValue = (p, scoreType, gameNum) => {
-        if (scoreType === "point") {
-            switch (gameNum) {
-                case 1:
-                    if (p.game1 && p.game1 !== undefined) { return p.game1.point } else { return null };
-                case 2:
-                    if (p.game2 && p.game2 !== undefined) { return p.game2.point } else { return null };
-                case 3:
-                    if (p.game3 && p.game3 !== undefined) { return p.game3.point } else { return null };
-            }
-        }
-
-        if (scoreType === "pointDeferential") {
-            // console.log(p, round2.pointDeferential);
-            switch (gameNum) {
-                case 1:
-                    if (p.game1 && p.game1 !== undefined) { return p.game1.pointDeferential } else { return null };
-                case 2:
-                    if (p.game2 && p.game2 !== undefined) { return p.game2.pointDeferential } else { return null };
-                case 3:
-                    if (p.game3 && p.game3 !== undefined) { return p.game3.pointDeferential } else { return null };
-            }
-        }
-    }
-
 
 
 
@@ -257,15 +248,25 @@ function Round2(props) {
             } else {
                 return (<div className="f-point d-flex flex-column">
                     <div className="two-participant">
-                        <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[0], score, game) === 1 ? true : false} />
+                        <input className="form-check-input" type="checkbox"
+                            onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
+                            defaultChecked={getDefaultValue(net.performance[0], score, game) === 1 ? true : false} />
+
                         <div className="vs"></div>
-                        <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[3], score, game) === 1 ? true : false} />
+
+                        <input className="form-check-input" type="checkbox"
+                            onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
+                            defaultChecked={getDefaultValue(net.performance[1], score, game) === 1 ? true : false} />
                     </div>
 
                     <div className="two-participant">
-                        <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[1], score, game) === 1 ? true : false} />
+                        <input className="form-check-input" type="checkbox"
+                            onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
+                            defaultChecked={getDefaultValue(net.performance[1], score, game) === 1 ? true : false} />
                         <div className="vs"></div>
-                        <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[2], score, game) === 1 ? true : false} />
+                        <input className="form-check-input" type="checkbox"
+                            onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
+                            defaultChecked={getDefaultValue(net.performance[2], score, game) === 1 ? true : false} />
                     </div>
                 </div>);
             }
@@ -285,15 +286,23 @@ function Round2(props) {
             } else {
                 return (<div className="f-point d-flex flex-column">
                     <div className="two-participant">
-                        <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[0], score, game)} />
+                        <input className="form-control" type="text"
+                            onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
+                            defaultValue={getDefaultValue(net.performance[0], score, game)} />
                         <div className="vs"></div>
-                        <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[3], score, game)} />
+                        <input className="form-control" type="text"
+                            onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
+                            defaultValue={getDefaultValue(net.performance[3], score, game)} />
                     </div>
 
                     <div className="two-participant">
-                        <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[1], score, game)} />
+                        <input className="form-control" type="text"
+                            onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
+                            defaultValue={getDefaultValue(net.performance[1], score, game)} />
                         <div className="vs"></div>
-                        <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[2], score, game)} />
+                        <input className="form-control" type="text"
+                            onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
+                            defaultValue={getDefaultValue(net.performance[2], score, game)} />
                     </div>
                 </div>);
             }
@@ -302,27 +311,12 @@ function Round2(props) {
 
 
 
-    const getTotal = (net, round, score) => {
-        // console.log(score);
-        if (score === "point") {
-            return net.performance.map((p, j) => (
-                <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
-                    <div className="total">{round1Total(p)}</div>
-                </div>
-            ));
-        }
-        if (score === "pointDeferential") {
-            return net.performance.map((p, j) => (
-                <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
-                    <div className="total">{round1TD(p)}</div>
-                </div>
-            ));
-        }
-    }
 
 
 
 
+
+    // ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const arrangingPerformer = (performer) => {
 
         if (performer.length < 4) {
@@ -355,8 +349,11 @@ function Round2(props) {
     }
 
 
+
+
+    // ⛏️⛏️ THIS IS MAIN RETURN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     return (
-        <div className="Round1">
+        <div className="Round2">
             <div className="d-flex">
                 {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
                 <button className="btn btn-primary" onClick={assignNetHandler} >Reassign</button>
@@ -372,13 +369,7 @@ function Round2(props) {
                 </div>
                 <br />
                 <br />
-                <h2 className="h2">Players leave</h2>
-                <div className="left-performance-list list-group">
-                    {leftedPerformance && leftedPerformance.map((p, i) => (<div key={i} className="list-group-item d-flex justify-content-between align-items-center">
-                        <p>{p.participant.firstname + " " + p.participant.lastname}</p>
-                        <button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button>
-                    </div>))}
-                </div>
+
                 <AddParticipant
                     roundNum={props.roundNum}
                     eventID={props.eventID}
@@ -394,9 +385,9 @@ function Round2(props) {
                                     <thead className="r-thead bg-dark text-light">
                                         <tr>
                                             <th colSpan="2" scope="colgroup"></th>
-                                            <th colSpan="2" scope="colgroup">Game 1</th>
-                                            <th colSpan="2" scope="colgroup">Game 2</th>
-                                            <th colSpan="2" scope="colgroup">Game 3</th>
+                                            <th colSpan="2" scope="colgroup">Game 4</th>
+                                            <th colSpan="2" scope="colgroup">Game 5</th>
+                                            <th colSpan="2" scope="colgroup">Game 6</th>
                                             <th colSpan="2" scope="colgroup">Total</th>
                                         </tr>
                                         <tr>
@@ -415,22 +406,22 @@ function Round2(props) {
                                     <tbody>
                                         {nets && nets.map((net, i) => (
                                             <tr key={i}>
-                                                <th scope="row">Net {net.sl}</th>
+                                                <th scope="row">Net {net.sl || i + 1}</th>
                                                 <td>
                                                     {arrangingPerformer(net.performance)}
                                                 </td>
 
 
-                                                {/* ROUND ONE - POINT AND POINT DEFERENTIAL */}
-                                                <td >{allPerformers(net, 1, "point")} </td>
-                                                <td>{allPerformers(net, 1, "pointDeferential")}</td>
+                                                {/* ROUND FOUR - POINT AND POINT DEFERENTIAL */}
+                                                <td >{allPerformers(net, 4, "point")} </td>
+                                                <td>{allPerformers(net, 4, "pointDeferential")}</td>
 
 
-                                                <td >{allPerformers(net, 2, "point")} </td>
-                                                <td>{allPerformers(net, 2, "pointDeferential")}</td>
+                                                <td >{allPerformers(net, 5, "point")} </td>
+                                                <td>{allPerformers(net, 5, "pointDeferential")}</td>
 
-                                                <td >{allPerformers(net, 3, "point")} </td>
-                                                <td>{allPerformers(net, 3, "pointDeferential")}</td>
+                                                <td >{allPerformers(net, 6, "point")} </td>
+                                                <td>{allPerformers(net, 6, "pointDeferential")}</td>
 
 
                                                 <td >{getTotal(net, 2, "point")}</td>
@@ -445,6 +436,15 @@ function Round2(props) {
                             <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
                         </div>
                     )}
+
+                    {leftedPerformance && leftedPerformance.length > 1 && (<React.Fragment>
+                        <h2 className="h2">Players Who Leave</h2>
+                        <div className="left-performance-list list-group">
+                            {leftedPerformance.map((p, i) => (<div key={i} className="list-group-item d-flex justify-content-between align-items-center">
+                                <p>{p.participant.firstname + " " + p.participant.lastname}</p>
+                            </div>))}
+                        </div>
+                    </React.Fragment>)}
                 </div>
             )}
             <br />

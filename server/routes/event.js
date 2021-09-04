@@ -143,7 +143,7 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
 router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
     try {
         const findRound = await Round.findOne({ event: req.params.eventID, no: req.params.round })
-            .populate([{
+            .populate({
                 path: "nets",
                 select: "performance",
                 populate: {
@@ -154,10 +154,30 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
                         select: "firstname lastname"
                     }
                 }
-            }])
+            })
+            // .populate({
+            //     path: "left",
+            //     select: "performance",
+            //     populate: {
+            //         path: 'performance',
+            //         select: 'participant',
+            //         populate: {
+            //             path: "participant",
+            //             select: "firstname lastname"
+            //         }
+            //     }
+            // })
             .exec();
-        console.log(findRound);
-        res.status(200).json({ msg: 'Getting Rounds', findRound });
+
+
+        // console.log(findRound.left);
+        const leftRound = await Performance.find({ _id: { $in: findRound.left } })
+            .populate({
+                path: "participant",
+                select: "firstname lastname"
+
+            });
+        res.status(200).json({ msg: 'Getting Rounds', findRound, leftRound });
     } catch (error) {
         console.log(error);
     }

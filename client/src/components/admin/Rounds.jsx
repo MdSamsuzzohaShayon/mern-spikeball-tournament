@@ -14,6 +14,7 @@ const Rounds = (props) => {
     // const [round, setRound] = useState(1);
     const [initialize, setInitialize] = useState(false);
     const [round, setRounds] = useState([]);
+    const [leftRound, setLeftRound] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     // const [reassignToNet, setReassignToNet] = useState(false);
 
@@ -51,6 +52,9 @@ const Rounds = (props) => {
         const jsonRes = await JSON.parse(text);
         // console.log("JSON");
         // console.log(jsonRes);
+        if(jsonRes.leftRound && jsonRes.leftRound.length > 0){
+            setLeftRound([...jsonRes.leftRound]);
+        }
         // CHECK FOR INITIAL NET 
         if (jsonRes.findRound) {
             setRounds(jsonRes.findRound);
@@ -131,6 +135,7 @@ const Rounds = (props) => {
                             round={round}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
+                            leftRound={leftRound}
                             eventID={props.eventID} />
                     </div>);
                 }
@@ -161,13 +166,14 @@ const Rounds = (props) => {
                         </div>
                     );
                 } else {
-                    return (<div className="tab-pane fade show active" ><Round4
-                        initialize={initialize}
-                        round={round}
-                        roundNum={activeItem}
-                        updateNets={updateFindNets}
-                        eventID={props.eventID}
-                    /> </div>);
+                    return (<div className="tab-pane fade show active" >
+                        <Round4
+                            initialize={initialize}
+                            round={round}
+                            roundNum={activeItem}
+                            updateNets={updateFindNets}
+                            eventID={props.eventID}
+                        /> </div>);
                 }
             case 5:
                 if (isLoading) {
@@ -178,13 +184,14 @@ const Rounds = (props) => {
                         </div>
                     );
                 } else {
-                    return (<div className="tab-pane fade show active" ><Round5
-                        initialize={initialize}
-                        round={round}
-                        roundNum={activeItem}
-                        updateNets={updateFindNets}
-                        eventID={props.eventID}
-                    /> </div>);
+                    return (<div className="tab-pane fade show active" >
+                        <Round5
+                            initialize={initialize}
+                            round={round}
+                            roundNum={activeItem}
+                            updateNets={updateFindNets}
+                            eventID={props.eventID}
+                        /> </div>);
                 }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);

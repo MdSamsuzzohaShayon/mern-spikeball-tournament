@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
 import Participants from './Participants';
 import Rounds from './Rounds'
-import Score from "../event/Score";
+import Score from "../score/Score";
 import './EventAdmin.css';
 
 export class EventAdmin extends Component {

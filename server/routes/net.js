@@ -49,8 +49,8 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
                     ranking = findPerformances.sort(rankingRound4);
                 }
 
-                console.log("Ranking - ", ranking);
-                console.log("------------------------BREAK--------------------------");
+                // console.log("Ranking - ", ranking);
+                // console.log("------------------------BREAK--------------------------");
 
                 // CREATE NETS 
 
@@ -72,8 +72,8 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
                         event: req.params.eventID,
                     });
                     const net = await newNet.save();
-                    console.log("NET sl - ", netNo);
-                    console.log("NET - ", net);
+                    // console.log("NET sl - ", netNo);
+                    // console.log("NET - ", net);
                     allNetsIds.push(net._id);
 
 
