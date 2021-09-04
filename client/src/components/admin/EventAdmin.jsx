@@ -4,6 +4,8 @@ import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
 import Participants from './Participants';
 import Rounds from './Rounds'
+import Score from "../event/Score";
+import './EventAdmin.css';
 
 export class EventAdmin extends Component {
     constructor(props) {
@@ -119,6 +121,17 @@ export class EventAdmin extends Component {
                 } else {
                     return (<div className="tab-pane fade show active" ><Rounds eventID={this.state.currentEventID} /></div>);
                 }
+            case "score":
+                if (this.state.isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (<div className="tab-pane fade show active score-board" ><Score /></div>);
+                }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);
         }
@@ -148,7 +161,7 @@ export class EventAdmin extends Component {
                                 <button className={this.state.activeTab === "event" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "event")} >Events</button>
                                 <button className={this.state.activeTab === "participants" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "participants")}  >Participants</button>
                                 <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Round</button>
-                                <button className="nav-link" >Settings</button>
+                                <button className={this.state.activeTab === "score" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "score")}  >Score</button>
                             </div>
                             <div className="tab-content" >
                                 {this.showAllNavItem()}

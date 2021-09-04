@@ -122,10 +122,10 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
             const round = await new_round.save();
             const updateNetRound = await Net.updateMany({ event: event._id }, { round: round._id }, { new: true });
 
-            
 
 
-            res.status(200).json({ msg: 'Assign to initial net randomly',  round });
+
+            res.status(200).json({ msg: 'Assign to initial net randomly', round });
         } else {
             res.status(201).json({ msg: "Have already assigned nets", findNets });
         }
@@ -142,7 +142,7 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
 // ⛏️⛏️ GET PERFORMANCE AND NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
     try {
-        const findRound = await Round.findOne({event: req.params.eventID, no: req.params.round})
+        const findRound = await Round.findOne({ event: req.params.eventID, no: req.params.round })
             .populate([{
                 path: "nets",
                 select: "performance",
@@ -156,7 +156,7 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
                 }
             }])
             .exec();
-            console.log(findRound);
+        console.log(findRound);
         res.status(200).json({ msg: 'Getting Rounds', findRound });
     } catch (error) {
         console.log(error);
@@ -194,11 +194,12 @@ router.get('/get-net/:eventID/:round', async (req, res, next) => {
 
 
 // ⛏️⛏️ GET PERFORMANCE AND NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.delete('/delete-round/:eventID/:roundID', async (req, res, next) => {
+router.delete('/delete-round/:eventID/:roundNum', async (req, res, next) => {
     try {
-        const deleteRound = await Round.findOneAndDelete({event: req.params.eventID, _id: req.params.roundID});
-        const deleteNets = await Net.deleteMany({round: deleteRound._id});
-        console.log(req.params);
+        const deleteRound = await Round.findOneAndDelete({ no: req.params.roundNum, event: req.params.eventID });
+        console.log(deleteRound);
+        const deleteNets = await Net.deleteMany({ round: deleteRound._id });
+        // console.log(req.params);
         res.status(200).json({ msg: 'Getting performance', deleteRound, deleteNets });
     } catch (error) {
         console.log(error);

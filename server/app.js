@@ -14,6 +14,7 @@ const adminRoute = require('./routes/admin');
 const eventRoute = require('./routes/event');
 const performanceRoute = require('./routes/performance');
 const netRoute = require('./routes/net');
+const roundRoute = require('./routes/round');
 
 
 
@@ -56,6 +57,7 @@ app.use('/api/admin', adminRoute);
 app.use('/api/event', eventRoute);
 app.use('/api/net', netRoute);
 app.use('/api/performance', performanceRoute );
+app.use('/api/round', roundRoute);
 
 
 

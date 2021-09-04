@@ -1,10 +1,10 @@
 import React from 'react';
 import { round1Total } from '../../utils/addTotalPoint';
 import { round1TD } from '../../utils/pointDeferential';
-import { assending124 } from '../../utils/ranking';
+
 
 const Round1 = (props) => {
-    const assendingPerformance = props.pp.sort(assending124);
+
     // console.log(assendingPerformance);
     return (
         <React.Fragment>
@@ -18,7 +18,7 @@ const Round1 = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {assendingPerformance.map((p, i) => (
+                    {props.pp.map((p, i) => (
                         <tr key={i}>
                             <td>{i + 1}</td>
                             <td>{p.participant.firstname}</td>

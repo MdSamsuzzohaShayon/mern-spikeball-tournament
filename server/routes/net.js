@@ -18,34 +18,46 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
     try {
 
         const { performances, leftedPerformance } = req.body;
+        const roundNum = parseInt(req.params.roundNum);
         // console.log(req.body);
-        const findRound = await Round.findOne({ event: req.params.eventID, no: req.params.roundNum });
+        const findRound = await Round.findOne({ event: req.params.eventID, no: roundNum });
         // console.log("Found rounds - ", findRound);
         if (findRound || findRound == null) {
             const allPerformanceIds = [];
             for (let per of performances) {
                 allPerformanceIds.push(per._id);
             }
+            const allLeftedPerFormance = [];
+            for (let lp of leftedPerformance) {
+                allLeftedPerFormance.push(lp._id);
+            }
+
             // console.log("pid -",allPerformanceIds);
             const findPerformances = await Performance.find({ _id: { $in: allPerformanceIds } }).populate({ path: "participant", select: "firstname lastname" });
             const assending = true;
             if (assending) {
                 let ranking = findPerformances;
-                if (req.params.roundNum === 2) {
+
+                if (roundNum === 2) {
+                    console.log("Round 2");
                     ranking = findPerformances.sort(rankingRound1);
-                } else if (req.params.roundNum === 3) {
+                } else if (roundNum === 3) {
                     ranking = findPerformances.sort(rankingRound2);
-                } else if (req.params.roundNum === 4) {
+                } else if (roundNum === 4) {
                     ranking = findPerformances.sort(rankingRound3);
-                } else if (req.params.roundNum === 5) {
+                } else if (roundNum === 5) {
                     ranking = findPerformances.sort(rankingRound4);
                 }
+
+                console.log("Ranking - ", ranking);
+                console.log("------------------------BREAK--------------------------");
 
                 // CREATE NETS 
 
                 // CREATING NET AND PERFORMANCE OF THE PLAYER 
                 const allNetsIds = [];
                 const allPerformanceIds = [];
+
 
 
 
@@ -60,6 +72,8 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
                         event: req.params.eventID,
                     });
                     const net = await newNet.save();
+                    console.log("NET sl - ", netNo);
+                    console.log("NET - ", net);
                     allNetsIds.push(net._id);
 
 
@@ -69,19 +83,23 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
                     }
                     netNo++;
                 }
+                // console.log("Net ids - ", allNetsIds);
+                // console.log("p ids - ", allPerformanceIds);
+                // console.log("pp ids - ", allLeftedPerFormance);
 
 
 
                 const new_round = new Round({
-                    no: req.params.roundNum,
+                    no: roundNum,
                     event: req.params.eventID,
                     performances: allPerformanceIds,
-                    nets: allNetsIds
+                    nets: allNetsIds,
+                    left: allLeftedPerFormance
                 });
-                console.log(new_round);
+                // console.log("New Round - ", new_round);
+                // console.log("Round Num - ", roundNum);
                 const round = await new_round.save();
                 const updateNetRound = await Net.updateMany({ _id: { $in: allNetsIds } }, { round: round._id }, { new: true });
-
 
 
                 // console.log("Ranking - ", ranking);

@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import { hostname } from "./utils/global";
 import Page404 from './pages/Page404';
 import EventAdmin from './components/admin/EventAdmin';
-import Event from './components/event/Event';
+import Score from './components/event/Score';
 
 
 class App extends Component {
@@ -99,7 +99,7 @@ class App extends Component {
              <EventAdmin isAuthenticated={this.state.isAuthenticated} /> 
           </Route>
           <Route exact path="/event/:id" >
-             <Event /> 
+             <Score /> 
           </Route>
           <Route path="*">
             <Page404 />
