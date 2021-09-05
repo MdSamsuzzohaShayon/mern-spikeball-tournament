@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
-import { getDefaultValue, getTotal } from '../../utils/helpers';
+import { getDefaultValue, getTotal, arrangingPerformer } from '../../utils/helpers';
 import AddParticipant from '../participant/AddParticipant';
 
 
@@ -134,8 +134,23 @@ function Round2(props) {
 
 
 
-    const randomAssignOrReAssign = () => {
+    const randomAssign = async (e) => {
+        e.preventDefault();
         console.log("random");
+        setIsLoading(true);
+        // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
+        const requestOptions = {
+            method: 'POST',
+            headers: { "Content-Type": 'application/json' },
+            credentials: "include",
+            body: JSON.stringify({ performances, leftedPerformance })
+        };
+        // console.log(props.eventID);
+
+        const response = await fetch(`${hostname}/api/net/random-assign-net/${props.eventID}/${props.roundNum}`, requestOptions);
+        console.log("Initialize net - ", response);
+        props.updateNets(true);
+        setIsLoading(false);
     }
 
 
@@ -256,7 +271,7 @@ function Round2(props) {
 
                         <input className="form-check-input" type="checkbox"
                             onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                            defaultChecked={getDefaultValue(net.performance[1], score, game) === 1 ? true : false} />
+                            defaultChecked={getDefaultValue(net.performance[3], score, game) === 1 ? true : false} />
                     </div>
 
                     <div className="two-participant">
@@ -316,37 +331,7 @@ function Round2(props) {
 
 
 
-    // ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const arrangingPerformer = (performer) => {
 
-        if (performer.length < 4) {
-            // console.log(performer);
-
-            return (
-                <div>
-                    {performer.map((p, j) => (
-                        <div className="player-name" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
-                    ))
-                    }
-                </div>);
-        } else {
-            // console.log(performer[0]);
-            return (
-                <div className="f-net d-flex flex-column text-center justify-space-between">
-                    <div className="two-participant">
-                        <div className="f-rival-item">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
-                        <div className="vs text-uppercase">VS</div>
-                        <div className="f-rival-item">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
-                    </div>
-                    <div className="two-participant">
-                        <div className="f-rival-item">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
-                        <div className="vs text-uppercase">VS</div>
-                        <div className="f-rival-item">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
-                    </div>
-                </div>);
-        }
-
-    }
 
 
 
@@ -357,7 +342,7 @@ function Round2(props) {
             <div className="d-flex">
                 {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
                 <button className="btn btn-primary" onClick={assignNetHandler} >Reassign</button>
-                <button className="btn btn-primary" onClick={assignNetHandler} >Random Reassign</button>
+                <button className="btn btn-primary" onClick={randomAssign} >Random Reassign</button>
             </div>
             {showPerformances ? (<React.Fragment>
                 <h2 className="h2">All players in the tournament</h2>
@@ -424,8 +409,10 @@ function Round2(props) {
                                                 <td>{allPerformers(net, 6, "pointDeferential")}</td>
 
 
-                                                <td >{getTotal(net, 2, "point")}</td>
-                                                <td >{getTotal(net, 2, "pointDeferential")}</td>
+
+                                                {/* TWO IS THE ROUND NUMBER  */}
+                                                <td >{getTotal(net, props.roundNum, "point")}</td>
+                                                <td >{getTotal(net, props.roundNum, "pointDeferential")}</td>
 
 
                                             </tr>
@@ -439,7 +426,7 @@ function Round2(props) {
 
                     {leftedPerformance && leftedPerformance.length > 1 && (<React.Fragment>
                         <h2 className="h2">Players Who Leave</h2>
-                        <div className="left-performance-list list-group">
+                        <div className="left-performance-list p-0 list-group">
                             {leftedPerformance.map((p, i) => (<div key={i} className="list-group-item d-flex justify-content-between align-items-center">
                                 <p>{p.participant.firstname + " " + p.participant.lastname}</p>
                             </div>))}

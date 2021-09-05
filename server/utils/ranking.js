@@ -151,6 +151,10 @@ function pdtR5(ab) {
 
 
 
+
+
+
+
 module.exports.rankingRound1 = (a, b) => {
     let pointA = 0, pointB = 0;
     pointA = addR1(a);
@@ -206,6 +210,39 @@ module.exports.rankingRound2 = (a, b) => {
     return 0;
 }
 
+
+
+
+
+// RANKING ROUND2 INDIVIDUAL 
+module.exports.rankingRound2Ind = (a, b) => {
+
+    let pointA = 0, pointB = 0;
+    pointA = addR2(a);
+    pointB = addR2(b);
+    // console.log(pointB);
+    if (pointA > pointB) {
+        return -1;
+    }
+    if (pointB > pointA) {
+        return 1
+    }
+    if (pointA == pointB) {
+        let pdta = 0, pdtb = 0;
+        pdta = pdtR2(a);
+        pdtb = pdtR2(b);
+        if (pdta > pdtb) {
+            return -1;
+        }
+        if (pdta < pdtb) {
+            return 1;
+        }
+        return 0;
+
+    }
+    return 0;
+}
+
 module.exports.rankingRound3 = (a, b) => {
 
     let pointA = 0, pointB = 0;
@@ -233,6 +270,38 @@ module.exports.rankingRound3 = (a, b) => {
     return 0;
 }
 
+
+
+module.exports.rankingRound3Ind = (a, b) => {
+
+    let pointA = 0, pointB = 0;
+    pointA = addR3(a);
+    pointB = addR3(b);
+    if (pointA > pointB) {
+        return -1;
+    }
+    if (pointB > pointA) {
+        return 1
+    }
+    if (pointA == pointB) {
+        let pdta = 0, pdtb = 0;
+        pdta = pdtR3(a);
+        pdtb = pdtR3(b);
+        if (pdta > pdtb) {
+            return -1;
+        }
+        if (pdta < pdtb) {
+            return 1;
+        }
+        return 0;
+
+    }
+    return 0;
+}
+
+
+
+
 module.exports.rankingRound4 = (a, b) => {
 
     let pointA = 0, pointB = 0;
@@ -248,6 +317,93 @@ module.exports.rankingRound4 = (a, b) => {
         let pdta = 0, pdtb = 0;
         pdta = pdtR1(a) + pdtR2(a) + pdtR3(a) + pdtR4(a);
         pdtb = pdtR1(b) + pdtR2(b) + pdtR3(b) + pdtR4(b);
+        if (pdta > pdtb) {
+            return -1;
+        }
+        if (pdta < pdtb) {
+            return 1;
+        }
+        return 0;
+
+    }
+    return 0;
+}
+
+
+module.exports.rankingRound4Ind = (a, b) => {
+
+    let pointA = 0, pointB = 0;
+    pointA = addR4(a);
+    pointB = addR4(b);
+    if (pointA > pointB) {
+        return -1;
+    }
+    if (pointB > pointA) {
+        return 1
+    }
+    if (pointA == pointB) {
+        let pdta = 0, pdtb = 0;
+        pdta = pdtR4(a);
+        pdtb = pdtR4(b);
+        if (pdta > pdtb) {
+            return -1;
+        }
+        if (pdta < pdtb) {
+            return 1;
+        }
+        return 0;
+
+    }
+    return 0;
+}
+
+
+
+
+module.exports.rankingRound5 = (a, b) => {
+
+    let pointA = 0, pointB = 0;
+    pointA = addR1(a) + addR2(a) + addR3(a) + addR4(a) + addR5(a);
+    pointB = addR1(b) + addR2(b) + addR3(b) + addR4(b) + addR5(b);
+    if (pointA > pointB) {
+        return -1;
+    }
+    if (pointB > pointA) {
+        return 1
+    }
+    if (pointA == pointB) {
+        let pdta = 0, pdtb = 0;
+        pdta = pdtR1(a) + pdtR2(a) + pdtR3(a) + pdtR4(a) + pdtR5(a);
+        pdtb = pdtR1(b) + pdtR2(b) + pdtR3(b) + pdtR4(b) + pdtR5(b);
+        if (pdta > pdtb) {
+            return -1;
+        }
+        if (pdta < pdtb) {
+            return 1;
+        }
+        return 0;
+
+    }
+    return 0;
+}
+
+
+
+module.exports.rankingRound5Ind = (a, b) => {
+
+    let pointA = 0, pointB = 0;
+    pointA = addR5(a);
+    pointB = addR5(b);
+    if (pointA > pointB) {
+        return -1;
+    }
+    if (pointB > pointA) {
+        return 1
+    }
+    if (pointA == pointB) {
+        let pdta = 0, pdtb = 0;
+        pdta = pdtR5(a);
+        pdtb = pdtR5(b);
         if (pdta > pdtb) {
             return -1;
         }

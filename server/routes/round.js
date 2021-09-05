@@ -1,7 +1,7 @@
 const express = require('express');
 const Performance = require('../models/Performance');
 const Round = require('../models/Round');
-const { rankingRound1, rankingRound2, rankingRound3, rankingRound4, wholeRanking } = require('../utils/ranking');
+const { rankingRound1, wholeRanking, rankingRound2Ind, rankingRound3Ind, rankingRound4Ind } = require('../utils/ranking');
 
 
 const router = express.Router();
@@ -31,7 +31,7 @@ router.get('/ranking/:eventID', async (req, res, next) => {
 
 
 
-        let round1 = null, round2 = null, round3 = null, round4 = null;
+        let round1 = null, round2 = null, round3 = null, round4 = null, round5 = null;
         const round1Slice = rounds.filter(r => r.no === 1)[0];
         if (round1Slice) {
             const round1Asscending = round1Slice.performances.sort(rankingRound1);
@@ -43,7 +43,7 @@ router.get('/ranking/:eventID', async (req, res, next) => {
         const round2Slice = rounds.filter(r => r.no === 2)[0];
         // console.log(round2Slice);
         if (round2Slice) {
-            const round2Asscending = round2Slice.performances.sort(rankingRound2);
+            const round2Asscending = round2Slice.performances.sort(rankingRound2Ind);
             round2 = round2Asscending.filter(r => r.game4 || r.game5 || r.game6);
             // console.log(round2);
         }
@@ -53,20 +53,27 @@ router.get('/ranking/:eventID', async (req, res, next) => {
 
         const round3Slice = rounds.filter(r => r.no === 3)[0];
         if (round3Slice) {
-            const round3Asscending = round3Slice.performances.sort(rankingRound3);
+            const round3Asscending = round3Slice.performances.sort(rankingRound3Ind);
             round3 = round3Asscending.filter(r => r.game7 || r.game8 || r.game9);
         }
 
 
         const round4Slice = rounds.filter(r => r.no === 4)[0];
         if (round4Slice) {
-            const round4Asscending = round4Slice.performances.sort(rankingRound4);
+            const round4Asscending = round4Slice.performances.sort(rankingRound4Ind);
             round4 = round4Asscending.filter(r => r.game10 || r.game11 || r.game12);
         }
 
 
+        const round5Slice = rounds.filter(r => r.no === 5)[0];
+        if (round5Slice) {
+            const round4Asscending = round5Slice.performances.sort(rankingRound4Ind);
+            round5 = round4Asscending.filter(r => r.game10 || r.game11 || r.game12);
+        }
 
-        res.status(201).json({ msg: "rank performance and inatilize performance", allPerformances, round1, round2, round3, round4 })
+
+
+        res.status(201).json({ msg: "rank performance and inatilize performance", allPerformances, round1, round2, round3, round4, round5 })
 
     } catch (error) {
         console.log(error);
