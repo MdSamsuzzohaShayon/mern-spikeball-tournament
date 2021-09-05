@@ -170,13 +170,18 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
             .exec();
 
 
+        // console.log(findRound);
+        let leftRound = null;
+        // console.log("findRound.left");
         // console.log(findRound.left);
-        const leftRound = await Performance.find({ _id: { $in: findRound.left } })
-            .populate({
-                path: "participant",
-                select: "firstname lastname"
+        if (findRound) {
+            leftRound = await Performance.find({ _id: { $in: findRound.left } })
+                .populate({
+                    path: "participant",
+                    select: "firstname lastname"
 
-            });
+                });
+        }
         res.status(200).json({ msg: 'Getting Rounds', findRound, leftRound });
     } catch (error) {
         console.log(error);
