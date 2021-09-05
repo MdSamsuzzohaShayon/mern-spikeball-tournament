@@ -174,6 +174,18 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
         let leftRound = null;
         // console.log("findRound.left");
         // console.log(findRound.left);
+        // 0|spikebal |     at /home/telex/spikeball/server/routes/event.js:174:74
+        // 0|spikebal |     at runMicrotasks (<anonymous>)
+        // 0|spikebal |     at processTicksAndRejections (internal/process/task_queues.js:95:5)
+        // 0|spikebal | TypeError: Cannot read property 'left' of null
+        // 0|spikebal |     at /home/telex/spikeball/server/routes/event.js:174:74
+        // 0|spikebal |     at runMicrotasks (<anonymous>)
+        // 0|spikebal |     at processTicksAndRejections (internal/process/task_queues.js:95:5)
+        // 0|spikebal | TypeError: Cannot read property 'left' of null
+        // 0|spikebal |     at /home/telex/spikeball/server/routes/event.js:174:74
+        // 0|spikebal |     at runMicrotasks (<anonymous>)
+        // 0|spikebal |     at processTicksAndRejections (internal/process/task_queues.js:95:5)
+        
         if (findRound) {
             leftRound = await Performance.find({ _id: { $in: findRound.left } })
                 .populate({
@@ -181,10 +193,8 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
                     select: "firstname lastname"
 
                 });
-            res.status(200).json({ msg: 'Getting Rounds', findRound, leftRound });
-        } else {
-            res.status(200).json({ msg: 'Getting Rounds', findRound });
         }
+        res.status(200).json({ msg: 'Getting Rounds', findRound, leftRound });
     } catch (error) {
         console.log(error);
     }
