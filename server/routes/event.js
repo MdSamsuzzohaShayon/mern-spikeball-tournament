@@ -181,8 +181,10 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
                     select: "firstname lastname"
 
                 });
+            res.status(200).json({ msg: 'Getting Rounds', findRound, leftRound });
+        } else {
+            res.status(200).json({ msg: 'Getting Rounds', findRound });
         }
-        res.status(200).json({ msg: 'Getting Rounds', findRound, leftRound });
     } catch (error) {
         console.log(error);
     }
