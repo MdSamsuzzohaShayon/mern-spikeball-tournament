@@ -88,3 +88,22 @@ export const round4TD = (performance) => {
     return deferential;
 }
 
+
+
+
+export const round5TD = (performance) => {
+    let deferential = 0;
+    try {
+
+        if (performance.game13) { let pd = performance.game13.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.game14) { let pd = performance.game14.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+        if (performance.game15) { let pd = performance.game15.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
+    } catch (error) {
+        console.log(error);
+    }
+    // console.log();
+
+
+    return deferential;
+}
+

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Round1 from '../round/Round1';
-import Round2 from '../round/Round2';
 import SingleRound from '../round/SingleRound';
-import Round4 from '../round/Round4';
-import Round5 from '../round/Round5';
 import { hostname } from '../../utils/global';
 import "./style/Rounds.css";
 

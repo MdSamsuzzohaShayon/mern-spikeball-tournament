@@ -54,10 +54,22 @@ Emojies - 📜 ⛏️ ➖ ✅
  - Create only one round instead of all five round
 
 
+### New requirements
+ - Show the players before by ranking. total point, average point deferential
+ - two in one team another two with another team
+ - For game one game two they will change team mate
+ - Every game with different partner (participant, point, point diferential)
+ - Awarding point ()
+ - Negative point will have red color, positive point will have green color
+ - Change reassign to rank assign, random assign
+
+
 
  ##### Problem
   - Component did update - login automitically and get a user
   - there are some problem with round - front-end
+  - ✅ Problem with left performance
+  - Problem with initial random assign from 2,3,4,5 round
 
 
 ### CSV Parser

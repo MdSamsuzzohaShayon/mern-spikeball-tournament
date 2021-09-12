@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { getDefaultValue, getTotal, arrangingPerformer } from '../../utils/helpers';
 import AddParticipant from '../participant/AddParticipant';
+import { getTotalPointOfARound, getTotalPointDifferentialOfARound } from '../../utils/tptd';
+import { showLiftedPefrormance } from '../../utils/performance';
 
 
 function SingleRound(props) {
@@ -17,7 +19,7 @@ function SingleRound(props) {
     // console.log(props);
     const { nets } = props.round;
     // console.log("Found Round");
-    // console.log(props);
+    // console.log(nets);
 
 
 
@@ -26,6 +28,7 @@ function SingleRound(props) {
 
     // ⛏️⛏️ GET ALL PERFORMERS FROM THIS CURRENT ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const getAllPerformance = async () => {
+        console.log("-------------------");
         const requestOptions = {
             method: 'GET',
             headers: { "Content-Type": 'application/json' },
@@ -35,13 +38,13 @@ function SingleRound(props) {
         setIsLoading(true);
         // console.log("Loading - ",isLoading);
         // console.log(r);
-        const response = await fetch(`${hostname}/api/event/get-performance/${props.eventID}`, requestOptions);
+        const response = await fetch(`${hostname}/api/performance/get-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         console.log("Get nets from round - ", response);
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
         setPerformances([...jsonRes.rankingPerformance]);
-        // console.log("JSON");
-        // console.log(jsonRes);
+        console.log("JSON");
+        console.log(jsonRes);
         setIsLoading(false);
     }
 
@@ -59,7 +62,12 @@ function SingleRound(props) {
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
         // console.log(props.leftRound);
-        setLeftedPerformance(props.leftRound);
+        // IF THIS IS NOT INITIALIZEABLE
+        if(props.initialize){
+            setLeftedPerformance([]);
+        }else{
+            setLeftedPerformance(props.leftRound);
+        }
         // console.log(leftedPerformance);
         if (props.round.length === 0) {
             getAllPerformance();
@@ -258,6 +266,8 @@ function SingleRound(props) {
         // console.log(net.performance);
         // console.log("s - ", score);
         // console.log(props.round);
+
+
         if (score === "point") {
             if (net.performance.length < 4) {
                 return net.performance.map((p, j) => (
@@ -333,9 +343,9 @@ function SingleRound(props) {
                 </div>);
             }
         }
+
+
     }
-
-
 
 
 
@@ -352,26 +362,34 @@ function SingleRound(props) {
         <div className="SingleRound">
             <div className="d-flex">
                 {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
-                <button className="btn btn-primary" onClick={assignNetHandler} >Reassign</button>
-                <button className="btn btn-primary" onClick={randomAssign} >Random Reassign</button>
+                <button className="btn btn-primary" onClick={assignNetHandler} >Rank Assign</button>
+                <button className="btn btn-primary" onClick={randomAssign} >Random Assign</button>
             </div>
             {showPerformances ? (<React.Fragment>
                 <h2 className="h2">All players in the tournament</h2>
-                <div className="performance-list list-group">
-                    {performances && performances.map((p, i) => (<div key={i} className="list-group-item d-flex justify-content-between align-items-center">
-                        <p>{p.participant.firstname + " " + p.participant.lastname}</p>
-                        <button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button>
-                    </div>))}
-                </div>
+                <table className="table table-bordered">
+                    <thead className="table-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Ranking</th>
+                            <th scope="col">Point</th>
+                            <th scope="col">Point Diferential</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {performances && performances.map((p, i) => (<tr key={i} >
+                            <td>{p.participant.firstname + " " + p.participant.lastname}</td>
+                            <td>{i + 1}</td>
+                            <td>{getTotalPointOfARound(p, props.roundNum)}</td>
+                            <td>{getTotalPointDifferentialOfARound(p, props.roundNum)}</td>
+                            <td><button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button></td>
+                        </tr>))}
+                    </tbody>
+                </table>
                 <br /><br />
-                {leftedPerformance && (<React.Fragment>
-                    <h2 className="h2">Players Who Leave</h2>
-                    <div className="left-performance-list p-0 list-group">
-                        {leftedPerformance.map((p, i) => (<div key={i} className="list-group-item d-flex justify-content-between align-items-center">
-                            <p>{p.participant.firstname + " " + p.participant.lastname}</p>
-                        </div>))}
-                    </div>
-                </React.Fragment>)}
+
+                {showLiftedPefrormance(leftedPerformance, props.roundNum)}
                 <br />
                 <br />
 
@@ -430,7 +448,6 @@ function SingleRound(props) {
 
 
 
-                                                {/* TWO IS THE ROUND NUMBER  */}
                                                 <td >{getTotal(net, props.roundNum, "point")}</td>
                                                 <td >{getTotal(net, props.roundNum, "pointDeferential")}</td>
 
@@ -445,15 +462,7 @@ function SingleRound(props) {
                     )}
 
 
-                    {/* {console.log(leftedPerformance)} */}
-                    {leftedPerformance && (<React.Fragment>
-                        <h2 className="h2">Players Who Leave</h2>
-                        <div className="left-performance-list p-0 list-group">
-                            {leftedPerformance.map((p, i) => (<div key={i} className="list-group-item d-flex justify-content-between align-items-center">
-                                <p>{p.participant.firstname + " " + p.participant.lastname}</p>
-                            </div>))}
-                        </div>
-                    </React.Fragment>)}
+                    {showLiftedPefrormance(leftedPerformance, props.roundNum)}
                 </div>
             )}
             <br />

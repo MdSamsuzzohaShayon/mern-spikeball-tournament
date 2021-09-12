@@ -172,19 +172,6 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
 
         // console.log(findRound);
         let leftRound = null;
-        // console.log("findRound.left");
-        // console.log(findRound.left);
-        // 0|spikebal |     at /home/telex/spikeball/server/routes/event.js:174:74
-        // 0|spikebal |     at runMicrotasks (<anonymous>)
-        // 0|spikebal |     at processTicksAndRejections (internal/process/task_queues.js:95:5)
-        // 0|spikebal | TypeError: Cannot read property 'left' of null
-        // 0|spikebal |     at /home/telex/spikeball/server/routes/event.js:174:74
-        // 0|spikebal |     at runMicrotasks (<anonymous>)
-        // 0|spikebal |     at processTicksAndRejections (internal/process/task_queues.js:95:5)
-        // 0|spikebal | TypeError: Cannot read property 'left' of null
-        // 0|spikebal |     at /home/telex/spikeball/server/routes/event.js:174:74
-        // 0|spikebal |     at runMicrotasks (<anonymous>)
-        // 0|spikebal |     at processTicksAndRejections (internal/process/task_queues.js:95:5)
         
         if (findRound) {
             leftRound = await Performance.find({ _id: { $in: findRound.left } })
@@ -371,14 +358,6 @@ router.post('/assign-thirteen-net/:eventID/:round', async (req, res, next) => {
 
 
 
-// ⛏️⛏️ GET ALL PERFORMANCES OF ALL NETS OF A SINGLE EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.get('/get-performance/:eventID', async (req, res, next) => {
-    // console.log("Get performance");
-    const performances = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
-    const rankingPerformance = performances.sort(wholeRanking)
-    // console.log(performances.length);
-    res.status(200).json({ msg: 'Get all performance of an event', rankingPerformance });
-});
 
 
 

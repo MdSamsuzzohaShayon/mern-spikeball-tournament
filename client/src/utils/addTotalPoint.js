@@ -65,3 +65,14 @@ export const round4Total = (performance) => {
 }
 
 
+
+export const round5Total = (performance) => {
+    let point = 0;
+    if (performance.game13) point += performance.game13.point;
+    if (performance.game14) point += performance.game14.point;
+    if (performance.game15) point += performance.game15.point;
+
+    return point;
+}
+
+

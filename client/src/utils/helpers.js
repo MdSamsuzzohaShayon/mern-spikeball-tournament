@@ -1,6 +1,6 @@
 
-import { round1Total, round2Total, round3Total, round4Total } from './addTotalPoint';
-import { round1TD, round2TD, round3TD, round4TD } from './pointDeferential';
+import { round1Total, round2Total, round3Total, round4Total, round5Total} from './addTotalPoint';
+import { round1TD, round2TD, round3TD, round4TD, round5TD} from './pointDeferential';
 
 // ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
@@ -159,10 +159,10 @@ export const getTotal = (net, round, score) => {
             } else if (round === 5) {
                 return (
                     <div >
-                        <div className="total my-4">{round4Total(net.performance[0])}</div>
-                        <div className="total my-4">{round4Total(net.performance[3])}</div>
-                        <div className="total my-4">{round4Total(net.performance[1])}</div>
-                        <div className="total my-4">{round4Total(net.performance[2])}</div>
+                        <div className="total my-4">{round5Total(net.performance[0])}</div>
+                        <div className="total my-4">{round5Total(net.performance[3])}</div>
+                        <div className="total my-4">{round5Total(net.performance[1])}</div>
+                        <div className="total my-4">{round5Total(net.performance[2])}</div>
                     </div>
                 );
             }
@@ -171,35 +171,52 @@ export const getTotal = (net, round, score) => {
         }
         if (score === "pointDeferential") {
             if (round === 2) {
+                // console.log("Log negative");
+                const t2td0 = parseInt(round2TD(net.performance[0]));
+                const t2td3 = parseInt(round2TD(net.performance[3]));
+                const t2td1 = parseInt(round2TD(net.performance[1]));
+                const t2td2 = parseInt(round2TD(net.performance[2]));
                 return (<div  >
-                    <div className="total my-4">{round2TD(net.performance[0])}</div>
-                    <div className="total my-4">{round2TD(net.performance[3])}</div>
-                    <div className="total my-4">{round2TD(net.performance[1])}</div>
-                    <div className="total my-4">{round2TD(net.performance[2])}</div>
+                    {Math.sign(t2td0) === -1 ? <div className="total my-4 text-danger">{t2td0}</div> : <div className="total my-4 text-success">{t2td0}</div>}
+                    {Math.sign(t2td3) === -1 ? <div className="total my-4 text-danger">{t2td3}</div> : <div className="total my-4 text-success">{t2td3}</div>}
+                    {Math.sign(t2td1) === -1 ? <div className="total my-4 text-danger">{t2td1}</div> : <div className="total my-4 text-success">{t2td1}</div>}
+                    {Math.sign(t2td2) === -1 ? <div className="total my-4 text-danger">{t2td2}</div> : <div className="total my-4 text-success">{t2td2}</div>}
                 </div>
                 );
             } else if (round === 3) {
+                const t3td0 = parseInt(round3TD(net.performance[0]));
+                const t3td3 = parseInt(round3TD(net.performance[3]));
+                const t3td1 = parseInt(round3TD(net.performance[1]));
+                const t3td2 = parseInt(round3TD(net.performance[2]));
                 return (<div  >
-                    <div className="total my-4">{round3TD(net.performance[0])}</div>
-                    <div className="total my-4">{round3TD(net.performance[3])}</div>
-                    <div className="total my-4">{round3TD(net.performance[1])}</div>
-                    <div className="total my-4">{round3TD(net.performance[2])}</div>
+                    {Math.sign(t3td0) === -1 ? <div className="total my-4 text-danger">{t3td0}</div> : <div className="total my-4 text-success">{t3td0}</div>}
+                    {Math.sign(t3td3) === -1 ? <div className="total my-4 text-danger">{t3td3}</div> : <div className="total my-4 text-success">{t3td3}</div>}
+                    {Math.sign(t3td1) === -1 ? <div className="total my-4 text-danger">{t3td1}</div> : <div className="total my-4 text-success">{t3td1}</div>}
+                    {Math.sign(t3td2) === -1 ? <div className="total my-4 text-danger">{t3td2}</div> : <div className="total my-4 text-success">{t3td2}</div>}
                 </div>
                 );
             } else if (round === 4) {
+                const t4td0 = parseInt(round4TD(net.performance[0]));
+                const t4td3 = parseInt(round4TD(net.performance[3]));
+                const t4td1 = parseInt(round4TD(net.performance[1]));
+                const t4td2 = parseInt(round4TD(net.performance[2]));
                 return (<div  >
-                    <div className="total my-4">{round4TD(net.performance[0])}</div>
-                    <div className="total my-4">{round4TD(net.performance[3])}</div>
-                    <div className="total my-4">{round4TD(net.performance[1])}</div>
-                    <div className="total my-4">{round4TD(net.performance[2])}</div>
+                    {Math.sign(t4td0) === -1 ? <div className="total my-4 text-danger">{t4td0}</div> : <div className="total my-4 text-success">{t4td0}</div>}
+                    {Math.sign(t4td3) === -1 ? <div className="total my-4 text-danger">{t4td3}</div> : <div className="total my-4 text-success">{t4td3}</div>}
+                    {Math.sign(t4td1) === -1 ? <div className="total my-4 text-danger">{t4td1}</div> : <div className="total my-4 text-success">{t4td1}</div>}
+                    {Math.sign(t4td2) === -1 ? <div className="total my-4 text-danger">{t4td2}</div> : <div className="total my-4 text-success">{t4td2}</div>}
                 </div>
                 );
             } else if (round === 5) {
+                const t5td0 = parseInt(round5TD(net.performance[0]));
+                const t5td3 = parseInt(round5TD(net.performance[3]));
+                const t5td1 = parseInt(round5TD(net.performance[1]));
+                const t5td2 = parseInt(round5TD(net.performance[2]));
                 return (<div  >
-                    <div className="total my-4">{round3TD(net.performance[0])}</div>
-                    <div className="total my-4">{round3TD(net.performance[3])}</div>
-                    <div className="total my-4">{round3TD(net.performance[1])}</div>
-                    <div className="total my-4">{round3TD(net.performance[2])}</div>
+                    {Math.sign(t5td0) === -1 ? <div className="total my-4 text-danger">{t5td0}</div> : <div className="total my-4 text-success">{t5td0}</div>}
+                    {Math.sign(t5td3) === -1 ? <div className="total my-4 text-danger">{t5td3}</div> : <div className="total my-4 text-success">{t5td3}</div>}
+                    {Math.sign(t5td1) === -1 ? <div className="total my-4 text-danger">{t5td1}</div> : <div className="total my-4 text-success">{t5td1}</div>}
+                    {Math.sign(t5td2) === -1 ? <div className="total my-4 text-danger">{t5td2}</div> : <div className="total my-4 text-success">{t5td2}</div>}
                 </div>
                 );
             }
