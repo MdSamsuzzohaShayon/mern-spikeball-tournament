@@ -32,6 +32,7 @@ export class Dashboard extends Component {
             try {
                 this.setState({ isLoading: true });
                 const response = await fetch(`${hostname}/api/event`, { method: "GET", credentials: "include" });
+                console.log("Get all events [Dashboard.jsx] - ", response);
                 const text = await response.text();
                 const jsonResponse = await JSON.parse(text);
                 if (this.isMountedValue) {
@@ -47,6 +48,8 @@ export class Dashboard extends Component {
             }
         }
     }
+
+    
     componentDidMount() {
         // console.log("Authenticated - ", this.props.isAuthenticated);
         this.isMountedValue = true;
@@ -111,11 +114,11 @@ export class Dashboard extends Component {
         return (
             <div className="Dashboard">
                 <div className="container">
-                    <EventList 
-                    isLoading={this.state.isLoading} 
-                    updateList={this.updateList} 
-                    eventList={this.state.eventList} 
-                    isAuthenticated={this.props.isAuthenticated} />
+                    <EventList
+                        isLoading={this.state.isLoading}
+                        updateList={this.updateList}
+                        eventList={this.state.eventList}
+                        isAuthenticated={this.props.isAuthenticated} />
                 </div>
             </div>
         );

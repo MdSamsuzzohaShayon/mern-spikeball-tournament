@@ -70,6 +70,8 @@ class Admin extends Component {
                 // //     // REDIRECT FROM  HERE TO DASHBOARD 
                 // // }
 
+                console.log("Login success - ", response);
+
                 this.setState({
                     errors: [],
                     success: "Login successfull"
@@ -103,7 +105,9 @@ class Admin extends Component {
             <div className="Admin">
                 <div className="container">
                     {this.state.isLoading ? (
-                        <div className="spinner-border text-danger text-center" role="status">
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
                         </div>
                     ) : (
                         <Login

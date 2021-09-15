@@ -8,16 +8,20 @@ const EventList = (props) => {
 
     const [show, setShow] = useState(false);
     const [event, setEvent] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
 
+
+    // ⛏️⛏️ CREATE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setIsLoading(true);
             // http://localhost:4000/api/admin/dashboard/participant
-            const response = await fetch(`${hostname}/api/admin/dashboard/event`, {
+            const response = await fetch(`${hostname}/api/event`, {
                 method: "POST",
                 credentials: 'include',
                 headers: {
@@ -25,13 +29,14 @@ const EventList = (props) => {
                 },
                 body: JSON.stringify(event)
             });
-            console.log("Create Event - ", response);
+            console.log("Create An Event - ", response);
+            setShow(false);
             props.updateList(true);
+            setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
-        setShow(false);
-        console.log(event);
+        // console.log(event);
     }
 
 
@@ -50,8 +55,10 @@ const EventList = (props) => {
     const deleteEvent = async (e, id) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${hostname}/api/admin/dashboard/event/${id}`, { method: "DELETE", credentials: "include" });
+            setIsLoading(true);
+            const response = await fetch(`${hostname}/api/event/${id}`, { method: "DELETE", credentials: "include" });
             props.updateList(true);
+            setIsLoading(false);
             console.log("Delete event - ", response);
         } catch (error) {
             console.log(error);
@@ -100,7 +107,7 @@ const EventList = (props) => {
                 </div>
             )}
 
-            {props.isLoading ? (
+            {props.isLoading || isLoading ? (
                 <div className="spinner-border text-danger text-center" role="status">
                 </div>
             ) : (

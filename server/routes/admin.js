@@ -3,9 +3,7 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-const formidable = require('formidable');
-const csv = require('csvtojson');
-const fsp = require('fs/promises');
+
 
 
 const { sendUser, replaceKeys } = require('../utils/helpers');
@@ -13,13 +11,9 @@ const { ensureAuth, ensureGuast } = require('../config/auth');
 
 const Admin = require('../models/Admin');
 const Event = require('../models/Event');
-const Participant = require('../models/Participant');
-const Performance = require('../models/Performance');
-const Net = require('../models/Net');
-const Round = require('../models/Round');
 
 
-const { json } = require('express');
+
 
 
 
@@ -38,6 +32,7 @@ router.post('/register', ensureAuth,
     check('password', "Password should be more than 5 character long").isLength({ min: 5 }),
     // check('role', "You must select a role").notEmpty(),
     (req, res, next) => {
+        console.log("Hit");
         const allErr = new Array();
         const { email, username, password } = req.body;
         const role = "general";
@@ -55,9 +50,13 @@ router.post('/register', ensureAuth,
                 // SAVE ADMIN 
                 bcrypt.genSalt(10, (saltErr, salt) => {
                     bcrypt.hash(password, salt, (hashErr, hash) => {
-                        const newAdmin = new Admin({ name: username, email, role, password: hash });
-                        newAdmin.save();
-                        return res.status(201).json({ admin: newAdmin });
+                        // const newAdmin = new Admin({ name: username, email, role, password: hash });
+                        // newAdmin.save();
+                        console.log(username, email, role, password, hash);
+                        Admin.create({name: username, email, role, password: hash},(err, docs)=>{
+                            if(err) throw err;
+                            return res.status(201).json({ admin: docs });
+                        })
                     });
                 });
             }
@@ -97,222 +96,6 @@ router.get('/logout', (req, res) => {
 /* ⛏️⛏️ LIST ALL ADMINS, EVENTS, PARTICIPANTS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.get('/dashboard', ensureAuth, (req, res, next) => {
     res.status(200).json({ user: sendUser(req.user) });
-});
-
-
-
-/* ⛏️⛏️ CREATE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/dashboard/event', ensureAuth,
-    check('title', "Title must not empty and a valid email").notEmpty(),
-    (req, res, next) => {
-        const valErrs = validationResult(req);
-        if (!valErrs.isEmpty()) {
-            return res.status(400).json({ errors: valErrs.errors });
-        } else {
-            // console.log(req.body);
-            Event.create({
-                title: req.body.title,
-                date: req.body.date,
-            }, (err, docs) => {
-                res.status(200).json({ request: 'Success', event: docs });
-                // console.log(docs);
-            });
-        }
-    });
-
-
-/* ⛏️⛏️ DELETE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.delete('/dashboard/event/:id', ensureAuth, async (req, res, next) => {
-    try {
-        const event = await Event.findByIdAndDelete({ _id: req.params.id });
-        const participant = await Participant.deleteMany({ _id: { $in: event.participants } });
-        // console.log("Deleted participant - ", participant);
-        const performance = await Performance.deleteMany({ event: req.params.id });
-        const net = await Net.deleteMany({ event: req.params.id });
-        const round = await Round.deleteMany({event: req.params.id});
-        res.status(200).json({ msg: 'Event deleted', event, participant, performance, net });
-    } catch (error) {
-        console.log(error)
-    }
-});
-
-
-
-
-
-
-
-
-// firstname,lastname,email,cell,birthdate,city
-/* ⛏️⛏️ CREATE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/dashboard/participant/:eventID',
-    check('firstname', "Firstname must not empty").notEmpty(),
-    check('lastname', "Lastname must not empty").notEmpty(),
-    check('city', "Must must not empty").notEmpty(),
-    async (req, res, next) => {
-        const valErrs = validationResult(req);
-
-        const { firstname, lastname, email, cell, birthdate, city, payment_amount, payment_method } = req.body;
-        // console.log(req.body);
-        if (!valErrs.isEmpty()) {
-            console.log(valErrs);
-            return res.status(400).json({ errors: valErrs.errors });
-        } else {
-            try {
-
-                const newParticipant = new Participant({
-                    firstname,
-                    lastname,
-                    email,
-                    cell,
-                    birthdate,
-                    city,
-                    payment_amount: parseInt(payment_amount),
-                    payment_method,
-                    event: req.params.eventID
-                });
-                const participant = await newParticipant.save();
-                const event = await Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: participant._id } }, { new: true });
-                console.log(event);
-                res.status(200).json({ msg: 'Create partipipant and referancing to event', participant, event });
-            } catch (error) {
-                res.json(error);
-            }
-        }
-    });
-
-
-
-/* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/dashboard/many-participant/:eventID', (req, res, next) => {
-
-
-    const form = formidable({ multiples: false });
-
-    form.parse(req, async (err, fields, files) => {
-        if (err) {
-            next(err);
-            return;
-        }
-
-
-        csv()
-            .fromFile(files.file.path)
-            .then((jsonObj) => {
-                const exampleObj = {
-                    'First Name': 'Kaitlin',
-                    'Last Name': 'Ro',
-                    Email: 'kaitlinro1@gmail.com',
-                    'Mobile Number': '+12089714339',
-                    Gender: 'Female',
-                    Birthdate: '02/15/1995',
-                    'Total Amount': '12.0',
-                    'Outstanding Balance': '0.0',
-                    Status: 'Spot Reserved',
-                    Payment: 'Paid',
-                    City: 'Rexburg',
-                }
-
-
-                // console.log("JSON OBJECT");
-                // console.log(jsonObj);
-
-
-                const errors = [];
-                const allParticipant = [];
-                let msg = null;
-                for (let obj of jsonObj) {
-                    const newParticipant = replaceKeys(obj, req.params.eventID);
-                    if (newParticipant.firstname && newParticipant.lastname && newParticipant.city) {
-                        allParticipant.push(newParticipant);
-                    } else {
-                        msg = "Some participant doesn't has firstname, lastname or city those are not included"
-                        // errors.push({ errType: "missing_fields", msg: "Some participant doesn't has firstname, lastname or city those are not included" });
-                    }
-                }
-                if (msg) errors.push({ msg });
-
-                // console.log(allParticipant);
-
-
-
-                if (errors.length > 0) {
-                    Participant.insertMany(allParticipant).then(function (participant) {
-                        // console.log("Has errors");
-                        // console.log("Data inserted", participant);  // Success
-                        participant.forEach((p, i) => {
-                            // console.log(p._id);
-                            Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: p._id } }, { new: true }).then((data) => {
-                                // console.log(data);
-                            }).catch(eventErr => {
-                                console.log(eventErr);
-                            });
-                        });
-
-
-
-                        res.json({ errors, eventID: req.params.eventID, files: participant });
-                    }).catch(function (error) {
-                        console.log(error)      // Failure
-                    });
-                } else {
-                    Participant.insertMany(allParticipant).then(function (participant) {
-                        // console.log("Data inserted", participant)  // Success
-                        participant.forEach((p, i) => {
-                            Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: p._id } }, { new: true }).then((data) => {
-                                // console.log(data);
-                            }).catch(eventErr => {
-                                console.log(eventErr);
-                            });
-                        });
-
-                        res.json({ msg: "All participant added successfully", eventID: req.params.eventID, files: participant });
-                    }).catch(function (error) {
-                        console.log(error)      // Failure
-                    });
-                }
-
-
-                // Function call
-            });
-
-    });
-
-    // const newParticipant = new Participant({
-    //     name: name,
-    //     address: address
-    // });
-    // const participant = await newParticipant.save();
-    // const event = await Event.findByIdAndUpdate({ _id: eventID }, { $push: { participants: participant._id } }, { new: true });
-    // res.status(200).json({ msg: 'Create partipipant and referancing to event', participant, event });
-});
-
-
-
-
-// doc.subdocs.push({ _id: 4815162342 })
-// doc.subdocs.pull({ _id: 4815162342 }) // removed
-/* ⛏️⛏️ DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.delete('/dashboard/participant/:id', async (req, res, next) => {
-    try {
-        const participant = await Participant.findByIdAndDelete({ _id: req.params.id });
-        // { $pull: { templates: { _id: templateid } } },
-        const event = await Event.findOneAndUpdate({ participants: participant._id }, { $pull: { participants: participant._id } }, { new: true });
-        res.status(200).json({ request: 'Deleted', participant, event });
-    } catch (error) {
-        res.json(error)
-    }
-});
-
-
-/* ⛏️⛏️ UPDATE EVENTS OR ADD PARTICIPANTS TO AN EVENTS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.get('/dashboard/participant', async (req, res, next) => {
-    try {
-        const participant = await Participant.find();
-        res.status(200).json({ participant });
-    } catch (error) {
-        res.json(error);
-    }
 });
 
 

@@ -1,13 +1,114 @@
 const express = require('express');
+
 const Event = require('../models/Event');
 const Net = require('../models/Net');
 const Performance = require('../models/Performance');
 const Round = require('../models/Round');
+
 const { rankingRound1, rankingRound2, rankingRound3, rankingRound4, wholeRanking, rankingRoundNine, rankingRoundThirteen } = require('../utils/ranking');
-const updatedPerformance = require('../utils/updatedPerformance');
 
 const router = express.Router();
 // arr[Math.floor(Math.random() * arr.length)];
+
+
+
+
+
+
+
+
+
+// ⛏️⛏️ ASSIGN PLAYER TO THE NET FOR THE FIRST ROUND - CREATE PERFORMANCE FOR ALL PLAYER  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+router.post('/assign-initial-net/:eventID', async (req, res, next) => {
+    try {
+        // console.log("Hit");
+        // console.log(req.params.eventID);
+        // const findNets = "Nets";
+        const findNets = await Net.find({ event: req.params.eventID });
+        // console.log("True - l65", findNets);
+        if (findNets.length < 1) {
+
+            // RANDOMIZE PERFORMANCE 
+            const performances = await Performance.find({ event: req.params.eventID });
+            // console.log({performances});
+            // const event = await Event.findById({ _id: req.params.eventID }).populate('participants').exec();
+            // const participants = event.participants;
+            let randomPerformance = [];
+            while (randomPerformance.length < performances.length) {
+                let random = performances[Math.floor(Math.random() * performances.length)];
+                randomPerformance.push(random);
+                randomPerformance = [...new Set(randomPerformance)];
+            }
+
+
+
+
+            // CREATING NET AND PERFORMANCE OF THE PLAYER 
+            const allNetsIds = [];
+            const allPerformanceIds = [];
+
+
+
+            // console.log({randomPerformance});
+
+            let i, j, temporary, chunk = 4, netNo = 1;
+            for (i = 0, j = randomPerformance.length; i < j; i += chunk) {
+                temporary = randomPerformance.slice(i, i + chunk);
+
+
+
+                const performanceChunk = [];
+                for (let k of temporary) {
+                    performanceChunk.push(k._id); // 4 
+                    allPerformanceIds.push(k._id); // ALL
+                }
+
+
+                const newNet = new Net({
+                    sl: netNo,
+                    performance: performanceChunk,
+                    event: req.params.eventID,
+                });
+                const net = await newNet.save();
+                allNetsIds.push(net._id);
+
+
+
+
+
+
+                // const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { $push: { performance: performance._id } }, { new: true });
+                netNo++;
+            }
+
+
+
+            const new_round = new Round({
+                no: 1,
+                event: req.params.eventID,
+                performances: allPerformanceIds,
+                nets: allNetsIds
+            });
+            // console.log(new_round);
+            const round = await new_round.save();
+            // UPDATE NET 
+            // const updateNetRound = await Net.updateMany({ event: req.params.eventID }, { round: round._id }, { new: true });
+            const updateNetRound = await Net.updateMany({ event: req.params.eventID, _id: { $in: allNetsIds } }, { round: round._id }, { new: true });
+
+
+
+
+            res.status(200).json({ msg: 'Assign to initial net randomly', round, updateNetRound });
+        } else {
+            res.status(201).json({ msg: "Have already assigned nets", findNets });
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+
+});
+
 
 
 
@@ -199,13 +300,16 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
 router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
     try {
 
-        console.log("Random assign");
+        // console.log("Random assign");
 
 
         const { performances, leftedPerformance } = req.body;
         const roundNum = parseInt(req.params.roundNum);
         // console.log(req.body);
         const findRound = await Round.findOne({ event: req.params.eventID, no: roundNum });
+
+        // console.log("Find round - ",findRound);
+
 
 
 
@@ -221,6 +325,8 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
 
             // console.log("pid -",allPerformanceIds);
             const findPerformances = await Performance.find({ _id: { $in: allPerformanceIds } }).populate({ path: "participant", select: "firstname lastname" });
+            // console.log(findPerformances);
+
 
 
             // console.log("Random assign");
@@ -235,11 +341,11 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
             // console.log("Ranking - ", ranking);
             // console.log("------------------------BREAK--------------------------");
 
+
             // CREATE NETS 
 
             // CREATING NET AND PERFORMANCE OF THE PLAYER 
             const allNetsIds = [];
-            const allperformances = [];
 
 
 
@@ -261,15 +367,21 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
 
 
                 let netPerformanceIds = [];
+                // console.log("Temporary - ", temporary);
                 for (let k of temporary) {
-                    allperformances.push(k._id);
+                    netPerformanceIds.push(k._id);
                 }
+                // console.log("performance ID by net- ",netPerformanceIds);
+                // console.log("------------------------BREAK--------------------------");
+
                 const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { performance: netPerformanceIds }, { new: true });
                 netNo++;
             }
             // console.log("Net ids - ", allNetsIds);
             // console.log("p ids - ", allPerformanceIds);
             // console.log("pp ids - ", allLeftedPerFormance);
+
+
 
 
 
@@ -284,8 +396,6 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
             // console.log("Round Num - ", roundNum);
             const round = await new_round.save();
             const updateNetRound = await Net.updateMany({ _id: { $in: allNetsIds } }, { round: round._id }, { new: true });
-
-
 
 
         } else {
@@ -328,6 +438,8 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
             }
 
         }
+
+
 
 
 

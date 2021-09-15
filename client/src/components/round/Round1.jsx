@@ -7,10 +7,10 @@ import { round1TD } from '../../utils/pointDeferential';
 function Round1(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [updatePerformance, setUpdatePerformance] = useState([]);
-    
+
 
     // console.log(props);
-    const {nets} = props.round;
+    const { nets } = props.round;
 
 
 
@@ -19,7 +19,9 @@ function Round1(props) {
     useEffect(() => {
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
-        setUpdatePerformance([]);
+        return () => {
+            setUpdatePerformance([]);
+        }
     }, []);
 
 
@@ -36,7 +38,7 @@ function Round1(props) {
         };
         // console.log(props.eventID);
 
-        const response = await fetch(`${hostname}/api/event/assign-initial-net/${props.eventID}`, requestOptions);
+        const response = await fetch(`${hostname}/api/net/assign-initial-net/${props.eventID}`, requestOptions);
         console.log("Initialize net - ", response);
         props.updateNets(true);
         setIsLoading(false);
@@ -71,7 +73,7 @@ function Round1(props) {
 
         // console.log(props.round._id);
 
-        const response = await fetch(`${hostname}/api/event/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
+        const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         console.log("Update - ", response);
         // console.log("Update - ", updatePerformance);
         setUpdatePerformance([]);
@@ -186,15 +188,12 @@ function Round1(props) {
                 ));
             } else {
                 return (<div className="f-point d-flex flex-column">
-                    <div className="two-participant">
+                    <div className="two-participant  d-flex flex-column">
                         <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[0], score, game) === 1 ? true : false} />
-                        <div className="vs"></div>
                         <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[1], score, game) === 1 ? true : false} />
                     </div>
-
-                    <div className="two-participant">
+                    <div className="two-participant  d-flex flex-column">
                         <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[2], score, game) === 1 ? true : false} />
-                        <div className="vs"></div>
                         <input className="form-check-input" type="checkbox" onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)} defaultChecked={getDefaultValue(net.performance[3], score, game) === 1 ? true : false} />
                     </div>
                 </div>);
@@ -214,15 +213,12 @@ function Round1(props) {
                 ));
             } else {
                 return (<div className="f-point d-flex flex-column">
-                    <div className="two-participant">
+                    <div className="two-participant  d-flex flex-column">
                         <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[0], score, game)} />
-                        <div className="vs"></div>
                         <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[1], score, game)} />
                     </div>
-
-                    <div className="two-participant">
+                    <div className="two-participant  d-flex flex-column">
                         <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[2], score, game)} />
-                        <div className="vs"></div>
                         <input className="form-control" type="text" onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)} defaultValue={getDefaultValue(net.performance[3], score, game)} />
                     </div>
                 </div>);
@@ -271,12 +267,11 @@ function Round1(props) {
                 <div className="f-net d-flex flex-column text-center justify-space-between">
                     <div className="two-participant">
                         <div className="f-rival-item">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
-                        <div className="vs text-uppercase">VS</div>
                         <div className="f-rival-item">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
                     </div>
+                    <div className="vs text-uppercase">VS</div>
                     <div className="two-participant">
                         <div className="f-rival-item">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
-                        <div className="vs text-uppercase">VS</div>
                         <div className="f-rival-item">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
                     </div>
                 </div>);
@@ -289,7 +284,12 @@ function Round1(props) {
         <div className="Round1">
             {props.initialize && <button className="btn btn-primary" onClick={initializeNetHandler} >Initialize net for first round</button>}
             <br />
-            {isLoading ? <div className="spinner-border text-danger" role="status"></div> : (
+            {isLoading ? (
+                <div className="text-center spinner-parent">
+                    <div className="spinner-border text-danger spinner-child" role="status">
+                    </div>
+                </div>
+            ) : (
                 <div className="show-all-nets">
                     {!props.initialize && (
                         <table className="table r-table table-bordered">

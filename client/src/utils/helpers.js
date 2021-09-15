@@ -112,18 +112,41 @@ export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
 export const getTotal = (net, round, score) => {
     // console.log(net.performance.length);
     // console.log("Round - ", round);
+
+    const roundwisePoint=(p)=>{
+        if(round === 2){
+            return <div className="total">{round2Total(p)}</div>
+        }else if(round === 3){
+            return <div className="total">{round3Total(p)}</div>
+        }else if(round === 4){
+            return <div className="total">{round4Total(p)}</div>
+        }else if(round === 5){
+            return <div className="total">{round5Total(p)}</div>
+        }
+    }
+    const roundwisePD=(p)=>{
+        if(round === 2){
+            return <div className="total">{round2TD(p)}</div>;
+        }else if(round === 3){
+            return <div className="total">{round3TD(p)}</div>;
+        }else if(round === 4){
+            return <div className="total">{round4TD(p)}</div>;
+        }else if(round === 5){
+            return <div className="total">{round5TD(p)}</div>;
+        }
+    }
     if (net.performance.length < 4) {
         if (score === "point") {
             return net.performance.map((p, j) => (
                 <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
-                    <div className="total">{round2Total(p)}</div>
+                    {roundwisePoint(p)}
                 </div>
             ));
         }
         if (score === "pointDeferential") {
             return net.performance.map((p, j) => (
                 <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
-                    <div className="total">{round2TD(p)}</div>
+                    {roundwisePD(p)}
                 </div>
             ));
         }
@@ -250,12 +273,11 @@ export const arrangingPerformer = (performer) => {
             <div className="f-net d-flex flex-column text-center justify-space-between">
                 <div className="two-participant">
                     <div className="f-rival-item">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
-                    <div className="vs text-uppercase">VS</div>
                     <div className="f-rival-item">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
                 </div>
+                    <div className="vs text-uppercase">VS</div>
                 <div className="two-participant">
                     <div className="f-rival-item">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
-                    <div className="vs text-uppercase">VS</div>
                     <div className="f-rival-item">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
                 </div>
             </div>);

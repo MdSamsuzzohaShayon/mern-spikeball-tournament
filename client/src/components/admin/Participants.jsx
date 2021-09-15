@@ -33,11 +33,16 @@ const Participants = (props) => {
 
 
 
-    // useEffect(()=>{
-    //     setPartitipant({});
-    //     setSelectedFile(null);
-    //     setErrors([]);
-    // }, []);
+    useEffect(()=>{
+        // setPartitipant({});
+        // setSelectedFile(null);
+        // setErrors([]);
+        return ()=>{
+            console.log("Participants component unmount");
+            setSelectedFile(null);
+            setPartitipant({});
+        }
+    }, []);
 
 
 
@@ -55,8 +60,8 @@ const Participants = (props) => {
                 body: JSON.stringify(participant)
             }
             // http://localhost:4000/api/admin/dashboard/participant
-            const response = await fetch(`${hostname}/api/admin/dashboard/participant/${props.eventID}`, options);
-            console.log("Add participant - ", response);
+            const response = await fetch(`${hostname}/api/performance/${props.eventID}`, options);
+            console.log("Add participant & performance [Participants.jsx] - ", response);
             const text = await response.text();
             const jsonRes = JSON.parse(text);
             if (jsonRes.errors) {
@@ -103,7 +108,7 @@ const Participants = (props) => {
         e.preventDefault();
         try {
             // http://localhost:4000/api/admin/dashboard/participant
-            const response = await fetch(`${hostname}/api/admin/dashboard/participant/${id}`, {
+            const response = await fetch(`${hostname}/api/performance/${id}`, {
                 method: "DELETE",
                 credentials: 'include',
                 headers: {
@@ -111,7 +116,7 @@ const Participants = (props) => {
                 }
             });
             if (response.status === 200) {
-                console.log("Delete participant - ", response);
+                console.log("Delete participant [Participant.jsx] - ", response);
                 props.updateEvent(true);
             }
         } catch (error) {
@@ -148,8 +153,8 @@ const Participants = (props) => {
                 body: formData
             };
             // http://localhost:4000/api/admin/dashboard/participant
-            const response = await fetch(`${hostname}/api/admin/dashboard/many-participant/${props.eventID}`, options);
-            console.log("Upload multiple participant - ", response);
+            const response = await fetch(`${hostname}/api/performance/multiple/${props.eventID}`, options);
+            console.log("Upload multiple participant[Participant.jsx] - ", response);
             const text = await response.text();
             const json = JSON.parse(text);
             console.log(json);

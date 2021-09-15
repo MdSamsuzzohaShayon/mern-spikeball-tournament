@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
 import Participants from './Participants';
-import Rounds from './Rounds'
+import Rounds from '../round/Rounds'
 import Score from "../score/Score";
 import './EventAdmin.css';
 
@@ -30,6 +30,7 @@ export class EventAdmin extends Component {
         this.is_mounted = true;
         this.setState({ currentEventID: this.props.match.params.id });
         // console.log("Auth - ",this.props.isAuthenticated);
+        // console.log("ID - ",this.props.match.params.id);
         this.getSingleEvent(this.props.match.params.id);
     }
 
@@ -46,6 +47,7 @@ export class EventAdmin extends Component {
             // console.log(participants);
             this.setState({ isLoading: true });
             const response = await fetch(`${hostname}/api/event/${id}`, { method: "GET", credentials: "include" });
+            console.log("Get single event [EventAdmin.jsx] - ", response);
             const text = await response.text();
             const jsonResponse = await JSON.parse(text);
             if (this.is_mounted) {

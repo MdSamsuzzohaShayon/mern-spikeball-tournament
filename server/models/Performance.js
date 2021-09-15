@@ -32,10 +32,6 @@ const performanceSchema = new Schema({
         required: true,
         ref: 'event'
     },
-    net: {
-        type: Schema.Types.ObjectId,
-        ref: 'net'
-    },
     game1: scoreSchema,
     game2: scoreSchema,
     game3: scoreSchema,

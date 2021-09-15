@@ -56,16 +56,16 @@ function SingleRound(props) {
 
 
 
-
+    // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     useEffect(() => {
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
         // console.log(props.leftRound);
         // IF THIS IS NOT INITIALIZEABLE
-        if(props.initialize){
+        if (props.initialize) {
             setLeftedPerformance([]);
-        }else{
+        } else {
             setLeftedPerformance(props.leftRound);
         }
         // console.log(leftedPerformance);
@@ -76,6 +76,9 @@ function SingleRound(props) {
             setPerformances([]);
         }
         setUpdatePerformance([]);
+        return () => {
+            console.log("Component unmounted");
+        }
     }, []);
 
 
@@ -155,7 +158,7 @@ function SingleRound(props) {
 
     const randomAssign = async (e) => {
         e.preventDefault();
-        console.log("random");
+        // console.log("random");
         setIsLoading(true);
         // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
         const requestOptions = {
@@ -167,7 +170,7 @@ function SingleRound(props) {
         // console.log(props.eventID);
 
         const response = await fetch(`${hostname}/api/net/random-assign-net/${props.eventID}/${props.roundNum}`, requestOptions);
-        console.log("Initialize net - ", response);
+        console.log("Random assign net - ", response);
         props.updateNets(true);
         setIsLoading(false);
     }
@@ -192,7 +195,7 @@ function SingleRound(props) {
 
         // console.log(props.round._id);
 
-        const response = await fetch(`${hostname}/api/event/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
+        const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         console.log("Update - ", response);
         // console.log("Update Performance - ", updatePerformance);
         setUpdatePerformance([]);
@@ -283,23 +286,21 @@ function SingleRound(props) {
                 ));
             } else {
                 return (<div className="f-point d-flex flex-column">
-                    <div className="two-participant">
+                    <div className="two-participant  d-flex flex-column ">
                         <input className="form-check-input" type="checkbox"
                             onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
                             defaultChecked={getDefaultValue(net.performance[0], score, game, props.roundNum) === 1 ? true : false} />
 
-                        <div className="vs"></div>
 
                         <input className="form-check-input" type="checkbox"
                             onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
                             defaultChecked={getDefaultValue(net.performance[3], score, game, props.roundNum) === 1 ? true : false} />
                     </div>
 
-                    <div className="two-participant">
+                    <div className="two-participant  d-flex flex-column ">
                         <input className="form-check-input" type="checkbox"
                             onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
                             defaultChecked={getDefaultValue(net.performance[1], score, game, props.roundNum) === 1 ? true : false} />
-                        <div className="vs"></div>
                         <input className="form-check-input" type="checkbox"
                             onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
                             defaultChecked={getDefaultValue(net.performance[2], score, game, props.roundNum) === 1 ? true : false} />
@@ -321,21 +322,19 @@ function SingleRound(props) {
                 ));
             } else {
                 return (<div className="f-point d-flex flex-column">
-                    <div className="two-participant">
+                    <div className="two-participant  d-flex flex-column ">
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
                             defaultValue={getDefaultValue(net.performance[0], score, game, props.roundNum)} />
-                        <div className="vs"></div>
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
                             defaultValue={getDefaultValue(net.performance[3], score, game, props.roundNum)} />
                     </div>
 
-                    <div className="two-participant">
+                    <div className="two-participant  d-flex flex-column ">
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
                             defaultValue={getDefaultValue(net.performance[1], score, game, props.roundNum)} />
-                        <div className="vs"></div>
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
                             defaultValue={getDefaultValue(net.performance[2], score, game, props.roundNum)} />
@@ -366,29 +365,37 @@ function SingleRound(props) {
                 <button className="btn btn-primary" onClick={randomAssign} >Random Assign</button>
             </div>
             {showPerformances ? (<React.Fragment>
-                <h2 className="h2">All players in the tournament</h2>
-                <table className="table table-bordered">
-                    <thead className="table-dark">
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Ranking</th>
-                            <th scope="col">Point</th>
-                            <th scope="col">Point Diferential</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {performances && performances.map((p, i) => (<tr key={i} >
-                            <td>{p.participant.firstname + " " + p.participant.lastname}</td>
-                            <td>{i + 1}</td>
-                            <td>{getTotalPointOfARound(p, props.roundNum)}</td>
-                            <td>{getTotalPointDifferentialOfARound(p, props.roundNum)}</td>
-                            <td><button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button></td>
-                        </tr>))}
-                    </tbody>
-                </table>
-                <br /><br />
-
+                {isLoading ? (
+                    <div className="text-center spinner-parent">
+                        <div className="spinner-border text-danger spinner-child" role="status">
+                        </div>
+                    </div>
+                ) : (<React.Fragment>
+                    <h2 className="h2">All players in the tournament</h2>
+                    <table className="table table-bordered">
+                        <thead className="table-dark">
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Ranking</th>
+                                <th scope="col">Point</th>
+                                <th scope="col">Point Diferential</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {performances && performances.map((p, i) => (<tr key={i} >
+                                {console.log(isLoading)}
+                                {console.log("Participant - ", (i + 1), p)}
+                                {/* <td>{p.participant.firstname + " " + p.participant.lastname}</td> */}
+                                <td>{i + 1}</td>
+                                <td>{getTotalPointOfARound(p, props.roundNum)}</td>
+                                <td>{getTotalPointDifferentialOfARound(p, props.roundNum)}</td>
+                                <td><button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button></td>
+                            </tr>))}
+                        </tbody>
+                    </table>
+                    <br /><br />
+                </React.Fragment>)}
                 {showLiftedPefrormance(leftedPerformance, props.roundNum)}
                 <br />
                 <br />
@@ -401,7 +408,12 @@ function SingleRound(props) {
 
             </React.Fragment>) : (
                 <div className="show table">
-                    {isLoading ? <div className="spinner-border text-danger" role="status"></div> : (
+                    {isLoading ? (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    ) : (
                         <div className="show-all-nets">
                             {!props.initialize && (
                                 <table className="table r-table table-bordered">

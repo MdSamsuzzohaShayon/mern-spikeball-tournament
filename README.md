@@ -13,7 +13,7 @@ Emojies - 📜 ⛏️ ➖ ✅
  - ✅ Participants
  - ✅ Nets
  - ✅ Rounds
- - Add unique serial no for paryicapant - track last record sl, If that is 15 start from 1
+ - ✅ Add unique serial no for paryicapant - track last record sl, If that is 15 start from 1
  - ✅ Upload players
  - ✅ Csv to json
  - ✅ Json file key and value validation
@@ -26,11 +26,10 @@ Emojies - 📜 ⛏️ ➖ ✅
  - ✅ when participant is been deleted delete that from events participants
  - ✅ Assign players to net randomly
  - ✅ Start round one to four 
- - Make some public routes to show score and detail
+ - ✅ Make some public routes to show score and detail
  - ✅ Add some sub document for participant - point, point deferential
  - ✅ In net create 4 performance(player performance) and in performance add point deferential, and many more. Performance need to have key round 1 to 15
  - ✅ After the foud round instead of creating a new net, we should update the existing net or performance
- - Set default value of performance (point and point deferential)
 
 ##### Round 5 to 8
  - Validate net 1 to 4, atlest 2 player need to have point for each round and all 4 round need to be done
@@ -46,12 +45,12 @@ Emojies - 📜 ⛏️ ➖ ✅
 ### Change requirements
  - ✅ Add ranking section in admin as well
  - When someone submit redirect to next round - all player will be listed initially 
- - Add participant informations - and reassign again - 
+ - ✅ Add participant informations - and reassign again - 
  - ✅ 5 round with 3 game for each round in total 15 games
  - ✅ Add some filed for participant - payment amount, paid method (cash, check ), venmo slash (*confused*), (city, firstname, lastname) required
- - Assign and Reassign participant button
- - Create only one route for assign and one route for reassign
- - Create only one round instead of all five round
+ - ✅ Assign and Reassign participant button
+ - ✅  Create only one route for assign and one route for reassign
+ - ✅ Create only one round instead of all five round
 
 
 ### New requirements
@@ -62,13 +61,19 @@ Emojies - 📜 ⛏️ ➖ ✅
  - Awarding point ()
  - Negative point will have red color, positive point will have green color
  - Change reassign to rank assign, random assign
+ - On Right side Player name, point, point differential
+ - After every game col will be like name, point, point diffrential
+ - Timmate need to change on every game
+ - Set default value for point and point differential from front-end,  so we can check how many games they played - if one player get 1 point oponent player will get 0 by default
+ - Average point and point differential for player in rounds tab
+ - Create some public table to show who is playing againest who and who get point
 
 
 
  ##### Problem
   - Component did update - login automitically and get a user
   - there are some problem with round - front-end
-  - ✅ Problem with left performance
+  - Problem with left performance
   - Problem with initial random assign from 2,3,4,5 round
 
 
@@ -109,4 +114,10 @@ __https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-
 
 
 
-
+ -  <tbody>
+  380 |     {performances && performances.map((p, i) => (<tr key={i} >
+> 381 |         <td>{p.participant.firstname + " " + p.participant.lastname}</td>
+^  382 |         <td>{i + 1}</td>
+  383 |         <td>{getTotalPointOfARound(p, props.roundNum)}</td>
+  384 |         <td>{getTotalPointDifferentialOfARound(p, props.roundNum)}</td>
+ - *Solution* When we create participant we also need to create performance by default

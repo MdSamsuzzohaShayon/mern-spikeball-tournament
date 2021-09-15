@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Round1 from '../round/Round1';
-import SingleRound from '../round/SingleRound';
+import Round1 from './Round1';
+import SingleRound from './SingleRound';
 import { hostname } from '../../utils/global';
 import "./style/Rounds.css";
 
@@ -43,7 +43,7 @@ const Rounds = (props) => {
         setIsLoading(true);
         // console.log("Loading - ",isLoading);
         // console.log(r);
-        const response = await fetch(`${hostname}/api/event/get-single-round/${props.eventID}/${r}`, requestOptions);
+        const response = await fetch(`${hostname}/api/round/get-single-round/${props.eventID}/${r}`, requestOptions);
         console.log("Get nets from round - ", response);
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
@@ -75,6 +75,18 @@ const Rounds = (props) => {
         // console.log("findRound called from use effect");
         findRound(activeItem);
         // console.log("Round - ", activeItem);
+
+
+        // UNMOUNT 
+        return () => {
+            // console.log("Rounds Component Unmount");
+            setActiveItem(1);
+            // const [round, setRound] = useState(1);
+            setInitialize(false);
+            setRounds([]);
+            setLeftRound([]);
+            setIsLoading(false);
+        }
     }, []);
 
 
