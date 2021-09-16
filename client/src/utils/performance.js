@@ -1,6 +1,6 @@
 import React from 'react';
 // ALL CONDITIONS RELATED TO PERFORMANCE 
-import {getTotalPointDifferentialOfARound, getTotalPointOfARound} from "./tptd";
+import {getTDRound, getTotalPointOfARound} from "./tptd";
 
 
 export const showLiftedPefrormance = (lp, rn) => {
@@ -20,7 +20,7 @@ export const showLiftedPefrormance = (lp, rn) => {
                     {lp.map((p, i) => (<tr key={i} >
                         <td>{p.participant.firstname + " " + p.participant.lastname}</td>
                         <td>{getTotalPointOfARound(p, rn)}</td>
-                        <td>{getTotalPointDifferentialOfARound(p, rn)}</td>
+                        <td>{getTDRound(p, rn)}</td>
                     </tr>))}
                 </tbody>
             </table>

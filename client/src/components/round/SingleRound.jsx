@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { getDefaultValue, getTotal, arrangingPerformer } from '../../utils/helpers';
 import AddParticipant from '../participant/AddParticipant';
-import { getTotalPointOfARound, getTotalPointDifferentialOfARound } from '../../utils/tptd';
+import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
 import { showLiftedPefrormance } from '../../utils/performance';
 
 
@@ -25,6 +25,7 @@ function SingleRound(props) {
 
 
 
+    let controller = new AbortController();
 
     // ⛏️⛏️ GET ALL PERFORMERS FROM THIS CURRENT ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const getAllPerformance = async () => {
@@ -32,7 +33,8 @@ function SingleRound(props) {
         const requestOptions = {
             method: 'GET',
             headers: { "Content-Type": 'application/json' },
-            credentials: "include"
+            credentials: "include",
+            signal: controller.signal
         };
         // console.log(props.eventID);
         setIsLoading(true);
@@ -46,6 +48,7 @@ function SingleRound(props) {
         console.log("JSON");
         console.log(jsonRes);
         setIsLoading(false);
+        controller = null
     }
 
 
@@ -59,13 +62,12 @@ function SingleRound(props) {
     // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     useEffect(() => {
+        console.log("Component did mount [SingleRound.jsx]");
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
         // console.log(props.leftRound);
         // IF THIS IS NOT INITIALIZEABLE
-        if (props.initialize) {
-            setLeftedPerformance([]);
-        } else {
+        if (!props.initialize) {
             setLeftedPerformance(props.leftRound);
         }
         // console.log(leftedPerformance);
@@ -76,10 +78,29 @@ function SingleRound(props) {
             setPerformances([]);
         }
         setUpdatePerformance([]);
-        return () => {
-            console.log("Component unmounted");
-        }
     }, []);
+
+
+
+
+
+
+
+
+
+
+    useEffect(() => {
+        return  ()=> {
+            console.log("Component unmount [SingleRound.jsx]");
+            // setIsLoading(false);
+            // setPerformances([]); // PARTICIPANTS
+            // setUpdatePerformance([]);
+            // setShowPerformances(true);
+            // setLeftedPerformance([]);
+            // return controller?.abort();
+            
+        };
+    });
 
 
 
@@ -197,7 +218,7 @@ function SingleRound(props) {
 
         const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         console.log("Update - ", response);
-        // console.log("Update Performance - ", updatePerformance);
+        console.log("Update Performance - ", updatePerformance);
         setUpdatePerformance([]);
         props.updateNets(true);
     }
@@ -245,7 +266,7 @@ function SingleRound(props) {
             }
         }
 
-        console.log(updatePerformance);
+        // console.log(updatePerformance);
     }
 
 
@@ -286,18 +307,20 @@ function SingleRound(props) {
                 ));
             } else {
                 return (<div className="f-point d-flex flex-column">
-                    <div className="two-participant  d-flex flex-column ">
+                    <div className="two-p-input two-p-input-1 d-flex flex-column justify-content-center">
                         <input className="form-check-input" type="checkbox"
                             onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
                             defaultChecked={getDefaultValue(net.performance[0], score, game, props.roundNum) === 1 ? true : false} />
-
-
+                            
+                            
                         <input className="form-check-input" type="checkbox"
                             onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
                             defaultChecked={getDefaultValue(net.performance[3], score, game, props.roundNum) === 1 ? true : false} />
                     </div>
 
-                    <div className="two-participant  d-flex flex-column ">
+                    <div className="line"></div>
+
+                    <div className="two-p-input two-p-input-2  d-flex flex-column items-center justify-content-center">
                         <input className="form-check-input" type="checkbox"
                             onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
                             defaultChecked={getDefaultValue(net.performance[1], score, game, props.roundNum) === 1 ? true : false} />
@@ -315,29 +338,30 @@ function SingleRound(props) {
                         <input
                             type="text"
                             className="form-control my-3"
-                            defaultValue={getDefaultValue(p, score, game, props.roundNum)}
+                            defaultValue={getDefaultValue(p, score, game, props.roundNum) !== "0-0" ? getDefaultValue(p, score, game, props.roundNum) : ""}
                             style={{ width: "80px" }} name={net.sl}
                             onChange={e => handleInputChange(e, p._id, game, score, net._id)} />
                     </div>
                 ));
             } else {
                 return (<div className="f-point d-flex flex-column">
-                    <div className="two-participant  d-flex flex-column ">
+                    <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
-                            defaultValue={getDefaultValue(net.performance[0], score, game, props.roundNum)} />
+                            defaultValue={ getDefaultValue(net.performance[0], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[0], score, game, props.roundNum) : ""} />
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                            defaultValue={getDefaultValue(net.performance[3], score, game, props.roundNum)} />
+                            defaultValue={getDefaultValue(net.performance[3], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[3], score, game, props.roundNum) : ""} />
                     </div>
+                    <div className="line"></div>
 
-                    <div className="two-participant  d-flex flex-column ">
+                    <div className="two-p-input two-p-i-2 d-flex flex-column align-items-center justify-content-center">
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
-                            defaultValue={getDefaultValue(net.performance[1], score, game, props.roundNum)} />
+                            defaultValue={getDefaultValue(net.performance[1], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[1], score, game, props.roundNum) : ""} />
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
-                            defaultValue={getDefaultValue(net.performance[2], score, game, props.roundNum)} />
+                            defaultValue={getDefaultValue(net.performance[2], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[2], score, game, props.roundNum) : ""} />
                     </div>
                 </div>);
             }
@@ -361,7 +385,7 @@ function SingleRound(props) {
         <div className="SingleRound">
             <div className="d-flex">
                 {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
-                <button className="btn btn-primary" onClick={assignNetHandler} >Rank Assign</button>
+                {!props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Rank Assign</button>}
                 <button className="btn btn-primary" onClick={randomAssign} >Random Assign</button>
             </div>
             {showPerformances ? (<React.Fragment>
@@ -385,11 +409,11 @@ function SingleRound(props) {
                         <tbody>
                             {performances && performances.map((p, i) => (<tr key={i} >
                                 {console.log(isLoading)}
-                                {console.log("Participant - ", (i + 1), p)}
-                                {/* <td>{p.participant.firstname + " " + p.participant.lastname}</td> */}
+                                {console.log("Participant - ", (i + 1), p.participant, p)}
+                                <td>{p.participant.firstname + " " + p.participant.lastname}</td>
                                 <td>{i + 1}</td>
                                 <td>{getTotalPointOfARound(p, props.roundNum)}</td>
-                                <td>{getTotalPointDifferentialOfARound(p, props.roundNum)}</td>
+                                {Math.sign(getTDRound(p, props.roundNum)) === -1 ? <td className="text-danger">{getTDRound(p, props.roundNum)}</td>: <td className="text-success">{getTDRound(p, props.roundNum)}</td>}
                                 <td><button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button></td>
                             </tr>))}
                         </tbody>

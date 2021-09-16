@@ -125,6 +125,7 @@ const Rounds = (props) => {
                             round={round}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
+                            game={[1, 2, 3]}
                             eventID={props.eventID} />
                     </div>);
                 }

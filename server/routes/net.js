@@ -125,6 +125,7 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
 
         // console.log("Found rounds - ", findRound);
         if (!findRound || findRound === null) {
+            console.log("No Round - create new one");
 
 
             const allPerformanceIds = [];

@@ -2,27 +2,61 @@
   cursor: pointer;
 }
 
-.show-all-nets .r-table tbody tr .f-rival-item {
-  height: 40px;
+.show-all-nets tr td {
+  padding: 0;
 }
-.show-all-nets .r-table tbody tr .f-point-differential {
-  height: 40px;
+.show-all-nets tr .two-participant {
+  height: 6.5rem;
+  padding-top: 0.7em;
 }
-.show-all-nets .r-table tbody tr .f-point .form-check-input {
-  margin-top: 14px;
+.show-all-nets tr .two-participant .p-rival {
+  margin: 10px 0;
 }
-.show-all-nets .r-table tbody tr .two-participant {
-  height: 120px;
-  border-bottom: 1px solid #c9c0c0;
+.show-all-nets tr .two-p-input {
+  height: 6.5rem;
+  margin-left: 5px;
 }
-.show-all-nets .r-table tbody tr .two-participant .form-control {
-  width: 90px;
-  margin-top: 5px;
+.show-all-nets tr .two-p-input .form-check-input {
+  margin: 8px 0;
 }
-.show-all-nets .r-table tbody tr .vs {
-  color: blue;
-  height: 25px;
+.show-all-nets tr .two-p-input-2 {
+  margin-top: 0.8em;
 }
-
+.show-all-nets tr .two-p-i-2 {
+  margin-top: 0.8em;
+}
+.show-all-nets tr .form-control {
+  width: 4rem;
+  margin: 5px 0;
+}
+.show-all-nets tr .line {
+  margin-top: 12px;
+  width: 100%;
+  position: relative;
+}
+.show-all-nets tr .line::before {
+  content: "";
+  position: absolute;
+  border-bottom: 1px rgba(0, 0, 0, 0.247) solid;
+  width: 100%;
+  transform: translateY(-50%);
+}
+.show-all-nets tr .vs {
+  display: flex;
+  flex-direction: row;
+}
+.show-all-nets tr .vs::before,
+.show-all-nets tr .vs::after {
+  content: "";
+  flex: 1 1;
+  border-bottom: 1px rgba(0, 0, 0, 0.247) solid;
+  margin: auto;
+}
+.show-all-nets tr .vs::before {
+  margin-right: 10px;
+}
+.show-all-nets tr .vs::after {
+  margin-left: 10px;
+}
 
 /*# sourceMappingURL=Rounds.css.map */

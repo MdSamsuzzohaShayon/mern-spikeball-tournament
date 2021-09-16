@@ -16,7 +16,7 @@ export const getTotalPointOfARound = (p, rn) => {
 }
 
 
-export const getTotalPointDifferentialOfARound = (p, rn) => {
+export const getTDRound = (p, rn) => {
     // console.log(p);
     // console.log(rn);
     if (rn === 2) {

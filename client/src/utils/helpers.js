@@ -1,6 +1,6 @@
 
-import { round1Total, round2Total, round3Total, round4Total, round5Total} from './addTotalPoint';
-import { round1TD, round2TD, round3TD, round4TD, round5TD} from './pointDeferential';
+import { round1Total, round2Total, round3Total, round4Total, round5Total } from './addTotalPoint';
+import { round1TD, round2TD, round3TD, round4TD, round5TD } from './pointDeferential';
 
 // ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
@@ -113,28 +113,31 @@ export const getTotal = (net, round, score) => {
     // console.log(net.performance.length);
     // console.log("Round - ", round);
 
-    const roundwisePoint=(p)=>{
-        if(round === 2){
+    const roundwisePoint = (p) => {
+        if (round === 2) {
             return <div className="total">{round2Total(p)}</div>
-        }else if(round === 3){
+        } else if (round === 3) {
             return <div className="total">{round3Total(p)}</div>
-        }else if(round === 4){
+        } else if (round === 4) {
             return <div className="total">{round4Total(p)}</div>
-        }else if(round === 5){
+        } else if (round === 5) {
             return <div className="total">{round5Total(p)}</div>
         }
     }
-    const roundwisePD=(p)=>{
-        if(round === 2){
+    const roundwisePD = (p) => {
+        if (round === 2) {
             return <div className="total">{round2TD(p)}</div>;
-        }else if(round === 3){
+        } else if (round === 3) {
             return <div className="total">{round3TD(p)}</div>;
-        }else if(round === 4){
+        } else if (round === 4) {
             return <div className="total">{round4TD(p)}</div>;
-        }else if(round === 5){
+        } else if (round === 5) {
             return <div className="total">{round5TD(p)}</div>;
         }
     }
+
+
+
     if (net.performance.length < 4) {
         if (score === "point") {
             return net.performance.map((p, j) => (
@@ -272,13 +275,13 @@ export const arrangingPerformer = (performer) => {
         return (
             <div className="f-net d-flex flex-column text-center justify-space-between">
                 <div className="two-participant">
-                    <div className="f-rival-item">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
-                    <div className="f-rival-item">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
+                    <div className="p-rival">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
+                    <div className="p-rival">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
                 </div>
-                    <div className="vs text-uppercase">VS</div>
+                <div className="vs text-uppercase">VS</div>
                 <div className="two-participant">
-                    <div className="f-rival-item">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
-                    <div className="f-rival-item">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
+                    <div className="p-rival">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
+                    <div className="p-rival">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
                 </div>
             </div>);
     }

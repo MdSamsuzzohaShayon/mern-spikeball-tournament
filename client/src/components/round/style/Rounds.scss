@@ -1,56 +1,83 @@
+$t-p-height: 6.5rem;
+$p-my: 10px;
+$input-w: 4rem;
+
 // ⛏️⛏️ PARENT COMPONENT ROUNDS  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-.Rounds{
-    .nav-link{
+.Rounds {
+    .nav-link {
         cursor: pointer;
     }
 }
 
-
-
-
 // ⛏️⛏️ ROUND ONE TO FIVE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-.show-all-nets{
-    .r-table {
+.show-all-nets {
+    tr {
+        td {
+            padding: 0;
+            // margin: 0;
+        }
 
-        tbody{
-            tr{
-                // background: #000;
-                .f-rival-item{
-                    height: 40px;
-                }
-                .f-point-differential{
-                    height: 40px;
-                }
-                .f-net{
-                    // height: 240px;
-                }
-                .f-point{
-                    // height: 240px;
-                    // height: 60px;
-                    .form-check-input{
-                        // height: 30px;
-                        margin-top: 14px;
-                    }
-                }
-                .two-participant{
-                    height: 120px;
-                    border-bottom: 1px solid rgb(201, 192, 192);
-                    .form-control{
-                        width: 90px;
-                        margin-top: 5px;
-                    }
-                }
-                .vs{
-                    color: blue;
-                    height: 25px;
-                    // margin: 10px 0;
-                }
+        .two-participant {
+            height: $t-p-height;
+            // background: blue;
+            padding-top: 0.7em;
+            .p-rival {
+                margin: $p-my 0;
             }
+        }
+
+        .two-p-input {
+            height: $t-p-height;
+            margin-left: 5px;
+            .form-check-input {
+                margin: 8px 0;
+            }
+        }
+        .two-p-input-1 {
+        }
+        .two-p-input-2 {
+            margin-top: 0.8em;
+        }
+
+        .two-p-i-1 {
+        }
+        .two-p-i-2 {
+            margin-top: 0.8em;
+        }
+        .form-control {
+            width: $input-w;
+            margin: 5px 0;
+        }
+
+        .line {
+            margin-top: 12px;
+            width: 100%;
+            position: relative;
+        }
+        .line::before {
+            content: "";
+            position: absolute;
+            border-bottom: 1px rgba(0, 0, 0, 0.247) solid;
+            width: 100%;
+            transform: translateY(-50%);
+        }
+
+        .vs {
+            display: flex;
+            flex-direction: row;
+        }
+        .vs::before,
+        .vs::after {
+            content: "";
+            flex: 1 1;
+            border-bottom: 1px rgba(0, 0, 0, 0.247) solid;
+            margin: auto;
+        }
+        .vs::before {
+            margin-right: 10px;
+        }
+        .vs::after {
+            margin-left: 10px;
         }
     }
 }
-
-
-
-
-

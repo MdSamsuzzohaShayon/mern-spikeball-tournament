@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from "react-bootstrap";
 import { hostname } from '../../utils/global';
 
 
 function AddParticipant(props) {
+    let controller = new AbortController();
+
+
     const [show, setShow] = useState(false);
     const [participant, setPartitipant] = useState({});
     const [errors, setErrors] = useState([]);
+
 
 
     const handleClose = () => {
@@ -36,12 +40,13 @@ function AddParticipant(props) {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(participant)
+                body: JSON.stringify(participant),
+                signal: controller.signal
             }
             // console.log("props");
             // console.log(props);
             // http://localhost:4000/api/admin/dashboard/participant
-            const response = await fetch(`${hostname}/api/performance/add/${props.eventID}/${props.roundNum}`, options);
+            const response = await fetch(`${hostname}/api/performance/${props.eventID}`, options);
             console.log("Add participant - ", response);
             const text = await response.text();
             const jsonRes = JSON.parse(text);
@@ -49,19 +54,26 @@ function AddParticipant(props) {
                 if (jsonRes.errors.length > 1) {
                     setErrors([...jsonRes.errors]);
                 }
+                controller = null;
             } else {
                 // console.log("JSON - ",jsonRes);
                 // props.updateEvent(true);
                 props.handleSaveParticipant(jsonRes);
                 setShow(false);
                 setPartitipant({});
+                controller = null;
+
             }
+
         } catch (error) {
             console.log(error);
         }
     };
 
 
+    // useEffect(() => {
+    //     return () => controller?.abort();
+    // });
 
 
 

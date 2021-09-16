@@ -56,7 +56,7 @@ Emojies - 📜 ⛏️ ➖ ✅
 ### New requirements
  - Show the players before by ranking. total point, average point deferential
  - two in one team another two with another team
- - For game one game two they will change team mate
+ - For every game they will change team mate
  - Every game with different partner (participant, point, point diferential)
  - Awarding point ()
  - Negative point will have red color, positive point will have green color
@@ -94,6 +94,11 @@ Emojies - 📜 ⛏️ ➖ ✅
  - __https://www.geeksforgeeks.org/file-uploading-in-react-js/__
  - __https://www.laravelcode.com/post/how-to-upload-files-in-reactjs-with-example__
 
+### Use Effect - Fetch Abort signal
+ - __https://dmitripavlutin.com/react-cleanup-async-effects/__
+ - __https://jsfiddle.net/Shayon/17zcubr4/265/__
+ - __https://developer.mozilla.org/en-US/docs/Web/API/AbortController/signal__
+
 
 
 __https://github.com/woodburydev/TypescriptPassportwReact/blob/main/backend/src/index.ts__
@@ -121,3 +126,5 @@ __https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-
   383 |         <td>{getTotalPointOfARound(p, props.roundNum)}</td>
   384 |         <td>{getTotalPointDifferentialOfARound(p, props.roundNum)}</td>
  - *Solution* When we create participant we also need to create performance by default
+
+ - Point diffrential NaN value error handle

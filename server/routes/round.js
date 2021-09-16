@@ -159,9 +159,9 @@ router.get('/ranking/:eventID', async (req, res, next) => {
 router.delete('/:eventID/:roundNum', async (req, res, next) => {
     try {
         const deleteRound = await Round.findOneAndDelete({ no: req.params.roundNum, event: req.params.eventID });
-        console.log(deleteRound);
+        // console.log(deleteRound);
         const deleteNets = await Net.deleteMany({ round: deleteRound._id });
-        console.log(req.params);
+        // console.log(req.params);
         res.status(200).json({ msg: 'Getting performance', deleteRound, deleteNets });
     } catch (error) {
         console.log(error);
