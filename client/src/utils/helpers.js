@@ -256,12 +256,15 @@ export const getTotal = (net, round, score) => {
 
 
 
-
+// gor = GAME OF ROUND
 // ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-export const arrangingPerformer = (performer) => {
+export const arrangingPerformer = (performer, gor) => {
+    console.log("Game of round - ",gor);
 
+
+
+    console.log("-------------------------------------------------------------------------");
     if (performer.length < 4) {
-        // console.log(performer);
 
         return (
             <div>
@@ -271,19 +274,60 @@ export const arrangingPerformer = (performer) => {
                 }
             </div>);
     } else {
-        // console.log(performer[0]);
-        return (
-            <div className="f-net d-flex flex-column text-center justify-space-between">
-                <div className="two-participant">
+        if (gor === 1) {
+            // console.log(performer[0]);
+            console.log(performer[0].participant.firstname);            
+            console.log(performer[1].participant.firstname);            
+            console.log(performer[2].participant.firstname);            
+            console.log(performer[3].participant.firstname);            
+            return (
+                <div className="f-net d-flex flex-column text-center justify-space-between">
+                    <div className="two-participant">
+                        <div className="p-rival">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
+                        <div className="p-rival">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
+                    </div>
+                    <div className="vs text-uppercase">VS</div>
+                    <div className="two-participant">
+                        <div className="p-rival">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
+                        <div className="p-rival">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
+                    </div>
+                </div>);
+        } else if (gor === 2) {
+            return (
+                <div className="f-net d-flex flex-column text-center justify-space-between">
+                    <div className="two-participant">
+                        <div className="p-rival">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
+                        <div className="p-rival">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
+                    </div>
+                    <div className="vs text-uppercase">VS</div>
+                    <div className="two-participant">
+                        <div className="p-rival">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
+                        <div className="p-rival">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
+                    </div>
+                </div>);
+        } else if (gor === 3) {
+            return (
+                <div className="f-net d-flex flex-column text-center justify-space-between">
+                    <div className="two-participant">
+                        <div className="p-rival">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
+                        <div className="p-rival">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
+                    </div>
+                    <div className="vs text-uppercase">VS</div>
+                    <div className="two-participant">
+                        <div className="p-rival">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
+                        <div className="p-rival">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
+                    </div>
+                </div>);
+        } else if (gor === 4) {
+            // THIS IS FOR AVERAGE 
+            return (
+                <div className="f-net d-flex flex-column text-center justify-space-between">
                     <div className="p-rival">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
-                    <div className="p-rival">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
-                </div>
-                <div className="vs text-uppercase">VS</div>
-                <div className="two-participant">
                     <div className="p-rival">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
                     <div className="p-rival">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
-                </div>
-            </div>);
+                    <div className="p-rival">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
+                </div>);
+        }
     }
 
 }
