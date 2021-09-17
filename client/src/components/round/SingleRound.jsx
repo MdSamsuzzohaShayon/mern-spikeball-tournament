@@ -5,6 +5,7 @@ import allPerformers from '../../utils/allPerformers';
 import AddParticipant from '../participant/AddParticipant';
 import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
 import { showLiftedPefrormance } from '../../utils/performance';
+import inputChange from '../../utils/inputChange';
 
 
 function SingleRound(props) {
@@ -18,7 +19,6 @@ function SingleRound(props) {
     const [updatePerformance, setUpdatePerformance] = useState([]);
     const [showPerformances, setShowPerformances] = useState(true);
     const [leftedPerformance, setLeftedPerformance] = useState([]);
-    const [firstRound, setFirstRound] = useState(false);
 
     let rank = 0;
 
@@ -76,26 +76,18 @@ function SingleRound(props) {
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
         // console.log(props.leftRound);
-        // console.log(props.roundNum);
-        if(props.roundNum === 1){
-            setFirstRound(true);
-            setLeftedPerformance([]);
-            setPerformances([]);
-            setShowPerformances(false)
-        }else{
-            // IF THIS IS NOT INITIALIZEABLE
-            if (!props.initialize) {
-                setLeftedPerformance(props.leftRound);
-            }
-            if (props.round.length === 0) {
-                getAllPerformance();
-            } else {
-                setShowPerformances(false);
-                setPerformances([]);
-            }
-            setUpdatePerformance([]);
+        // IF THIS IS NOT INITIALIZEABLE
+        if (!props.initialize) {
+            setLeftedPerformance(props.leftRound);
         }
         // console.log(leftedPerformance);
+        if (props.round.length === 0) {
+            getAllPerformance();
+        } else {
+            setShowPerformances(false);
+            setPerformances([]);
+        }
+        setUpdatePerformance([]);
     }, []);
 
 
@@ -264,51 +256,7 @@ function SingleRound(props) {
 
 
 
-        const findItem = updatePerformance.find((elm, i) => elm.performanceID === id && elm.game === game);
-        if (isExtra) {
-            if (findItem) {
-                // console.log("Find Item - ", findItem);
-                updatePerformance.forEach((up, i) => {
-                    if (up.performanceID === id && up.game === game && scoreType === "point") {
-                        let point = 1 + e.target.value;
-                        // let val = parseInt(e.target.value)                    ;
-                        // console.log(val);
-                        up.score.point = point;
-                        // console.log(point);
-                    };
-                });
-            } else {
-                // CREATE NEW ONE 
-                if (scoreType === "point") {
-                    let point = 1 + e.target.value;
-                    // console.log(point);
-                    setUpdatePerformance(oldState => [...oldState, { performanceID: id, game, score: { point }, netID }]);
-                }
-            }
-        } else {
-            if (findItem) {
-                // console.log("Find Item - ", findItem);
-                updatePerformance.forEach((up, i) => {
-                    if (up.performanceID === id && up.game === game && scoreType === "pointDeferential") up.score.pointDeferential = e.target.value;
-                    if (up.performanceID === id && up.game === game && scoreType === "point") {
-                        let point = null;
-                        e.target.checked || e.target.checked == "on" ? point = 1 : point = 0;
-                        up.score.point = point
-                    };
-                });
-            } else {
-                // CREATE NEW ONE 
-                if (scoreType === "point") {
-                    let point = null;
-                    e.target.checked || e.target.checked == "on" ? point = 1 : point = 0;
-                    setUpdatePerformance(oldState => [...oldState, { performanceID: id, game, score: { point }, netID }]);
-                }
-                if (scoreType === "pointDeferential") {
-                    setUpdatePerformance(oldState => [...oldState, { performanceID: id, game, score: { pointDeferential: e.target.value }, netID }]);
-
-                }
-            }
-        }
+        inputChange(updatePerformance, id, game, isExtra, scoreType, e, setUpdatePerformance, netID);
 
 
         // console.log(updatePerformance);
@@ -487,3 +435,7 @@ function SingleRound(props) {
 }
 
 export default SingleRound;
+
+
+
+

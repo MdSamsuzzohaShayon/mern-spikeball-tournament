@@ -3,11 +3,31 @@ import { hostname } from '../../utils/global';
 import { round1Total } from '../../utils/addTotalPoint';
 import { round1TD } from '../../utils/pointDeferential';
 import { arrangingPerformer } from '../../utils/helpers';
+import inputChange from '../../utils/inputChange';
+import allPerformers from '../../utils/allPerformers';
 
 
 function Round1(props) {
+    const initialExtra = { pid: null, g: null, r: null };
+    // const [showInput, setShowInput] = useState(false);
+    const [selectedExtra, setSelectedExtra] = useState(initialExtra);
     const [isLoading, setIsLoading] = useState(false);
     const [updatePerformance, setUpdatePerformance] = useState([]);
+
+
+
+    const addExtra = (e, pid, g, r) => {
+        // E = EVENT, PID = PREFORMANCE ID, G = GAME, R = ROUND 
+        setSelectedExtra({ pid, g, r });
+    }
+
+    const showInput = (pid, g, r) => {
+        if (pid === selectedExtra.pid && g === selectedExtra.g && r === selectedExtra.r) {
+            return "block";
+        } else {
+            return "none";
+        }
+    }
 
 
     // console.log(props);
@@ -90,42 +110,14 @@ function Round1(props) {
 
 
     // ⛏️⛏️ INPUT VALUE CHANGE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const handleInputChange = (e, id, game, scoreType, netID) => {
+    const handleInputChange = (e, id, game, scoreType, netID, isExtra) => {
         // e.preventDefault();
         // console.log("Change - ", e.target.checked);
         // console.log("Performance ID - ", id);
         // console.log("round - ", round);
         // console.log("score - ", score);
         // console.log("Net ID - ", netID);
-
-        // console.log(e.target.checked);
-
-
-        const findItem = updatePerformance.find((elm, i) => elm.performanceID === id && elm.game === game);
-        if (findItem) {
-            // console.log("Find Item - ", findItem);
-            updatePerformance.forEach((up, i) => {
-                if (up.performanceID === id && up.game === game && scoreType === "pointDeferential") up.score.pointDeferential = e.target.value;
-                if (up.performanceID === id && up.game === game && scoreType === "point") {
-                    let point = null;
-                    e.target.checked || e.target.checked == "on" ? point = 1 : point = 0;
-                    up.score.point = point
-                };
-            });
-        } else {
-            // CREATE NEW ONE 
-            if (scoreType === "point") {
-                let point = null;
-                e.target.checked || e.target.checked == "on" ? point = 1 : point = 0;
-                setUpdatePerformance(oldState => [...oldState, { performanceID: id, game, score: { point }, netID }]);
-            }
-            if (scoreType === "pointDeferential") {
-                setUpdatePerformance(oldState => [...oldState, { performanceID: id, game, score: { pointDeferential: e.target.value }, netID }]);
-
-            }
-        }
-
-        // console.log(updatePerformance);
+        inputChange(updatePerformance, id, game, isExtra, scoreType, e, setUpdatePerformance, netID);
     }
 
 
@@ -168,258 +160,6 @@ function Round1(props) {
 
 
 
-
-    // gor = GAME OF ROUND 
-
-    // ⛏️⛏️ INPUT FIELD FOR ALL PARTICIPANT OR PERFORMANCE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const allPerformers = (net, game, score, gor) => {
-        // console.log(net.performance);
-        // console.log("s - ", score);
-        // console.log(props.round);
-        /*
-        if (score === "point") {
-            if (net.performance.length < 4) {
-                return net.performance.map((p, j) => (
-                    <div className="f-point d-flex flex-column" key={j}>
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            onChange={e => handleInputChange(e, p._id, game, score, net._id)}
-                            defaultChecked={getDefaultValue(p, score, game) === 1 ? true : false}
-                        />
-
-                    </div>
-                ));
-            } else {
-                return (<div className="f-point d-flex flex-column">
-                    <div className="two-p-input two-p-input-1 d-flex flex-column justify-content-center">
-                        <input className="form-check-input" type="checkbox"
-                            onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
-                            defaultChecked={getDefaultValue(net.performance[0], score, game) === 1 ? true : false} />
-                        <input className="form-check-input" type="checkbox"
-                            onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
-                            defaultChecked={getDefaultValue(net.performance[1], score, game) === 1 ? true : false} />
-                    </div>
-                    <div className="line"></div>
-                    <div className="two-p-input two-p-input-2 d-flex flex-column justify-content-center">
-                        <input className="form-check-input" type="checkbox"
-                            onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
-                            defaultChecked={getDefaultValue(net.performance[2], score, game) === 1 ? true : false} />
-                        <input className="form-check-input" type="checkbox"
-                            onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                            defaultChecked={getDefaultValue(net.performance[3], score, game) === 1 ? true : false} />
-                    </div>
-                </div>);
-            }
-        }
-        if (score === "pointDeferential") {
-            if (net.performance.length < 4) {
-                return net.performance.map((p, j) => (
-                    <div className="f-point-differential" key={j}>
-                        <input
-                            type="text"
-                            className="form-control my-3"
-                            defaultValue={getDefaultValue(p, score, game) !== "0-0" ? getDefaultValue(p, score, game) : ""}
-                            style={{ width: "80px" }} name={net.sl}
-                            onChange={e => handleInputChange(e, p._id, game, score, net._id)} />
-                    </div>
-                ));
-            } else {
-                return (<div className="f-point d-flex flex-column">
-                    <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
-                        <input className="form-control" type="text"
-                            onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
-                            defaultValue={getDefaultValue(net.performance[0], score, game) !== "0-0" ? getDefaultValue(net.performance[0], score, game) : ""} />
-                        <input className="form-control" type="text"
-                            onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
-                            defaultValue={getDefaultValue(net.performance[1], score, game) !== "0-0" ? getDefaultValue(net.performance[1], score, game) : ""} />
-                    </div>
-                    <div className="line"></div>
-                    <div className="two-p-input two-p-i-2 d-flex flex-column align-items-center justify-content-center">
-                        <input className="form-control" type="text"
-                            onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
-                            defaultValue={getDefaultValue(net.performance[2], score, game) !== "0-0" ? getDefaultValue(net.performance[2], score, game) : ""} />
-                        <input className="form-control" type="text"
-                            onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                            defaultValue={getDefaultValue(net.performance[3], score, game) !== "0-0" ? getDefaultValue(net.performance[3], score, game) : ""} />
-                    </div>
-                </div>);
-            }
-        }
-        */
-
-        if (score === "point") {
-            if (net.performance.length < 4) {
-                return net.performance.map((p, j) => (
-                    <div className="f-point d-flex flex-column" key={j}>
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            onChange={e => handleInputChange(e, p._id, game, score, net._id)}
-                            defaultChecked={getDefaultValue(p, score, game, props.roundNum) === 1 ? true : false}
-                        />
-
-                    </div>
-                ));
-            } else {
-                if (gor === 1) {
-                    return (<div className="f-point d-flex flex-column">
-                        <div className="two-p-input two-p-input-1 d-flex flex-column justify-content-center">
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[0], score, game, props.roundNum) === 1 ? true : false} />
-
-
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[3], score, game, props.roundNum) === 1 ? true : false} />
-                        </div>
-
-                        <div className="line"></div>
-
-                        <div className="two-p-input two-p-input-2  d-flex flex-column items-center justify-content-center">
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[1], score, game, props.roundNum) === 1 ? true : false} />
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[2], score, game, props.roundNum) === 1 ? true : false} />
-                        </div>
-                    </div>);
-                } else if (gor === 2) {
-                    return (<div className="f-point d-flex flex-column">
-                        <div className="two-p-input two-p-input-1 d-flex flex-column justify-content-center">
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[0], score, game, props.roundNum) === 1 ? true : false} />
-
-
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[1], score, game, props.roundNum) === 1 ? true : false} />
-                        </div>
-
-                        <div className="line"></div>
-
-                        <div className="two-p-input two-p-input-2  d-flex flex-column items-center justify-content-center">
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[2], score, game, props.roundNum) === 1 ? true : false} />
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[3], score, game, props.roundNum) === 1 ? true : false} />
-                        </div>
-                    </div>);
-                } else if (gor === 3) {
-                    return (<div className="f-point d-flex flex-column">
-                        <div className="two-p-input two-p-input-1 d-flex flex-column justify-content-center">
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[0], score, game, props.roundNum) === 1 ? true : false} />
-
-
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[2], score, game, props.roundNum) === 1 ? true : false} />
-                        </div>
-
-                        <div className="line"></div>
-
-                        <div className="two-p-input two-p-input-2  d-flex flex-column items-center justify-content-center">
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[1], score, game, props.roundNum) === 1 ? true : false} />
-                            <input className="form-check-input" type="checkbox"
-                                onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                                defaultChecked={getDefaultValue(net.performance[3], score, game, props.roundNum) === 1 ? true : false} />
-                        </div>
-                    </div>);
-                }
-            }
-        }
-        if (score === "pointDeferential") {
-            if (net.performance.length < 4) {
-                return net.performance.map((p, j) => (
-                    <div className="f-point-differential" key={j}>
-                        <input
-                            type="text"
-                            className="form-control my-3"
-                            defaultValue={getDefaultValue(p, score, game, props.roundNum) !== "0-0" ? getDefaultValue(p, score, game, props.roundNum) : ""}
-                            style={{ width: "80px" }} name={net.sl}
-                            onChange={e => handleInputChange(e, p._id, game, score, net._id)} />
-                    </div>
-                ));
-            } else {
-                if (gor === 1) {
-                    return (<div className="f-point d-flex flex-column">
-                        <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[0], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[0], score, game, props.roundNum) : ""} />
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[3], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[3], score, game, props.roundNum) : ""} />
-                        </div>
-                        <div className="line"></div>
-
-                        <div className="two-p-input two-p-i-2 d-flex flex-column align-items-center justify-content-center">
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[1], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[1], score, game, props.roundNum) : ""} />
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[2], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[2], score, game, props.roundNum) : ""} />
-                        </div>
-                    </div>);
-                }else if(gor === 2){
-                    return (<div className="f-point d-flex flex-column">
-                        <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[0], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[0], score, game, props.roundNum) : ""} />
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[1], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[1], score, game, props.roundNum) : ""} />
-                        </div>
-                        <div className="line"></div>
-
-                        <div className="two-p-input two-p-i-2 d-flex flex-column align-items-center justify-content-center">
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[2], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[2], score, game, props.roundNum) : ""} />
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[3], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[3], score, game, props.roundNum) : ""} />
-                        </div>
-                    </div>);
-                }else if(gor === 3){
-                    return (<div className="f-point d-flex flex-column">
-                        <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[0]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[0], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[0], score, game, props.roundNum) : ""} />
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[2]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[2], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[2], score, game, props.roundNum) : ""} />
-                        </div>
-                        <div className="line"></div>
-
-                        <div className="two-p-input two-p-i-2 d-flex flex-column align-items-center justify-content-center">
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[1]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[1], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[1], score, game, props.roundNum) : ""} />
-                            <input className="form-control" type="text"
-                                onChange={e => handleInputChange(e, net.performance[3]._id, game, score, net._id)}
-                                defaultValue={getDefaultValue(net.performance[3], score, game, props.roundNum) !== "0-0" ? getDefaultValue(net.performance[3], score, game, props.roundNum) : ""} />
-                        </div>
-                    </div>);
-                }
-            }
-        }
-    }
-
-
-
     const getTotal = (net, round, score) => {
         // console.log(score);
         if (score === "point") {
@@ -441,36 +181,7 @@ function Round1(props) {
 
 
 
-    /*
-    const arrangingPerformer = (performer) => {
 
-        if (performer.length < 4) {
-            // console.log(performer);
-
-            return (
-                <div>
-                    {performer.map((p, j) => (
-                        <div className="player-name" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
-                    ))
-                    }
-                </div>);
-        } else {
-            return (
-                <div className="f-net d-flex flex-column text-center justify-space-between">
-                    <div className="two-participant">
-                        <div className="f-rival">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
-                        <div className="f-rival">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
-                    </div>
-                    <div className="vs text-uppercase">VS</div>
-                    <div className="two-participant">
-                        <div className="f-rival">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
-                        <div className="f-rival">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
-                    </div>
-                </div>);
-        }
-
-    }
-    */
 
 
 
@@ -525,17 +236,17 @@ function Round1(props) {
                                         <th scope="row">Net {net.sl || i + 1}</th>
 
                                         <td>{arrangingPerformer(net.performance, 1)} </td>
-                                        <td >{allPerformers(net, props.game[0], "point", 1)} </td>
-                                        <td>{allPerformers(net, props.game[0], "pointDeferential", 1)}</td>
+                                        <td >{allPerformers(net, props.game[0], "point", 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                        <td>{allPerformers(net, props.game[0], "pointDeferential", 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
 
                                         <td>{arrangingPerformer(net.performance, 2)} </td>
-                                        <td >{allPerformers(net, props.game[1], "point", 2)} </td>
-                                        <td>{allPerformers(net, props.game[1], "pointDeferential", 2)}</td>
+                                        <td >{allPerformers(net, props.game[1], "point", 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                        <td>{allPerformers(net, props.game[1], "pointDeferential", 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
                                         <td>{arrangingPerformer(net.performance, 3)} </td>
-                                        <td >{allPerformers(net, props.game[2], "point", 3)} </td>
-                                        <td>{allPerformers(net, props.game[2], "pointDeferential", 3)}</td>
+                                        <td >{allPerformers(net, props.game[2], "point", 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                        <td>{allPerformers(net, props.game[2], "pointDeferential", 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
 
                                         {/* AVERAGE  */}
