@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import EventList from '../components/EventList';
-import "./Dashboard.css";
+import "../style/Dashboard.css";
 
 export class Dashboard extends Component {
     constructor(props) {

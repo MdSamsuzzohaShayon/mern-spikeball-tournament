@@ -1,0 +1,26 @@
+.RoundTable .two-p {
+  height: 6.5rem;
+}
+.RoundTable .two-p .p-item {
+  height: 20px;
+}
+.RoundTable .two-p .p-i-1 {
+  margin-top: 12px;
+}
+.RoundTable .two-p .p-i-2 {
+  margin-top: 10px;
+}
+.RoundTable .two-pd {
+  height: 6.5rem;
+}
+.RoundTable .two-pd .pd-item {
+  height: 20px;
+}
+.RoundTable .two-pd .pd-i-1 {
+  margin-top: 12px;
+}
+.RoundTable .two-pd .pd-i-2 {
+  margin-top: 10px;
+}
+
+/*# sourceMappingURL=Score.css.map */

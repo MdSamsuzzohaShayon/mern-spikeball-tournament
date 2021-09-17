@@ -1,0 +1,28 @@
+@import "./variables";
+
+.RoundTable {
+    .two-p {
+        height: $t-p-height;
+        .p-item {
+            height: $item-height;
+        }
+        .p-i-1 {
+            margin-top: $mt-p-i-1;
+        }
+        .p-i-2 {
+            margin-top: $mt-p-i-2;
+        }
+    }
+    .two-pd {
+        height: $t-p-height;
+        .pd-item {
+            height: $item-height;
+        }
+        .pd-i-1 {
+            margin-top: $mt-p-i-1;
+        }
+        .pd-i-2 {
+            margin-top: $mt-p-i-2;
+        }
+    }
+}

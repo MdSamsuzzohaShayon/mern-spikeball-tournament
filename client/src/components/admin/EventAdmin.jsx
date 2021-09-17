@@ -5,7 +5,7 @@ import { hostname } from '../../utils/global';
 import Participants from './Participants';
 import Rounds from '../round/Rounds'
 import Score from "../score/Score";
-import './EventAdmin.css';
+import '../../style/EventAdmin.css';
 
 export class EventAdmin extends Component {
     constructor(props) {
@@ -132,7 +132,7 @@ export class EventAdmin extends Component {
                         </div>
                     );
                 } else {
-                    return (<div className="tab-pane fade show active score-board" ><Score /></div>);
+                    return (<div className="tab-pane fade show active score-board" ><Score admin={true}/></div>);
                 }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);

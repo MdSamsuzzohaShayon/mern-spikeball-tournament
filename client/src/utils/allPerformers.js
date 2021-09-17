@@ -11,12 +11,20 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
         if (net.performance.length < 4) {
             return net.performance.map((p, j) => (
                 <div className="f-point d-flex flex-column" key={j}>
-                    <input
-                        className="form-check-input"
-                        type="checkbox"
-                        onChange={e => handleInputChange(e, p._id, game, score, net._id, false)}
-                        defaultChecked={getDefaultValue(p, score, game, props.roundNum) >= 1 ? true : false}
-                    />
+                    <div className="point-extra d-flex jusitify-content-center align-items-center">
+                        <input
+                            className="form-check-input not-mingle-point"
+                            type="checkbox"
+                            onChange={e => handleInputChange(e, p._id, game, score, net._id, false)}
+                            defaultChecked={getDefaultValue(p, score, game, props.roundNum) >= 1 ? true : false}
+                        />
+
+                        {getDefaultValue(p, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
+                            <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, p._id, game, props.round)} className="extra-icon" />
+                            <input type="number" style={{ display: showInput(p._id, game, props.round) }}
+                                onChange={e => handleInputChange(e, p._id, game, score, net._id, true)} className="extra-input" />
+                        </div>)}
+                    </div>
 
                 </div>
             ));
@@ -31,7 +39,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, one._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(one, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(one, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(one, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, one._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(one._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, one._id, game, score, net._id, true)} className="extra-input" />
@@ -43,7 +51,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, four._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(four, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(four, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(four, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, four._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(four._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, four._id, game, score, net._id, true)} className="extra-input" />
@@ -60,7 +68,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, two._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(two, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(two, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(two, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, two._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(two._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, two._id, game, score, net._id, true)} className="extra-input" />
@@ -72,7 +80,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, three._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(three, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(three, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(three, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, three._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(three._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, three._id, game, score, net._id, true)} className="extra-input" />
@@ -91,7 +99,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, one._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(one, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(one, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(one, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, one._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(one._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, one._id, game, score, net._id, true)} className="extra-input" />
@@ -103,7 +111,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, two._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(two, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(two, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(two, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, two._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(two._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, two._id, game, score, net._id, true)} className="extra-input" />
@@ -122,7 +130,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, three._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(three, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(three, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(three, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, three._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(three._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, three._id, game, score, net._id, true)} className="extra-input" />
@@ -134,7 +142,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, four._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(four, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(four, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(four, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, four._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(four._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, four._id, game, score, net._id, true)} className="extra-input" />
@@ -155,7 +163,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, one._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(one, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(one, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(one, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, one._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(one._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, one._id, game, score, net._id, true)} className="extra-input" />
@@ -167,7 +175,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, three._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(three, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(three, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(three, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, three._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(three._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, three._id, game, score, net._id, true)} className="extra-input" />
@@ -183,7 +191,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, two._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(two, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(two, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(two, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, two._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(two._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, two._id, game, score, net._id, true)} className="extra-input" />
@@ -195,7 +203,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                                 onChange={e => handleInputChange(e, four._id, game, score, net._id, false)}
                                 defaultChecked={getDefaultValue(four, score, game, props.roundNum) >= 1 ? true : false} />
 
-                            {getDefaultValue(four, score, game, props.roundNum) >= 1 && (<div className="extra">
+                            {getDefaultValue(four, score, game, props.roundNum) >= 1 && (<div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, four._id, game, props.round)} className="extra-icon" />
                                 <input type="number" style={{ display: showInput(four._id, game, props.round) }}
                                     onChange={e => handleInputChange(e, four._id, game, score, net._id, true)} className="extra-input" />
@@ -212,10 +220,10 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
     if (score === "pointDeferential") {
         if (net.performance.length < 4) {
             return net.performance.map((p, j) => (
-                <div className="f-point-differential" key={j}>
+                <div className="f-point-differential d-flex flex-column align-items-center justify-content-center" key={j}>
                     <input
                         type="text"
-                        className="form-control my-3"
+                        className="form-control"
                         defaultValue={getDefaultValue(p, score, game, props.roundNum) !== "0-0" ? getDefaultValue(p, score, game, props.roundNum) : ""}
                         style={{ width: "80px" }} name={net.sl}
                         onChange={e => handleInputChange(e, p._id, game, score, net._id, false)} />

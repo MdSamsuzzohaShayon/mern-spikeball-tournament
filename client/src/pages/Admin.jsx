@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import Login from '../components/admin/Login';
-import './Admin.css';
+import '../style/Admin.css';
 
 
 

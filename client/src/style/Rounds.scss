@@ -1,6 +1,4 @@
-$t-p-height: 6.5rem;
-$p-my: 10px;
-$input-w: 4.5rem;
+@import "./variables";
 
 // ⛏️⛏️ PARENT COMPONENT ROUNDS  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 .Rounds {
@@ -49,6 +47,15 @@ $input-w: 4.5rem;
             margin: 5px 0;
         }
 
+
+        .not-mingle-point{
+            margin: $p-my-ns 0;
+        }
+        .player-name{
+            margin: $p-my-ns 0;
+        }
+
+
         .line {
             margin-top: 12px;
             width: 100%;
@@ -78,6 +85,18 @@ $input-w: 4.5rem;
         }
         .vs::after {
             margin-left: 10px;
+        }
+
+
+
+
+        .extra-icon{
+            width: 10px;
+            margin-left: 5px;
+        }
+        .extra-input{
+            width: $input-w;
+            margin-left: 5px;
         }
     }
 }

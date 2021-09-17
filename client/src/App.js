@@ -1,6 +1,6 @@
 // ⛏️⛏️ MAIN APP FILE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import './style/App.css';
 import { Switch, Route, Redirect } from "react-router-dom";
 import Menu from './components/Menu';
 import Home from './pages/Home';
@@ -82,7 +82,7 @@ class App extends Component {
     this.setState({ isAuthenticated: false });
   }
   render() {
-    console.log("Authenticated - " , this.state.isAuthenticated);
+    // console.log("Authenticated - " , this.state.isAuthenticated);
     return (
       <div className="App">
         <Menu authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />
@@ -99,7 +99,7 @@ class App extends Component {
              <EventAdmin isAuthenticated={this.state.isAuthenticated} /> 
           </Route>
           <Route exact path="/event/:id" >
-             <Score /> 
+             <Score admin={false} /> 
           </Route>
           <Route path="*">
             <Page404 />
