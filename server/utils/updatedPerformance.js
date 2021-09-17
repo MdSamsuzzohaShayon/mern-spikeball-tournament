@@ -3,26 +3,26 @@ const updatedPerformance = (pu, roundNum) => {
     // console.log(roundNum);
     // console.log(pu);
     if (roundNum == 1) {
-        console.log("Update performance");
-        console.log(pu);
-        const exmple = [{
-            performanceID: '612ffa1cc6266f842260bed6',
-            game: 1,
-            score: { point: 1, pointDeferential: '15' },
-            netID: '612ffa1ac6266f842260bece'
-        },
-        {
-            performanceID: '612ffa1cc6266f842260bed6',
-            game: 2,
-            score: { point: 1, pointDeferential: '12-11' },
-            netID: '612ffa1ac6266f842260bece'
-        },
-        {
-            performanceID: '612ffa1fc6266f842260bee4',
-            game: 1,
-            score: { point: 'on', pointDeferential: '12-1' },
-            netID: '612ffa1dc6266f842260bedc'
-        }];
+        // console.log("Update performance");
+        // console.log(pu);
+        // const exmple = [{
+        //     performanceID: '612ffa1cc6266f842260bed6',
+        //     game: 1,
+        //     score: { point: 1, pointDeferential: '15' },
+        //     netID: '612ffa1ac6266f842260bece'
+        // },
+        // {
+        //     performanceID: '612ffa1cc6266f842260bed6',
+        //     game: 2,
+        //     score: { point: 1, pointDeferential: '12-11' },
+        //     netID: '612ffa1ac6266f842260bece'
+        // },
+        // {
+        //     performanceID: '612ffa1fc6266f842260bee4',
+        //     game: 1,
+        //     score: { point: 'on', pointDeferential: '12-1' },
+        //     netID: '612ffa1dc6266f842260bedc'
+        // }];
 
 
         switch (pu.game) {

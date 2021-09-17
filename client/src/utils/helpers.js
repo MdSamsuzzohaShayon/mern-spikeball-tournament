@@ -106,6 +106,21 @@ export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
 }
 
 
+let r = 0;
+export const rankLoop = (net, i, rank) => {
+    // rank ++;
+    // console.log(rank);
+    // console.log("Called");
+    // r = r + 1;
+    return net.performance.map((p, pi) => {
+        // console.log("J - ", j);
+        rank++;
+        return rank;
+    });
+    // return <div>{i}</div>
+}
+
+
 
 
 // ⛏️⛏️ GET TOTAL POINT AND DIFERENTIAL FOR THIS ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
@@ -259,11 +274,11 @@ export const getTotal = (net, round, score) => {
 // gor = GAME OF ROUND
 // ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 export const arrangingPerformer = (performer, gor) => {
-    console.log("Game of round - ",gor);
+    // console.log("Game of round - ",gor);
 
 
 
-    console.log("-------------------------------------------------------------------------");
+    // console.log("-------------------------------------------------------------------------");
     if (performer.length < 4) {
 
         return (
@@ -276,10 +291,10 @@ export const arrangingPerformer = (performer, gor) => {
     } else {
         if (gor === 1) {
             // console.log(performer[0]);
-            console.log(performer[0].participant.firstname);            
-            console.log(performer[1].participant.firstname);            
-            console.log(performer[2].participant.firstname);            
-            console.log(performer[3].participant.firstname);            
+            // console.log(performer[0].participant.firstname);            
+            // console.log(performer[1].participant.firstname);            
+            // console.log(performer[2].participant.firstname);            
+            // console.log(performer[3].participant.firstname);            
             return (
                 <div className="f-net d-flex flex-column text-center justify-space-between">
                     <div className="two-participant">
@@ -319,6 +334,7 @@ export const arrangingPerformer = (performer, gor) => {
                     </div>
                 </div>);
         } else if (gor === 4) {
+
             // THIS IS FOR AVERAGE 
             return (
                 <div className="f-net d-flex flex-column text-center justify-space-between">

@@ -116,7 +116,7 @@ const EventList = (props) => {
                         <tr>
                             <th scope="col">Title</th>
                             <th scope="col">Date</th>
-                            <th scope="col">Details</th>
+                            <th scope="col">Details </th>
                             {props.isAuthenticated && <th scope="col">Handle</th>}
                         </tr>
                     </thead>

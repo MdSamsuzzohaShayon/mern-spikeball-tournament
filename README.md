@@ -128,3 +128,6 @@ __https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-
  - *Solution* When we create participant we also need to create performance by default
 
  - Point diffrential NaN value error handle
+
+
+# After updating this first thing need to learn is deploy MERN

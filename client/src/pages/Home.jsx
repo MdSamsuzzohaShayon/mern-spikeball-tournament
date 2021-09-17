@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import EventList from '../components/EventList';
+// import icon from "/icon/extra.svg";
+
 
 class Home extends Component {
     constructor(props) {
@@ -77,6 +79,8 @@ class Home extends Component {
     render() {
         return (
             <div className="Home">
+                <i class="bi bi-plus-lg"></i>
+                
                 <div className="container mt-3">
                     <EventList isLoading={this.state.isLoading}
                         pullEventID={this.getEventID}

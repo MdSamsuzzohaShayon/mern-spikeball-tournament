@@ -120,11 +120,20 @@ const Rounds = (props) => {
                 } else {
                     // console.log("Loading(false) - ", isLoading);
                     return (<div className="tab-pane fade show active" >
-                        <Round1
+                        {/* <Round1
                             initialize={initialize}
                             round={round}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
+                            game={[1, 2, 3]}
+                            eventID={props.eventID} /> */}
+
+                            <SingleRound
+                            initialize={initialize}
+                            round={round}
+                            roundNum={activeItem}
+                            updateNets={updateFindNets}
+                            leftRound={[]}
                             game={[1, 2, 3]}
                             eventID={props.eventID} />
                     </div>);
