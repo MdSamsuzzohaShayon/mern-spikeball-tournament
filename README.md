@@ -106,16 +106,24 @@ __https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-
 
 
 ### Docker
- - __https://nodejs.org/de/docs/guides/nodejs-docker-webapp/__
  - __https://www.digitalocean.com/community/tutorials/how-to-build-a-node-js-application-with-docker__
  - __https://github.com/MdSamsuzzohaShayon/Web-Linux-Essential-Docs/tree/2_web_hosting/Docker__
+ - [Install docker](https://docs.docker.com/engine/install/ubuntu/)
+ - Node image for docker [ ]
+ - [Make nodejs app with docker](https://nodejs.org/de/docs/guides/nodejs-docker-webapp/)
  - [Dockerfile](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
  - [Making dockerfile](https://docs.docker.com/engine/reference/builder/)
  - [.dockerignore](https://docs.docker.com/engine/reference/builder/)
- - Commands
-```
-make build
-```
+ - Commands for server 
+  ```
+  cd server
+  sudo make build
+  ```
+ - make all those files inside client as well and run Similer command for client
+  ```
+  sudo make build
+  ```
+ - 
 
 
 
