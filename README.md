@@ -106,10 +106,10 @@ __https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-
 
 
 ### Docker
+ - [Tutorials](https://www.youtube.com/watch?v=DftsReyhz2Q&t=1319s)  - 22m
  - __https://www.digitalocean.com/community/tutorials/how-to-build-a-node-js-application-with-docker__
  - __https://github.com/MdSamsuzzohaShayon/Web-Linux-Essential-Docs/tree/2_web_hosting/Docker__
  - [Install docker](https://docs.docker.com/engine/install/ubuntu/)
- - Node image for docker [ ]
  - [Make nodejs app with docker](https://nodejs.org/de/docs/guides/nodejs-docker-webapp/)
  - [Dockerfile](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
  - [Making dockerfile](https://docs.docker.com/engine/reference/builder/)
@@ -123,7 +123,9 @@ __https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-
   ```
   sudo make build
   ```
- - 
+ - [Docker compose](https://docs.docker.com/compose/)
+ - If made any change run those build once again
+ - create docker-compose and makefile in root and run the command `sudo make run-dev`
 
 
 

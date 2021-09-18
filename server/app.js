@@ -17,10 +17,11 @@ const netRoute = require('./routes/net');
 const roundRoute = require('./routes/round');
 
 
+// MONGO_URI='mongodb://mongo:27017/cinema'
 
-
+const mongoURI = `mongodb://mongo:27017/spikeball`;
 // ⛏️⛏️ MONGO DB DATABASE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.0ss9r.mongodb.net/Spikeball-Events?retryWrites=true&w=majority`;
+// const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.0ss9r.mongodb.net/Spikeball-Events?retryWrites=true&w=majority`;
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false }, (err) => {
     if (err) throw err;
     console.log("Db is connected successfully ");
