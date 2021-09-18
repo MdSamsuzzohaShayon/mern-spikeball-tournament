@@ -47,6 +47,12 @@ const performanceSchema = new Schema({
     game13: scoreSchema,
     game14: scoreSchema,
     game15: scoreSchema,
+    // nog = NUMBER OF GAME 
+    nog: {
+        type: Number,
+        max: 15,
+        min: 1
+    }
     // nested: {
     //     stuff: {
     //         type: String,

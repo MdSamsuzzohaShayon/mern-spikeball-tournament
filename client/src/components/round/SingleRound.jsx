@@ -230,6 +230,7 @@ function SingleRound(props) {
         const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         // console.log("Update - ", response);
         console.log("Update Performance - ", updatePerformance);
+
         setUpdatePerformance([]);
         props.updateNets(true);
     }

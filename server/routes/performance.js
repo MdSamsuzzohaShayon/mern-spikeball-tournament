@@ -202,11 +202,11 @@ router.post('/multiple/:eventID', (req, res, next) => {
                     Participant.insertMany(allParticipant).then(function (participant) {
                         // console.log(participant);
                         const performanceList = [];
-                        for(let per of participant){
-                            performanceList.push({participant: per._id, event: req.params.eventID});
+                        for (let per of participant) {
+                            performanceList.push({ participant: per._id, event: req.params.eventID });
                         }
                         // console.log("insert many performance - ");
-                        Performance.insertMany(performanceList).then(p=>{
+                        Performance.insertMany(performanceList).then(p => {
                             console.log("Inserted all performance - ", p);
                         });
                         // console.log("Data inserted", participant)  // Success
@@ -255,11 +255,25 @@ router.put('/update-performance/:eventID/:round', (req, res, next) => {
     performanceUpdate.forEach((pu, i) => {
         // console.log(pu);
         // console.log(updatedPerformance(pu, req.params.round));
-        Performance.findByIdAndUpdate(pu.performanceID, updatedPerformance(pu, req.params.round), (err, docs) => {
-            // console.log(pu);
-            if (err) throw err;
-            // console.log("Found - ", docs);
-        });
+        // Performance.findByIdAndUpdate(pu.performanceID, updatedPerformance(pu, req.params.round), (err, docs) => {
+        //     // console.log(pu);
+        //     if (err) throw err;
+        //     console.log("Found - ", docs);
+        // });
+
+
+
+        // Using queries with promise chaining
+        // Model.findOne({ name: 'Mr. Anderson' }).
+        // then(doc => Model.updateOne({ _id: doc._id }, { name: 'Neo' })).
+        // then(() => Model.findOne({ name: 'Neo' })).
+        // then(doc => console.log(doc.name)); // 'Neo'
+
+
+        Performance.findOne({ _id: pu.performanceID })
+            .then(doc => Performance.updateOne({ _id: doc._id }, updatedPerformance(pu, req.params.round, doc)))
+            .then(result => console.log("Updated - ", result))
+            .catch(err => console.log(err));
     });
     // UPDATE EXISTING PERFORMANCE
     res.status(200).json({ msg: 'Get net and participant' });
