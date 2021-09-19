@@ -254,6 +254,7 @@ router.put('/update-performance/:eventID/:round', (req, res, next) => {
     // console.log("Updated performance", performanceUpdate);
     performanceUpdate.forEach((pu, i) => {
         // console.log(pu);
+        // console.log(pu.netID);
         // console.log(updatedPerformance(pu, req.params.round));
         // Performance.findByIdAndUpdate(pu.performanceID, updatedPerformance(pu, req.params.round), (err, docs) => {
         //     // console.log(pu);
@@ -271,7 +272,7 @@ router.put('/update-performance/:eventID/:round', (req, res, next) => {
 
 
         Performance.findOne({ _id: pu.performanceID })
-            .then(doc => Performance.updateOne({ _id: doc._id }, updatedPerformance(pu, req.params.round, doc)))
+            .then(doc => Performance.updateOne({ _id: doc._id }, updatedPerformance(pu, req.params.round, doc, pu.netID)))
             .then(result => console.log("Updated - ", result))
             .catch(err => console.log(err));
     });

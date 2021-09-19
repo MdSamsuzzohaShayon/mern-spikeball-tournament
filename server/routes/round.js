@@ -23,7 +23,7 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
                 select: "performance",
                 populate: {
                     path: 'performance',
-                    select: 'participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15',
+                    select: 'participant nog net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15',
                     populate: {
                         path: "participant",
                         select: "firstname lastname"

@@ -50,6 +50,7 @@ const performanceSchema = new Schema({
     // nog = NUMBER OF GAME 
     nog: {
         type: Number,
+        default: 1,
         max: 15,
         min: 1
     }
