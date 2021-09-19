@@ -7,13 +7,14 @@
             height: $item-height;
         }
         .p-i-1 {
-            margin-top: $mt-p-i-1;
+            margin-top: 0;
         }
         .p-i-2 {
             margin-top: $mt-p-i-2;
         }
     }
     .two-pd {
+        // background: #000;
         height: $t-p-height;
         .pd-item {
             height: $item-height;

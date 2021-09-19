@@ -54,19 +54,19 @@ Emojies - 📜 ⛏️ ➖ ✅
 
 
 ### New requirements
- - Show the players before by ranking. total point, average point deferential
- - two in one team another two with another team
- - For every game they will change team mate
- - Every game with different partner (participant, point, point diferential)
- - Awarding point ()
- - Negative point will have red color, positive point will have green color
- - Change reassign to rank assign, random assign
- - On Right side Player name, point, point differential
- - After every game col will be like name, point, point diffrential
- - Timmate need to change on every game
+ - ✅ Show the players before by ranking. total point, average point deferential
+ - ✅ two in one team another two with another team
+ - ✅ For every game they will change team mate
+ - ✅ Every game with different partner (participant, point, point diferential)
+ - ✅ Awarding point ()
+ - ✅ Negative point will have red color, positive point will have green color
+ - ✅ Change reassign to rank assign, random assign
+ - ✅ On Right side Player name, point, point differential
+ - ✅ After every game col will be like name, point, point diffrential
+ - ✅ Timmate need to change on every game
  - Set default value for point and point differential from front-end,  so we can check how many games they played - if one player get 1 point oponent player will get 0 by default
- - Average point and point differential for player in rounds tab
- - Create some public table to show who is playing againest who and who get point
+ - ✅ Average point and point differential for player in rounds tab
+ - ✅ Create some public table to show who is playing againest who and who get point
 
 
 

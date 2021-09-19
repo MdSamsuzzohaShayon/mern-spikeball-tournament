@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../../utils/global';
-import { getDefaultValue, getTotal, arrangingPerformer, rankLoop } from '../../utils/helpers';
-import allPerformers from '../../utils/allPerformers';
-import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
+import { getDefaultValue, arrangingPerformer } from '../../utils/helpers';
 
 
 function SingleRound(props) {
@@ -76,12 +73,12 @@ function SingleRound(props) {
                 if (gor === 1) {
                     // 1ST VS 4TH & 2ND VS 3RD
                     return (<div className="f-point d-flex flex-column">
-                        <div className="two-p two-p-1 d-flex flex-column justify-content-center">
+                        <div className="two-p two-p-1 d-flex flex-column justify-content-center align-items-center">
                             <div className="p-item p-i-1">{getDefaultValue(one, score, game, props.roundNum)}</div>
                             <div className="p-item p-i-2">{getDefaultValue(four, score, game, props.roundNum)}</div>
                         </div>
                         <div className="line"></div>
-                        <div className="two-p two-p-2  d-flex flex-column items-center justify-content-center">
+                        <div className="two-p two-p-2  d-flex flex-column justify-content-center align-items-center">
                             <div className="p-item p-i-1">{getDefaultValue(two, score, game, props.roundNum)}</div>
                             <div className="p-item p-i-2">{getDefaultValue(three, score, game, props.roundNum)}</div>
                         </div>
@@ -89,12 +86,12 @@ function SingleRound(props) {
                 } else if (gor === 2) {
                     // 1ST VS 2ND & 3RD VS 4TH 
                     return (<div className="f-point d-flex flex-column">
-                        <div className="two-p two-p-1 d-flex flex-column justify-content-center">
+                        <div className="two-p two-p-1 d-flex flex-column justify-content-center align-items-center">
                             <div className="p-item p-i-1">{getDefaultValue(one, score, game, props.roundNum)}</div>
                             <div className="p-item p-i-2">{getDefaultValue(two, score, game, props.roundNum)}</div>
                         </div>
                         <div className="line"></div>
-                        <div className="two-p two-p-2  d-flex flex-column items-center justify-content-center">
+                        <div className="two-p two-p-2  d-flex flex-column justify-content-center align-items-center">
                             <div className="p-item p-i-1">{getDefaultValue(three, score, game, props.roundNum)}</div>
                             <div className="p-item p-i-2">{getDefaultValue(four, score, game, props.roundNum)}</div>
                         </div>
@@ -102,12 +99,12 @@ function SingleRound(props) {
                 } else if (gor === 3) {
                     // 1ST VS 3RD & 2ND VS 4TH 
                     return (<div className="f-point d-flex flex-column">
-                        <div className="two-p two-p-1 d-flex flex-column justify-content-center">
+                        <div className="two-p two-p-1 d-flex flex-column justify-content-center align-items-center">
                             <div className="p-item p-i-1">{getDefaultValue(one, score, game, props.roundNum)}</div>
                             <div className="p-item p-i-2">{getDefaultValue(three, score, game, props.roundNum)}</div>
                         </div>
                         <div className="line"></div>
-                        <div className="two-p two-p-2  d-flex flex-column items-center justify-content-center">
+                        <div className="two-p two-p-2  d-flex flex-column justify-content-center align-items-center">
                             <div className="p-item p-i-1">{getDefaultValue(two, score, game, props.roundNum)}</div>
                             <div className="p-item p-i-2">{getDefaultValue(four, score, game, props.roundNum)}</div>
                         </div>

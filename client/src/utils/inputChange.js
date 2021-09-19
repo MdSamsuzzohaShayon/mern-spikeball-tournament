@@ -1,5 +1,6 @@
 const pointVal = 1;
 function inputChange(updatePerformance, id, game, isExtra, scoreType, e, setUpdatePerformance, netID) {
+    console.log("game - ",game);
     const findItem = updatePerformance.find((elm, i) => elm.performanceID === id && elm.game === game);
     if (isExtra) {
         if (findItem) {

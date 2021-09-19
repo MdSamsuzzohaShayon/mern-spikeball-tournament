@@ -4,7 +4,7 @@ import RoundTable from './RoundTable';
 
 function Round(props) {
 
-    // console.log(props);
+    // console.log("Props - ",props);
     // if()
     // useEffect(() => {
     //     console.log("Component did mount [Round.jsx]");

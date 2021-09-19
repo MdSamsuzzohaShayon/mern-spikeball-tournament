@@ -3,7 +3,7 @@ import { round1Total, round2Total, round3Total, round4Total, totalPoint } from '
 import { round1TD, round2TD, round3TD, round4TD, totalDeferential } from '../../utils/pointDeferential';
 
 
-const Round1 = (props) => {
+const Point = (props) => {
     // console.log(props);
 
     const addWithRound = (roundNum, p) => {
@@ -69,4 +69,4 @@ const Round1 = (props) => {
     );
 }
 
-export default Round1;
+export default Point;

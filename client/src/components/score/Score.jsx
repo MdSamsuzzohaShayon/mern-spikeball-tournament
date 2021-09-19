@@ -17,6 +17,7 @@ class Score extends Component {
             round2: [],
             round3: [],
             round4: [],
+            round5: [],
             allRank: [],
 
             activeItem: 1,
@@ -55,6 +56,7 @@ class Score extends Component {
         if (jsonRes.round2 && jsonRes.round2.length > 0) this.setState({ round2: jsonRes.round2 });
         if (jsonRes.round3 && jsonRes.round3.length > 0) this.setState({ round3: jsonRes.round3 });
         if (jsonRes.round4 && jsonRes.round4.length > 0) this.setState({ round4: jsonRes.round4 });
+        if (jsonRes.round5 && jsonRes.round5.length > 0) this.setState({ round5: jsonRes.round5 });
         if (jsonRes.allPerformances && jsonRes.allPerformances.length > 0) this.setState({ allRank: jsonRes.allPerformances });
 
         // CHECK FOR INITIAL NET 
@@ -211,7 +213,7 @@ class Score extends Component {
                     );
                 } else {
                     return (<div className="tab-pane fade show active" >
-                        <Round roundNum={this.state.activeItem} pp={this.state.round5} round={this.state.allRound} game={this.state.game} />
+                        <Round public={this.props.admin} roundNum={this.state.activeItem} pp={this.state.round5} round={this.state.allRound} game={this.state.game} />
                     </div>);
                 }
             default:

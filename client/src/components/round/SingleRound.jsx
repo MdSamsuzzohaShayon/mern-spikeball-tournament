@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
-import { getDefaultValue, getTotal, arrangingPerformer, rankLoop } from '../../utils/helpers';
+import { getDefaultValue, serializePerformer, arrangingPerformer, getAverage } from '../../utils/helpers';
 import allPerformers from '../../utils/allPerformers';
 import AddParticipant from '../participant/AddParticipant';
 import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
@@ -299,9 +299,9 @@ function SingleRound(props) {
     // ⛏️⛏️ THIS IS MAIN RETURN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     return (
         <div className="SingleRound">
-            <div className="d-flex">
+            <div className="d-flex my-3 justify-content-start align-items-center">
                 {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
-                {!props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Rank Assign</button>}
+                {!props.initialize && <button className="btn btn-primary mx-3" onClick={assignNetHandler} >Rank Assign</button>}
                 <button className="btn btn-primary" onClick={randomAssign} >Random Assign</button>
             </div>
             {showPerformances ? (<React.Fragment>
@@ -383,7 +383,7 @@ function SingleRound(props) {
                                             <th scope="col">point deferential</th>
 
                                             {/* AVERAGE  */}
-                                            <th scope="col">Rank</th>
+                                            {/* <th scope="col">Rank</th> */}
                                             <th scope="col">Participant</th>
                                             <th scope="col">point</th>
                                             <th scope="col">point deferential</th>
@@ -410,10 +410,10 @@ function SingleRound(props) {
 
                                                 {/* AVERAGE  */}
                                                 {/* <td>{i+1} </td> */}
-                                                <td>{rankLoop(net, i + 1, rank)} </td>
-                                                <td>{arrangingPerformer(net.performance, 4)} </td>
-                                                <td >{getTotal(net, props.roundNum, "point", 4)}</td>
-                                                <td >{getTotal(net, props.roundNum, "pointDeferential", 4)}</td>
+                                                {/* <td>{rankLoop(net, i + 1, rank)} </td> */}
+                                                <td>{serializePerformer(net.performance)} </td>
+                                                <td >{getAverage(net, "point", 4)}</td>
+                                                <td >{getAverage(net, "pointDeferential", 4)}</td>
 
 
                                             </tr>
@@ -422,6 +422,7 @@ function SingleRound(props) {
                                 </table>
                             )}
                             <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
+                            <br />
                         </div>
                     )}
 

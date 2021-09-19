@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
-import Participants from './Participants';
+import Participants from '../participant/Participants';
 import Rounds from '../round/Rounds'
 import Score from "../score/Score";
 import '../../style/EventAdmin.css';

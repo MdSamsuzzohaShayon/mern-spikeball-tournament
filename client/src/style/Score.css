@@ -2,10 +2,10 @@
   height: 6.5rem;
 }
 .RoundTable .two-p .p-item {
-  height: 20px;
+  height: 18px;
 }
 .RoundTable .two-p .p-i-1 {
-  margin-top: 12px;
+  margin-top: 0;
 }
 .RoundTable .two-p .p-i-2 {
   margin-top: 10px;
@@ -14,10 +14,10 @@
   height: 6.5rem;
 }
 .RoundTable .two-pd .pd-item {
-  height: 20px;
+  height: 18px;
 }
 .RoundTable .two-pd .pd-i-1 {
-  margin-top: 12px;
+  margin-top: 8px;
 }
 .RoundTable .two-pd .pd-i-2 {
   margin-top: 10px;

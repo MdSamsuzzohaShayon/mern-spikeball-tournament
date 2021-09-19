@@ -1,6 +1,6 @@
 
-import { round1Total, round2Total, round3Total, round4Total, round5Total } from './addTotalPoint';
-import { round1TD, round2TD, round3TD, round4TD, round5TD } from './pointDeferential';
+import { round1Total, round2Total, round3Total, round4Total, round5Total, totalPoint } from './addTotalPoint';
+import { round1TD, round2TD, round3TD, round4TD, round5TD, totalDeferential } from './pointDeferential';
 
 
 // ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
@@ -297,6 +297,45 @@ export const getTotal = (net, round, score) => {
 
 
 
+// ⛏️⛏️ GET TOTAL POINT AND DIFERENTIAL FOR THIS ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+export const getAverage = (net, score) => {
+    // console.log(net.performance.length);
+    // console.log("Round - ", round);
+
+    // const totalPoint = (p) => {
+    //     return <div className="total">{round5Total(p)}</div>
+    // }
+    // const totalPD = (p) => {
+    //     return <div className="total">{round5TD(p)}</div>;
+    // }
+
+
+
+    if (score === "point") {
+        return net.performance.map((p, j) => {
+            // console.log("P");
+            // console.log(p);
+            // console.log(p.nog);
+            // console.log("Total - ",totalPoint(p));
+            return (
+                <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
+                    {(totalPoint(p) / p.nog).toFixed(2)}
+                </div>
+            )
+        });
+    }
+
+    if (score === "pointDeferential") {
+        return net.performance.map((p, j) => (
+            <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
+                {(totalDeferential(p) / p.nog).toFixed(2)}
+            </div>
+        ));
+    }
+}
+
+
+
 
 
 
@@ -375,6 +414,21 @@ export const arrangingPerformer = (performer, gor) => {
                 </div>);
         }
     }
+
+}
+
+
+
+// ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+export const serializePerformer = (performer) => {
+    // console.log("Game of round - ",gor);
+    return (
+        <div>
+            {performer.map((p, j) => (
+                <div className="player-name" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
+            ))
+            }
+        </div>);
 
 }
 

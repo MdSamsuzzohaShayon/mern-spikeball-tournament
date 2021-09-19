@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { round1Total } from '../../utils/addTotalPoint';
 import { round1TD } from '../../utils/pointDeferential';
-import { arrangingPerformer } from '../../utils/helpers';
+import { arrangingPerformer, getAverage, serializePerformer } from '../../utils/helpers';
 import inputChange from '../../utils/inputChange';
 import allPerformers from '../../utils/allPerformers';
 
@@ -250,9 +250,9 @@ function Round1(props) {
 
 
                                         {/* AVERAGE  */}
-                                        <td>{arrangingPerformer(net.performance, 4)} </td>
-                                        <td >{getTotal(net, props.roundNum, "point", 4)}</td>
-                                        <td >{getTotal(net, props.roundNum, "pointDeferential", 4)}</td>
+                                        <td>{serializePerformer(net.performance)} </td>
+                                        <td >{getAverage(net, "point", 4)}</td>
+                                        <td >{getAverage(net, "pointDeferential", 4)}</td>
                                     </tr>
                                 ))}
                             </tbody>

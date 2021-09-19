@@ -1,7 +1,7 @@
 export const totalDeferential = (performance) => {
     let deferential = 0;
     try {
-        deferential = round1TD(performance) + round2TD(performance) + round3TD(performance) + round4TD(performance);
+        deferential = round1TD(performance) + round2TD(performance) + round3TD(performance) + round4TD(performance) + round5TD(performance);
 
         if (performance.game13) { let pd = performance.game13.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }
         if (performance.game14) { let pd = performance.game14.pointDeferential.split('-'); deferential += parseInt(pd[0]) - parseInt(pd[1]); }

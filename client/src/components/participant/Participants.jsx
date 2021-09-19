@@ -176,7 +176,7 @@ const Participants = (props) => {
 
     if (props.participants) {
         return (
-            <div className="Participants">
+            <div className="Participants  mx-5 mt-3">
                 <h2 className="h2">{props.event.title}</h2>
                 {props.participants.length > 0 && (
                     <table className="table table-bordered table-hover">
