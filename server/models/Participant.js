@@ -14,10 +14,7 @@ const participantSchema = new Schema({
     cell: String,
     birthdate: String,
     payment_amount: String,
-    payment_method: {
-        type: String,
-        default: "Cash"
-    },
+    payment_method: String,
     city: {
         type: String,
         required: true
