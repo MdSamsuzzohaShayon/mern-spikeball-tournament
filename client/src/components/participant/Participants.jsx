@@ -34,16 +34,16 @@ const Participants = (props) => {
 
 
 
-    useEffect(()=>{
-        // setPartitipant({});
-        // setSelectedFile(null);
-        // setErrors([]);
-        return ()=>{
-            console.log("Participants component unmount");
-            setSelectedFile(null);
-            setPartitipant({});
-        }
-    }, []);
+    // useEffect(()=>{
+    //     // setPartitipant({});
+    //     // setSelectedFile(null);
+    //     // setErrors([]);
+    //     return ()=>{
+    //         console.log("Participants component unmount");
+    //         setSelectedFile(null);
+    //         // setPartitipant({});
+    //     }
+    // }, []);
 
 
 
@@ -51,6 +51,7 @@ const Participants = (props) => {
     const handleSaveParticipant = async (e) => {
         e.preventDefault();
         setErrors([]);
+        
         try {
             const options = {
                 method: "POST",
@@ -65,8 +66,9 @@ const Participants = (props) => {
             console.log("Add participant & performance [Participants.jsx] - ", response);
             const text = await response.text();
             const jsonRes = JSON.parse(text);
+            // console.log(jsonRes.errors.length);
             if (jsonRes.errors) {
-                if (jsonRes.errors.length > 1) {
+                if (jsonRes.errors.length >= 1) {
                     setErrors([...jsonRes.errors]);
                 }
             } else {
@@ -78,6 +80,9 @@ const Participants = (props) => {
                 console.log("Status - ", response.status);
                 setPartitipant({});
             }
+
+
+            console.log(participant);
 
             // console.log(jsonRes.errors);
 
@@ -98,6 +103,7 @@ const Participants = (props) => {
             ...participant,
             [evt.target.name]: evt.target.value
         });
+        // console.log(participant);
     }
 
 

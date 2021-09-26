@@ -6,6 +6,8 @@ EMOJIES - 📜 ⛏️ ➖ ✅
  - __HTTP://18.216.248.251/HOME__
 
 
+~~strike out~~
+
 ### PLANNING
 
 ##### MAKE MODELS

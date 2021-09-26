@@ -1,9 +1,9 @@
 import React from 'react';
 // ALL CONDITIONS RELATED TO PERFORMANCE 
-import {getTDRound, getTotalPointOfARound} from "./tptd";
+import { getTDRound, getTotalPointOfARound } from "./tptd";
 
 
-export const showLiftedPefrormance = (lp, rn) => {
+export const showLiftedPefrormance = (lp, rn, recoverLeftedPerformance, concatinable) => {
     // console.log(lp.length);
     if (lp && lp.length > 0) {
         return (<React.Fragment>
@@ -13,7 +13,9 @@ export const showLiftedPefrormance = (lp, rn) => {
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Point</th>
-                        <th scope="col">Point Diferential</th>
+                        <th scope="col">Point Differential</th>
+                        {concatinable && <th scope="col">Action</th>}
+
                     </tr>
                 </thead>
                 <tbody>
@@ -21,6 +23,8 @@ export const showLiftedPefrormance = (lp, rn) => {
                         <td>{p.participant.firstname + " " + p.participant.lastname}</td>
                         <td>{getTotalPointOfARound(p, rn)}</td>
                         <td>{getTDRound(p, rn)}</td>
+                        {concatinable && <td><button className="btn btn-primary" onClick={(e) => recoverLeftedPerformance(e, p._id)} > Add</button></td>}
+
                     </tr>))}
                 </tbody>
             </table>

@@ -25,8 +25,9 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
         // console.log(req.params.eventID);
         // const findNets = "Nets";
         const findNets = await Net.find({ event: req.params.eventID });
-        // console.log("True - l65", findNets);
+        // console.log("True - l65 ", findNets);
         if (findNets.length < 1) {
+            // console.log("True condition");
 
             // RANDOMIZE PERFORMANCE 
             const performances = await Performance.find({ event: req.params.eventID });
@@ -39,6 +40,8 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
                 randomPerformance.push(random);
                 randomPerformance = [...new Set(randomPerformance)];
             }
+
+            // console.log(randomPerformance);
 
 
 

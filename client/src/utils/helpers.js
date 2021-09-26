@@ -298,7 +298,7 @@ export const getTotal = (net, round, score) => {
 
 
 // ⛏️⛏️ GET TOTAL POINT AND DIFERENTIAL FOR THIS ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-export const getAverage = (net, score) => {
+export const getTotalPPD = (net, score) => {
     // console.log(net.performance.length);
     // console.log("Round - ", round);
 
@@ -317,20 +317,30 @@ export const getAverage = (net, score) => {
             // console.log(p);
             // console.log(p.nog);
             // console.log("Total - ",totalPoint(p));
-            return (
-                <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
-                    {(totalPoint(p) / p.nog).toFixed(2)}
-                </div>
-            )
+            if (Math.sign(totalPoint(p)) === 1) {
+                return <div className="mt-4 text-success" key={j}>{totalPoint(p).toFixed(2)}</div>;
+            } else if (Math.sign(totalPoint(p)) === (-1)) {
+                return <div className="mt-4 text-danger" key={j}>{totalPoint(p).toFixed(2)}</div>;
+            }
         });
     }
 
     if (score === "pointDeferential") {
-        return net.performance.map((p, j) => (
-            <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
-                {(totalDeferential(p) / p.nog).toFixed(2)}
-            </div>
-        ));
+        // return net.performance.map((p, j) => (
+        //     <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
+        //         {totalDeferential(p).toFixed(2)}
+        //         {/* {(totalDeferential(p) / p.nog).toFixed(2)} */}
+        //     </div>
+        // )
+        // );
+        return net.performance.map((p, j) => {
+            if (Math.sign(totalDeferential(p)) === 1) {
+                return <div className="mt-4 text-success" key={j}>{totalDeferential(p).toFixed(2)}</div>;
+            } else if (Math.sign(totalDeferential(p)) === (-1)) {
+                return <div className="mt-4 text-danger" key={j}>{totalDeferential(p).toFixed(2)}</div>;
+            }
+        }
+        );
     }
 }
 

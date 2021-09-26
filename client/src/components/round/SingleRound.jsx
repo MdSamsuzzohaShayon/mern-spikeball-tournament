@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
-import { getDefaultValue, serializePerformer, arrangingPerformer, getAverage } from '../../utils/helpers';
+import { getDefaultValue, serializePerformer, arrangingPerformer, getTotalPPD } from '../../utils/helpers';
 import allPerformers from '../../utils/allPerformers';
 import AddParticipant from '../participant/AddParticipant';
 import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
@@ -16,7 +16,7 @@ function SingleRound(props) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [performances, setPerformances] = useState([]); // PARTICIPANTS
-    const [updatePerformance, setUpdatePerformance] = useState([]);
+    const [updateTeam, setUpdateTeam] = useState([]);
     const [showPerformances, setShowPerformances] = useState(true);
     const [leftedPerformance, setLeftedPerformance] = useState([]);
 
@@ -54,8 +54,8 @@ function SingleRound(props) {
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
         setPerformances([...jsonRes.rankingPerformance]);
-        console.log("JSON");
-        console.log(jsonRes);
+        // console.log("JSON");
+        // console.log(jsonRes);
         setIsLoading(false);
         controller = null
     }
@@ -87,7 +87,7 @@ function SingleRound(props) {
             setShowPerformances(false);
             setPerformances([]);
         }
-        setUpdatePerformance([]);
+        setUpdateTeam([]);
     }, []);
 
 
@@ -99,19 +99,19 @@ function SingleRound(props) {
 
 
 
-    useEffect(() => {
-        return () => {
-            console.log("Component unmount [SingleRound.jsx]");
-            // setIsLoading(false);
-            // setPerformances([]); // PARTICIPANTS
-            // setUpdatePerformance([]);
-            // setShowPerformances(true);
-            // setLeftedPerformance([]);
-            // return controller?.abort();
-            rank = 0;
+    // useEffect(() => {
+    //     return () => {
+    //         console.log("Component unmount [SingleRound.jsx]");
+    //         // setIsLoading(false);
+    //         // setPerformances([]); // PARTICIPANTS
+    //         // setUpdateTeam([]);
+    //         // setShowPerformances(true);
+    //         // setLeftedPerformance([]);
+    //         // return controller?.abort();
+    //         // rank = 0;
 
-        };
-    });
+    //     };
+    // });
 
 
 
@@ -139,6 +139,19 @@ function SingleRound(props) {
         // setLeftedPerformance(prevState => [...prevState, newElement])
         //setLeftedPerformance([...leftedPerformance, ...performances.filter(p => p._id === pId)]);
     }
+
+
+    const recoverLeftedPerformance = (e, pId) => {
+        e.preventDefault();
+        // console.log("Pid - ", pId);
+        setPerformances((prevState => [...prevState, ...leftedPerformance.filter((p, i) => p._id === pId)]));
+        setLeftedPerformance((prevState) => {
+            // console.log("Previous state - ", prevState);
+            // console.log("New State - ", newState);
+            return [...prevState.filter((p, i) => p._id !== pId)]
+        });
+    }
+
 
 
 
@@ -220,19 +233,18 @@ function SingleRound(props) {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
             credentials: "include",
-            body: JSON.stringify(updatePerformance)
+            body: JSON.stringify(updateTeam)
         };
         // console.log(props.eventID);
 
 
         // console.log(props.round._id);
 
-        const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
+        console.log("Update Performance - ", updateTeam);
+        // const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         // console.log("Update - ", response);
-        console.log("Update Performance - ", updatePerformance);
-
-        setUpdatePerformance([]);
-        props.updateNets(true);
+        // setUpdateTeam([]);
+        // props.updateNets(true);
     }
 
 
@@ -240,11 +252,11 @@ function SingleRound(props) {
 
 
 
-
+    // e, team2, game, score, net._id, false, team1
 
     // ⛏️⛏️ INPUT VALUE CHANGE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const handleInputChange = (e, id, game, scoreType, netID, isExtra) => {
-        // e.preventDefault();
+    const handleInputChange = (e, team, game, scoreType, netID, isExtra, oponent, extraPlayer, individual) => {
+        e.preventDefault();
         // console.log("Change - ", e.target.checked);
         // console.log("Performance ID - ", id);
         // console.log("round - ", round);
@@ -257,10 +269,11 @@ function SingleRound(props) {
 
 
 
-        inputChange(updatePerformance, id, game, isExtra, scoreType, e, setUpdatePerformance, netID);
+        inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam, extraPlayer, individual);
+        // inputChange(updateTeam, team, game, isExtra, scoreType, e, setUpdateTeam, netID, oponent);
 
 
-        // console.log(updatePerformance);
+        // console.log(updateTeam);
     }
 
 
@@ -324,8 +337,6 @@ function SingleRound(props) {
                         </thead>
                         <tbody>
                             {performances && performances.map((p, i) => (<tr key={i} >
-                                {console.log(isLoading)}
-                                {console.log("Participant - ", (i + 1), p.participant, p)}
                                 <td>{p.participant.firstname + " " + p.participant.lastname}</td>
                                 <td>{i + 1}</td>
                                 <td>{getTotalPointOfARound(p, props.roundNum)}</td>
@@ -336,7 +347,7 @@ function SingleRound(props) {
                     </table>
                     <br /><br />
                 </React.Fragment>)}
-                {showLiftedPefrormance(leftedPerformance, props.roundNum)}
+                {showLiftedPefrormance(leftedPerformance, props.roundNum, recoverLeftedPerformance, true)}
                 <br />
                 <br />
 
@@ -360,27 +371,30 @@ function SingleRound(props) {
                                     <thead className="r-thead bg-dark text-light text-center">
                                         <tr>
                                             <th colSpan="1" scope="colgroup"></th>
-                                            <th colSpan="3" scope="colgroup">Game {props.game[0]}</th>
-                                            <th colSpan="3" scope="colgroup">Game {props.game[1]}</th>
-                                            <th colSpan="3" scope="colgroup">Game {props.game[2]}</th>
-                                            <th colSpan="4" scope="colgroup">Average</th>
+                                            <th colSpan="4" scope="colgroup">Game {props.game[0]}</th>
+                                            <th colSpan="4" scope="colgroup">Game {props.game[1]}</th>
+                                            <th colSpan="4" scope="colgroup">Game {props.game[2]}</th>
+                                            <th colSpan="3" scope="colgroup">Total</th>
                                         </tr>
                                         <tr>
                                             <th scope="col">Net</th>
 
                                             <th scope="col">Team</th>
-                                            <th scope="col">point</th>
-                                            <th scope="col">point deferential</th>
+                                            <th scope="col">Score</th>
+                                            <th scope="col">Point</th>
+                                            <th scope="col">point differential</th>
 
 
                                             <th scope="col">Team</th>
-                                            <th scope="col">point</th>
-                                            <th scope="col">point deferential</th>
+                                            <th scope="col">Score</th>
+                                            <th scope="col">Point</th>
+                                            <th scope="col">point differential</th>
 
 
                                             <th scope="col">Team</th>
-                                            <th scope="col">point</th>
-                                            <th scope="col">point deferential</th>
+                                            <th scope="col">Score</th>
+                                            <th scope="col">Point</th>
+                                            <th scope="col">point differential</th>
 
                                             {/* AVERAGE  */}
                                             {/* <th scope="col">Rank</th> */}
@@ -395,15 +409,18 @@ function SingleRound(props) {
                                                 <th scope="row">Net {net.sl || i + 1}</th>
 
                                                 <td>{arrangingPerformer(net.performance, 1)} </td>
+                                                <td >{allPerformers(net, props.game[0], "score", 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                 <td >{allPerformers(net, props.game[0], "point", 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                 <td>{allPerformers(net, props.game[0], "pointDeferential", 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
 
                                                 <td>{arrangingPerformer(net.performance, 2)} </td>
                                                 <td >{allPerformers(net, props.game[1], "point", 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                                <td >{allPerformers(net, props.game[1], "score", 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                 <td>{allPerformers(net, props.game[1], "pointDeferential", 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
                                                 <td>{arrangingPerformer(net.performance, 3)} </td>
+                                                <td >{allPerformers(net, props.game[2], "score", 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                 <td >{allPerformers(net, props.game[2], "point", 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                 <td>{allPerformers(net, props.game[2], "pointDeferential", 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
@@ -412,8 +429,8 @@ function SingleRound(props) {
                                                 {/* <td>{i+1} </td> */}
                                                 {/* <td>{rankLoop(net, i + 1, rank)} </td> */}
                                                 <td>{serializePerformer(net.performance)} </td>
-                                                <td >{getAverage(net, "point", 4)}</td>
-                                                <td >{getAverage(net, "pointDeferential", 4)}</td>
+                                                <td >{getTotalPPD(net, "point", 4)}</td>
+                                                <td >{getTotalPPD(net, "pointDeferential", 4)}</td>
 
 
                                             </tr>
@@ -427,7 +444,7 @@ function SingleRound(props) {
                     )}
 
 
-                    {showLiftedPefrormance(leftedPerformance, props.roundNum)}
+                    {showLiftedPefrormance(leftedPerformance, props.roundNum, null, false)}
                 </div>
             )}
             <br />

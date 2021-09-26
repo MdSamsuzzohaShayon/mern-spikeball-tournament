@@ -33,7 +33,7 @@ router.get('/:eventID', async (req, res, next) => {
 router.post('/:eventID',
     check('firstname', "Firstname must not empty").notEmpty(),
     check('lastname', "Lastname must not empty").notEmpty(),
-    check('city', "Must must not empty").notEmpty(),
+    check('city', "City must not empty").notEmpty(),
     async (req, res, next) => {
         const valErrs = validationResult(req);
 
@@ -52,7 +52,7 @@ router.post('/:eventID',
                     cell,
                     birthdate,
                     city,
-                    payment_amount: parseInt(payment_amount),
+                    payment_amount,
                     payment_method,
                     event: req.params.eventID
                 });
@@ -157,7 +157,7 @@ router.post('/multiple/:eventID', (req, res, next) => {
 
 
                 // // console.log("JSON OBJECT");
-                // // console.log(jsonObj);
+                // console.log("JSON OBJECT - ", jsonObj);
 
 
                 const errors = [];
@@ -174,15 +174,25 @@ router.post('/multiple/:eventID', (req, res, next) => {
                 }
                 if (msg) errors.push({ msg });
 
-                // console.log(allParticipant);
+                // console.log("All Participant - ", allParticipant);
 
 
 
                 if (errors.length > 0) {
+                    // console.log("No errors");
                     Participant.insertMany(allParticipant).then(function (participant) {
-                        console.log(allParticipant);
+                        // console.log(allParticipant);
                         // console.log("Has errors");
                         // console.log("Data inserted", participant);  // Success
+                        const performanceList = [];
+                        for (let per of participant) {
+                            performanceList.push({ participant: per._id, event: req.params.eventID });
+                        }
+                        // console.log("insert many performance - ");
+                        Performance.insertMany(performanceList).then(p => {
+                            console.log("Inserted all performance - ", p);
+                        });
+
                         participant.forEach((p, i) => {
                             // console.log(p._id);
                             Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: p._id } }, { new: true }).then((data) => {
@@ -199,6 +209,7 @@ router.post('/multiple/:eventID', (req, res, next) => {
                         console.log(error)      // Failure
                     });
                 } else {
+                    // console.log("Has errors");
                     Participant.insertMany(allParticipant).then(function (participant) {
                         // console.log(participant);
                         const performanceList = [];
