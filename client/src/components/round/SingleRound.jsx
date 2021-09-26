@@ -17,6 +17,7 @@ function SingleRound(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [performances, setPerformances] = useState([]); // PARTICIPANTS
     const [updateTeam, setUpdateTeam] = useState([]);
+    const [updatePerformance, setUpdatePerformance] = useState([]);
     const [showPerformances, setShowPerformances] = useState(true);
     const [leftedPerformance, setLeftedPerformance] = useState([]);
 
@@ -233,18 +234,18 @@ function SingleRound(props) {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
             credentials: "include",
-            body: JSON.stringify(updateTeam)
+            body: JSON.stringify({updatePerformance, updateTeam})
         };
         // console.log(props.eventID);
 
 
         // console.log(props.round._id);
 
-        console.log("Update Performance - ", updateTeam);
-        // const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
-        // console.log("Update - ", response);
-        // setUpdateTeam([]);
-        // props.updateNets(true);
+
+        const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
+        console.log("Update - ", response);
+        setUpdateTeam([]);
+        props.updateNets(true);
     }
 
 
@@ -269,7 +270,7 @@ function SingleRound(props) {
 
 
 
-        inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam, extraPlayer, individual);
+        inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam, extraPlayer, individual, updatePerformance, setUpdatePerformance);
         // inputChange(updateTeam, team, game, isExtra, scoreType, e, setUpdateTeam, netID, oponent);
 
 

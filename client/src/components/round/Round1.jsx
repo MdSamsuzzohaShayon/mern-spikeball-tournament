@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { round1Total } from '../../utils/addTotalPoint';
 import { round1TD } from '../../utils/pointDeferential';
-import { arrangingPerformer, getTotalPPD, serializePerformer } from '../../utils/helpers';
+import { arrangingPerformer, getTotalPPD, serializePerformer, getDefaultValue } from '../../utils/helpers';
 import inputChange from '../../utils/inputChange';
 import allPerformers from '../../utils/allPerformers';
 
@@ -13,6 +13,7 @@ function Round1(props) {
     const [selectedExtra, setSelectedExtra] = useState(initialExtra);
     const [isLoading, setIsLoading] = useState(false);
     const [updateTeam, setUpdateTeam] = useState([]);
+    const [updatePerformance, setUpdatePerformance] = useState([]);
 
 
 
@@ -88,18 +89,19 @@ function Round1(props) {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
             credentials: "include",
-            body: JSON.stringify(updateTeam)
+            body: JSON.stringify({updatePerformance, updateTeam})
         };
         // console.log(props.eventID);
 
 
         // console.log(props.round._id);
+        // console.log("Update team - ", updateTeam);
+        // console.log("Update Performance - ", updatePerformance);
 
-        console.log("Update Performance - ", updateTeam);
-        // const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
-        // console.log("Update - ", response);
-        // setUpdateTeam([]);
-        // props.updateNets(true);
+        const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
+        console.log("Update - ", response);
+        setUpdateTeam([]);
+        props.updateNets(true);
     }
 
 
@@ -122,7 +124,7 @@ function Round1(props) {
         // inputChange(updateTeam, id, game, isExtra, scoreType, e, setUpdateTeam, netID, partner);
         // console.log("Team 1 ",team);
         // console.log("Team 2 ",oponent);
-        inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam, extraPlayer, individual, teamNum);
+        inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam, extraPlayer, individual, teamNum, updatePerformance, setUpdatePerformance);
     }
 
 
@@ -134,6 +136,7 @@ function Round1(props) {
 
 
     // ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+    /*
     const getDefaultValue = (p, scoreType, gameNum) => {
         if (scoreType === "point") {
             switch (gameNum) {
@@ -158,6 +161,7 @@ function Round1(props) {
             }
         }
     }
+    */
 
 
 
@@ -165,6 +169,7 @@ function Round1(props) {
 
 
 
+    /*
     const getTotal = (net, round, score) => {
         // console.log(score);
         if (score === "point") {
@@ -182,6 +187,7 @@ function Round1(props) {
             ));
         }
     }
+    */
 
 
 

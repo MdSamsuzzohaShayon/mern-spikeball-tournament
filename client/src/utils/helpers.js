@@ -3,11 +3,13 @@ import { round1Total, round2Total, round3Total, round4Total, round5Total, totalP
 import { round1TD, round2TD, round3TD, round4TD, round5TD, totalDeferential } from './pointDeferential';
 
 
+// team1.player1, score, game, props.roundNum
 // ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
     // console.log("Performance - ", p);
     // console.log("Game num - ", gameNum);
     // console.log("Round num - ", roundNum);
+    // console.log("score type - ", scoreType);
     if (roundNum === 1) {
         if (scoreType === "point") {
             switch (gameNum) {
@@ -19,9 +21,7 @@ export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                 case 3:
                     if (p.game3 && p.game3 !== undefined) { return p.game3.point } else { return null };
             }
-        }
-
-        if (scoreType === "pointDeferential") {
+        } else if (scoreType === "pointDeferential") {
             // console.log(p, round2.pointDeferential);
             switch (gameNum) {
                 case 1:
@@ -30,6 +30,15 @@ export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game2 && p.game2 !== undefined) { return p.game2.pointDeferential } else { return null };
                 case 3:
                     if (p.game3 && p.game3 !== undefined) { return p.game3.pointDeferential } else { return null };
+            }
+        } else if (scoreType === "score") {
+            switch (gameNum) {
+                case 1:
+                    if (p.game1 && p.game1 !== undefined) { return p.game1.score } else { return null };
+                case 2:
+                    if (p.game2 && p.game2 !== undefined) { return p.game2.score } else { return null };
+                case 3:
+                    if (p.game3 && p.game3 !== undefined) { return p.game3.score } else { return null };
             }
         }
     }

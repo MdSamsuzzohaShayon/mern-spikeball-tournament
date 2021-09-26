@@ -325,7 +325,125 @@ const updatedPerformance = (pu, roundNum, doc, netID) => {
 }
 
 
-module.exports = updatedPerformance;
+
+const updatedTeam = (ut, roundNum, score, tp, tpd, netID) => {
+    if (roundNum == 1) {
+        switch (ut.game) {
+            case 1:
+                let game1 = new Object();
+                game1.score = score;
+                game1.point = tp;
+                game1.pointDeferential = tpd;
+                return { game1 }
+            case 2:
+                let game2 = new Object();
+                game2.score = score;
+                game2.point = tp;
+                game2.pointDeferential = tpd;
+                return { game2 }
+            case 3:
+                let game3 = new Object();
+                game3.score = score;
+                game3.point = tp;
+                game3.pointDeferential = tpd;
+                return { game3 }
+        }
+
+
+
+
+
+    } else if (roundNum == 2) {
+        switch (ut.game) {
+            case 4:
+                let game4 = new Object();
+                game4.score = score;
+                game4.point = tp;
+                game4.pointDeferential = tpd;
+                return { game4 }
+
+            case 5:
+                let game5 = new Object();
+                game5.score = score;
+                game5.point = tp;
+                game5.pointDeferential = tpd;
+                return { game5 }
+            case 6:
+                let game6 = new Object();
+                game6.score = score;
+                game6.point = tp;
+                game6.pointDeferential = tpd;
+                return { game6 }
+        }
+    } else if (roundNum == 3) {
+        switch (ut.game) {
+            case 7:
+                let game7 = new Object();
+                game7.score = score;
+                game7.point = tp;
+                game7.pointDeferential = tpd;
+                return { game7 }
+            case 8:
+                let game8 = new Object();
+                game8.score = score;
+                game8.point = tp;
+                game8.pointDeferential = tpd;
+                return { game8 }
+            case 9:
+                let game9 = new Object();
+                game9.score = score;
+                game9.point = tp;
+                game9.pointDeferential = tpd;
+                return { game9 }
+        }
+    }
+    else if (roundNum == 4) {
+        switch (ut.game) {
+            case 10:
+                game10.score = score;
+                game10.point = tp;
+                game10.pointDeferential = tpd;
+                return { game10 }
+            case 11:
+                let game11 = new Object();
+                game11.score = score;
+                game11.point = tp;
+                game11.pointDeferential = tpd;
+                return { game11 }
+            case 12:
+                let game12 = new Object();
+                game12.score = score;
+                game12.point = tp;
+                game12.pointDeferential = tpd;
+
+                return { game12 }
+        }
+    } else if (roundNum == 5) {
+        switch (ut.game) {
+            case 13:
+                let game13 = new Object();
+                game13.score = score;
+                game13.point = tp;
+                game13.pointDeferential = tpd;
+                return { game13 }
+            case 14:
+                let game14 = new Object();
+                game14.score = score;
+                game14.point = tp;
+                game14.pointDeferential = tpd;
+                return { game14 }
+            case 15:
+                let game15 = new Object();
+                game15.score = score;
+                game15.point = tp;
+                game15.pointDeferential = tpd;
+                return { game15 }
+        }
+    }
+}
+
+
+module.exports = { updatedPerformance, updatedTeam };
 
 
 

@@ -10,7 +10,7 @@ const Performance = require('../models/Performance');
 
 const { check, validationResult } = require('express-validator');
 const { wholeRanking } = require('../utils/ranking');
-const updatedPerformance = require('../utils/updatedPerformance');
+const { updatedPerformance, updatedTeam } = require('../utils/updatedPerformance');
 const { replaceKeys } = require('../utils/helpers');
 
 
@@ -84,45 +84,6 @@ router.post('/:eventID',
 
 
 
-// firstname,lastname,email,cell,birthdate,city
-/* ⛏️⛏️ CREATE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-/*
-router.post('/dashboard/participant/:eventID',
-    check('firstname', "Firstname must not empty").notEmpty(),
-    check('lastname', "Lastname must not empty").notEmpty(),
-    check('city', "Must must not empty").notEmpty(),
-    async (req, res, next) => {
-        const valErrs = validationResult(req);
-
-        const { firstname, lastname, email, cell, birthdate, city, payment_amount, payment_method } = req.body;
-        // console.log(req.body);
-        if (!valErrs.isEmpty()) {
-            console.log(valErrs);
-            return res.status(400).json({ errors: valErrs.errors });
-        } else {
-            try {
-
-                const newParticipant = new Participant({
-                    firstname,
-                    lastname,
-                    email,
-                    cell,
-                    birthdate,
-                    city,
-                    payment_amount: parseInt(payment_amount),
-                    payment_method,
-                    event: req.params.eventID
-                });
-                const participant = await newParticipant.save();
-                const event = await Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: participant._id } }, { new: true });
-                console.log(event);
-                res.status(200).json({ msg: 'Create partipipant and referancing to event', participant, event });
-            } catch (error) {
-                res.json(error);
-            }
-        }
-    });
-*/
 
 
 /* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
@@ -256,37 +217,54 @@ router.post('/multiple/:eventID', (req, res, next) => {
 
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.put('/update-performance/:eventID/:round', (req, res, next) => {
-    // FIND THE NET AND PERFORMANCE AND UPDATE PERFORMANCE
-    // const nets = await Net.findOne({ _id: req.params.netID }).populate({ path: "performance", populate: { path: "participant" } });
-    // const net = await Net.findOne({ _id: req.params.netID }, {$pull: {performance: ["6120ccc897bd511d81fe9908"]}});
-    // console.log("Round - ",req.params.round);
+    // console.log(req.body);
+    const { updatePerformance, updateTeam } = req.body;
+    const { round, event } = req.params;
+    // console.log("--------------------------------------------------------------------------");
+    // console.log("--------------------------------------------------------------------------");
+    // console.log("--------------------------------------------------------------------------");
+    // console.log("--------------------------------------------------------------------------");
+    // console.log(updatePerformance);
+    // console.log(updateTeam);
 
+
+    updateTeam.forEach((ut, i) => {
+        let t1pd = ut.team1.score - ut.team2.score;
+        let t2pd = ut.team2.score - ut.team1.score;
+
+
+        let t1p = 0, t2p = 0;
+        if (t1pd > t2pd) {
+            t1p = 1;
+        } else {
+            t2p = 1;
+        }
+        // console.log("team 1 point - ", t1p);
+        // console.log("team 2 point - ", t2p);
+        // if (t2p < t1p) {
+        // }
+
+
+        // SHOULD USE UPDATE MANY 
+        // TEAM 1
+        Performance.findByIdAndUpdate(ut.team1.player1, updatedTeam(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => {if (err) throw err});
+        Performance.findByIdAndUpdate(ut.team1.player2, updatedTeam(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => {if (err) throw err});
+
+        // TEAM 2
+        Performance.findByIdAndUpdate(ut.team2.player1, updatedTeam(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => {if (err) throw err});
+        Performance.findByIdAndUpdate(ut.team2.player2, updatedTeam(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => {if (err) throw err});
+    });
+
+
+    /*
     const performanceUpdate = req.body;
-    // console.log("Updated performance", performanceUpdate);
     performanceUpdate.forEach((pu, i) => {
-        // console.log(pu);
-        // console.log(pu.netID);
-        // console.log(updatedPerformance(pu, req.params.round));
-        // Performance.findByIdAndUpdate(pu.performanceID, updatedPerformance(pu, req.params.round), (err, docs) => {
-        //     // console.log(pu);
-        //     if (err) throw err;
-        //     console.log("Found - ", docs);
-        // });
-
-
-
-        // Using queries with promise chaining
-        // Model.findOne({ name: 'Mr. Anderson' }).
-        // then(doc => Model.updateOne({ _id: doc._id }, { name: 'Neo' })).
-        // then(() => Model.findOne({ name: 'Neo' })).
-        // then(doc => console.log(doc.name)); // 'Neo'
-
-
         Performance.findOne({ _id: pu.performanceID })
             .then(doc => Performance.updateOne({ _id: doc._id }, updatedPerformance(pu, req.params.round, doc, pu.netID)))
             .then(result => console.log("Updated - ", result))
             .catch(err => console.log(err));
     });
+    */
     // UPDATE EXISTING PERFORMANCE
     res.status(200).json({ msg: 'Get net and participant' });
 });
