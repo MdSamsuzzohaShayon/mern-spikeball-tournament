@@ -2,6 +2,7 @@
 const Net = require('../models/Net');
 const Performance = require('../models/Performance');
 
+/*
 const updatedPerformance = (pu, roundNum, doc, netID) => {
     // console.log("Docs - ", doc);
     // console.log(roundNum);
@@ -323,10 +324,11 @@ const updatedPerformance = (pu, roundNum, doc, netID) => {
 
     // console.log("NOG - ", nog);
 }
+*/
 
 
 
-const updatedTeam = (ut, roundNum, score, tp, tpd, netID) => {
+const updatedPerformance = (ut, roundNum, score, tp, tpd, netID) => {
     if (roundNum == 1) {
         switch (ut.game) {
             case 1:
@@ -443,11 +445,12 @@ const updatedTeam = (ut, roundNum, score, tp, tpd, netID) => {
 }
 
 
-module.exports = { updatedPerformance, updatedTeam };
+module.exports = updatedPerformance;
 
 
 
 
+/*
 function updateNogInDB(nog, doc, netID) {
 
     // console.log("NOG - ", nog);
@@ -467,4 +470,5 @@ function updateNogInDB(nog, doc, netID) {
         });
     }
 }
+*/
 

@@ -4,7 +4,6 @@
 function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam, extraPlayerId, individual, teamNum, updatePerformance, setUpdatePerformance) {
     // ONE RECORD FOR ONE NET 
 
-    // console.log("Game of round - ", game);
     // console.log("game - ",game);
     // console.log("Score Type  - ",scoreType);
     // console.log("Update team - ", updateTeam);
@@ -12,7 +11,7 @@ function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTe
     // console.log("team 1 - ", team1);
     // console.log("team 2 - ", team2);
     // console.log("Team Num - ", teamNum);
-    // console.log("Oponent team - ", oponent);
+
     // IF THERE IS NO VALUE FOR OPONENT - SET DEFAULT VALUE 
     // console.log("Is extra - ",isExtra);
 
@@ -24,6 +23,10 @@ function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTe
 
 
     if (scoreType === "score") {
+        // console.log("-----------😱😱Score😱😱----------------");
+        // console.log("Game of round - ", game);
+        // console.log("Team - ",team);
+        // console.log("Oponent team - ", oponent);
         // A NET THAT HAS LESS THAN 4 PLAYERS 
         if (individual === true) {
             let score = parseInt(e.target.value);

@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const scoreSchema = new Schema({
     score: { type: Number, default: 0 },
     point: { type: Number, default: 0 },
-    pointDeferential: { type: String, default: '0-0' },
+    pointDeferential: { type: Number, default: 0 },
 });
 
 

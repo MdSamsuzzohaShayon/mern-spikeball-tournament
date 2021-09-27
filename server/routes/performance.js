@@ -10,7 +10,7 @@ const Performance = require('../models/Performance');
 
 const { check, validationResult } = require('express-validator');
 const { wholeRanking } = require('../utils/ranking');
-const { updatedPerformance, updatedTeam } = require('../utils/updatedPerformance');
+const updatedPerformance = require('../utils/updatedPerformance');
 const { replaceKeys } = require('../utils/helpers');
 
 
@@ -224,7 +224,7 @@ router.put('/update-performance/:eventID/:round', (req, res, next) => {
     // console.log("--------------------------------------------------------------------------");
     // console.log("--------------------------------------------------------------------------");
     // console.log("--------------------------------------------------------------------------");
-    // console.log(updatePerformance);
+    console.log(updatePerformance);
     // console.log(updateTeam);
 
 
@@ -233,31 +233,42 @@ router.put('/update-performance/:eventID/:round', (req, res, next) => {
         let t2pd = ut.team2.score - ut.team1.score;
 
 
+        // if(ut.game === 1){
+
+        // }
         let t1p = 0, t2p = 0;
         if (t1pd > t2pd) {
             t1p = 1;
-        } else {
+        } else if (t1pd < t2pd) {
             t2p = 1;
         }
-        // console.log("team 1 point - ", t1p);
-        // console.log("team 2 point - ", t2p);
-        // if (t2p < t1p) {
-        // }
 
 
         // SHOULD USE UPDATE MANY 
         // TEAM 1
-        Performance.findByIdAndUpdate(ut.team1.player1, updatedTeam(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => {if (err) throw err});
-        Performance.findByIdAndUpdate(ut.team1.player2, updatedTeam(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => {if (err) throw err});
+        Performance.findByIdAndUpdate(ut.team1.player1, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err });
+        Performance.findByIdAndUpdate(ut.team1.player2, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err });
 
         // TEAM 2
-        Performance.findByIdAndUpdate(ut.team2.player1, updatedTeam(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => {if (err) throw err});
-        Performance.findByIdAndUpdate(ut.team2.player2, updatedTeam(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => {if (err) throw err});
+        Performance.findByIdAndUpdate(ut.team2.player1, updatedPerformance(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err });
+        Performance.findByIdAndUpdate(ut.team2.player2, updatedPerformance(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err });
     });
 
 
+
+    updatePerformance.forEach((pu, i) => {
+        let point = 0, pointDeferential = 0, score = 0;
+        if (pu.score > 0) {
+            point = 1;
+            pointDeferential = pu.score;
+            score = pu.score;
+        }
+        Performance.findByIdAndUpdate(pu.pId, updatedPerformance(pu, round, score, point, pointDeferential, pu.netID), (err, docs) => { if (err) throw err });
+    });
+
+
+
     /*
-    const performanceUpdate = req.body;
     performanceUpdate.forEach((pu, i) => {
         Performance.findOne({ _id: pu.performanceID })
             .then(doc => Performance.updateOne({ _id: doc._id }, updatedPerformance(pu, req.params.round, doc, pu.netID)))
@@ -265,6 +276,7 @@ router.put('/update-performance/:eventID/:round', (req, res, next) => {
             .catch(err => console.log(err));
     });
     */
+
     // UPDATE EXISTING PERFORMANCE
     res.status(200).json({ msg: 'Get net and participant' });
 });
