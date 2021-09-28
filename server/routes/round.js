@@ -13,7 +13,6 @@ const router = express.Router();
 
 
 
-// get-net 
 // ⛏️⛏️ GET SINGLE ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
     try {
@@ -47,7 +46,7 @@ router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
 
         // console.log(findRound);
         let leftRound = null;
-        
+
         if (findRound) {
             leftRound = await Performance.find({ _id: { $in: findRound.left } })
                 .populate({
@@ -85,24 +84,35 @@ router.get('/ranking/:eventID', async (req, res, next) => {
             }
         }).exec();
 
+        // console.log(rounds);
+
 
 
 
         let round1 = null, round2 = null, round3 = null, round4 = null, round5 = null;
+        let round1NR = null, round2NR = null, round3NR = null, round4NR = null, round5NR = null;
         const round1Slice = rounds.filter(r => r.no === 1)[0];
+        // console.log(round1Slice);
         if (round1Slice) {
-            const round1Asscending = round1Slice.performances.sort(rankingRound1);
-            round1 = round1Asscending.filter(r => r.game1 || r.game2 || r.game3);
+            // const round1Asscending = round1Slice.performances.sort(rankingRound1);
+            // round1 = round1Asscending.filter(r => r.game1 || r.game2 || r.game3);
+            round1 = round1Slice.performances.sort(rankingRound1);
+            round1NR = round1Slice;
+
         }
 
 
 
         const round2Slice = rounds.filter(r => r.no === 2)[0];
-        // console.log(round2Slice);
         if (round2Slice) {
-            const round2Asscending = round2Slice.performances.sort(rankingRound2Ind);
-            round2 = round2Asscending.filter(r => r.game4 || r.game5 || r.game6);
+            round2 = round2Slice.performances.sort(rankingRound2Ind);
+            // const round2Asscending = round2Slice.performances.sort(rankingRound2Ind);
+            // round2 = round2Asscending.filter(r => r.game4 || r.game5 || r.game6);
+            // round2Asscending.forEach(r2=> console.log(r2));
+            // console.log(round2Asscending);
             // console.log(round2);
+            round2NR = round2Slice;
+
         }
 
 
@@ -110,27 +120,36 @@ router.get('/ranking/:eventID', async (req, res, next) => {
 
         const round3Slice = rounds.filter(r => r.no === 3)[0];
         if (round3Slice) {
-            const round3Asscending = round3Slice.performances.sort(rankingRound3Ind);
-            round3 = round3Asscending.filter(r => r.game7 || r.game8 || r.game9);
+            round3 = round3Slice.performances.sort(rankingRound3Ind);
+            // const round3Asscending = round3Slice.performances.sort(rankingRound3Ind);
+            // round3 = round3Asscending.filter(r => r.game7 || r.game8 || r.game9);
+            round3NR = round3Slice;
+
         }
 
 
         const round4Slice = rounds.filter(r => r.no === 4)[0];
         if (round4Slice) {
-            const round4Asscending = round4Slice.performances.sort(rankingRound4Ind);
-            round4 = round4Asscending.filter(r => r.game10 || r.game11 || r.game12);
+            round4 = round4Slice.performances.sort(rankingRound4Ind);
+            // const round4Asscending = round4Slice.performances.sort(rankingRound4Ind);
+            // round4 = round4Asscending.filter(r => r.game10 || r.game11 || r.game12);
+            round4NR = round4Slice;
+
         }
 
 
         const round5Slice = rounds.filter(r => r.no === 5)[0];
         if (round5Slice) {
-            const round4Asscending = round5Slice.performances.sort(rankingRound4Ind);
-            round5 = round4Asscending.filter(r => r.game10 || r.game11 || r.game12);
+            round5 = round5Slice.performances.sort(rankingRound5Ind);
+            // const round4Asscending = round5Slice.performances.sort(rankingRound4Ind);
+            // round5 = round4Asscending.filter(r => r.game10 || r.game11 || r.game12);
+            round5NR = round5Slice;
+
         }
 
 
 
-        res.status(201).json({ msg: "rank performance and inatilize performance", allPerformances, round1, round2, round3, round4, round5 })
+        res.status(201).json({ msg: "rank performance and inatilize performance", allPerformances, round1, round2, round3, round4, round5, round1NR, round2NR, round3NR, round4NR, round5NR })
 
     } catch (error) {
         console.log(error);

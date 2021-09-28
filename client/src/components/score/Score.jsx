@@ -18,6 +18,11 @@ class Score extends Component {
             round3: [],
             round4: [],
             round5: [],
+            round1NR: [],
+            round2NR: [],
+            round3NR: [],
+            round4NR: [],
+            round5NR: [],
             allRank: [],
 
             activeItem: 1,
@@ -45,18 +50,28 @@ class Score extends Component {
         this.setState({ isLoading: true });
 
 
-        // console.log(this.state.currentEventID);
+        // console.log(this.state.currentEventID); /get-single-round/:eventID/:round
         const response = await fetch(`${hostname}/api/round/ranking/${this.state.currentEventID}`, requestOptions);
         console.log("Get nets from round with ranking - ", response);
         const text = await response.text();
         const jsonRes = await JSON.parse(text);
         // console.log("JSON");
-        // console.log(jsonRes);
+        // console.log(jsonRes.round2);
         if (jsonRes.round1 && jsonRes.round1.length > 0) this.setState({ round1: jsonRes.round1 });
         if (jsonRes.round2 && jsonRes.round2.length > 0) this.setState({ round2: jsonRes.round2 });
         if (jsonRes.round3 && jsonRes.round3.length > 0) this.setState({ round3: jsonRes.round3 });
         if (jsonRes.round4 && jsonRes.round4.length > 0) this.setState({ round4: jsonRes.round4 });
         if (jsonRes.round5 && jsonRes.round5.length > 0) this.setState({ round5: jsonRes.round5 });
+
+        // // NO RANK 
+        // if (jsonRes.round1NR && jsonRes.round1NR.length > 0) this.setState({ round1NR: jsonRes.round1NR });
+        // if (jsonRes.round2NR && jsonRes.round2NR.length > 0) this.setState({ round2NR: jsonRes.round2NR });
+        // if (jsonRes.round3NR && jsonRes.round3NR.length > 0) this.setState({ round3NR: jsonRes.round3NR });
+        // if (jsonRes.round4NR && jsonRes.round4NR.length > 0) this.setState({ round4NR: jsonRes.round4NR });
+        // if (jsonRes.round5NR && jsonRes.round5NR.length > 0) this.setState({ round5NR: jsonRes.round5NR });
+
+
+
         if (jsonRes.allPerformances && jsonRes.allPerformances.length > 0) this.setState({ allRank: jsonRes.allPerformances });
 
         // CHECK FOR INITIAL NET 
@@ -127,6 +142,9 @@ class Score extends Component {
         // console.log(item);
         e.preventDefault();
         // setActiveItem(item);
+        if(!this.props.admin){
+            this.findRound(item);
+        }
         this.setState({ activeItem: item })
         // findRankingRound(item);
         if (item === 1) {
@@ -227,7 +245,7 @@ class Score extends Component {
     render() {
         const one = 1, two = 2, three = 3, four = 4, five = 5;
         return (
-            <div className="Event">
+            <div className="Score">
                 {this.state.isLoading ? (<div className="text-center spinner-parent">
                     <div className="spinner-border text-danger spinner-child" role="status">
                     </div>

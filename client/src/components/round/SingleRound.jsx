@@ -396,7 +396,6 @@ function SingleRound(props) {
                                             <th scope="col">point differential</th>
 
                                             {/* AVERAGE  */}
-                                            {/* <th scope="col">Rank</th> */}
                                             <th scope="col">Participant</th>
                                             <th scope="col">point</th>
                                             <th scope="col">point deferential</th>

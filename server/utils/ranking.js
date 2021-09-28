@@ -122,6 +122,8 @@ function pdtR5(ab) {
 
 module.exports.rankingRound1 = (a, b) => {
     let pointA = 0, pointB = 0;
+    // console.log("Round 1 t p a - ", addR1(a));
+    // console.log("Round 1 t p b - ", addR1(b));
     pointA = addR1(a);
     pointB = addR1(b);
     if (pointA > pointB) {
@@ -185,6 +187,7 @@ module.exports.rankingRound2Ind = (a, b) => {
     let pointA = 0, pointB = 0;
     pointA = addR2(a);
     pointB = addR2(b);
+    // console.log(pointA);
     // console.log(pointB);
     if (pointA > pointB) {
         return -1;
@@ -304,7 +307,7 @@ module.exports.rankingRound4Ind = (a, b) => {
         return -1;
     }
     if (pointB > pointA) {
-        return 1
+        return 1;
     }
     if (pointA == pointB) {
         let pdta = 0, pdtb = 0;
@@ -334,7 +337,7 @@ module.exports.rankingRound5 = (a, b) => {
         return -1;
     }
     if (pointB > pointA) {
-        return 1
+        return 1;
     }
     if (pointA == pointB) {
         let pdta = 0, pdtb = 0;

@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { getDefaultValue, arrangingPerformer } from '../../utils/helpers';
 
 
-function SingleRound(props) {
+function RoundTable(props) {
 
     const [isLoading, setIsLoading] = useState(false);
 
 
     const { nets } = props.round;
+
     // console.log("Found Round");
-    // console.log(nets);
+    // console.log("Nets - ",nets);
+    // console.log("Game - ", props.game);
+    
+
 
 
 
@@ -24,6 +28,7 @@ function SingleRound(props) {
     // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     useEffect(() => {
+        console.log("Round - ", props.round);
         console.log("Component did mount [RoundTable.jsx]");
     }, []);
 
@@ -36,12 +41,12 @@ function SingleRound(props) {
 
 
 
-    useEffect(() => {
-        return () => {
-            console.log("Component unmount [RoundTable.jsx]");
+    // useEffect(() => {
+    //     return () => {
+    //         console.log("Component unmount [RoundTable.jsx]");
 
-        };
-    });
+    //     };
+    // });
 
 
 
@@ -255,7 +260,7 @@ function SingleRound(props) {
     )
 }
 
-export default SingleRound;
+export default RoundTable;
 
 
 

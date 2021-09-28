@@ -6,10 +6,10 @@ function Round(props) {
 
     // console.log("Props - ",props);
     // if()
-    // useEffect(() => {
-    //     console.log("Component did mount [Round.jsx]");
+    useEffect(() => {
+        console.log("Component did mount [Round.jsx]");
         
-    // }, []);
+    }, []);
 
     return (
         <div className="Round">
@@ -18,7 +18,7 @@ function Round(props) {
                     <div className="col-md-6">
                         <div className="roundwise-ranking">
                             <h2 className="h2">Round {props.roundNum}</h2>
-                            <Point roundNum={1} pp={props.pp} />
+                            <Point roundNum={props.roundNum} pp={props.pp} />
                         </div>
                     </div>
                 )}
