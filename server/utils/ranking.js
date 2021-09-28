@@ -44,7 +44,7 @@ function addR5(ab) {
 
 
 
-
+/*
 function pdtR1(ab) {
     let pdt = 0;
     if (ab.game1) {
@@ -63,44 +63,31 @@ function pdtR1(ab) {
     }
     return pdt;
 }
+*/
+
+function pdtR1(ab) {
+    let pdt = 0;
+    if (ab.game1) pdt += ab.game1.pointDeferential;
+    if (ab.game2) pdt += ab.game2.pointDeferential;
+    if (ab.game3) pdt += ab.game3.pointDeferential;
+    return pdt;
+}
 
 
 function pdtR2(ab) {
     let pdt = 0;
-    if (ab.game4) {
-        let pd = ab.game4.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
-
-    if (ab.game5) {
-        let pd = ab.game5.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
-
-    if (ab.game6) {
-        let pd = ab.game6.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
+    if (ab.game4) pdt += ab.game4.pointDeferential;
+    if (ab.game5) pdt += ab.game5.pointDeferential
+    if (ab.game6) pdt += ab.game6.pointDeferential;
     return pdt;
 }
 
 
 function pdtR3(ab) {
     let pdt = 0;
-    if (ab.game7) {
-        let pd = ab.game7.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
-
-    if (ab.game8) {
-        let pd = ab.game8.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
-
-    if (ab.game9) {
-        let pd = ab.game9.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
+    if (ab.game7) pdt += ab.game7.pointDeferential;
+    if (ab.game8) pdt += ab.game8.pointDeferential;
+    if (ab.game9) pdt += ab.game9.pointDeferential;
     return pdt;
 }
 
@@ -108,20 +95,9 @@ function pdtR3(ab) {
 
 function pdtR4(ab) {
     let pdt = 0;
-    if (ab.game10) {
-        let pd = ab.game10.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
-
-    if (ab.game11) {
-        let pd = ab.game11.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
-
-    if (ab.game12) {
-        let pd = ab.game12.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
+    if (ab.game10) pdt += ab.game10.pointDeferential;
+    if (ab.game11) pdt += ab.game11.pointDeferential;
+    if (ab.game12) pdt += ab.game12.pointDeferential;
     return pdt;
 }
 
@@ -129,20 +105,9 @@ function pdtR4(ab) {
 
 function pdtR5(ab) {
     let pdt = 0;
-    if (ab.game13) {
-        let pd = ab.game13.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
-
-    if (ab.game14) {
-        let pd = ab.game14.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
-
-    if (ab.game15) {
-        let pd = ab.game15.pointDeferential.split('-');
-        pdt += parseInt(pd[0]) - parseInt(pd[1]);
-    }
+    if (ab.game13) pdt += ab.game13.pointDeferential;
+    if (ab.game14) pdt += ab.game14.pointDeferential;
+    if (ab.game15) pdt += ab.game15.pointDeferential;
     return pdt;
 }
 

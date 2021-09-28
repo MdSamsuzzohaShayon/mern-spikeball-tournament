@@ -253,10 +253,10 @@ function SingleRound(props) {
 
 
 
-    // e, team2, game, score, net._id, false, team1
+
 
     // ⛏️⛏️ INPUT VALUE CHANGE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const handleInputChange = (e, team, game, scoreType, netID, isExtra, oponent, extraPlayer, individual) => {
+    const handleInputChange = (e, team, game, scoreType, netID, isExtra, oponent, extraPlayer, individual, teamNum) => {
         e.preventDefault();
         // console.log("Change - ", e.target.checked);
         // console.log("Performance ID - ", id);
@@ -268,9 +268,7 @@ function SingleRound(props) {
         // console.log(e.target.checked);
         // console.log(e.target.value);
 
-
-
-        inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam, extraPlayer, individual, updatePerformance, setUpdatePerformance);
+        inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam, extraPlayer, individual, teamNum, updatePerformance, setUpdatePerformance);
         // inputChange(updateTeam, team, game, isExtra, scoreType, e, setUpdateTeam, netID, oponent);
 
 

@@ -9,7 +9,6 @@ export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
     // console.log("Performance - ", p);
     // console.log("Game num - ", gameNum);
     // console.log("Round num - ", roundNum);
-    // console.log("score type - ", scoreType);
     if (roundNum === 1) {
         if (scoreType === "point") {
             switch (gameNum) {
@@ -67,6 +66,15 @@ export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                 case 6:
                     if (p.game6 && p.game6 !== undefined) { return p.game6.pointDeferential } else { return null };
             }
+        } else if (scoreType === "score") {
+            switch (gameNum) {
+                case 4:
+                    if (p.game4 && p.game4 !== undefined) { return p.game4.score } else { return null };
+                case 5:
+                    if (p.game5 && p.game5 !== undefined) { return p.game5.score } else { return null };
+                case 6:
+                    if (p.game6 && p.game6 !== undefined) { return p.game6.score } else { return null };
+            }
         }
     } else if (roundNum === 3) {
         if (scoreType === "point") {
@@ -90,6 +98,15 @@ export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game8 && p.game8 !== undefined) { return p.game8.pointDeferential } else { return null };
                 case 9:
                     if (p.game9 && p.game9 !== undefined) { return p.game9.pointDeferential } else { return null };
+            }
+        } else if (scoreType === "score") {
+            switch (gameNum) {
+                case 7:
+                    if (p.game7 && p.game7 !== undefined) { return p.game7.score } else { return null };
+                case 8:
+                    if (p.game8 && p.game8 !== undefined) { return p.game8.score } else { return null };
+                case 9:
+                    if (p.game9 && p.game9 !== undefined) { return p.game9.score } else { return null };
             }
         }
     } else if (roundNum === 4) {
@@ -115,6 +132,15 @@ export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                 case 12:
                     if (p.game12 && p.game12 !== undefined) { return p.game12.pointDeferential } else { return null };
             }
+        } else if (scoreType === "score") {
+            switch (gameNum) {
+                case 10:
+                    if (p.game10 && p.game10 !== undefined) { return p.game10.score } else { return null };
+                case 11:
+                    if (p.game11 && p.game11 !== undefined) { return p.game11.score } else { return null };
+                case 12:
+                    if (p.game12 && p.game12 !== undefined) { return p.game12.score } else { return null };
+            }
         }
     } else if (roundNum === 5) {
         if (scoreType === "point") {
@@ -139,25 +165,34 @@ export const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                 case 15:
                     if (p.game15 && p.game15 !== undefined) { return p.game15.pointDeferential } else { return null };
             }
+        } else if (scoreType === "score") {
+            switch (gameNum) {
+                case 13:
+                    if (p.game13 && p.game13 !== undefined) { return p.game13.score } else { return null };
+                case 14:
+                    if (p.game14 && p.game14 !== undefined) { return p.game14.score } else { return null };
+                case 15:
+                    if (p.game15 && p.game15 !== undefined) { return p.game15.score } else { return null };
+            }
         }
     }
 
 }
 
 
-let r = 0;
-export const rankLoop = (net, i, rank) => {
-    // rank ++;
-    // console.log(rank);
-    // console.log("Called");
-    // r = r + 1;
-    return net.performance.map((p, pi) => {
-        // console.log("J - ", j);
-        rank++;
-        return rank;
-    });
-    // return <div>{i}</div>
-}
+// let r = 0;
+// export const rankLoop = (net, i, rank) => {
+//     // rank ++;
+//     // console.log(rank);
+//     // console.log("Called");
+//     // r = r + 1;
+//     return net.performance.map((p, pi) => {
+//         // console.log("J - ", j);
+//         rank++;
+//         return rank;
+//     });
+//     // return <div>{i}</div>
+// }
 
 
 
@@ -168,25 +203,29 @@ export const getTotal = (net, round, score) => {
     // console.log("Round - ", round);
 
     const roundwisePoint = (p) => {
-        if (round === 2) {
-            return <div className="total">{round2Total(p)}</div>
+        if (round === 1) {
+            return <div className="total">{round1Total(p)}</div>
+        } else if (round === 2) {
+            return <div className="total">{round1Total(p) + round2Total(p)}</div>
         } else if (round === 3) {
-            return <div className="total">{round3Total(p)}</div>
+            return <div className="total">{round1Total(p) + round2Total(p) + round3Total(p)}</div>
         } else if (round === 4) {
-            return <div className="total">{round4Total(p)}</div>
+            return <div className="total">{round1Total(p) + round2Total(p) + round3Total(p) + round4Total(p)}</div>
         } else if (round === 5) {
-            return <div className="total">{round5Total(p)}</div>
+            return <div className="total">{round1Total(p) + round2Total(p) + round3Total(p) + round4Total(p) + round5Total(p)}</div>
         }
     }
     const roundwisePD = (p) => {
-        if (round === 2) {
-            return <div className="total">{round2TD(p)}</div>;
+        if (round === 1) {
+            return <div className="total">{round1TD(p)}</div>;
+        } else if (round === 2) {
+            return <div className="total">{round1TD(p) + round2TD(p)}</div>;
         } else if (round === 3) {
-            return <div className="total">{round3TD(p)}</div>;
+            return <div className="total">{round1TD(p) + round2TD(p) + round3TD(p)}</div>;
         } else if (round === 4) {
-            return <div className="total">{round4TD(p)}</div>;
+            return <div className="total">{round1TD(p) + round2TD(p) + round3TD(p) + round4TD(p)}</div>;
         } else if (round === 5) {
-            return <div className="total">{round5TD(p)}</div>;
+            return <div className="total">{round1TD(p) + round2TD(p) + round3TD(p) + round4TD(p) + round5TD(p)}</div>;
         }
     }
 
@@ -330,6 +369,8 @@ export const getTotalPPD = (net, score) => {
                 return <div className="mt-4 text-success" key={j}>{totalPoint(p).toFixed(2)}</div>;
             } else if (Math.sign(totalPoint(p)) === (-1)) {
                 return <div className="mt-4 text-danger" key={j}>{totalPoint(p).toFixed(2)}</div>;
+            } else {
+                return <div className="mt-4" key={j}>{totalPoint(p).toFixed(2)}</div>;
             }
         });
     }
@@ -347,6 +388,8 @@ export const getTotalPPD = (net, score) => {
                 return <div className="mt-4 text-success" key={j}>{totalDeferential(p).toFixed(2)}</div>;
             } else if (Math.sign(totalDeferential(p)) === (-1)) {
                 return <div className="mt-4 text-danger" key={j}>{totalDeferential(p).toFixed(2)}</div>;
+            } else {
+                return <div className="mt-4" key={j}>{totalDeferential(p).toFixed(2)}</div>;
             }
         }
         );
