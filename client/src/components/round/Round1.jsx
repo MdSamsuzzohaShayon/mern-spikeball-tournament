@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../../utils/global';
-import { round1Total } from '../../utils/addTotalPoint';
-import { round1TD } from '../../utils/pointDeferential';
-import { arrangingPerformer, getTotalPPD, serializePerformer, getDefaultValue } from '../../utils/helpers';
+import { hostname, POINT, POINT_DIFFERENTIAL, SCORE } from '../../utils/global';
+// import { round1Total } from '../../utils/addTotalPoint';
+// import { round1TD } from '../../utils/pointDeferential';
+import { arrangingPerformer, serializePerformer } from '../../utils/helpers';
+import { getTotalPPD } from '../../utils/getTotalPPD';
+import getDefaultValue from '../../utils/defaultValue';
 import inputChange from '../../utils/inputChange';
 import allPerformers from '../../utils/allPerformers';
 
@@ -170,7 +172,7 @@ function Round1(props) {
     // ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     /*
     const getDefaultValue = (p, scoreType, gameNum) => {
-        if (scoreType === "point") {
+        if (scoreType === POINT) {
             switch (gameNum) {
                 case 1:
                     if (p.game1 && p.game1 !== undefined) { return p.game1.point } else { return null };
@@ -181,7 +183,7 @@ function Round1(props) {
             }
         }
 
-        if (scoreType === "pointDeferential") {
+        if (scoreType === POINT_DIFFERENTIAL) {
             // console.log(p, round2.pointDeferential);
             switch (gameNum) {
                 case 1:
@@ -204,14 +206,14 @@ function Round1(props) {
     /*
     const getTotal = (net, round, score) => {
         // console.log(score);
-        if (score === "point") {
+        if (score === POINT) {
             return net.performance.map((p, j) => (
                 <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
                     <div className="total">{round1Total(p)}</div>
                 </div>
             ));
         }
-        if (score === "pointDeferential") {
+        if (score === POINT_DIFFERENTIAL) {
             return net.performance.map((p, j) => (
                 <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
                     <div className="total">{round1TD(p)}</div>
@@ -282,26 +284,26 @@ function Round1(props) {
                                         <th scope="row">Net {net.sl || i + 1}</th>
 
                                         <td>{arrangingPerformer(net.performance, 1)} </td>
-                                        <td >{allPerformers(net, props.game[0], "score", 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td >{allPerformers(net, props.game[0], "point", 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td>{allPerformers(net, props.game[0], "pointDeferential", 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
+                                        <td >{allPerformers(net, props.game[0], SCORE, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                        <td >{allPerformers(net, props.game[0], POINT, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                        <td>{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
 
                                         <td>{arrangingPerformer(net.performance, 2)} </td>
-                                        <td >{allPerformers(net, props.game[1], "score", 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td >{allPerformers(net, props.game[1], "point", 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td>{allPerformers(net, props.game[1], "pointDeferential", 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
+                                        <td >{allPerformers(net, props.game[1], SCORE, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                        <td >{allPerformers(net, props.game[1], POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                        <td>{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
                                         <td>{arrangingPerformer(net.performance, 3)} </td>
-                                        <td >{allPerformers(net, props.game[2], "score", 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td >{allPerformers(net, props.game[2], "point", 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td>{allPerformers(net, props.game[2], "pointDeferential", 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
+                                        <td >{allPerformers(net, props.game[2], SCORE, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                        <td >{allPerformers(net, props.game[2], POINT, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                        <td>{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
 
                                         {/* AVERAGE  */}
                                         <td>{serializePerformer(net.performance)} </td>
-                                        <td >{getTotalPPD(net, "point", 4)}</td>
-                                        <td >{getTotalPPD(net, "pointDeferential", 4)}</td>
+                                        <td >{getTotalPPD(net, POINT, 4)}</td>
+                                        <td >{getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</td>
                                     </tr>
                                 ))}
                             </tbody>

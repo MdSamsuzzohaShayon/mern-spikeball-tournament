@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getDefaultValue, arrangingPerformer, checkNegativeP, checkNegativePD } from '../../utils/helpers';
+import {  arrangingPerformer, checkNegativeP, checkNegativePD } from '../../utils/helpers';
+import {POINT, POINT_DIFFERENTIAL, SCORE} from '../../utils/global';
+import getDefaultValue from '../../utils/defaultValue';
 
 
 function RoundTable(props) {
@@ -68,7 +70,7 @@ function RoundTable(props) {
         // console.log(game);
         // console.log(score);
 
-        if (score === "point") {
+        if (score === POINT) {
             if (net.performance.length < 4) {
                 return net.performance.map((p, j) => (
                     <div className="f-point d-flex flex-column" key={j}>
@@ -122,7 +124,7 @@ function RoundTable(props) {
                 }
             }
         }
-        if (score === "pointDeferential") {
+        if (score === POINT_DIFFERENTIAL) {
             if (net.performance.length < 4) {
                 return net.performance.map((p, j) => (
                     <div className="f-point-differential" key={j}>
@@ -241,18 +243,18 @@ function RoundTable(props) {
                                         <th scope="row">Net {net.sl || i + 1}</th>
 
                                         <td>{arrangingPerformer(net.performance, 1)} </td>
-                                        <td >{allPerformers(net, props.game[0], "point", 1, getDefaultValue)} </td>
-                                        <td >{allPerformers(net, props.game[0], "pointDeferential", 1, getDefaultValue)} </td>
+                                        <td >{allPerformers(net, props.game[0], POINT, 1, getDefaultValue)} </td>
+                                        <td >{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, getDefaultValue)} </td>
 
 
                                         <td>{arrangingPerformer(net.performance, 2)} </td>
-                                        <td >{allPerformers(net, props.game[1], "point", 2, getDefaultValue)} </td>
-                                        <td >{allPerformers(net, props.game[1], "pointDeferential", 2, getDefaultValue)} </td>
+                                        <td >{allPerformers(net, props.game[1], POINT, 2, getDefaultValue)} </td>
+                                        <td >{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, getDefaultValue)} </td>
 
 
                                         <td>{arrangingPerformer(net.performance, 3)} </td>
-                                        <td >{allPerformers(net, props.game[2], "point", 3, getDefaultValue)} </td>
-                                        <td >{allPerformers(net, props.game[2], "pointDeferential", 3, getDefaultValue)} </td>
+                                        <td >{allPerformers(net, props.game[2], POINT, 3, getDefaultValue)} </td>
+                                        <td >{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, getDefaultValue)} </td>
 
                                     </tr>
                                 ))}

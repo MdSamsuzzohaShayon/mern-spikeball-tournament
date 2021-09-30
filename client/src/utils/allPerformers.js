@@ -1,5 +1,6 @@
 import React from 'react';
 import { checkNegativePD } from './helpers';
+import { POINT, POINT_DIFFERENTIAL, SCORE } from './global';
 // gor = GAME OF ROUND 
 // ⛏️⛏️ INPUT FIELD FOR ALL PARTICIPANT OR PERFORMANCE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue, addExtra, showInput, props) => {
@@ -9,7 +10,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
     // console.log("Game - ", game, props.game);
 
 
-    if (score === "point") {
+    if (score === POINT) {
         if (net.performance.length < 4) {
             return net.performance.map((p, j) => (
                 <div className="f-point d-flex flex-column" key={j}>
@@ -19,7 +20,9 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                             <div className="extra d-flex">
                                 <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, p._id, game, props.round)} className="extra-icon" />
                                 <input type="text" style={{ display: showInput(p._id, game, props.round) }}
-                                    onChange={e => handleInputChange(e, p._id, game, score, net._id, true)} className="extra-input" />
+                                    // e, team1, game, score, net._id, false, team2, null, false, 1, gor
+                                    // (e, team, game, scoreType, netID, isExtra, oponent, extraPlayer, individual, teamNum)
+                                    onChange={e => handleInputChange(e, p._id, game, score, net._id, true, null, false, false, null)} className="extra-input" />
                             </div>
                         </React.Fragment>)}
                     </div>
@@ -139,12 +142,12 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                         </div>
 
                         <div className="point-extra d-flex jusitify-content-center align-items-center">
-                            {getDefaultValue(two, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
-                                <div className="actual-point got-point text-success">{getDefaultValue(two, score, game, props.roundNum)}</div>
+                            {getDefaultValue(four, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
+                                <div className="actual-point got-point text-success">{getDefaultValue(four, score, game, props.roundNum)}</div>
                                 <div className="extra d-flex">
-                                    <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, two._id, game, props.round)} className="extra-icon" />
-                                    <input type="text" style={{ display: showInput(two._id, game, props.round) }}
-                                        onChange={e => handleInputChange(e, two._id, game, score, net._id, true)} className="extra-input" />
+                                    <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, four._id, game, props.round)} className="extra-icon" />
+                                    <input type="text" style={{ display: showInput(four._id, game, props.round) }}
+                                        onChange={e => handleInputChange(e, four._id, game, score, net._id, true)} className="extra-input" />
                                 </div>
                             </React.Fragment>)}
                         </div>
@@ -213,7 +216,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
             }
         }
     }
-    if (score === "pointDeferential") {
+    if (score === POINT_DIFFERENTIAL) {
         if (net.performance.length < 4) {
             return net.performance.map((p, j) => (
                 <div className="f-point-differential d-flex flex-column align-items-center justify-content-center" key={j}>
@@ -264,7 +267,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
         }
     }
 
-    if (score === "score") {
+    if (score === SCORE) {
         if (net.performance.length < 4) {
             return net.performance.map((p, j) => (
                 <div className="f-point-differential d-flex flex-column align-items-center justify-content-center" key={j}>

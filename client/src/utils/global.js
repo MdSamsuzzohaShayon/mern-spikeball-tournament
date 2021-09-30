@@ -1,7 +1,10 @@
 export const hostname = "http://localhost:4000";
 
+export const POINT = "point", POINT_DIFFERENTIAL = "pointDeferential", SCORE = "score";
 
 
+
+/*
 // ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 export const getDefaultValue = (p, scoreType, gameNum) => {
     if (scoreType === "point") {
@@ -27,3 +30,4 @@ export const getDefaultValue = (p, scoreType, gameNum) => {
         }
     }
 }
+*/
