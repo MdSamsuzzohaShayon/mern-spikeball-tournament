@@ -12,6 +12,18 @@
 .show-all-nets tr .two-participant .p-rival {
   margin: 10px 0;
 }
+.show-all-nets tr .tp-point {
+  margin: 1.5em 0.5em;
+}
+.show-all-nets tr .tp-point-diffrential {
+  margin: 1.5em 0.5em;
+}
+.show-all-nets tr .player-sl {
+  margin: 1.5em 0.5em !important;
+}
+.show-all-nets tr .f-point, .show-all-nets tr .f-point-differential {
+  margin: 1.2em;
+}
 .show-all-nets tr .two-p-input {
   height: 6.5rem;
   margin-left: 5px;

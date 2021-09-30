@@ -24,6 +24,19 @@
             }
         }
 
+        .tp-point {
+            margin: $t-p-p-m;
+        }
+        .tp-point-diffrential {
+            margin: $t-p-p-m;
+        }
+        .player-sl{
+            margin: $t-p-p-m !important;
+        }
+        .f-point, .f-point-differential{
+            margin: $p-w-n-my;
+        }
+
         // .got-point{
         //     // background: rgb(148, 148, 241);
         // }
@@ -51,14 +64,12 @@
             margin: 5px 0;
         }
 
-
-        .not-mingle-point{
+        .not-mingle-point {
             margin: $p-my-ns 0;
         }
-        .player-name{
+        .player-name {
             margin: $p-my-ns 0;
         }
-
 
         .line {
             margin-top: 12px;
@@ -91,19 +102,13 @@
             margin-left: 10px;
         }
 
-
-
-
-        .extra-icon{
+        .extra-icon {
             width: 10px;
             margin-left: 5px;
         }
-        .extra-input{
+        .extra-input {
             width: $input-w;
             margin-left: 5px;
         }
-
-
-        
     }
 }

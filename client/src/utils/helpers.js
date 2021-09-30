@@ -111,7 +111,7 @@ export const serializePerformer = (performer) => {
     return (
         <div>
             {performer.map((p, j) => (
-                <div className="player-name" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
+                <div className="player-name player-sl" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
             ))
             }
         </div>);

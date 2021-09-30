@@ -424,8 +424,8 @@ function SingleRound(props) {
 
 
                                                 <td>{arrangingPerformer(net.performance, 2)} </td>
-                                                <td >{allPerformers(net, props.game[1], POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                 <td >{allPerformers(net, props.game[1], SCORE, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                                <td >{allPerformers(net, props.game[1], POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                 <td>{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
                                                 <td>{arrangingPerformer(net.performance, 3)} </td>

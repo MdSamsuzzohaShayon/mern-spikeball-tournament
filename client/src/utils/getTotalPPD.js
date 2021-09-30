@@ -171,18 +171,18 @@ export const getTotalPPD = (net, score) => {
             // console.log(p.nog);
             // console.log("Total - ",totalPoint(p));
             if (Math.sign(totalPoint(p)) === 1) {
-                return <div className="mt-4 text-success" key={j}>{totalPoint(p).toFixed(2)}</div>;
+                return <div className="tp-point text-success" key={j}>{totalPoint(p).toFixed(2)}</div>;
             } else if (Math.sign(totalPoint(p)) === (-1)) {
-                return <div className="mt-4 text-danger" key={j}>{totalPoint(p).toFixed(2)}</div>;
+                return <div className="tp-point text-danger" key={j}>{totalPoint(p).toFixed(2)}</div>;
             } else {
-                return <div className="mt-4" key={j}>{totalPoint(p).toFixed(2)}</div>;
+                return <div className="tp-point" key={j}>{totalPoint(p).toFixed(2)}</div>;
             }
         });
     }
 
     if (score === POINT_DIFFERENTIAL) {
         // return net.performance.map((p, j) => (
-        //     <div style={{ width: "100%", height: "100%" }} className="mt-4" key={j}>
+        //     <div style={{ width: "100%", height: "100%" }} className="tp-point" key={j}>
         //         {totalDeferential(p).toFixed(2)}
         //         {/* {(totalDeferential(p) / p.nog).toFixed(2)} */}
         //     </div>
@@ -190,11 +190,11 @@ export const getTotalPPD = (net, score) => {
         // );
         return net.performance.map((p, j) => {
             if (Math.sign(totalDeferential(p)) === 1) {
-                return <div className="mt-4 text-success" key={j}>{totalDeferential(p).toFixed(2)}</div>;
+                return <div className="tp-point-diffrential text-success" key={j}>{totalDeferential(p).toFixed(2)}</div>;
             } else if (Math.sign(totalDeferential(p)) === (-1)) {
-                return <div className="mt-4 text-danger" key={j}>{totalDeferential(p).toFixed(2)}</div>;
+                return <div className="tp-point-diffrential text-danger" key={j}>{totalDeferential(p).toFixed(2)}</div>;
             } else {
-                return <div className="mt-4" key={j}>{totalDeferential(p).toFixed(2)}</div>;
+                return <div className="tp-point-diffrential" key={j}>{totalDeferential(p).toFixed(2)}</div>;
             }
         }
         );

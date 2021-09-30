@@ -84,7 +84,7 @@ function RoundTable(props) {
 
                 if (gor === 1) {
                     // 1ST VS 4TH & 2ND VS 3RD
-                    return (<div className="f-point d-flex flex-column">
+                    return (<div className="player-point d-flex flex-column">
                         <div className="two-p two-p-1 d-flex flex-column justify-content-center align-items-center">
                             {checkNegativeP(getDefaultValue(one, score, game, props.roundNum), "p-i-1")}
                             {checkNegativeP(getDefaultValue(four, score, game, props.roundNum), "p-i-2")}
@@ -97,7 +97,7 @@ function RoundTable(props) {
                     </div>);
                 } else if (gor === 2) {
                     // 1ST VS 2ND & 3RD VS 4TH 
-                    return (<div className="f-point d-flex flex-column">
+                    return (<div className="player-point d-flex flex-column">
                         <div className="two-p two-p-1 d-flex flex-column justify-content-center align-items-center">
                             {checkNegativeP(getDefaultValue(one, score, game, props.roundNum), "p-i-1")}
                             {checkNegativeP(getDefaultValue(two, score, game, props.roundNum), "p-i-2")}
@@ -110,7 +110,7 @@ function RoundTable(props) {
                     </div>);
                 } else if (gor === 3) {
                     // 1ST VS 3RD & 2ND VS 4TH 
-                    return (<div className="f-point d-flex flex-column">
+                    return (<div className="player-point d-flex flex-column">
                         <div className="two-p two-p-1 d-flex flex-column justify-content-center align-items-center">
                             {checkNegativeP(getDefaultValue(one, score, game, props.roundNum), "p-i-1")}
                             {checkNegativeP(getDefaultValue(three, score, game, props.roundNum), "p-i-2")}
@@ -135,7 +135,7 @@ function RoundTable(props) {
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 if (gor === 1) {
                     // 1ST & 4TH VS 2ND & 3RD 
-                    return (<div className="f-point d-flex flex-column">
+                    return (<div className="player-point-differential d-flex flex-column">
                         <div className="two-pd two-pd-i-1 d-flex flex-column align-items-center justify-content-center">
                             {checkNegativePD(getDefaultValue(one, score, game, props.roundNum), "pd-i-1")}
                             {checkNegativePD(getDefaultValue(four, score, game, props.roundNum), "pd-i-2")}
@@ -149,7 +149,7 @@ function RoundTable(props) {
                 } else if (gor === 2) {
                     // 1ST & 2ND VS 3RD & 4TH 
                     console.log("Game of round - ", gor);
-                    return (<div className="f-point d-flex flex-column">
+                    return (<div className="player-point-differential d-flex flex-column">
                         <div className="two-pd two-pd-i-1 d-flex flex-column align-items-center justify-content-center">
                             {checkNegativePD(getDefaultValue(one, score, game, props.roundNum), "pd-i-1")}
                             {checkNegativePD(getDefaultValue(two, score, game, props.roundNum), "pd-i-2")}
@@ -162,7 +162,7 @@ function RoundTable(props) {
                     </div>);
                 } else if (gor === 3) {
                     // 1ST & 3RD VS 2ND & 4TH 
-                    return (<div className="f-point d-flex flex-column">
+                    return (<div className="player-point-differential d-flex flex-column">
                         <div className="two-pd two-pd-i-1 d-flex flex-column align-items-center justify-content-center">
                             {checkNegativePD(getDefaultValue(one, score, game, props.roundNum), "pd-i-1")}
                             {checkNegativePD(getDefaultValue(three, score, game, props.roundNum), "pd-i-2")}

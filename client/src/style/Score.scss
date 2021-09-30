@@ -1,6 +1,17 @@
 @import "./variables";
 
 .RoundTable {
+    td{
+        padding: 0;
+        margin: 0;
+    }
+    .f-point{
+    }
+    .player-point, .player-point-differential{
+        padding: 0 !important;
+        margin: 0 !important;
+
+    }
     .two-p {
         height: $t-p-height;
         .p-item {
