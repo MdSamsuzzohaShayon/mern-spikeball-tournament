@@ -27,6 +27,7 @@ function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTe
         // console.log("Game of round - ", game);
         // console.log("Team - ",team);
         // console.log("Oponent team - ", oponent);
+        // console.log("inputChange.js line 30 - ",updateTeam);
         // A NET THAT HAS LESS THAN 4 PLAYERS 
         if (individual === true) {
             let score = parseInt(e.target.value);

@@ -216,7 +216,7 @@ router.post('/multiple/:eventID', (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-performance/:eventID/:round', (req, res, next) => {
+router.put('/update-performance/:eventID/:round', async (req, res, next) => {
     // console.log(req.body);
     const { updatePerformance, updateTeam } = req.body;
     const { round, event } = req.params;
@@ -224,8 +224,8 @@ router.put('/update-performance/:eventID/:round', (req, res, next) => {
     // console.log("--------------------------------------------------------------------------");
     // console.log("--------------------------------------------------------------------------");
     // console.log("--------------------------------------------------------------------------");
-    console.log(updatePerformance);
-    // console.log(updateTeam);
+    // console.log(updatePerformance);
+    console.log(updateTeam);
 
 
     updateTeam.forEach((ut, i) => {
@@ -238,20 +238,25 @@ router.put('/update-performance/:eventID/:round', (req, res, next) => {
         // }
         let t1p = 0, t2p = 0;
         if (t1pd > t2pd) {
+            // console.log("Team 1 get point ");
             t1p = 1;
         } else if (t1pd < t2pd) {
+            // console.log("Team 2 get point ");
             t2p = 1;
         }
 
+        console.log(t1p);
+        console.log(t2p);
+        console.log("Break----------------------");
 
         // SHOULD USE UPDATE MANY 
         // TEAM 1
-        Performance.findByIdAndUpdate(ut.team1.player1, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err });
-        Performance.findByIdAndUpdate(ut.team1.player2, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err });
+        Performance.findByIdAndUpdate(ut.team1.player1, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 1 player 1'); });
+        Performance.findByIdAndUpdate(ut.team1.player2, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 1 player 2'); });
 
         // TEAM 2
-        Performance.findByIdAndUpdate(ut.team2.player1, updatedPerformance(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err });
-        Performance.findByIdAndUpdate(ut.team2.player2, updatedPerformance(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err });
+        Performance.findByIdAndUpdate(ut.team2.player1, updatedPerformance(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 2 player 1'); });
+        Performance.findByIdAndUpdate(ut.team2.player2, updatedPerformance(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 2 player 2');} );
     });
 
 

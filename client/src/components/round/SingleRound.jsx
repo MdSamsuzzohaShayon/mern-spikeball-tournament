@@ -63,6 +63,15 @@ function SingleRound(props) {
 
 
 
+    useEffect(()=>{
+        console.log("update state");
+        const points = document.querySelectorAll('.got-point');
+        const no_point = document.querySelectorAll('.no-point');
+        points.forEach((point, i)=> {
+            console.log("Parent element of point - ",point.parentElement.parentElement)
+        });
+    });
+    // }, [updateTeam, updatePerformance]);
 
 
 
@@ -324,7 +333,7 @@ function SingleRound(props) {
                     </div>
                 ) : (<React.Fragment>
                     <h2 className="h2">All players in the tournament</h2>
-                    <table className="table table-bordered">
+                    <table className="table table-bordered table-striped">
                         <thead className="table-dark">
                             <tr>
                                 <th scope="col">Name</th>

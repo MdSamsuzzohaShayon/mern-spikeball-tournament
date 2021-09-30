@@ -84,14 +84,15 @@ EMOJIES - 📜 ⛏️ ➖ ✅
  - ONLY WINNING TEAM WILL GET POINT
  - ✅ IN THE PLACE OF AVERAGE THAT WOULD BE TOTAL POINT AND POINT DIFFERENTIAL
  - ✅ FOR EXTRA NET (LESS THAN 4 PLAYER) IF THEY GET 1 THEY WILL GET POINT AND POINT DIFFERENTIAL WOULD BE 1, IF THEY GET 0 THEY WON'T GET POINT
- - ✅ Ranking by point and point differential
- - add extra point
- - ✅ get default value from db and update
- - Set default value
+ - ✅ RANKING BY POINT AND POINT DIFFERENTIAL
+ - ADD EXTRA POINT
+ - GET DEFAULT VALUE FROM DB AND UPDATE
+ - SET DEFAULT VALUE
 
 
 
  ### PROBLEM
+  - Game of round 1 , game 1 point is not working properly (first team is not getting right point)
   - COMPONENT DID UPDATE - LOGIN AUTOMITICALLY AND GET A USER
   - THERE ARE SOME PROBLEM WITH ROUND - FRONT-END
   - ✅ PROBLEM WITH LEFT PERFORMANCE

@@ -35,6 +35,38 @@ function Round1(props) {
     const { nets } = props.round;
 
 
+    /*
+    useEffect(() => {
+        console.log("update state");
+        const t_p_input = document.querySelectorAll(".two-p-input");
+        const points = document.querySelectorAll('.got-point');
+        const no_point = document.querySelectorAll('.no-point');
+        // points.forEach((point, i) => {
+        //     point.parentElement.parentElement.style.backgroundColor = "blue";
+
+        //     if (point.parentElement.parentElement.nextElementSibling) point.parentElement.parentElement.nextElementSibling.style.backgroundColor = "blue";
+        //     console.log("Parent element of point - ", point.parentElement.parentElement);
+        // });
+
+        t_p_input.forEach((tp, i)=> {
+            // console.log(tp);
+            if(tp.hasChildNodes()){
+                if(tp.childNodes[0].classList.contains('point-extra')){
+                    // tp.style.backgroundColor = "blue";
+                    console.log(tp);
+                    // console.log(tp.parentElement.parentElement.previousElementSibling);
+   
+                    // if(tp.previousElementSibling) tp.previousElementSibling.style.backgroundColor = "blue";
+                    // if(tp.nextElementSibling){
+                    //     tp.nextElementSibling.style.backgroundColor = "blue";
+                    // }
+
+                }
+            }
+        });
+    });
+    */
+    // }, [updateTeam, updatePerformance]);
 
 
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
@@ -89,7 +121,7 @@ function Round1(props) {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
             credentials: "include",
-            body: JSON.stringify({updatePerformance, updateTeam})
+            body: JSON.stringify({ updatePerformance, updateTeam })
         };
         // console.log(props.eventID);
 
@@ -209,7 +241,7 @@ function Round1(props) {
             ) : (
                 <div className="show-all-nets">
                     {!props.initialize && (
-                        <table className="table r-table table-bordered">
+                        <table className="table r-table table-bordered  table-striped">
                             <thead className="r-thead bg-dark text-light text-center">
                                 <tr>
                                     <th colSpan="1" scope="colgroup"></th>
