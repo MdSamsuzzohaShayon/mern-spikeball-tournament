@@ -9,7 +9,7 @@ function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTe
     // console.log("game - ",game);
     // console.log("Score Type  - ",scoreType);
     // console.log("Update team - ", updateTeam);
-    // console.log("Update performance - ", updatePerformance);
+    console.log("Update performance - ", updatePerformance);
     // console.log("team 1 - ", team1);
     // console.log("team 2 - ", team2);
     // console.log("Team Num - ", teamNum);
@@ -26,16 +26,16 @@ function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTe
         // console.log("Game - ", game);
         let extraPoint = parseFloat(e.target.value);
         if (isNaN(extraPoint)) extraPoint = 0;
-        // console.log("extra point - ", extraPoint);
-        const performanceID = team;
+        console.log("extra point - ", extraPoint);
+        const performanceID = extraPlayerId;
         // console.log("performance - ", per);
 
         const findPerformance = updatePerformance.find((elm, i) => elm.pId === performanceID && elm.game === game && elm.netID === netID);
-        // console.log("find ", findPerformance);
+        console.log("find ", findPerformance);
         if (findPerformance) {
             // UPDATE TEAM 
             updatePerformance.forEach((up, i) => {
-                if (up.pId === performanceID && up.netID === netID && up.game === game && extraPoint === true) {
+                if (up.pId === performanceID && up.netID === netID && up.game === game) {
                     up.extra = extraPoint;
                 }
             });

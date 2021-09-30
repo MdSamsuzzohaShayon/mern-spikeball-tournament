@@ -10,7 +10,7 @@ const Performance = require('../models/Performance');
 
 const { check, validationResult } = require('express-validator');
 const { wholeRanking } = require('../utils/ranking');
-const updatedPerformance = require('../utils/updatedPerformance');
+const { updatedPerformance, updatedExtraPerformance, getScoreFromDoc } = require('../utils/updatedPerformance');
 const { replaceKeys } = require('../utils/helpers');
 
 
@@ -225,13 +225,35 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
     // console.log("--------------------------------------------------------------------------");
     // console.log("--------------------------------------------------------------------------");
     // console.log(updatePerformance);
-    console.log(updateTeam);
+    // console.log(updateTeam);
 
 
-    updateTeam.forEach((ut, i) => {
-        let t1pd = ut.team1.score - ut.team2.score;
-        let t2pd = ut.team2.score - ut.team1.score;
+    updateTeam.forEach(async (ut, i) => {
+        let team1Score = ut.team1.score, team2Score = ut.team2.score;
+        if (team1Score === 0) {
+            // FIND PREVIOUS ITEM AND UPDATE 
+            // Performance.findByIdAndUpdate(ut.team1.player1
+            // console.log(ut.team1.player1);
+            const doc = await Performance.findById(ut.team1.player1)
+            team1Score = getScoreFromDoc(ut.game, doc);
+            // console.log("DOC 1 - ", doc);
+            // console.log("Team 1 score - ", team1Score);
 
+        }
+        if (team2Score === 0) {
+            // FIND PREVIOUS ITEM AND UPDATE 
+            const doc = await Performance.findById(ut.team2.player1);
+            team2Score = getScoreFromDoc(ut.game, doc);
+            // console.log("DOC 2 - ", doc);
+            // console.log("Team 2 score - ", team2Score);
+        }
+
+        let t1pd = team1Score - team2Score;
+        let t2pd = team2Score - team1Score;
+
+        // console.log("Point diffrential");
+        // console.log(t1pd);
+        // console.log(t2pd);
 
         // if(ut.game === 1){
 
@@ -245,30 +267,70 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
             t2p = 1;
         }
 
-        console.log(t1p);
-        console.log(t2p);
-        console.log("Break----------------------");
 
+
+
+        // console.log(t1p);
+        // console.log(t2p);
+        // console.log("Break----------------------");
+
+        /*
         // SHOULD USE UPDATE MANY 
         // TEAM 1
-        Performance.findByIdAndUpdate(ut.team1.player1, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 1 player 1'); });
-        Performance.findByIdAndUpdate(ut.team1.player2, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 1 player 2'); });
+        Performance.findOne({ _id: ut.team1.player1 })
+            .then(doc => Performance.updateOne({ _id: doc._id }, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID, doc)))
+            .then(result => console.log(result))
+            .catch(err => console.log(err));
+        Performance.findOne({ _id: ut.team1.player2 })
+            .then(doc => Performance.updateOne({ _id: doc._id }, updatedPerformance(ut, round, ut.team1.score, t1p, t1pd, ut.netID, doc)))
+            .then(result => console.log(result))
+            .catch(err => console.log(err));
+
+
+        // console.log("Update team 1");
+
+
+        Performance.findOne({ _id: ut.team2.player1 })
+            .then(doc => Performance.updateOne({ _id: doc._id }, updatedPerformance(ut, round, ut.team2.score, t1p, t1pd, ut.netID, doc)))
+            .then(result => console.log(result))
+            .catch(err => console.log(err));
+        Performance.findOne({ _id: ut.team2.player2 })
+            .then(doc => Performance.updateOne({ _id: doc._id }, updatedPerformance(ut, round, ut.team2.score, t1p, t1pd, ut.netID, doc)))
+            .then(result => console.log(result))
+            .catch(err => console.log(err));
+        console.log("Update team 2");
+        */
+
+
+
+        Performance.findByIdAndUpdate(ut.team1.player1, updatedPerformance(ut, round, team1Score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 1 player 1'); });
+        Performance.findByIdAndUpdate(ut.team1.player2, updatedPerformance(ut, round, team1Score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 1 player 2'); });
 
         // TEAM 2
-        Performance.findByIdAndUpdate(ut.team2.player1, updatedPerformance(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 2 player 1'); });
-        Performance.findByIdAndUpdate(ut.team2.player2, updatedPerformance(ut, round, ut.team2.score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 2 player 2');} );
+        Performance.findByIdAndUpdate(ut.team2.player1, updatedPerformance(ut, round, team2Score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 2 player 1'); });
+        Performance.findByIdAndUpdate(ut.team2.player2, updatedPerformance(ut, round, team2Score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 2 player 2'); });
     });
 
 
 
     updatePerformance.forEach((pu, i) => {
-        let point = 0, pointDeferential = 0, score = 0;
-        if (pu.score > 0) {
-            point = 1;
-            pointDeferential = pu.score;
-            score = pu.score;
+        // UPDATE EXTRA POINT - AWARD POINT
+        if (pu.extraPoint === true) {
+            // UPDATE PERFORMANCE POINT FOR ANY PLAYER - AWARD POINT
+            Performance.findOne({ _id: pu.pId })
+                .then(doc => Performance.updateOne({ _id: doc._id }, updatedExtraPerformance(pu, round, pu.netID, doc)))
+                .then(result => console.log("Updated point - award point ", result))
+                .catch(err => console.log(err));
+        } else {
+            // UPDATE SCORE FOR LESS THAN 4 PLAYERS NET 
+            let point = 0, pointDeferential = 0, score = 0;
+            if (pu.score > 0) {
+                point = 1;
+                pointDeferential = pu.score;
+                score = pu.score;
+            }
+            Performance.findByIdAndUpdate(pu.pId, updatedPerformance(pu, round, score, point, pointDeferential, pu.netID), (err, docs) => { if (err) throw err });
         }
-        Performance.findByIdAndUpdate(pu.pId, updatedPerformance(pu, round, score, point, pointDeferential, pu.netID), (err, docs) => { if (err) throw err });
     });
 
 
