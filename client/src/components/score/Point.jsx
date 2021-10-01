@@ -10,8 +10,8 @@ const Point = (props) => {
         switch (roundNum) {
             case 1:
                 return (<React.Fragment>
-                    {Math.sign(round1Total(p)) === -1 ? <td className="text-danger"> {round1Total(p)}</td>: <td className="text-success"> {round1Total(p)}</td>}
-                    {Math.sign(round1TD(p)) === -1 ? <td className="text-danger"> {round1TD(p)}</td>: <td className="text-success"> {round1TD(p)}</td>}
+                    {Math.sign(round1Total(p)) === -1 ? <td className="text-danger"> {round1Total(p).toFixed(2)}</td>: <td className="text-success"> {round1Total(p).toFixed(2)}</td>}
+                    {Math.sign(round1TD(p)) === -1 ? <td className="text-danger"> {round1TD(p).toFixed(2)}</td>: <td className="text-success"> {round1TD(p).toFixed(2)}</td>}
                     {/* <td> {round1Total(p)}</td> */}
                     {/* <td>{round1TD(p)}</td> */}
                 </React.Fragment>);

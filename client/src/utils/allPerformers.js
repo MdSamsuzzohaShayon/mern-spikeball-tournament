@@ -13,7 +13,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
     if (score === POINT) {
         if (net.performance.length < 4) {
             return net.performance.map((p, j) => (
-                <div className="f-point d-flex flex-column" key={j}>
+                <div className="my-3 player-point d-flex flex-column" key={j}>
                     <div className="point-extra d-flex jusitify-content-center align-items-center">
                         {getDefaultValue(p, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
                             <div className="actual-point got-point text-success">{getDefaultValue(p, score, game, props.roundNum)}</div>
@@ -33,7 +33,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
             if (gor === 1) {
                 // 1ST & 4TH VS 2ND  4TH 
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-                return (<div className="f-point d-flex flex-column">
+                return (<div className="player-point d-flex flex-column">
                     <div className="two-p-input two-p-input-1 d-flex flex-column justify-content-center">
                         <div className="point-extra d-flex jusitify-content-center align-items-center">
                             {/* <input className="form-check-input" type="checkbox"
@@ -101,7 +101,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
             } else if (gor === 2) {
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 // 1ST & 2ND VS 3RD & 4TH 
-                return (<div className="f-point d-flex flex-column">
+                return (<div className="player-point d-flex flex-column">
                     <div className="two-p-input two-p-input-1  d-flex flex-column justify-content-center">
                         <div className="point-extra d-flex jusitify-content-center align-items-center">
                             {getDefaultValue(one, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
@@ -161,7 +161,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
             } else if (gor === 3) {
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 // 1ST VS 3RD & 2ND VS 4TH 
-                return (<div className="f-point d-flex flex-column">
+                return (<div className="player-point d-flex flex-column">
                     <div className="two-p-input two-p-input-1  d-flex flex-column justify-content-center">
                         <div className="point-extra d-flex jusitify-content-center align-items-center">
                             {getDefaultValue(one, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
@@ -221,13 +221,13 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
     if (score === POINT_DIFFERENTIAL) {
         if (net.performance.length < 4) {
             return net.performance.map((p, j) => (
-                <div className="f-point-differential d-flex flex-column align-items-center justify-content-center" key={j}>
+                <div className="player-point-differential d-flex flex-column align-items-center justify-content-center my-3" key={j}>
                     <div className="pd-item">{getDefaultValue(p, score, game, props.roundNum)}</div>
                 </div>
             ));
         } else {
             if (gor === 1) {
-                return (<div className="f-point d-flex flex-column">
+                return (<div className="player-point-differential d-flex flex-column">
                     <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
                         {checkNegativePD(getDefaultValue(net.performance[0], score, game, props.roundNum), "pd-i-1")}
                         {checkNegativePD(getDefaultValue(net.performance[3], score, game, props.roundNum), "pd-i-2")}
@@ -240,7 +240,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                     </div>
                 </div>);
             } else if (gor === 2) {
-                return (<div className="f-point d-flex flex-column">
+                return (<div className="player-point-differential d-flex flex-column">
                     <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
                         {checkNegativePD(getDefaultValue(net.performance[0], score, game, props.roundNum), "pd-i-1")}
                         {checkNegativePD(getDefaultValue(net.performance[1], score, game, props.roundNum), "pd-i-2")}
@@ -253,7 +253,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                     </div>
                 </div>);
             } else if (gor === 3) {
-                return (<div className="f-point d-flex flex-column">
+                return (<div className="player-point-differential d-flex flex-column">
                     <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
                         {checkNegativePD(getDefaultValue(net.performance[0], score, game, props.roundNum), "pd-i-1")}
                         {checkNegativePD(getDefaultValue(net.performance[2], score, game, props.roundNum), "pd-i-2")}
@@ -272,7 +272,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
     if (score === SCORE) {
         if (net.performance.length < 4) {
             return net.performance.map((p, j) => (
-                <div className="f-score d-flex flex-column align-items-center justify-content-center" key={j}>
+                <div className="player-score d-flex flex-column align-items-center justify-content-center" key={j}>
                     <input
                         type="text"
                         className="form-control"
@@ -293,7 +293,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                 // 1ST & 4TH VS 2ND & 4TH 
                 const team1 = { player1: net.performance[0]._id, player2: net.performance[3]._id };
                 const team2 = { player1: net.performance[1]._id, player2: net.performance[2]._id }
-                return (<div className="f-point d-flex flex-column">
+                return (<div className="player-score d-flex flex-column">
                     <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, team1, game, score, net._id, false, team2, null, false, 1, gor)}
@@ -319,7 +319,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                 // 1ST & 2ND VS 3RD & 4TH 
                 const team1 = { player1: net.performance[0]._id, player2: net.performance[1]._id };
                 const team2 = { player1: net.performance[2]._id, player2: net.performance[3]._id };
-                return (<div className="f-point d-flex flex-column">
+                return (<div className="player-score d-flex flex-column">
                     <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, team1, game, score, net._id, false, team2, null, false, 1, gor)}
@@ -343,7 +343,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                 // 1ST & 3RD VS 2ND & 4TH 
                 const team1 = { player1: net.performance[0]._id, player2: net.performance[2]._id };
                 const team2 = { player1: net.performance[1]._id, player2: net.performance[3]._id };
-                return (<div className="f-point d-flex flex-column">
+                return (<div className="player-score d-flex flex-column">
                     <div className="two-p-input two-p-i-1 d-flex flex-column align-items-center justify-content-center">
                         <input className="form-control" type="text"
                             onChange={e => handleInputChange(e, team1, game, score, net._id, false, team2, null, false, 1, gor)}

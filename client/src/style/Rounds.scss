@@ -23,6 +23,11 @@
                 margin: $p-my 0;
             }
         }
+        .player-point, .player-point-differential, .player-score{
+            padding: 0 !important;
+            margin: 0 !important;
+    
+        }
 
         .tp-point {
             margin: $t-p-p-m;

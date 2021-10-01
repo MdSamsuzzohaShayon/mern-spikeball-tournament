@@ -668,6 +668,7 @@ module.exports.updatedPerformance = (ut, roundNum, score, tp, tpd, netID, doc) =
     } else if (roundNum == 4) {
         switch (ut.game) {
             case 10:
+                let game10 = new Object();
                 game10.score = score;
                 game10.point = tp;
                 game10.pointDeferential = tpd;

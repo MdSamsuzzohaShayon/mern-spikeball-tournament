@@ -349,8 +349,8 @@ function SingleRound(props) {
                             {performances && performances.map((p, i) => (<tr key={i} >
                                 <td>{p.participant.firstname + " " + p.participant.lastname}</td>
                                 <td>{i + 1}</td>
-                                <td>{getTotalPointOfARound(p, props.roundNum)}</td>
-                                {Math.sign(getTDRound(p, props.roundNum)) === -1 ? <td className="text-danger">{getTDRound(p, props.roundNum)}</td> : <td className="text-success">{getTDRound(p, props.roundNum)}</td>}
+                                <td>{getTotalPointOfARound(p, props.roundNum).toFixed(2)}</td>
+                                {Math.sign(getTDRound(p, props.roundNum)) === -1 ? <td className="text-danger">{getTDRound(p, props.roundNum).toFixed(2)}</td> : <td className="text-success">{getTDRound(p, props.roundNum).toFixed(2)}</td>}
                                 <td><button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button></td>
                             </tr>))}
                         </tbody>
