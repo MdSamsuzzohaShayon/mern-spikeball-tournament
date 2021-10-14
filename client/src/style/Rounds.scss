@@ -1,22 +1,24 @@
 @import "./variables";
+@import "./mixins";
 
 
+
+.Rounds{
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0;
+}
 
 // ⛏️⛏️ ROUND ONE TO FIVE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 .show-all-nets {
     tr {
         td {
-            padding: 0;
-            // margin: 0;
+            padding: 0 !important;
         }
 
         .two-participant {
-            height: $t-p-height;
-            // background: blue;
-            padding-top: 0.7em;
-            .p-rival {
-                margin: $p-my 0;
-            }
+            min-height: $t-p-height;
+            @include center_horizontally();
         }
         .player-point, .player-point-differential, .player-score{
             padding: 0 !important;
@@ -24,41 +26,51 @@
     
         }
 
-        .tp-point {
-            margin: $t-p-p-m;
-        }
-        .tp-point-diffrential {
-            margin: $t-p-p-m;
-        }
-        .player-sl{
-            margin: $t-p-p-m !important;
-        }
-        .f-point, .f-point-differential{
-            margin: $p-w-n-my;
-        }
+
+
+
+
+        // .tp-point {
+        //     margin: $t-p-p-m;
+        // }
+        // .tp-point-diffrential {
+        //     margin: $t-p-p-m;
+        // }
+
+        // .player-name, .point-extra{
+        //     height: 48px;
+        //     align-items: center;
+        // }
+
+
+
+
+        // .player-sl{
+        //     margin: $t-p-p-m !important;
+        // }
+        // .f-point, .f-point-differential{
+        //     margin: $p-w-n-my;
+        // }
 
         // .got-point{
         //     // background: rgb(148, 148, 241);
         // }
 
         .two-p-input {
-            height: $t-p-height;
-            margin-left: 5px;
-            .form-check-input {
-                margin: 8px 0;
-            }
+            min-height: $t-p-height;
+            @include center_horizontally();
         }
-        .two-p-input-1 {
-        }
-        .two-p-input-2 {
-            margin-top: 0.8em;
-        }
+        // .two-p-input-1 {
+        // }
+        // .two-p-input-2 {
+        //     margin-top: 0.8em;
+        // }
 
-        .two-p-i-1 {
-        }
-        .two-p-i-2 {
-            margin-top: 0.8em;
-        }
+        // .two-p-i-1 {
+        // }
+        // .two-p-i-2 {
+        //     margin-top: 0.8em;
+        // }
         .form-control {
             width: $input-w;
             margin: 5px 0;
@@ -67,14 +79,17 @@
         .not-mingle-point {
             margin: $p-my-ns 0;
         }
-        .player-name {
-            margin: $p-my-ns 0;
-        }
+        // .player-name {
+        //     margin: $p-my-ns 0;
+        // }
 
         .line {
             margin-top: 12px;
             width: 100%;
             position: relative;
+            @media screen and(max-width: $br-lg) {
+                margin-top: 8px;
+            }
         }
         .line::before {
             content: "";

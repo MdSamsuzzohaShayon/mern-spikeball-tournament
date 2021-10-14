@@ -71,22 +71,28 @@ const Rounds = (props) => {
 
 
 
+
+
     useEffect(() => {
         // console.log("findRound called from use effect");
         findRound(activeItem);
         // console.log("Round - ", activeItem);
 
 
+        // const netTeam = document.querySelectorAll('.f-net');
+
+
+
         // UNMOUNT 
-        return () => {
-            // console.log("Rounds Component Unmount");
-            setActiveItem(1);
-            // const [round, setRound] = useState(1);
-            setInitialize(false);
-            setRounds([]);
-            setLeftRound([]);
-            setIsLoading(false);
-        }
+        // return () => {
+        //     // // console.log("Rounds Component Unmount");
+        //     // setActiveItem(1);
+        //     // // const [round, setRound] = useState(1);
+        //     // setInitialize(false);
+        //     // setRounds([]);
+        //     // setLeftRound([]);
+        //     // setIsLoading(false);
+        // }
     }, []);
 
 

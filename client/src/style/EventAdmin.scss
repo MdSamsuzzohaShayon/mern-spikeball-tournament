@@ -3,20 +3,34 @@
 
 
 
+
 .tab-content{
     width: 100%;
+    .tab-pane{
+        width: 96%;
+        margin-left: 2%;
+        margin-top: 10px;
+    }
+}
+
+.Rounds{
+    .tab-pane{
+        @include reset_tabpane();
+    }
+}
+.Score{
+    .tab-pane{
+        @include reset_tabpane();
+    }
 }
 
 // ⛏️⛏️ PARENT COMPONENT ROUNDS  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-.Rounds {
-    // mx-lg-5 mt-3
-    @include tab_content();
-}
+// .Rounds {
+//     // mx-lg-5 mt-3
+//     @include tab_content();
+// }
 
-.Participants{
-    .participant-table{
-        width: 100vh;
-    }
-    @include tab_content();
+// .Participants{
+//     @include tab_content();
     
-}
+// }

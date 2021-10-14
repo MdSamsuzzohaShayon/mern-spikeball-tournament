@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {  arrangingPerformer, checkNegativeP, checkNegativePD } from '../../utils/helpers';
-import {POINT, POINT_DIFFERENTIAL, SCORE} from '../../utils/global';
+import { arrangingPerformer, checkNegativeP, checkNegativePD } from '../../utils/helpers';
+import { POINT, POINT_DIFFERENTIAL, SCORE } from '../../utils/global';
 import getDefaultValue from '../../utils/defaultValue';
 
 
@@ -73,7 +73,7 @@ function RoundTable(props) {
         if (score === POINT) {
             if (net.performance.length < 4) {
                 return net.performance.map((p, j) => (
-                    <div className="f-point d-flex flex-column" key={j}>
+                    <div className="f-point" key={j}>
                         {checkNegativeP(getDefaultValue(p, score, game, props.roundNum), `p-i-${j + 1}`)}
                     </div>
                 ));
@@ -84,39 +84,39 @@ function RoundTable(props) {
 
                 if (gor === 1) {
                     // 1ST VS 4TH & 2ND VS 3RD
-                    return (<div className="player-point d-flex flex-column">
-                        <div className="two-p two-p-1 d-flex flex-column justify-content-center align-items-center">
+                    return (<div className="player-point  d-flex flex-column">
+                        <div className="two-p two-p-1">
                             {checkNegativeP(getDefaultValue(one, score, game, props.roundNum), "p-i-1")}
                             {checkNegativeP(getDefaultValue(four, score, game, props.roundNum), "p-i-2")}
                         </div>
                         <div className="line"></div>
-                        <div className="two-p two-p-2  d-flex flex-column justify-content-center align-items-center">
+                        <div className="two-p two-p-2 ">
                             {checkNegativeP(getDefaultValue(two, score, game, props.roundNum), "p-i-1")}
                             {checkNegativeP(getDefaultValue(three, score, game, props.roundNum), "p-i-2")}
                         </div>
                     </div>);
                 } else if (gor === 2) {
                     // 1ST VS 2ND & 3RD VS 4TH 
-                    return (<div className="player-point d-flex flex-column">
-                        <div className="two-p two-p-1 d-flex flex-column justify-content-center align-items-center">
+                    return (<div className="player-point  d-flex flex-column">
+                        <div className="two-p two-p-1">
                             {checkNegativeP(getDefaultValue(one, score, game, props.roundNum), "p-i-1")}
                             {checkNegativeP(getDefaultValue(two, score, game, props.roundNum), "p-i-2")}
                         </div>
                         <div className="line"></div>
-                        <div className="two-p two-p-2  d-flex flex-column justify-content-center align-items-center">
+                        <div className="two-p two-p-2 ">
                             {checkNegativeP(getDefaultValue(three, score, game, props.roundNum), "p-i-1")}
                             {checkNegativeP(getDefaultValue(four, score, game, props.roundNum), "p-i-2")}
                         </div>
                     </div>);
                 } else if (gor === 3) {
                     // 1ST VS 3RD & 2ND VS 4TH 
-                    return (<div className="player-point d-flex flex-column">
-                        <div className="two-p two-p-1 d-flex flex-column justify-content-center align-items-center">
+                    return (<div className="player-point  d-flex flex-column">
+                        <div className="two-p two-p-1">
                             {checkNegativeP(getDefaultValue(one, score, game, props.roundNum), "p-i-1")}
                             {checkNegativeP(getDefaultValue(three, score, game, props.roundNum), "p-i-2")}
                         </div>
                         <div className="line"></div>
-                        <div className="two-p two-p-2  d-flex flex-column justify-content-center align-items-center">
+                        <div className="two-p two-p-2 ">
                             {checkNegativeP(getDefaultValue(two, score, game, props.roundNum), "p-i-1")}
                             {checkNegativeP(getDefaultValue(four, score, game, props.roundNum), "p-i-2")}
                         </div>
@@ -128,7 +128,7 @@ function RoundTable(props) {
             if (net.performance.length < 4) {
                 return net.performance.map((p, j) => (
                     <div className="f-point-differential" key={j}>
-                        {checkNegativePD(getDefaultValue(p, score, game, props.roundNum), `pd-i-${j+1}`)}
+                        {checkNegativePD(getDefaultValue(p, score, game, props.roundNum), `pd-i-${j + 1}`)}
                     </div>
                 ));
             } else {
@@ -136,12 +136,12 @@ function RoundTable(props) {
                 if (gor === 1) {
                     // 1ST & 4TH VS 2ND & 3RD 
                     return (<div className="player-point-differential d-flex flex-column">
-                        <div className="two-pd two-pd-i-1 d-flex flex-column align-items-center justify-content-center">
+                        <div className="two-pd two-pd-i-1 ">
                             {checkNegativePD(getDefaultValue(one, score, game, props.roundNum), "pd-i-1")}
                             {checkNegativePD(getDefaultValue(four, score, game, props.roundNum), "pd-i-2")}
                         </div>
                         <div className="line"></div>
-                        <div className="two-pd two-pd-i-2 d-flex flex-column align-items-center justify-content-center">
+                        <div className="two-pd two-pd-i-2 ">
                             {checkNegativePD(getDefaultValue(two, score, game, props.roundNum), "pd-i-1")}
                             {checkNegativePD(getDefaultValue(three, score, game, props.roundNum), "pd-i-2")}
                         </div>
@@ -150,12 +150,12 @@ function RoundTable(props) {
                     // 1ST & 2ND VS 3RD & 4TH 
                     // console.log("Game of round - ", gor);
                     return (<div className="player-point-differential d-flex flex-column">
-                        <div className="two-pd two-pd-i-1 d-flex flex-column align-items-center justify-content-center">
+                        <div className="two-pd two-pd-i-1 ">
                             {checkNegativePD(getDefaultValue(one, score, game, props.roundNum), "pd-i-1")}
                             {checkNegativePD(getDefaultValue(two, score, game, props.roundNum), "pd-i-2")}
                         </div>
                         <div className="line"></div>
-                        <div className="two-pd two-pd-i-2 d-flex flex-column align-items-center justify-content-center">
+                        <div className="two-pd two-pd-i-2 ">
                             {checkNegativePD(getDefaultValue(three, score, game, props.roundNum), "pd-i-1")}
                             {checkNegativePD(getDefaultValue(four, score, game, props.roundNum), "pd-i-2")}
                         </div>
@@ -163,12 +163,12 @@ function RoundTable(props) {
                 } else if (gor === 3) {
                     // 1ST & 3RD VS 2ND & 4TH 
                     return (<div className="player-point-differential d-flex flex-column">
-                        <div className="two-pd two-pd-i-1 d-flex flex-column align-items-center justify-content-center">
+                        <div className="two-pd two-pd-i-1 ">
                             {checkNegativePD(getDefaultValue(one, score, game, props.roundNum), "pd-i-1")}
                             {checkNegativePD(getDefaultValue(three, score, game, props.roundNum), "pd-i-2")}
                         </div>
                         <div className="line"></div>
-                        <div className="two-pd two-pd-i-2 d-flex flex-column align-items-center justify-content-center">
+                        <div className="two-pd two-pd-i-2 ">
                             {checkNegativePD(getDefaultValue(two, score, game, props.roundNum), "pd-i-1")}
                             {checkNegativePD(getDefaultValue(four, score, game, props.roundNum), "pd-i-2")}
                         </div>
@@ -204,62 +204,64 @@ function RoundTable(props) {
             ) : (
                 <div className="show-all-nets">
                     {!props.initialize && (
-                        <table className="table r-table table-bordered table-striped">
-                            <thead className="r-thead bg-dark text-light text-center">
-                                <tr>
-                                    <th colSpan="1" scope="colgroup"></th>
-                                    <th colSpan="3" scope="colgroup">Game {props.game[0]}</th>
-                                    <th colSpan="3" scope="colgroup">Game {props.game[1]}</th>
-                                    <th colSpan="3" scope="colgroup">Game {props.game[2]}</th>
-                                    {/* <th colSpan="4" scope="colgroup">Average</th> */}
-                                </tr>
-                                <tr>
-                                    <th scope="col">Net</th>
+                        <div className="table-responsive">
+                            <table className="table r-table table-bordered table-striped">
+                                <thead className="r-thead bg-dark text-light text-center">
+                                    <tr>
+                                        <th colSpan="1" scope="colgroup"></th>
+                                        <th colSpan="3" scope="colgroup">Game {props.game[0]}</th>
+                                        <th colSpan="3" scope="colgroup">Game {props.game[1]}</th>
+                                        <th colSpan="3" scope="colgroup">Game {props.game[2]}</th>
+                                        {/* <th colSpan="4" scope="colgroup">Average</th> */}
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Net</th>
 
-                                    <th scope="col">Team</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point deferential</th>
-
-
-                                    <th scope="col">Team</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point deferential</th>
+                                        <th scope="col">Team</th>
+                                        <th scope="col">point</th>
+                                        <th scope="col">point deferential</th>
 
 
-                                    <th scope="col">Team</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point deferential</th>
+                                        <th scope="col">Team</th>
+                                        <th scope="col">point</th>
+                                        <th scope="col">point deferential</th>
 
-                                    {/* AVERAGE  */}
-                                    {/* <th scope="col">Rank</th>
+
+                                        <th scope="col">Team</th>
+                                        <th scope="col">point</th>
+                                        <th scope="col">point deferential</th>
+
+                                        {/* AVERAGE  */}
+                                        {/* <th scope="col">Rank</th>
                                     <th scope="col">Participant</th>
                                     <th scope="col">point</th>
                                     <th scope="col">point deferential</th> */}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {nets && nets.map((net, i) => (
-                                    <tr key={i}>
-                                        <th scope="row">Net {net.sl || i + 1}</th>
-
-                                        <td>{arrangingPerformer(net.performance, 1)} </td>
-                                        <td >{allPerformers(net, props.game[0], POINT, 1, getDefaultValue)} </td>
-                                        <td >{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, getDefaultValue)} </td>
-
-
-                                        <td>{arrangingPerformer(net.performance, 2)} </td>
-                                        <td >{allPerformers(net, props.game[1], POINT, 2, getDefaultValue)} </td>
-                                        <td >{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, getDefaultValue)} </td>
-
-
-                                        <td>{arrangingPerformer(net.performance, 3)} </td>
-                                        <td >{allPerformers(net, props.game[2], POINT, 3, getDefaultValue)} </td>
-                                        <td >{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, getDefaultValue)} </td>
-
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {nets && nets.map((net, i) => (
+                                        <tr key={i}>
+                                            <th scope="row">Net {net.sl || i + 1}</th>
+
+                                            <td>{arrangingPerformer(net.performance, 1)} </td>
+                                            <td >{allPerformers(net, props.game[0], POINT, 1, getDefaultValue)} </td>
+                                            <td >{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, getDefaultValue)} </td>
+
+
+                                            <td>{arrangingPerformer(net.performance, 2)} </td>
+                                            <td >{allPerformers(net, props.game[1], POINT, 2, getDefaultValue)} </td>
+                                            <td >{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, getDefaultValue)} </td>
+
+
+                                            <td>{arrangingPerformer(net.performance, 3)} </td>
+                                            <td >{allPerformers(net, props.game[2], POINT, 3, getDefaultValue)} </td>
+                                            <td >{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, getDefaultValue)} </td>
+
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     )}
                 </div>
             )}

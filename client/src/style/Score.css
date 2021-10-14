@@ -2,33 +2,26 @@
   padding: 0;
   margin: 0;
 }
-.RoundTable .player-point, .RoundTable .player-point-differential {
-  padding: 0 !important;
-  margin: 0 !important;
-}
 .RoundTable .two-p {
-  height: 6.5rem;
-}
-.RoundTable .two-p .p-item {
-  height: 18px;
-}
-.RoundTable .two-p .p-i-1 {
-  margin-top: 0;
-}
-.RoundTable .two-p .p-i-2 {
-  margin-top: 10px;
+  min-height: 126px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
 }
 .RoundTable .two-pd {
-  height: 6.5rem;
+  min-height: 126px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
 }
-.RoundTable .two-pd .pd-item {
-  height: 18px;
-}
-.RoundTable .two-pd .pd-i-1 {
-  margin-top: 8px;
-}
-.RoundTable .two-pd .pd-i-2 {
-  margin-top: 10px;
+.RoundTable .players-in-net {
+  height: 252px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
 }
 
 /*# sourceMappingURL=Score.css.map */

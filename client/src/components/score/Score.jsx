@@ -246,14 +246,15 @@ class Score extends Component {
         const one = 1, two = 2, three = 3, four = 4, five = 5;
         return (
             <div className="Score">
-                {this.state.isLoading ? (<div className="text-center spinner-parent">
-                    <div className="spinner-border text-danger spinner-child" role="status">
-                    </div>
-                </div>) : (<div className="display-event-details container">
-                    <div className="whole-ranking">
-                        <h2 className="h2">Overall ranking</h2>
-                        <Point roundNum={5} pp={this.state.allRank} />
-                    </div>
+                <div className="container">
+                    {this.state.isLoading ? (<div className="text-center spinner-parent">
+                        <div className="spinner-border text-danger spinner-child" role="status">
+                        </div>
+                    </div>) : (<div className="display-event-details">
+                        <div className="whole-ranking">
+                            <h2 className="h2">Overall ranking</h2>
+                            <Point roundNum={5} pp={this.state.allRank} />
+                        </div>
 
 
 
@@ -263,17 +264,17 @@ class Score extends Component {
 
 
 
-                    <nav className="nav nav-pills">
-                        <a className="nav-link active" className={this.state.activeItem === one ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, one)}>Round 1</a>
-                        <a className="nav-link active" className={this.state.activeItem === two ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, two)}>Round 2</a>
-                        <a className="nav-link active" className={this.state.activeItem === three ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, three)}>Round 3</a>
-                        <a className="nav-link active" className={this.state.activeItem === four ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, four)}>Round 4</a>
-                        <a className="nav-link active" className={this.state.activeItem === five ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, five)}>Round 5</a>
-                        {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
-                    </nav>
-                    <div className="tab-content" >
-                        {this.showTabContent()}
-                    </div>
+                        <nav className="nav nav-pills">
+                            <a className="nav-link active" className={this.state.activeItem === one ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, one)}>Round 1</a>
+                            <a className="nav-link active" className={this.state.activeItem === two ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, two)}>Round 2</a>
+                            <a className="nav-link active" className={this.state.activeItem === three ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, three)}>Round 3</a>
+                            <a className="nav-link active" className={this.state.activeItem === four ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, four)}>Round 4</a>
+                            <a className="nav-link active" className={this.state.activeItem === five ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, five)}>Round 5</a>
+                            {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
+                        </nav>
+                        <div className="tab-content" >
+                            {this.showTabContent()}
+                        </div>
 
 
 
@@ -282,7 +283,7 @@ class Score extends Component {
 
 
 
-                    {/* <div className="row">
+                        {/* <div className="row">
                         {this.state.round1 && this.state.round1.length > 1 && (
                             <div className="col-md-6">
                                 <div className="roundwise-ranking">
@@ -321,7 +322,8 @@ class Score extends Component {
 
                     </div>
                  */}
-                </div>)}
+                    </div>)}
+                </div>
             </div>
         )
     }

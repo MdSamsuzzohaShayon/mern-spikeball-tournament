@@ -1,9 +1,21 @@
-@mixin  tab_content {
-    margin: 2rem 2rem ;
-    @media screen and (max-width: $br-md){
-        margin: 2rem 1rem ;
+@mixin tab_content {
+    margin: 2rem 2rem;
+    @media screen and (max-width: $br-lg) {
+        margin: 2rem 1rem;
     }
     .nav-link {
         cursor: pointer;
     }
+}
+
+@mixin center_horizontally {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+}
+@mixin reset_tabpane {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0;
 }

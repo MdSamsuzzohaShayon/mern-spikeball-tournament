@@ -303,8 +303,8 @@ function Round1(props) {
 
                                             {/* AVERAGE  */}
                                             <td>{serializePerformer(net.performance)} </td>
-                                            <td >{getTotalPPD(net, POINT, 4)}</td>
-                                            <td >{getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</td>
+                                            <td > <div className="players-in-net"> {getTotalPPD(net, POINT, 4)}</div></td>
+                                            <td > <div className="players-in-net"> {getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</div></td>
                                         </tr>
                                     ))}
                                 </tbody>

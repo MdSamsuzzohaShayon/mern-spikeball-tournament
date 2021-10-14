@@ -1,41 +1,29 @@
+.Rounds {
+  width: 100%;
+  margin-left: 0;
+  margin-top: 0;
+}
+
 .show-all-nets tr td {
-  padding: 0;
+  padding: 0 !important;
 }
 .show-all-nets tr .two-participant {
-  height: 6.5rem;
-  padding-top: 0.7em;
-}
-.show-all-nets tr .two-participant .p-rival {
-  margin: 10px 0;
+  min-height: 126px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
 }
 .show-all-nets tr .player-point, .show-all-nets tr .player-point-differential, .show-all-nets tr .player-score {
   padding: 0 !important;
   margin: 0 !important;
 }
-.show-all-nets tr .tp-point {
-  margin: 1.5em 0.5em;
-}
-.show-all-nets tr .tp-point-diffrential {
-  margin: 1.5em 0.5em;
-}
-.show-all-nets tr .player-sl {
-  margin: 1.5em 0.5em !important;
-}
-.show-all-nets tr .f-point, .show-all-nets tr .f-point-differential {
-  margin: 1.2em;
-}
 .show-all-nets tr .two-p-input {
-  height: 6.5rem;
-  margin-left: 5px;
-}
-.show-all-nets tr .two-p-input .form-check-input {
-  margin: 8px 0;
-}
-.show-all-nets tr .two-p-input-2 {
-  margin-top: 0.8em;
-}
-.show-all-nets tr .two-p-i-2 {
-  margin-top: 0.8em;
+  min-height: 126px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
 }
 .show-all-nets tr .form-control {
   width: 4.5rem;
@@ -44,13 +32,15 @@
 .show-all-nets tr .not-mingle-point {
   margin: 15px 0;
 }
-.show-all-nets tr .player-name {
-  margin: 15px 0;
-}
 .show-all-nets tr .line {
   margin-top: 12px;
   width: 100%;
   position: relative;
+}
+@media screen and (max-width: 992px) {
+  .show-all-nets tr .line {
+    margin-top: 8px;
+  }
 }
 .show-all-nets tr .line::before {
   content: "";
