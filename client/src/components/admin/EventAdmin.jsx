@@ -105,12 +105,14 @@ export class EventAdmin extends Component {
                         </div>
                     );
                 } else {
-                    return (<div className="tab-pane fade show active" ><Participants
+                    return (<div className="tab-pane fade show active" >
+                        <Participants
                         event={this.state.currentEvent}
                         updateEvent={this.updateEvent}
                         participants={this.state.currentEvent.participants}
                         eventID={this.state.currentEventID}
-                    /></div>);
+                    />
+                    </div>);
                 }
             case "rounds":
                 if (this.state.isLoading) {
@@ -159,7 +161,7 @@ export class EventAdmin extends Component {
                     {/* Event admin ID: {this.state.currentEventID} */}
                     <div className="Overview">
                         <div className="d-flex align-items-start dashboard-nav container-fluid">
-                            <div className="nav flex-column  nav-pills dashboard-nav-items bg-dark">
+                            <div className="nav nav-pills dashboard-nav-items bg-dark">
                                 <button className={this.state.activeTab === "event" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "event")} >Events</button>
                                 <button className={this.state.activeTab === "participants" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "participants")}  >Participants</button>
                                 <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Round</button>

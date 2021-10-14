@@ -213,7 +213,7 @@ const Rounds = (props) => {
         }
     }
     return (
-        <div className="Rounds mx-5 mt-3">
+        <div className="Rounds">
             <nav className="nav nav-pills bg-dark">
                 <a className="nav-link active" className={activeItem === 1 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 1)}>Round 1</a>
                 <a className="nav-link active" className={activeItem === 2 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 2)}>Round 2</a>

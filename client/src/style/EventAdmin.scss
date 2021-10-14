@@ -1,0 +1,22 @@
+@import "./variables";
+@import "./mixins";
+
+
+
+.tab-content{
+    width: 100%;
+}
+
+// ⛏️⛏️ PARENT COMPONENT ROUNDS  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+.Rounds {
+    // mx-lg-5 mt-3
+    @include tab_content();
+}
+
+.Participants{
+    .participant-table{
+        width: 100vh;
+    }
+    @include tab_content();
+    
+}

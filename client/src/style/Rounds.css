@@ -1,7 +1,3 @@
-.Rounds .nav-link {
-  cursor: pointer;
-}
-
 .show-all-nets tr td {
   padding: 0;
 }
@@ -11,6 +7,10 @@
 }
 .show-all-nets tr .two-participant .p-rival {
   margin: 10px 0;
+}
+.show-all-nets tr .player-point, .show-all-nets tr .player-point-differential, .show-all-nets tr .player-score {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 .show-all-nets tr .tp-point {
   margin: 1.5em 0.5em;

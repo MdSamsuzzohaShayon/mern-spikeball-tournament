@@ -12,4 +12,8 @@
   height: 4rem;
 }
 
+.table {
+  overflow-x: auto !important;
+}
+
 /*# sourceMappingURL=App.css.map */

@@ -51,7 +51,7 @@ const Participants = (props) => {
     const handleSaveParticipant = async (e) => {
         e.preventDefault();
         setErrors([]);
-        
+
         try {
             const options = {
                 method: "POST",
@@ -182,39 +182,41 @@ const Participants = (props) => {
 
     if (props.participants) {
         return (
-            <div className="Participants  mx-5 mt-3">
+            <div className="Participants">
                 <h2 className="h2">{props.event.title}</h2>
                 {props.participants.length > 0 && (
-                    <table className="table table-bordered table-hover">
-                        <thead className="bg-dark text-light">
-                            <tr>
-                                <th scope="col">SL</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Cell</th>
-                                <th scope="col">Birthdate</th>
-                                <th scope="col">Payment Amount</th>
-                                <th scope="col">Payment Method</th>
-                                <th scope="col">City</th>
-                                <th scope="col">Handle</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {props.participants.map((p, i) => (
-                                <tr key={i}>
-                                    <td >{i + 1}</td>
-                                    <td>{p.firstname + " " + p.lastname}</td>
-                                    <td>{p.email}</td>
-                                    <td>{p.cell}</td>
-                                    <td>{p.birthdate}</td>
-                                    <td>{p.payment_amount}</td>
-                                    <td>{p.payment_method}</td>
-                                    <td>{p.city}</td>
-                                    <td><button className="btn btn-danger" onClick={e => deleteParticipant(e, p._id)}>Delete</button></td>
+                    <div className="table-responsive">
+                        <table className="table table-bordered table-hover participant-table">
+                            <thead className="bg-dark text-light">
+                                <tr>
+                                    <th scope="col">SL</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Cell</th>
+                                    <th scope="col">Birthdate</th>
+                                    <th scope="col">Payment Amount</th>
+                                    <th scope="col">Payment Method</th>
+                                    <th scope="col">City</th>
+                                    <th scope="col">Handle</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {props.participants.map((p, i) => (
+                                    <tr key={i}>
+                                        <td >{i + 1}</td>
+                                        <td>{p.firstname + " " + p.lastname}</td>
+                                        <td>{p.email}</td>
+                                        <td>{p.cell}</td>
+                                        <td>{p.birthdate}</td>
+                                        <td>{p.payment_amount}</td>
+                                        <td>{p.payment_method}</td>
+                                        <td>{p.city}</td>
+                                        <td><button className="btn btn-danger" onClick={e => deleteParticipant(e, p._id)}>Delete</button></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
 
 

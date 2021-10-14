@@ -243,71 +243,74 @@ function Round1(props) {
             ) : (
                 <div className="show-all-nets">
                     {!props.initialize && (
-                        <table className="table r-table table-bordered  table-striped">
-                            <thead className="r-thead bg-dark text-light text-center">
-                                <tr>
-                                    <th colSpan="1" scope="colgroup"></th>
-                                    <th colSpan="4" scope="colgroup">Game {props.game[0]}</th>
-                                    <th colSpan="4" scope="colgroup">Game {props.game[1]}</th>
-                                    <th colSpan="4" scope="colgroup">Game {props.game[2]}</th>
-                                    <th colSpan="3" scope="colgroup">Total</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Net</th>
-
-                                    <th scope="col">Team</th>
-                                    <th scope="col">Score</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point differential</th>
-
-
-                                    <th scope="col">Team</th>
-                                    <th scope="col">Score</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point differential</th>
-
-
-                                    <th scope="col">Team</th>
-                                    <th scope="col">Score</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point differential</th>
-
-                                    {/* Total  */}
-                                    <th scope="col">Participant</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point differential</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {nets && nets.map((net, i) => (
-                                    <tr key={i}>
-                                        <th scope="row">Net {net.sl || i + 1}</th>
-
-                                        <td>{arrangingPerformer(net.performance, 1)} </td>
-                                        <td >{allPerformers(net, props.game[0], SCORE, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td >{allPerformers(net, props.game[0], POINT, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td>{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
-
-
-                                        <td>{arrangingPerformer(net.performance, 2)} </td>
-                                        <td >{allPerformers(net, props.game[1], SCORE, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td >{allPerformers(net, props.game[1], POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td>{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
-
-                                        <td>{arrangingPerformer(net.performance, 3)} </td>
-                                        <td >{allPerformers(net, props.game[2], SCORE, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td >{allPerformers(net, props.game[2], POINT, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                        <td>{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
-
-
-                                        {/* AVERAGE  */}
-                                        <td>{serializePerformer(net.performance)} </td>
-                                        <td >{getTotalPPD(net, POINT, 4)}</td>
-                                        <td >{getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</td>
+                        <div className="table-responsive">
+                            <table className="table r-table table-bordered  table-striped">
+                                <thead className="r-thead bg-dark text-light text-center">
+                                    <tr>
+                                        <th colSpan="1" scope="colgroup"></th>
+                                        <th colSpan="4" scope="colgroup">Game {props.game[0]}</th>
+                                        <th colSpan="4" scope="colgroup">Game {props.game[1]}</th>
+                                        <th colSpan="4" scope="colgroup">Game {props.game[2]}</th>
+                                        <th colSpan="3" scope="colgroup">Total</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                    <tr>
+                                        <th scope="col">Net</th>
+
+                                        <th scope="col">Team</th>
+                                        <th scope="col">Score</th>
+                                        <th scope="col">point</th>
+                                        <th scope="col">point differential</th>
+
+
+                                        <th scope="col">Team</th>
+                                        <th scope="col">Score</th>
+                                        <th scope="col">point</th>
+                                        <th scope="col">point differential</th>
+
+
+                                        <th scope="col">Team</th>
+                                        <th scope="col">Score</th>
+                                        <th scope="col">point</th>
+                                        <th scope="col">point differential</th>
+
+                                        {/* Total  */}
+                                        <th scope="col">Participant</th>
+                                        <th scope="col">point</th>
+                                        <th scope="col">point differential</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {nets && nets.map((net, i) => (
+                                        <tr key={i}>
+                                            <th scope="row">Net {net.sl || i + 1}</th>
+
+                                            <td>{arrangingPerformer(net.performance, 1)} </td>
+                                            <td >{allPerformers(net, props.game[0], SCORE, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                            <td >{allPerformers(net, props.game[0], POINT, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                            <td>{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
+
+
+                                            <td>{arrangingPerformer(net.performance, 2)} </td>
+                                            <td >{allPerformers(net, props.game[1], SCORE, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                            <td >{allPerformers(net, props.game[1], POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                            <td>{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
+
+                                            <td>{arrangingPerformer(net.performance, 3)} </td>
+                                            <td >{allPerformers(net, props.game[2], SCORE, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                            <td >{allPerformers(net, props.game[2], POINT, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                            <td>{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
+
+
+                                            {/* AVERAGE  */}
+                                            <td>{serializePerformer(net.performance)} </td>
+                                            <td >{getTotalPPD(net, POINT, 4)}</td>
+                                            <td >{getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
                     )}
                     <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
                 </div>

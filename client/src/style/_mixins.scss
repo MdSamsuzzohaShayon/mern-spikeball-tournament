@@ -1,0 +1,9 @@
+@mixin  tab_content {
+    margin: 2rem 2rem ;
+    @media screen and (max-width: $br-md){
+        margin: 2rem 1rem ;
+    }
+    .nav-link {
+        cursor: pointer;
+    }
+}

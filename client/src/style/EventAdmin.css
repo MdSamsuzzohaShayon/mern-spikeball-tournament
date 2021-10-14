@@ -1,6 +1,32 @@
-.score-board{
-    width: 100% !important;
+.tab-content {
+  width: 100%;
 }
-.tab-content{
-    width: 100% !important;
+
+.Rounds {
+  margin: 2rem 2rem;
 }
+@media screen and (max-width: 768px) {
+  .Rounds {
+    margin: 2rem 1rem;
+  }
+}
+.Rounds .nav-link {
+  cursor: pointer;
+}
+
+.Participants {
+  margin: 2rem 2rem;
+}
+.Participants .participant-table {
+  width: 100vh;
+}
+@media screen and (max-width: 768px) {
+  .Participants {
+    margin: 2rem 1rem;
+  }
+}
+.Participants .nav-link {
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=EventAdmin.css.map */
