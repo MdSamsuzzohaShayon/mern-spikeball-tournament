@@ -43,17 +43,17 @@ function RoundTable(props) {
 
 
 
-    useEffect(() => {
-        const points  = document.querySelectorAll('.got-p');
-        const point_d  = document.querySelectorAll('.got-pd');
-        points.forEach((point, i)=>{
-            console.log(point.parentElement);
-        });
-        // return () => {
-        //     console.log("Component unmount [RoundTable.jsx]");
+    // useEffect(() => {
+    //     const points  = document.querySelectorAll('.got-p');
+    //     const point_d  = document.querySelectorAll('.got-pd');
+    //     points.forEach((point, i)=>{
+    //         console.log(point.parentElement);
+    //     });
+    //     // return () => {
+    //     //     console.log("Component unmount [RoundTable.jsx]");
 
-        // };
-    });
+    //     // };
+    // });
 
 
 
@@ -148,7 +148,7 @@ function RoundTable(props) {
                     </div>);
                 } else if (gor === 2) {
                     // 1ST & 2ND VS 3RD & 4TH 
-                    console.log("Game of round - ", gor);
+                    // console.log("Game of round - ", gor);
                     return (<div className="player-point-differential d-flex flex-column">
                         <div className="two-pd two-pd-i-1 d-flex flex-column align-items-center justify-content-center">
                             {checkNegativePD(getDefaultValue(one, score, game, props.roundNum), "pd-i-1")}

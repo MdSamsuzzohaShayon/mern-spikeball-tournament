@@ -3,7 +3,7 @@ const Performance = require('../models/Performance');
 const Round = require('../models/Round');
 const Net = require('../models/Net');
 
-const { rankingRound1, wholeRanking, rankingRound2Ind, rankingRound3Ind, rankingRound4Ind } = require('../utils/ranking');
+const { rankingRound1, wholeRanking, rankingRound2Ind, rankingRound3Ind, rankingRound4Ind, rankingRound5Ind } = require('../utils/ranking');
 
 
 const router = express.Router();

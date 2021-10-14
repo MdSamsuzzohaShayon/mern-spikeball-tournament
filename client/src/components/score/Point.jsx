@@ -10,30 +10,30 @@ const Point = (props) => {
         switch (roundNum) {
             case 1:
                 return (<React.Fragment>
-                    {Math.sign(round1Total(p)) === -1 ? <td className="text-danger"> {round1Total(p).toFixed(2)}</td>: <td className="text-success"> {round1Total(p).toFixed(2)}</td>}
+                    {Math.sign(round1Total(p)) === -1 ? <td className="text-danger">dd {round1Total(p).toFixed(2)}</td>: <td className="text-success"> {round1Total(p).toFixed(2)}</td>}
                     {Math.sign(round1TD(p)) === -1 ? <td className="text-danger"> {round1TD(p).toFixed(2)}</td>: <td className="text-success"> {round1TD(p).toFixed(2)}</td>}
                     {/* <td> {round1Total(p)}</td> */}
                     {/* <td>{round1TD(p)}</td> */}
                 </React.Fragment>);
             case 2:
                 return (<React.Fragment>
-                    {Math.sign(round2Total(p)) === -1 ? <td className="text-danger"> {round2Total(p)}</td>: <td className="text-success"> {round2Total(p)}</td>}
-                    {Math.sign(round2TD(p)) === -1 ? <td className="text-danger"> {round2TD(p)}</td>: <td className="text-success"> {round2TD(p)}</td>}
+                    {Math.sign(round2Total(p)) === -1 ? <td className="text-danger"> dd{round2Total(p).toFixed(2)}</td>: <td className="text-success"> {round2Total(p).toFixed(2)}</td>}
+                    {Math.sign(round2TD(p)) === -1 ? <td className="text-danger"> {round2TD(p).toFixed(2)}</td>: <td className="text-success"> {round2TD(p).toFixed(2)}</td>}
                 </React.Fragment>);
             case 3:
                 return (<React.Fragment>
-                    {Math.sign(round3Total(p)) === -1 ? <td className="text-danger"> {round3Total(p)}</td>: <td className="text-success"> {round3Total(p)}</td>}
-                    {Math.sign(round3TD(p)) === -1 ? <td className="text-danger"> {round3TD(p)}</td>: <td className="text-success"> {round3TD(p)}</td>}
+                    {Math.sign(round3Total(p)) === -1 ? <td className="text-danger"> {round3Total(p).toFixed(2)}</td>: <td className="text-success"> {round3Total(p).toFixed(2)}</td>}
+                    {Math.sign(round3TD(p)) === -1 ? <td className="text-danger"> {round3TD(p).toFixed(2)}</td>: <td className="text-success"> {round3TD(p).toFixed(2)}</td>}
                 </React.Fragment>);
             case 4:
                 return (<React.Fragment>
-                    {Math.sign(round4Total(p)) === -1 ? <td className="text-danger"> {round4Total(p)}</td>: <td className="text-success"> {round4Total(p)}</td>}
-                    {Math.sign(round4TD(p)) === -1 ? <td className="text-danger"> {round4TD(p)}</td>: <td className="text-success"> {round4TD(p)}</td>}
+                    {Math.sign(round4Total(p)) === -1 ? <td className="text-danger"> {round4Total(p).toFixed(2)}</td>: <td className="text-success"> {round4Total(p).toFixed(2)}</td>}
+                    {Math.sign(round4TD(p)) === -1 ? <td className="text-danger"> {round4TD(p).toFixed(2)}</td>: <td className="text-success"> {round4TD(p).toFixed(2)}</td>}
                 </React.Fragment>);
             case 5:
                 return (<React.Fragment>
-                    {Math.sign(totalPoint(p)) === -1 ? <td className="text-danger"> {totalPoint(p)}</td>: <td className="text-success"> {totalPoint(p)}</td>}
-                    {Math.sign(totalDeferential(p)) === -1 ? <td className="text-danger"> {totalDeferential(p)}</td>: <td className="text-success"> {totalDeferential(p)}</td>}
+                    {Math.sign(totalPoint(p)) === -1 ? <td className="text-danger"> {totalPoint(p).toFixed(2)}</td>: <td className="text-success"> {totalPoint(p).toFixed(2)}</td>}
+                    {Math.sign(totalDeferential(p)) === -1 ? <td className="text-danger"> {totalDeferential(p).toFixed(2)}</td>: <td className="text-success"> {totalDeferential(p).toFixed(2)}</td>}
                 </React.Fragment>);
 
             default:

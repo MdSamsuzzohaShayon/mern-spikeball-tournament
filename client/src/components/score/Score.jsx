@@ -40,71 +40,71 @@ class Score extends Component {
 
     // ⛏️⛏️ GET ALL NETS FROM A ROUND WITH RANKING ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     async findRankingRound() {
+        try {
+            const requestOptions = {
+                method: 'GET',
+                headers: { "Content-Type": 'application/json' },
+                credentials: "include"
+            };
 
-        const requestOptions = {
-            method: 'GET',
-            headers: { "Content-Type": 'application/json' },
-            credentials: "include"
-        };
-
-        this.setState({ isLoading: true });
-
-
-        // console.log(this.state.currentEventID); /get-single-round/:eventID/:round
-        const response = await fetch(`${hostname}/api/round/ranking/${this.state.currentEventID}`, requestOptions);
-        console.log("Get nets from round with ranking - ", response);
-        const text = await response.text();
-        const jsonRes = await JSON.parse(text);
-        // console.log("JSON");
-        // console.log(jsonRes.round2);
-        if (jsonRes.round1 && jsonRes.round1.length > 0) this.setState({ round1: jsonRes.round1 });
-        if (jsonRes.round2 && jsonRes.round2.length > 0) this.setState({ round2: jsonRes.round2 });
-        if (jsonRes.round3 && jsonRes.round3.length > 0) this.setState({ round3: jsonRes.round3 });
-        if (jsonRes.round4 && jsonRes.round4.length > 0) this.setState({ round4: jsonRes.round4 });
-        if (jsonRes.round5 && jsonRes.round5.length > 0) this.setState({ round5: jsonRes.round5 });
-
-        // // NO RANK 
-        // if (jsonRes.round1NR && jsonRes.round1NR.length > 0) this.setState({ round1NR: jsonRes.round1NR });
-        // if (jsonRes.round2NR && jsonRes.round2NR.length > 0) this.setState({ round2NR: jsonRes.round2NR });
-        // if (jsonRes.round3NR && jsonRes.round3NR.length > 0) this.setState({ round3NR: jsonRes.round3NR });
-        // if (jsonRes.round4NR && jsonRes.round4NR.length > 0) this.setState({ round4NR: jsonRes.round4NR });
-        // if (jsonRes.round5NR && jsonRes.round5NR.length > 0) this.setState({ round5NR: jsonRes.round5NR });
+            this.setState({ isLoading: true });
+            const response = await fetch(`${hostname}/api/round/ranking/${this.state.currentEventID}`, requestOptions);
+            console.log("Get nets from round with ranking - ", response);
+            const text = await response.text();
+            const jsonRes = await JSON.parse(text);
+            // console.log("JSON--------------------");
+            // console.log(jsonRes);
+            if (jsonRes.round1 && jsonRes.round1.length > 0) this.setState({ round1: jsonRes.round1 });
+            if (jsonRes.round2 && jsonRes.round2.length > 0) this.setState({ round2: jsonRes.round2 });
+            if (jsonRes.round3 && jsonRes.round3.length > 0) this.setState({ round3: jsonRes.round3 });
+            if (jsonRes.round4 && jsonRes.round4.length > 0) this.setState({ round4: jsonRes.round4 });
+            if (jsonRes.round5 && jsonRes.round5.length > 0) this.setState({ round5: jsonRes.round5 });
 
 
+            if (jsonRes.allPerformances && jsonRes.allPerformances.length > 0) this.setState({ allRank: jsonRes.allPerformances });
+            // console.log("jsonRes.allPerformances - ", jsonRes.allPerformances);
 
-        if (jsonRes.allPerformances && jsonRes.allPerformances.length > 0) this.setState({ allRank: jsonRes.allPerformances });
 
-        // CHECK FOR INITIAL NET 
-        this.setState({ isLoading: false });
+            // CHECK FOR INITIAL NET 
+            this.setState({ isLoading: false });
+
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
 
 
     // ⛏️⛏️ GET ALL NETS FROM A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     findRound = async (r) => {
+        try {
+            const requestOptions = {
+                method: 'GET',
+                headers: { "Content-Type": 'application/json' },
+                credentials: "include"
+            };
+            this.setState({ isLoading: true });
 
-        const requestOptions = {
-            method: 'GET',
-            headers: { "Content-Type": 'application/json' },
-            credentials: "include"
-        };
-        this.setState({ isLoading: true });
+            const response = await fetch(`${hostname}/api/round/get-single-round/${this.state.currentEventID}/${r}`, requestOptions);
+            console.log("Get nets from round - ", response);
+            const text = await response.text();
+            const jsonRes = await JSON.parse(text);
+            // console.log(r);
+            // console.log("JSON - find round");
+            // console.log(jsonRes);
 
-        const response = await fetch(`${hostname}/api/round/get-single-round/${this.state.currentEventID}/${r}`, requestOptions);
-        console.log("Get nets from round - ", response);
-        const text = await response.text();
-        const jsonRes = await JSON.parse(text);
-        // console.log(r);
-        // console.log("JSON");
-        // console.log(jsonRes);
+            // CHECK FOR INITIAL NET 
+            if (jsonRes.findRound) {
+                this.setState({ allRound: jsonRes.findRound })
+            }
 
-        // CHECK FOR INITIAL NET 
-        if (jsonRes.findRound) {
-            this.setState({ allRound: jsonRes.findRound })
+            this.setState({ isLoading: false });
+            // console.log("Loading - ",isLoading);
+        } catch (error) {
+            console.log(error);
         }
 
-        this.setState({ isLoading: false });
-        // console.log("Loading - ",isLoading);
     }
 
 
@@ -125,8 +125,8 @@ class Score extends Component {
         this.is_mounted = true;
         this.findRankingRound();
         if (!this.props.admin) {
-            // console.log("Active item - ", this.state.activeItem);
             this.findRound(this.state.activeItem);
+            // console.log("Active item - ", this.state.activeItem);
 
         }
     }
@@ -142,7 +142,7 @@ class Score extends Component {
         // console.log(item);
         e.preventDefault();
         // setActiveItem(item);
-        if(!this.props.admin){
+        if (!this.props.admin) {
             this.findRound(item);
         }
         this.setState({ activeItem: item })
