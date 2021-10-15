@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { hostname, POINT, POINT_DIFFERENTIAL, SCORE } from '../../utils/global';
 // import { round1Total } from '../../utils/addTotalPoint';
 // import { round1TD } from '../../utils/pointDeferential';
-import { arrangingPerformer, serializePerformer } from '../../utils/helpers';
+import { serializePerformer } from '../../utils/helpers';
 import { getTotalPPD } from '../../utils/getTotalPPD';
 import getDefaultValue from '../../utils/defaultValue';
 import inputChange from '../../utils/inputChange';
 import allPerformers from '../../utils/allPerformers';
+import arrangingPerformer from '../../utils/arrangePerformer';
 
 
 function Round1(props) {
@@ -284,18 +285,19 @@ function Round1(props) {
                                         <tr key={i}>
                                             <th scope="row">Net {net.sl || i + 1}</th>
 
-                                            <td>{arrangingPerformer(net.performance, 1)} </td>
+                                            <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT, props.roundNum)} </td>
                                             <td >{allPerformers(net, props.game[0], SCORE, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                             <td >{allPerformers(net, props.game[0], POINT, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                             <td>{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
 
-                                            <td>{arrangingPerformer(net.performance, 2)} </td>
+
+                                            <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT, props.roundNum)} </td>
                                             <td >{allPerformers(net, props.game[1], SCORE, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                             <td >{allPerformers(net, props.game[1], POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                             <td>{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
-                                            <td>{arrangingPerformer(net.performance, 3)} </td>
+                                            <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT, props.roundNum)} </td>
                                             <td >{allPerformers(net, props.game[2], SCORE, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                             <td >{allPerformers(net, props.game[2], POINT, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                             <td>{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>

@@ -103,6 +103,9 @@ EMOJIES - 📜 ⛏️ ➖ ✅
  - SHOULDN'T SHOW MATCH UP WHICH IS NOT ASSIGNED YET. IN PUBLIC RANKING PAGE
 
 
+### 📜 REPLY 
+ - IF YOU UPDATE THIS ON EVERY INPUT CHANGE, THIS APPLICATION WILL BE VERY SLOW SINCE YOU HAVE THE ABILITY TO UPDATE MULTIPLE DOCUMENT ON DATABASE 
+
 
  ### PROBLEM
   - ✅ Game of round 1 , game 1 point is not working properly (first team is not getting right point)

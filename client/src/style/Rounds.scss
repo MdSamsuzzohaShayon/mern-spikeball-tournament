@@ -28,7 +28,17 @@
 
 
 
-
+        .players-in-net{
+            height: $t-p-height * 2;
+            @include center_horizontally();
+        }
+        .got-point-name{
+            color: green;
+            // background: rgb(129, 240, 203);
+        }
+        .no-point-name{
+            color: red;
+        }
 
         // .tp-point {
         //     margin: $t-p-p-m;

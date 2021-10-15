@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { hostname, POINT, POINT_DIFFERENTIAL, SCORE } from '../../utils/global';
-import { serializePerformer, arrangingPerformer } from '../../utils/helpers';
+import { serializePerformer } from '../../utils/helpers';
 import { getTotalPPD } from '../../utils/getTotalPPD';
 import getDefaultValue from '../../utils/defaultValue';
 import allPerformers from '../../utils/allPerformers';
@@ -8,6 +8,7 @@ import AddParticipant from '../participant/AddParticipant';
 import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
 import { showLiftedPefrormance } from '../../utils/performance';
 import inputChange from '../../utils/inputChange';
+import arrangingPerformer from '../../utils/arrangePerformer';
 
 
 function SingleRound(props) {
@@ -41,7 +42,7 @@ function SingleRound(props) {
 
     // ⛏️⛏️ GET ALL PERFORMERS FROM THIS CURRENT ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const getAllPerformance = async () => {
-        console.log("-------------------");
+        // console.log("-------------------");
         const requestOptions = {
             method: 'GET',
             headers: { "Content-Type": 'application/json' },
@@ -65,16 +66,6 @@ function SingleRound(props) {
 
 
 
-    // useEffect(()=>{
-    //     console.log("update state");
-    //     const points = document.querySelectorAll('.got-point');
-    //     const no_point = document.querySelectorAll('.no-point');
-    //     points.forEach((point, i)=> {
-    //         console.log("Parent element of point - ",point.parentElement.parentElement)
-    //     });
-    // });
-    // }, [updateTeam, updatePerformance]);
-
 
 
 
@@ -83,6 +74,8 @@ function SingleRound(props) {
     // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     useEffect(() => {
+        // STYLE GOT POINT 
+
         console.log("Component did mount [SingleRound.jsx]");
         rank = 0;
         // console.log("All nets - ", props.nets);
@@ -105,6 +98,28 @@ function SingleRound(props) {
 
 
 
+    // useEffect(() => {
+    //     const points = document.querySelectorAll('.got-point');
+    //     // console.log(points);
+    //     const no_point = document.querySelectorAll('.no-point');
+    //     // console.log("point - ", points);
+    //     points.forEach((point, i) => {
+    //         if (point.classList.contains('get-point')) {
+    //             // console.log("Parent element of point - ",point.parentElement.parentElement) ;
+    //             if (point.parentElement.parentElement.classList.contains("two-p-input-1")) {
+    //                 // console.log("Parent element of point - ",point.parentElement.parentElement.parentElement.parentElement.previousElementSibling.previousElementSibling);
+    //                 // CHECK FOR ROW ONE OR TWO - NEED TO SET ROW WITH TWO DIFFERENT CLASS 
+    //                 // point.parentElement.parentElement.parentElement.parentElement.previousElementSibling.style.background = "green";
+    //                 point.parentElement.parentElement.parentElement.parentElement.previousElementSibling.previousElementSibling.childNodes[0].childNodes[0].style.color = "green";
+    //                 // IF POINT HAS NUMBER TWO ROW THEN PREVIOUS ELEMENT NEED TO COLOR FOR NUMBER TWO ROW                 
+    //                 console.log("point element - ", point);
+    //             } else if (point.parentElement.parentElement.classList.contains("two-p-input-2")) {
+
+    //             }
+    //         }
+    //     });
+    //     // console.log("Component mount ------------ ", points); 
+    // });
 
 
 
@@ -417,19 +432,20 @@ function SingleRound(props) {
                                             {nets && nets.map((net, i) => (
                                                 <tr key={i}>
                                                     <th scope="row">Net {net.sl || i + 1}</th>
-
-                                                    <td>{arrangingPerformer(net.performance, 1)} </td>
+                                                    <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT, props.roundNum)} </td>
                                                     <td >{allPerformers(net, props.game[0], SCORE, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td >{allPerformers(net, props.game[0], POINT, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td>{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
 
-                                                    <td>{arrangingPerformer(net.performance, 2)} </td>
+
+                                                    <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT, props.roundNum)} </td>
                                                     <td >{allPerformers(net, props.game[1], SCORE, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td >{allPerformers(net, props.game[1], POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td>{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
-                                                    <td>{arrangingPerformer(net.performance, 3)} </td>
+
+                                                    <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT, props.roundNum)} </td>
                                                     <td >{allPerformers(net, props.game[2], SCORE, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td >{allPerformers(net, props.game[2], POINT, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td>{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>

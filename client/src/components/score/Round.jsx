@@ -8,7 +8,7 @@ function Round(props) {
     // if()
     useEffect(() => {
         console.log("Component did mount [Round.jsx]");
-        console.log(props);
+        // console.log(props);
     }, []);
 
     return (
