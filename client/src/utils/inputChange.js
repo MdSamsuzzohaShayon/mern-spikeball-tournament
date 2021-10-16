@@ -1,4 +1,4 @@
-import { POINT, POINT_DIFFERENTIAL, SCORE } from '../utils/global';
+import { POINT, SCORE } from '../utils/global';
 // const pointVal = 1;
 // inputChange(netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam);
 // function inputChange(updateTeam, team, game, isExtra, scoreType, e, setUpdateTeam, netID, oponent) {
@@ -8,8 +8,8 @@ function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTe
 
     // console.log("game - ",game);
     // console.log("Score Type  - ",scoreType);
-    // console.log("Update team - ", updateTeam);
-    console.log("Update performance - ", updatePerformance);
+    console.log("Update team - ", updateTeam);
+    // console.log("Update performance - ", updatePerformance);
     // console.log("team 1 - ", team1);
     // console.log("team 2 - ", team2);
     // console.log("Team Num - ", teamNum);
@@ -26,12 +26,12 @@ function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTe
         // console.log("Game - ", game);
         let extraPoint = parseFloat(e.target.value);
         if (isNaN(extraPoint)) extraPoint = 0;
-        console.log("extra point - ", extraPoint);
+        // console.log("extra point - ", extraPoint);
         const performanceID = extraPlayerId;
         // console.log("performance - ", per);
 
         const findPerformance = updatePerformance.find((elm, i) => elm.pId === performanceID && elm.game === game && elm.netID === netID);
-        console.log("find ", findPerformance);
+        // console.log("find ", findPerformance);
         if (findPerformance) {
             // UPDATE TEAM 
             updatePerformance.forEach((up, i) => {
@@ -108,7 +108,7 @@ function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTe
 
                     let score = parseInt(e.target.value);
                     // if(pd === "" || pd === '') pd = '0-0';
-                    let oponentScore = 0;
+                    let oponentScore = null;
                     const findOpnent = updateTeam.find((elm, i) => {
                         if (elm.team2.player1 === oponent.player1 && elm.team2.player2 === oponent.player2 && elm.game === game) {
                             return elm.team2.score = score;
@@ -151,7 +151,7 @@ function inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTe
                     // CREATE NEW TEAM 
                     let score = parseInt(e.target.value);
                     // if(pd === "" || pd === '') pd = '0-0';
-                    let oponentScore = 0;
+                    let oponentScore = null;
                     const findOpnent = updateTeam.find((elm, i) => {
                         if (elm.team2.player1 === oponent.player1 && elm.team2.player2 === oponent.player2 && elm.game === game) {
                             return elm.team2.score = score;

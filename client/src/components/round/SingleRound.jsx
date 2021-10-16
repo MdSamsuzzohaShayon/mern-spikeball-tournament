@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { hostname, POINT, POINT_DIFFERENTIAL, SCORE } from '../../utils/global';
-import { serializePerformer } from '../../utils/helpers';
+import { hostname, POINT, POINT_DIFFERENTIAL, SCORE, NO_SCORE } from '../../utils/global';
 import { getTotalPPD } from '../../utils/getTotalPPD';
 import getDefaultValue from '../../utils/defaultValue';
 import allPerformers from '../../utils/allPerformers';
@@ -8,7 +7,7 @@ import AddParticipant from '../participant/AddParticipant';
 import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
 import { showLiftedPefrormance } from '../../utils/performance';
 import inputChange from '../../utils/inputChange';
-import arrangingPerformer from '../../utils/arrangePerformer';
+import { arrangingPerformer, serializePerformer } from '../../utils/arrangePerformer';
 
 
 function SingleRound(props) {
@@ -24,7 +23,7 @@ function SingleRound(props) {
     const [showPerformances, setShowPerformances] = useState(true);
     const [leftedPerformance, setLeftedPerformance] = useState([]);
 
-    let rank = 0;
+
 
 
 
@@ -77,7 +76,6 @@ function SingleRound(props) {
         // STYLE GOT POINT 
 
         console.log("Component did mount [SingleRound.jsx]");
-        rank = 0;
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
         // console.log(props.leftRound);
@@ -94,6 +92,8 @@ function SingleRound(props) {
         }
         setUpdateTeam([]);
     }, []);
+
+
 
 
 
@@ -451,12 +451,16 @@ function SingleRound(props) {
                                                     <td>{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
 
-                                                    {/* AVERAGE  */}
+
+
+                                                    {/* TOTAL  */}
                                                     {/* <td>{i+1} </td> */}
                                                     {/* <td>{rankLoop(net, i + 1, rank)} </td> */}
-                                                    <td>{serializePerformer(net.performance)} </td>
-                                                    <td >{getTotalPPD(net, POINT, 4)}</td>
-                                                    <td >{getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</td>
+                                                    {console.log("single net before - ", net)}
+                                                    <td>{serializePerformer(net.performance, props.roundNum, NO_SCORE)} </td>
+                                                    {console.log("single net after - ", net)}
+                                                    <td > <div className="players-in-net">  {getTotalPPD(net, POINT, props.roundNum)} </div></td>
+                                                    <td ><div className="players-in-net"> {getTotalPPD(net, POINT_DIFFERENTIAL, props.roundNum)}</div></td>
 
 
                                                 </tr>

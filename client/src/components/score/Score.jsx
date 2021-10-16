@@ -253,7 +253,7 @@ class Score extends Component {
                     </div>) : (<div className="display-event-details">
                         <div className="whole-ranking">
                             <h2 className="h2">Overall ranking</h2>
-                            <Point roundNum={5} pp={this.state.allRank} />
+                            <Point roundNum={5} pp={this.state.allRank} roundwise={false} />
                         </div>
 
 

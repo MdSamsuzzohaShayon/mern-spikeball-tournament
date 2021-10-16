@@ -151,9 +151,10 @@ export const getTotal = (net, round, score) => {
 
 
 // ⛏️⛏️ GET TOTAL POINT AND DIFERENTIAL FOR THIS ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-export const getTotalPPD = (net, score) => {
+export const getTotalPPD = (net, score, roundNum) => {
     // console.log(net.performance.length);
     // console.log("Round - ", round);
+    // console.log("net - ", net);
 
     // const totalPoint = (p) => {
     //     return <div className="total">{round5Total(p)}</div>
@@ -165,19 +166,63 @@ export const getTotalPPD = (net, score) => {
 
 
     if (score === POINT) {
-        return net.performance.map((p, j) => {
-            // console.log("P");
-            // console.log(p);
-            // console.log(p.nog);
-            // console.log("Total - ",totalPoint(p));
-            if (Math.sign(totalPoint(p)) === 1) {
-                return <div className="tp-point text-success" key={j}>{totalPoint(p).toFixed(2)}</div>;
-            } else if (Math.sign(totalPoint(p)) === (-1)) {
-                return <div className="tp-point text-danger" key={j}>{totalPoint(p).toFixed(2)}</div>;
-            } else {
-                return <div className="tp-point" key={j}>{totalPoint(p).toFixed(2)}</div>;
-            }
-        });
+        if (roundNum === 1) {
+            return net.performance.map((p, j) => {
+                // console.log("P");
+                // console.log(p);
+                // console.log(p.nog);
+                // console.log("Total - ",totalPoint(p));
+                if (Math.sign(round1Total(p)) === 1) {
+                    return <div className="tp-point text-success" key={j}>{round1Total(p).toFixed(2)}</div>;
+                } else if (Math.sign(round1Total(p)) === (-1)) {
+                    return <div className="tp-point text-danger" key={j}>{round1Total(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point" key={j}>{round1Total(p).toFixed(2)}</div>;
+                }
+            });
+        } else if (roundNum === 2) {
+            return net.performance.map((p, j) => {
+                if (Math.sign(round2Total(p)) === 1) {
+                    return <div className="tp-point text-success" key={j}>{round2Total(p).toFixed(2)}</div>;
+                } else if (Math.sign(round2Total(p)) === (-1)) {
+                    return <div className="tp-point text-danger" key={j}>{round2Total(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point" key={j}>{round2Total(p).toFixed(2)}</div>;
+                }
+            });
+        } else if (roundNum === 3) {
+            return net.performance.map((p, j) => {
+                if (Math.sign(round3Total(p)) === 1) {
+                    return <div className="tp-point text-success" key={j}>{round3Total(p).toFixed(2)}</div>;
+                } else if (Math.sign(round3Total(p)) === (-1)) {
+                    return <div className="tp-point text-danger" key={j}>{round3Total(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point" key={j}>{round3Total(p).toFixed(2)}</div>;
+                }
+            });
+        } else if (roundNum === 4) {
+            return net.performance.map((p, j) => {
+                if (Math.sign(round4Total(p)) === 1) {
+                    return <div className="tp-point text-success" key={j}>{round4Total(p).toFixed(2)}</div>;
+                } else if (Math.sign(round4Total(p)) === (-1)) {
+                    return <div className="tp-point text-danger" key={j}>{round4Total(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point" key={j}>{round4Total(p).toFixed(2)}</div>;
+                }
+            });
+        } else if (roundNum === 5) {
+            return net.performance.map((p, j) => {
+                if (Math.sign(round5Total(p)) === 1) {
+                    return <div className="tp-point text-success" key={j}>{round5Total(p).toFixed(2)}</div>;
+                } else if (Math.sign(round5Total(p)) === (-1)) {
+                    return <div className="tp-point text-danger" key={j}>{round5Total(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point" key={j}>{round5Total(p).toFixed(2)}</div>;
+                }
+            });
+        }else{
+            return;
+        }
     }
 
     if (score === POINT_DIFFERENTIAL) {
@@ -188,16 +233,59 @@ export const getTotalPPD = (net, score) => {
         //     </div>
         // )
         // );
-        return net.performance.map((p, j) => {
-            if (Math.sign(totalDeferential(p)) === 1) {
-                return <div className="tp-point-diffrential text-success" key={j}>{totalDeferential(p).toFixed(2)}</div>;
-            } else if (Math.sign(totalDeferential(p)) === (-1)) {
-                return <div className="tp-point-diffrential text-danger" key={j}>{totalDeferential(p).toFixed(2)}</div>;
-            } else {
-                return <div className="tp-point-diffrential" key={j}>{totalDeferential(p).toFixed(2)}</div>;
-            }
+        if (roundNum === 1) {
+            return net.performance.map((p, j) => {
+                if (Math.sign(round1TD(p)) === 1) {
+                    return <div className="tp-point-differential text-success" key={j}>{round1TD(p).toFixed(2)}</div>;
+                } else if (Math.sign(round1TD(p)) === (-1)) {
+                    return <div className="tp-point-differential text-danger" key={j}>{round1TD(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point-differential" key={j}>{round1TD(p).toFixed(2)}</div>;
+                }
+            });
+        } else if (roundNum === 2) {
+            return net.performance.map((p, j) => {
+                if (Math.sign(round2TD(p)) === 1) {
+                    return <div className="tp-point-differential text-success" key={j}>{round2TD(p).toFixed(2)}</div>;
+                } else if (Math.sign(round2TD(p)) === (-1)) {
+                    return <div className="tp-point-differential text-danger" key={j}>{round2TD(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point-differential" key={j}>{round2TD(p).toFixed(2)}</div>;
+                }
+            });
+        }else if (roundNum === 3) {
+            return net.performance.map((p, j) => {
+                if (Math.sign(round3TD(p)) === 1) {
+                    return <div className="tp-point-differential text-success" key={j}>{round3TD(p).toFixed(2)}</div>;
+                } else if (Math.sign(round3TD(p)) === (-1)) {
+                    return <div className="tp-point-differential text-danger" key={j}>{round3TD(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point-differential" key={j}>{round3TD(p).toFixed(2)}</div>;
+                }
+            });
+        }else if (roundNum === 4) {
+            return net.performance.map((p, j) => {
+                if (Math.sign(round4TD(p)) === 1) {
+                    return <div className="tp-point-differential text-success" key={j}>{round4TD(p).toFixed(2)}</div>;
+                } else if (Math.sign(round4TD(p)) === (-1)) {
+                    return <div className="tp-point-differential text-danger" key={j}>{round4TD(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point-differential" key={j}>{round4TD(p).toFixed(2)}</div>;
+                }
+            });
+        }else if (roundNum === 5) {
+            return net.performance.map((p, j) => {
+                if (Math.sign(round5TD(p)) === 1) {
+                    return <div className="tp-point-differential text-success" key={j}>{round5TD(p).toFixed(2)}</div>;
+                } else if (Math.sign(round5TD(p)) === (-1)) {
+                    return <div className="tp-point-differential text-danger" key={j}>{round5TD(p).toFixed(2)}</div>;
+                } else {
+                    return <div className="tp-point-differential" key={j}>{round5TD(p).toFixed(2)}</div>;
+                }
+            });
+        }else {
+            return;
         }
-        );
     }
 }
 

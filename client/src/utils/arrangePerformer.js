@@ -1,5 +1,6 @@
 import React from "react";
 import getDefaultValue from "./defaultValue";
+import { rankingRound1, rankingRound2, rankingRound3, rankingRound4, rankingRound5, wholeRanking } from "./ranking";
 
 
 
@@ -19,29 +20,19 @@ const checkWon = (pointValue, firstname, lastname) => {
 }
 
 
-const checkWonLoop = (pointValue, firstname, lastname, val) => {
-    if (pointValue === null) {
-        return (<div className="p-rival" key={val}>{firstname} {lastname}  </div>);
-    } else if (pointValue === 0) {
-        return (<div className="p-rival text-danger" key={val}>{firstname} {lastname}  </div>);
-    } else if (pointValue >= 1) {
-        return (<div className="p-rival text-success" key={val}>{firstname} {lastname}  </div>);
-    }
-}
-
-
 // gor = GAME OF ROUND
 // net.performance, 1, props.game[0], POINT, props.roundNum, getDefaultValue
 // ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-const arrangingPerformer = (performer, gor, game, scoreType, roundNum) => {
+export const arrangingPerformer = (performer, gor, game, scoreType, roundNum) => {
     // console.log("Game of round - ", gor);
 
 
+    // console.log("Arranging Perfomer - ", performer);
 
     // console.log("-------------------------------------------------------------------------");
     if (performer.length < 4) {
 
-            {/* // <div className="player-name" key={j}>{p.participant.firstname} {p.participant.lastname}</div> */}
+        {/* // <div className="player-name" key={j}>{p.participant.firstname} {p.participant.lastname}</div> */ }
         return performer.map((p, j) => (<React.Fragment key={j}>
             {checkWon(getDefaultValue(p, scoreType, game, roundNum), p.participant.firstname, p.participant.lastname)}
         </React.Fragment>
@@ -110,17 +101,58 @@ const arrangingPerformer = (performer, gor, game, scoreType, roundNum) => {
                         {checkWon(getDefaultValue(four, scoreType, game, roundNum), four.participant.firstname, four.participant.lastname)}
                     </div>
                 </div>);
-        } else if (gor === 4) {
-
-            // THIS IS FOR AVERAGE 
-            return (
-                <div className="f-net d-flex flex-column text-center ">
-                    <div className="p-rival">{performer[0].participant.firstname} {performer[0].participant.lastname}  </div>
-                    <div className="p-rival">{performer[1].participant.firstname} {performer[1].participant.lastname}  </div>
-                    <div className="p-rival">{performer[2].participant.firstname} {performer[2].participant.lastname}  </div>
-                    <div className="p-rival">{performer[3].participant.firstname} {performer[3].participant.lastname}  </div>
-                </div>);
+        } else {
+            return;
         }
+    }
+
+}
+
+
+
+
+
+
+// ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+export const serializePerformer = (performers, roundNum) => {
+    // console.log("Game of round - ",gor);
+    // console.log("Performers - ",performers);
+
+    let performersAccending = performers;
+    
+
+    // if (roundNum === 1) {
+    //     // console.log("Sorted - ", roundNum);
+    //     performersAccending = performers.sort(rankingRound1);
+    // } else if (roundNum === 2) {
+    //     // console.log("Sorted - ", roundNum);
+    //     performersAccending = performers.sort(rankingRound2); 
+    // } else if (roundNum === 3) {
+    //     performersAccending = performers.sort(rankingRound3);
+    // } else if (roundNum === 4) {
+    //     performersAccending = performers.sort(rankingRound4);
+    // } else if (roundNum === 5) {
+    //     performersAccending = performers.sort(rankingRound5);
+    // } else {
+    //     return;
+    // }
+
+    if (performersAccending.length < 4) {
+        return (
+            <div >
+                {performersAccending.map((p, j) => (
+                    <div className="player-name player-sl" key={j}>{p.participant.firstname} {p.participant.lastname} {roundNum}</div>
+                ))
+                }
+            </div>);
+    } else {
+        return (
+            <div className="players-in-net">
+                {performersAccending.map((p, j) => (
+                    <div className="player-name player-sl" key={j}>{p.participant.firstname } {p.participant.lastname} {roundNum}</div>
+                ))
+                }
+            </div>);
     }
 
 }
@@ -133,6 +165,4 @@ const arrangingPerformer = (performer, gor, game, scoreType, roundNum) => {
 
 
 
-
-export default arrangingPerformer;
 

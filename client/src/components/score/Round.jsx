@@ -19,7 +19,7 @@ function Round(props) {
                         <div className="col-md-6">
                             <div className="roundwise-ranking">
                                 <h2 className="h2">Round {props.roundNum}</h2>
-                                <Point roundNum={props.roundNum} pp={props.pp} />
+                                <Point roundNum={props.roundNum} pp={props.pp} roundwise={true} />
                             </div>
                         </div>
                     )}

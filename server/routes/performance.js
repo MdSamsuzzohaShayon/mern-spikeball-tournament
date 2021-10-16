@@ -230,7 +230,7 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
 
     updateTeam.forEach(async (ut, i) => {
         let team1Score = ut.team1.score, team2Score = ut.team2.score;
-        if (team1Score === 0) {
+        if (team1Score === null) {
             // FIND PREVIOUS ITEM AND UPDATE 
             // Performance.findByIdAndUpdate(ut.team1.player1
             // console.log(ut.team1.player1);
@@ -240,7 +240,7 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
             // console.log("Team 1 score - ", team1Score);
 
         }
-        if (team2Score === 0) {
+        if (team2Score === null) {
             // FIND PREVIOUS ITEM AND UPDATE 
             const doc = await Performance.findById(ut.team2.player1);
             team2Score = getScoreFromDoc(ut.game, doc);

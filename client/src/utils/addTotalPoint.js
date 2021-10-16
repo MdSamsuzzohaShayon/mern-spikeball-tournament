@@ -6,9 +6,9 @@ export const totalPoint = (performance) => {
     let point = 0;
     point = round1Total(performance) + round2Total(performance) + round3Total(performance) + round4Total(performance) + round5Total(performance);
 
-    if (performance.round13) point += performance.round13.point;
-    if (performance.round14) point += performance.round14.point;
-    if (performance.round15) point += performance.round15.point;
+    // if (performance.round13) point += performance.round13.point;
+    // if (performance.round14) point += performance.round14.point;
+    // if (performance.round15) point += performance.round15.point;
 
     return point;
 }

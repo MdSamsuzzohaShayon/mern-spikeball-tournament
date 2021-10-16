@@ -8,6 +8,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
     // console.log("s - ", score);
     // console.log(props.round);
     // console.log("Game - ", game, props.game);
+    
 
 
     if (score === POINT) {

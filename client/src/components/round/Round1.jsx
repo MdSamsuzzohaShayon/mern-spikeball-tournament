@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { hostname, POINT, POINT_DIFFERENTIAL, SCORE } from '../../utils/global';
-// import { round1Total } from '../../utils/addTotalPoint';
-// import { round1TD } from '../../utils/pointDeferential';
-import { serializePerformer } from '../../utils/helpers';
+import { hostname, POINT, POINT_DIFFERENTIAL, SCORE, NO_SCORE } from '../../utils/global';
 import { getTotalPPD } from '../../utils/getTotalPPD';
 import getDefaultValue from '../../utils/defaultValue';
 import inputChange from '../../utils/inputChange';
 import allPerformers from '../../utils/allPerformers';
-import arrangingPerformer from '../../utils/arrangePerformer';
+import {arrangingPerformer, serializePerformer} from "../../utils/arrangePerformer";
+
 
 
 function Round1(props) {
@@ -304,9 +302,11 @@ function Round1(props) {
 
 
                                             {/* AVERAGE  */}
-                                            <td>{serializePerformer(net.performance)} </td>
-                                            <td > <div className="players-in-net"> {getTotalPPD(net, POINT, 4)}</div></td>
-                                            <td > <div className="players-in-net"> {getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</div></td>
+                                            <td> {serializePerformer(net.performance, props.roundNum, NO_SCORE)} </td>
+                                            <td > <div className="players-in-net">  {getTotalPPD(net, POINT, props.roundNum)} </div></td>
+                                            <td ><div className="players-in-net"> {getTotalPPD(net, POINT_DIFFERENTIAL, props.roundNum)}</div></td>
+                                            {/* <td > <div className="players-in-net"> {getTotalPPD(net, POINT, 4)}</div></td>
+                                            <td > <div className="players-in-net"> {getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</div></td> */}
                                         </tr>
                                     ))}
                                 </tbody>

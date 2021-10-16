@@ -27,18 +27,9 @@ import getDefaultValue from "./defaultValue";
 
 
 
-// ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-export const serializePerformer = (performer) => {
-    // console.log("Game of round - ",gor);
-    return (
-        <div className="players-in-net">
-            {performer.map((p, j) => (
-                <div className="player-name player-sl" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
-            ))
-            }
-        </div>);
 
-}
+
+
 
 
 

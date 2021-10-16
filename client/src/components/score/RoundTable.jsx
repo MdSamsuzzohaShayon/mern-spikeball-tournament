@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {  checkNegativeP, checkNegativePD } from '../../utils/helpers';
 import { POINT, POINT_DIFFERENTIAL, SCORE } from '../../utils/global';
 import getDefaultValue from '../../utils/defaultValue';
-import arrangingPerformer from '../../utils/arrangePerformer';
+import {arrangingPerformer} from '../../utils/arrangePerformer';
 
 
 function RoundTable(props) {
