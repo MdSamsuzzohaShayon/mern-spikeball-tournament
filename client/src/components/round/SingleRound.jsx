@@ -8,6 +8,7 @@ import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
 import { showLiftedPefrormance } from '../../utils/performance';
 import inputChange from '../../utils/inputChange';
 import { arrangingPerformer, serializePerformer } from '../../utils/arrangePerformer';
+import { Modal, Button } from 'react-bootstrap'
 
 
 function SingleRound(props) {
@@ -22,6 +23,31 @@ function SingleRound(props) {
     const [updatePerformance, setUpdatePerformance] = useState([]);
     const [showPerformances, setShowPerformances] = useState(true);
     const [leftedPerformance, setLeftedPerformance] = useState([]);
+    // const [assignNet, setAssignNet] = useState(false);
+    const [randomNet, setRandomNet] = useState(null);
+
+    // MODAL 
+    const [assignNetShow, setAssignNetShow] = useState(false);
+    const handleNetClose = (update) => {
+        // console.log("UPdate - ", update);
+        if (update === true) {
+            if (randomNet === true) {
+                randomAssign();
+            } else {
+                assignNetHandler();
+            }
+        }
+        setAssignNetShow(false)
+    };
+    const handleNetShow = (e, random) => {
+        setAssignNetShow(true);
+        if (random === true) {
+            setRandomNet(true);
+        } else {
+            setRandomNet(false);
+        }
+    };
+
 
 
 
@@ -338,9 +364,29 @@ function SingleRound(props) {
     return (
         <div className="SingleRound">
             <div className="d-flex my-3 justify-content-start align-items-center">
+
                 {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
-                {!props.initialize && <button className="btn btn-primary mx-3" onClick={assignNetHandler} >Rank Assign</button>}
-                <button className="btn btn-primary" onClick={randomAssign} >Random Assign</button>
+                {!props.initialize && <button className="btn btn-primary mx-3" onClick={e => handleNetShow(e, false)} >Rank Assign</button>}
+                <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
+
+
+
+                <Modal show={assignNetShow} onHide={handleNetClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Report score</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Did you report any score in this round?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={e => handleNetClose(false)}>
+                            Yes
+                        </Button>
+                        <Button variant="primary" onClick={e => handleNetClose(true)}>
+                            No
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+
             </div>
             {showPerformances ? (<React.Fragment>
                 {isLoading ? (
@@ -456,11 +502,11 @@ function SingleRound(props) {
                                                     {/* TOTAL  */}
                                                     {/* <td>{i+1} </td> */}
                                                     {/* <td>{rankLoop(net, i + 1, rank)} </td> */}
-                                                    {console.log("single net before - ", net)}
+                                                    {/* {console.log("single net before - ", net)} */}
                                                     <td>{serializePerformer(net.performance, props.roundNum, NO_SCORE)} </td>
-                                                    {console.log("single net after - ", net)}
-                                                    <td > <div className="players-in-net">  {getTotalPPD(net, POINT, props.roundNum)} </div></td>
-                                                    <td ><div className="players-in-net"> {getTotalPPD(net, POINT_DIFFERENTIAL, props.roundNum)}</div></td>
+                                                    {/* {console.log("single net after - ", net)} */}
+                                                    <td >  {getTotalPPD(net, POINT, props.roundNum)} </td>
+                                                    <td >{getTotalPPD(net, POINT_DIFFERENTIAL, props.roundNum)}</td>
 
 
                                                 </tr>

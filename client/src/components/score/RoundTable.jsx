@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {  checkNegativeP, checkNegativePD } from '../../utils/helpers';
+import { checkNegativeP, checkNegativePD } from '../../utils/helpers';
 import { POINT, POINT_DIFFERENTIAL, SCORE } from '../../utils/global';
 import getDefaultValue from '../../utils/defaultValue';
-import {arrangingPerformer} from '../../utils/arrangePerformer';
+import { arrangingPerformer } from '../../utils/arrangePerformer';
 
 
 function RoundTable(props) {
@@ -30,10 +30,10 @@ function RoundTable(props) {
 
     // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    useEffect(() => {
-        console.log("Round - ", props.round);
-        console.log("Component did mount [RoundTable.jsx]");
-    }, []);
+    // useEffect(() => {
+    //     // console.log("Round - ", props.round);
+    //     console.log("Component did mount [RoundTable.jsx]");
+    // }, []);
 
 
 
@@ -73,11 +73,13 @@ function RoundTable(props) {
 
         if (score === POINT) {
             if (net.performance.length < 4) {
-                return net.performance.map((p, j) => (
-                    <div className="f-point" key={j}>
-                        {checkNegativeP(getDefaultValue(p, score, game, props.roundNum), `p-i-${j + 1}`)}
-                    </div>
-                ));
+                return (<div className="net-less-four">{(
+                    net.performance.map((p, j) => (
+                        <div className="f-point short-net-player" key={j}>
+                            {checkNegativeP(getDefaultValue(p, score, game, props.roundNum), `p-i-${j + 1}`)}
+                        </div>
+                    ))
+                )}</div>);
             } else {
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 // console.log("Player One Point - ",getDefaultValue(one, score, game, props.roundNum));
@@ -127,11 +129,13 @@ function RoundTable(props) {
         }
         if (score === POINT_DIFFERENTIAL) {
             if (net.performance.length < 4) {
-                return net.performance.map((p, j) => (
-                    <div className="f-point-differential" key={j}>
-                        {checkNegativePD(getDefaultValue(p, score, game, props.roundNum), `pd-i-${j + 1}`)}
-                    </div>
-                ));
+                return (<div className="net-less-four">{(
+                    net.performance.map((p, j) => (
+                       <div className="short-net-player f-point-differential" key={j}>
+                           {checkNegativePD(getDefaultValue(p, score, game, props.roundNum), `pd-i-${j + 1}`)}
+                       </div>
+                   ))
+                )}</div>);
             } else {
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 if (gor === 1) {

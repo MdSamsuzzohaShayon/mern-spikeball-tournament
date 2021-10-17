@@ -167,60 +167,157 @@ export const getTotalPPD = (net, score, roundNum) => {
 
     if (score === POINT) {
         if (roundNum === 1) {
-            return net.performance.map((p, j) => {
-                // console.log("P");
-                // console.log(p);
-                // console.log(p.nog);
-                // console.log("Total - ",totalPoint(p));
-                if (Math.sign(round1Total(p)) === 1) {
-                    return <div className="tp-point text-success" key={j}>{round1Total(p).toFixed(2)}</div>;
-                } else if (Math.sign(round1Total(p)) === (-1)) {
-                    return <div className="tp-point text-danger" key={j}>{round1Total(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point" key={j}>{round1Total(p).toFixed(2)}</div>;
-                }
-            });
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        // console.log("P");
+                        // console.log(p);
+                        // console.log(p.nog);
+                        // console.log("Total - ",totalPoint(p));
+                        if (Math.sign(round1Total(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round1Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round1Total(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round1Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round1Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        // console.log("P");
+                        // console.log(p);
+                        // console.log(p.nog);
+                        // console.log("Total - ",totalPoint(p));
+                        if (Math.sign(round1Total(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round1Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round1Total(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round1Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round1Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
+            // return  net.performance.map((p, j) => {
+            //     // console.log("P");
+            //     // console.log(p);
+            //     // console.log(p.nog);
+            //     // console.log("Total - ",totalPoint(p));
+            //     if (Math.sign(round1Total(p)) === 1) {
+            //         return <div className="tp-point text-success" key={j}>{round1Total(p).toFixed(2)}</div>;
+            //     } else if (Math.sign(round1Total(p)) === (-1)) {
+            //         return <div className="tp-point text-danger" key={j}>{round1Total(p).toFixed(2)}</div>;
+            //     } else {
+            //         return <div className="tp-point" key={j}>{round1Total(p).toFixed(2)}</div>;
+            //     }
+            // });
         } else if (roundNum === 2) {
-            return net.performance.map((p, j) => {
-                if (Math.sign(round2Total(p)) === 1) {
-                    return <div className="tp-point text-success" key={j}>{round2Total(p).toFixed(2)}</div>;
-                } else if (Math.sign(round2Total(p)) === (-1)) {
-                    return <div className="tp-point text-danger" key={j}>{round2Total(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point" key={j}>{round2Total(p).toFixed(2)}</div>;
-                }
-            });
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round2Total(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round2Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round2Total(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round2Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round2Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round2Total(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round2Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round2Total(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round2Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round2Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
         } else if (roundNum === 3) {
-            return net.performance.map((p, j) => {
-                if (Math.sign(round3Total(p)) === 1) {
-                    return <div className="tp-point text-success" key={j}>{round3Total(p).toFixed(2)}</div>;
-                } else if (Math.sign(round3Total(p)) === (-1)) {
-                    return <div className="tp-point text-danger" key={j}>{round3Total(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point" key={j}>{round3Total(p).toFixed(2)}</div>;
-                }
-            });
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round3Total(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round3Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round3Total(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round3Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round3Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round3Total(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round3Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round3Total(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round3Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round3Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
         } else if (roundNum === 4) {
-            return net.performance.map((p, j) => {
-                if (Math.sign(round4Total(p)) === 1) {
-                    return <div className="tp-point text-success" key={j}>{round4Total(p).toFixed(2)}</div>;
-                } else if (Math.sign(round4Total(p)) === (-1)) {
-                    return <div className="tp-point text-danger" key={j}>{round4Total(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point" key={j}>{round4Total(p).toFixed(2)}</div>;
-                }
-            });
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round4Total(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round4Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round4Total(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round4Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round4Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round4Total(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round4Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round4Total(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round4Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round4Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
         } else if (roundNum === 5) {
-            return net.performance.map((p, j) => {
-                if (Math.sign(round5Total(p)) === 1) {
-                    return <div className="tp-point text-success" key={j}>{round5Total(p).toFixed(2)}</div>;
-                } else if (Math.sign(round5Total(p)) === (-1)) {
-                    return <div className="tp-point text-danger" key={j}>{round5Total(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point" key={j}>{round5Total(p).toFixed(2)}</div>;
-                }
-            });
-        }else{
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round5Total(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round5Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round5Total(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round5Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round5Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round5Total(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round5Total(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round5Total(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round5Total(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round5Total(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
+        } else {
             return;
         }
     }
@@ -234,56 +331,136 @@ export const getTotalPPD = (net, score, roundNum) => {
         // )
         // );
         if (roundNum === 1) {
-            return net.performance.map((p, j) => {
-                if (Math.sign(round1TD(p)) === 1) {
-                    return <div className="tp-point-differential text-success" key={j}>{round1TD(p).toFixed(2)}</div>;
-                } else if (Math.sign(round1TD(p)) === (-1)) {
-                    return <div className="tp-point-differential text-danger" key={j}>{round1TD(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point-differential" key={j}>{round1TD(p).toFixed(2)}</div>;
-                }
-            });
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round1TD(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round1TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round1TD(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round1TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round1TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round1TD(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round1TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round1TD(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round1TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round1TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
         } else if (roundNum === 2) {
-            return net.performance.map((p, j) => {
-                if (Math.sign(round2TD(p)) === 1) {
-                    return <div className="tp-point-differential text-success" key={j}>{round2TD(p).toFixed(2)}</div>;
-                } else if (Math.sign(round2TD(p)) === (-1)) {
-                    return <div className="tp-point-differential text-danger" key={j}>{round2TD(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point-differential" key={j}>{round2TD(p).toFixed(2)}</div>;
-                }
-            });
-        }else if (roundNum === 3) {
-            return net.performance.map((p, j) => {
-                if (Math.sign(round3TD(p)) === 1) {
-                    return <div className="tp-point-differential text-success" key={j}>{round3TD(p).toFixed(2)}</div>;
-                } else if (Math.sign(round3TD(p)) === (-1)) {
-                    return <div className="tp-point-differential text-danger" key={j}>{round3TD(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point-differential" key={j}>{round3TD(p).toFixed(2)}</div>;
-                }
-            });
-        }else if (roundNum === 4) {
-            return net.performance.map((p, j) => {
-                if (Math.sign(round4TD(p)) === 1) {
-                    return <div className="tp-point-differential text-success" key={j}>{round4TD(p).toFixed(2)}</div>;
-                } else if (Math.sign(round4TD(p)) === (-1)) {
-                    return <div className="tp-point-differential text-danger" key={j}>{round4TD(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point-differential" key={j}>{round4TD(p).toFixed(2)}</div>;
-                }
-            });
-        }else if (roundNum === 5) {
-            return net.performance.map((p, j) => {
-                if (Math.sign(round5TD(p)) === 1) {
-                    return <div className="tp-point-differential text-success" key={j}>{round5TD(p).toFixed(2)}</div>;
-                } else if (Math.sign(round5TD(p)) === (-1)) {
-                    return <div className="tp-point-differential text-danger" key={j}>{round5TD(p).toFixed(2)}</div>;
-                } else {
-                    return <div className="tp-point-differential" key={j}>{round5TD(p).toFixed(2)}</div>;
-                }
-            });
-        }else {
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round2TD(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round2TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round2TD(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round2TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round2TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round2TD(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round2TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round2TD(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round2TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round2TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
+        } else if (roundNum === 3) {
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round3TD(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round3TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round3TD(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round3TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round3TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round3TD(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round3TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round3TD(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round3TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round3TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
+        } else if (roundNum === 4) {
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round4TD(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round4TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round4TD(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round4TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round4TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round4TD(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round4TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round4TD(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round4TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round4TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
+        } else if (roundNum === 5) {
+            if (net.performance.length < 4) {
+                return (<div className="net-less-four">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round5TD(p)) === 1) {
+                            return <div className="tp-point short-net-player text-success" key={j}>{round5TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round5TD(p)) === (-1)) {
+                            return <div className="tp-point short-net-player  text-danger" key={j}>{round5TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point short-net-player " key={j}>{round5TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            } else {
+                return (<div className="players-in-net">{
+                    net.performance.map((p, j) => {
+                        if (Math.sign(round5TD(p)) === 1) {
+                            return <div className="tp-point text-success" key={j}>{round5TD(p).toFixed(2)}</div>;
+                        } else if (Math.sign(round5TD(p)) === (-1)) {
+                            return <div className="tp-point text-danger" key={j}>{round5TD(p).toFixed(2)}</div>;
+                        } else {
+                            return <div className="tp-point" key={j}>{round5TD(p).toFixed(2)}</div>;
+                        }
+                    })
+                }</div>);
+            }
+        } else {
             return;
         }
     }

@@ -8,14 +8,14 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
     // console.log("s - ", score);
     // console.log(props.round);
     // console.log("Game - ", game, props.game);
-    
+
 
 
     if (score === POINT) {
         if (net.performance.length < 4) {
-            return (<div className="players-in-net">{net.performance.map((p, j) => (
+            return (<div className="net-less-four">{(net.performance.map((p, j) => (
                 <div key={j}>
-                    <div className="point-extra d-flex jusitify-content-center align-items-center">
+                    <div className="point-extra short-net-player d-flex jusitify-content-center align-items-center">
                         {getDefaultValue(p, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
                             <div className="actual-point got-point text-success">{getDefaultValue(p, score, game, props.roundNum)}</div>
                             <div className="extra d-flex">
@@ -29,7 +29,8 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                     </div>
 
                 </div>
-            ))}</div>);
+            )))}</div>);
+
         } else {
             if (gor === 1) {
                 // 1ST & 4TH VS 2ND  4TH 
@@ -221,11 +222,11 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
     }
     if (score === POINT_DIFFERENTIAL) {
         if (net.performance.length < 4) {
-            return (<div className="players-in-net">{net.performance.map((p, j) => (
-                <div className="player-point-differential my-3" key={j}>
+            return (<div className="net-less-four">{(net.performance.map((p, j) => (
+                <div className="short-net-player player-point-differential my-3" key={j}>
                     <div className="pd-item">{getDefaultValue(p, score, game, props.roundNum)}</div>
                 </div>
-            ))}</div>);
+            )))}</div>);
         } else {
             if (gor === 1) {
                 return (<div className="player-point-differential d-flex flex-column">
@@ -272,8 +273,8 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
 
     if (score === SCORE) {
         if (net.performance.length < 4) {
-            return (<div className="players-in-net">{net.performance.map((p, j) => (
-                <div className="player-score" key={j}>
+            return (<div className="net-less-four"> {(net.performance.map((p, j) => (
+                <div className="short-net-player player-score" key={j}>
                     <input
                         type="text"
                         className="form-control"
@@ -283,7 +284,7 @@ const allPerformers = (net, game, score, gor, handleInputChange, getDefaultValue
                         onChange={e => handleInputChange(e, null, game, score, net._id, false, null, p._id, true, null)}
                     />
                 </div>
-            ))}</div>);
+            )))} </div>);
         } else {
             // console.log("player 1 - ", net.performance[0]._id);
             // console.log("player 2 - ", net.performance[1]._id);

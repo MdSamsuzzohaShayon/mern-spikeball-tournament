@@ -33,10 +33,10 @@ export const arrangingPerformer = (performer, gor, game, scoreType, roundNum) =>
     if (performer.length < 4) {
 
         {/* // <div className="player-name" key={j}>{p.participant.firstname} {p.participant.lastname}</div> */ }
-        return performer.map((p, j) => (<React.Fragment key={j}>
-            {checkWon(getDefaultValue(p, scoreType, game, roundNum), p.participant.firstname, p.participant.lastname)}
+        return (<div className="net-less-four">{(performer.map((p, j) => (<React.Fragment key={j}>
+            <div className="short-net-player">{checkWon(getDefaultValue(p, scoreType, game, roundNum), p.participant.firstname, p.participant.lastname)}</div>    
         </React.Fragment>
-        ));
+        )))}</div>);
     } else {
         if (gor === 1) {
             // console.log(performer);
@@ -119,7 +119,7 @@ export const serializePerformer = (performers, roundNum) => {
     // console.log("Performers - ",performers);
 
     let performersAccending = performers;
-    
+
 
     // if (roundNum === 1) {
     //     // console.log("Sorted - ", roundNum);
@@ -139,9 +139,9 @@ export const serializePerformer = (performers, roundNum) => {
 
     if (performersAccending.length < 4) {
         return (
-            <div >
+            <div className="net-less-four">
                 {performersAccending.map((p, j) => (
-                    <div className="player-name player-sl" key={j}>{p.participant.firstname} {p.participant.lastname} {roundNum}</div>
+                    <div className="player-name player-sl short-net-player" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
                 ))
                 }
             </div>);
@@ -149,7 +149,7 @@ export const serializePerformer = (performers, roundNum) => {
         return (
             <div className="players-in-net">
                 {performersAccending.map((p, j) => (
-                    <div className="player-name player-sl" key={j}>{p.participant.firstname } {p.participant.lastname} {roundNum}</div>
+                    <div className="player-name player-sl" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
                 ))
                 }
             </div>);

@@ -4,7 +4,7 @@ import { getTotalPPD } from '../../utils/getTotalPPD';
 import getDefaultValue from '../../utils/defaultValue';
 import inputChange from '../../utils/inputChange';
 import allPerformers from '../../utils/allPerformers';
-import {arrangingPerformer, serializePerformer} from "../../utils/arrangePerformer";
+import { arrangingPerformer, serializePerformer } from "../../utils/arrangePerformer";
 
 
 
@@ -282,6 +282,7 @@ function Round1(props) {
                                     {nets && nets.map((net, i) => (
                                         <tr key={i}>
                                             <th scope="row">Net {net.sl || i + 1}</th>
+                                            {/* {console.log("net performance - ", net.performance)} */}
 
                                             <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT, props.roundNum)} </td>
                                             <td >{allPerformers(net, props.game[0], SCORE, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
@@ -303,8 +304,8 @@ function Round1(props) {
 
                                             {/* AVERAGE  */}
                                             <td> {serializePerformer(net.performance, props.roundNum, NO_SCORE)} </td>
-                                            <td > <div className="players-in-net">  {getTotalPPD(net, POINT, props.roundNum)} </div></td>
-                                            <td ><div className="players-in-net"> {getTotalPPD(net, POINT_DIFFERENTIAL, props.roundNum)}</div></td>
+                                            <td >  {getTotalPPD(net, POINT, props.roundNum)} </td>
+                                            <td >{getTotalPPD(net, POINT_DIFFERENTIAL, props.roundNum)}</td>
                                             {/* <td > <div className="players-in-net"> {getTotalPPD(net, POINT, 4)}</div></td>
                                             <td > <div className="players-in-net"> {getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</div></td> */}
                                         </tr>
