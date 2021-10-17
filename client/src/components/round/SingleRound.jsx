@@ -28,23 +28,34 @@ function SingleRound(props) {
 
     // MODAL 
     const [assignNetShow, setAssignNetShow] = useState(false);
-    const handleNetClose = (update) => {
-        // console.log("UPdate - ", update);
-        if (update === true) {
-            if (randomNet === true) {
-                randomAssign();
-            } else {
-                assignNetHandler();
+    const handleNetClose = (e, update) => {
+        // console.log("Update - ", update);
+        try {
+
+            // e.preventDefault();
+            // console.log("UPdate - ", update);
+            if (update === true) {
+                if (randomNet === true) {
+                    randomAssign();
+                } else {
+                    assignNetHandler();
+                }
             }
+            setAssignNetShow(false);
+        } catch (error) {
+            console.log(error);
         }
-        setAssignNetShow(false)
     };
     const handleNetShow = (e, random) => {
-        setAssignNetShow(true);
-        if (random === true) {
-            setRandomNet(true);
-        } else {
-            setRandomNet(false);
+        try {
+            setAssignNetShow(true);
+            if (random === true) {
+                setRandomNet(true);
+            } else {
+                setRandomNet(false);
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -254,8 +265,8 @@ function SingleRound(props) {
 
 
 
-    const randomAssign = async (e) => {
-        e.preventDefault();
+    const randomAssign = async () => {
+        // e.preventDefault();
         // console.log("random");
         setIsLoading(true);
         // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
@@ -377,10 +388,10 @@ function SingleRound(props) {
                     </Modal.Header>
                     <Modal.Body>Did you report any score in this round?</Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={e => handleNetClose(false)}>
+                        <Button variant="secondary" onClick={e => handleNetClose(e, false)}>
                             Yes
                         </Button>
-                        <Button variant="primary" onClick={e => handleNetClose(true)}>
+                        <Button variant="primary" onClick={e => handleNetClose(e, true)}>
                             No
                         </Button>
                     </Modal.Footer>

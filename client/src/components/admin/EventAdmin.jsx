@@ -14,7 +14,11 @@ export class EventAdmin extends Component {
         this.state = {
             currentEventID: null,
             activeTab: 'event',
-            currentEvent: null,
+            currentEvent: {
+                title: null,
+                participants: [],
+                Date: null
+            },
             participants: "",
             isLoading: false
         };
@@ -94,7 +98,26 @@ export class EventAdmin extends Component {
                         </div>
                     );
                 } else {
-                    return (<div className="tab-pane fade show active" >Overview How Many Events, How Many Rounds, Score, Participants</div>);
+                    return (<div className="tab-pane fade show active" >
+                        <div className="row">
+                            <div className="col">
+                                <div class="card" >
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total Participants</h5>
+                                        <p class="card-text">{this.state.currentEvent.participants.length}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col">
+                                <div class="card" >
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tournament date</h5>
+                                        <p class="card-text">{`${new Date(this.state.currentEvent.date).getDay()}`}-{`${new Date(this.state.currentEvent.date).getMonth()}`}-{`${new Date(this.state.currentEvent.date).getFullYear()}`}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>);
                 }
             case "participants":
                 if (this.state.isLoading) {
@@ -107,11 +130,11 @@ export class EventAdmin extends Component {
                 } else {
                     return (<div className="tab-pane fade show active" >
                         <Participants
-                        event={this.state.currentEvent}
-                        updateEvent={this.updateEvent}
-                        participants={this.state.currentEvent.participants}
-                        eventID={this.state.currentEventID}
-                    />
+                            event={this.state.currentEvent}
+                            updateEvent={this.updateEvent}
+                            participants={this.state.currentEvent.participants}
+                            eventID={this.state.currentEventID}
+                        />
                     </div>);
                 }
             case "rounds":
@@ -134,7 +157,7 @@ export class EventAdmin extends Component {
                         </div>
                     );
                 } else {
-                    return (<div className="tab-pane fade show active score-board" ><Score admin={true}/></div>);
+                    return (<div className="tab-pane fade show active score-board" ><Score admin={true} /></div>);
                 }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);
@@ -155,13 +178,17 @@ export class EventAdmin extends Component {
 
 
     render() {
+        console.log(this.state.currentEvent);
         if (this.state.currentEventID) {
             return (
                 <div className="EventAdmin">
                     {/* Event admin ID: {this.state.currentEventID} */}
+                    {console.log("Event -")}
                     <div className="Overview">
                         <div className="d-flex align-items-start dashboard-nav container-fluid">
-                            <div className="nav nav-pills dashboard-nav-items bg-dark">
+                            <div className="nav nav-pills dashboard-nav-items bg-dark text-center">
+                                <h3 className="text-secondary nav-link" >{this.state.currentEvent.title}</h3>
+                                <br />
                                 <button className={this.state.activeTab === "event" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "event")} >Events</button>
                                 <button className={this.state.activeTab === "participants" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "participants")}  >Participants</button>
                                 <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Round</button>
