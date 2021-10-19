@@ -93,7 +93,7 @@ function Round1(props) {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
             credentials: "include",
-            // body: JSON.stringify({ updatePerformance, updateScore })
+            body: JSON.stringify({ updateScore, winningExtraPoint })
         };
         // console.log(props.eventID);
 
@@ -103,10 +103,10 @@ function Round1(props) {
         // console.log("Update Performance - ", updatePerformance);
 
         // CHANGE REQUEST BODY 
-        // const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
-        // console.log("Update - ", response);
-        // setUpdateScore([]);
-        // props.updateNets(true);
+        const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
+        console.log("Update - ", response);
+        setUpdateScore([]);
+        props.updateNets(true);
     }
 
 
@@ -177,8 +177,8 @@ function Round1(props) {
                                             <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT, props.roundNum)} </td>
                                             {/* SCORE  */}
                                             <td >{playersScore(net, props.game[0], SCORE, 1, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
-                                            <td >{playersExtraPoint(net, props.game[0], EXTRA_POINT, 1, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>                                       
-                                            <td >{playersPoint(net, props.game[0], POINT, 1 , props.roundNum)} </td>
+                                            <td >{playersExtraPoint(net, props.game[0], EXTRA_POINT, 1, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
+                                            <td >{playersPoint(net, props.game[0], POINT, 1, props.roundNum)} </td>
 
                                             <td>{playersPointDifferential(net, props.game[0], POINT_DIFFERENTIAL, 1, props.roundNum)}</td>
 
@@ -190,9 +190,9 @@ function Round1(props) {
 
                                             <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT, props.roundNum)} </td>
                                             {/* SCORE  */}
-                                            <td >{playersScore(net, props.game[1], SCORE, 1, handleScoreChange,  props.roundNum, updateScore, setUpdateScore)} </td>
+                                            <td >{playersScore(net, props.game[1], SCORE, 1, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
                                             <td >{playersExtraPoint(net, props.game[1], EXTRA_POINT, 2, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
-                                            <td >{playersPoint(net, props.game[1], POINT, 2 , props.roundNum)} </td>
+                                            <td >{playersPoint(net, props.game[1], POINT, 2, props.roundNum)} </td>
                                             <td>{playersPointDifferential(net, props.game[1], POINT_DIFFERENTIAL, 2, props.roundNum)}</td>
 
 
@@ -202,9 +202,9 @@ function Round1(props) {
 
                                             <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT, props.roundNum)} </td>
                                             {/* SCORE  */}
-                                            <td >{playersScore(net, props.game[2], SCORE, 1, handleScoreChange,  props.roundNum, updateScore, setUpdateScore)} </td>
+                                            <td >{playersScore(net, props.game[2], SCORE, 1, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
                                             <td >{playersExtraPoint(net, props.game[2], EXTRA_POINT, 3, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
-                                            <td >{playersPoint(net, props.game[2], POINT, 3 , props.roundNum)} </td>
+                                            <td >{playersPoint(net, props.game[2], POINT, 3, props.roundNum)} </td>
                                             <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, props.roundNum)}</td>
 
 

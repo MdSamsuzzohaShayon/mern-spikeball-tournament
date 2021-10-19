@@ -2,8 +2,8 @@ import { EXTRA_POINT, SCORE } from '../utils/global';
 
 
 
-
-const handleExtraWinningPointChange = (e, game, netID, scoreType, teamIDList, winningExtraPoint, setWinningExtraPoint) => {
+// e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint
+const handleExtraWinningPointChange = (e, game, scoreType, netID, teamIDList, shortNet, winningExtraPoint, setWinningExtraPoint) => {
     if (scoreType === EXTRA_POINT) {
         let extraPoint = parseFloat(e.target.value);
         if (isNaN(extraPoint)) extraPoint = 0;
@@ -208,3 +208,20 @@ const updatedTeams = [
         "game": 1,
         "netID": "61524bda4cd211193b335a16"
     }];
+
+const updatedExtra = [{
+    "teamIDList": ["61524bd34cd211193b3359f2"],
+    "game": 1,
+    "netID": "61524bdb4cd211193b335a1a",
+    "extraPoint": 12
+}, {
+    "teamIDList": ["61524bd34cd211193b3359f6", "61524bd34cd211193b3359f3"],
+    "game": 1,
+    "netID": "61524bdb4cd211193b335a18",
+    "extraPoint": 12
+}, {
+    "teamIDList": ["61524bd34cd211193b3359f5", "61524bd34cd211193b3359f1"],
+    "game": 2,
+    "netID": "61524bda4cd211193b335a16",
+    "extraPoint": 11
+}]

@@ -4,17 +4,16 @@ import { POINT, POINT_DIFFERENTIAL, SCORE, EXTRA_POINT } from './global';
 import getDefaultValue from './defaultValue';
 // gor = GAME OF ROUND 
 // ⛏️⛏️ INPUT FIELD FOR ALL PARTICIPANT OR PERFORMANCE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-const playersExtraPoint = (net, game, score, gor, handleExtraWinningPointChange, addExtra, showInput, roundNum, winningExtraPoint, setWinningExtraPoint) => {
+const playersExtraPoint = (net, game, scoreType, gor, handleExtraWinningPointChange, addExtra, showInput, roundNum, winningExtraPoint, setWinningExtraPoint) => {
     // console.log(net.performance);
-    // console.log("s - ", score);
+    // console.log("s - ", scoreType);
     // console.log(props.round);
     // console.log("Game - ", game, props.game);
 
 
-    if (score === EXTRA_POINT) {
+    if (scoreType === EXTRA_POINT) {
         const checkDefaultVal = (defaultVal, selectedTeam, shortNet, j) => {
 
-            let classList = "extra d-flex";
             // if (shortNet === true) classList = classList + " short-net-player";
             if (shortNet === true) {
                 if (defaultVal && defaultVal <= 1) {
@@ -22,7 +21,7 @@ const playersExtraPoint = (net, game, score, gor, handleExtraWinningPointChange,
                         <div className="extra d-flex short-net-player" key={j}>
                             <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
                             <input type="text" style={{ display: showInput(selectedTeam, game, roundNum) }}
-                                onChange={e => handleExtraWinningPointChange(e, null, game, score, net._id, true, null, selectedTeam, false, null)} className="extra-input form-control" />
+                                onChange={e => handleExtraWinningPointChange(e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control" />
                         </div>
                     );
                 } else {
@@ -34,7 +33,7 @@ const playersExtraPoint = (net, game, score, gor, handleExtraWinningPointChange,
                         <div className="extra d-flex" >
                             <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
                             <input type="text" style={{ display: showInput(selectedTeam, game, roundNum) }}
-                                onChange={e => handleExtraWinningPointChange(e, null, game, score, net._id, true, null, selectedTeam, false, null)} className="extra-input form-control" />
+                                onChange={e => handleExtraWinningPointChange(e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control" />
                         </div>
                     );
                 } else {
@@ -46,7 +45,7 @@ const playersExtraPoint = (net, game, score, gor, handleExtraWinningPointChange,
 
 
         if (net.performance.length < 4) {
-            // return (<div className="net-less-four">{net.performance.map((p, j) => <div className="short-net-player" key={j}>  <input type="text" className="form-control extra-point" onChange={e => handleInputChange(e, null, game, score, net._id, true, null, p._id, false, null)} /> </div>)}</div>);
+            // return (<div className="net-less-four">{net.performance.map((p, j) => <div className="short-net-player" key={j}>  <input type="text" className="form-control extra-point" onChange={e => handleInputChange(e, null, game, scoreType, net._id, true, null, p._id, false, null)} /> </div>)}</div>);
             return (<div className="net-less-four">{net.performance.map((p, j) => checkDefaultVal(getDefaultValue(p, POINT, game, roundNum), [p._id], true, j))}</div>);
 
         } else {
@@ -67,124 +66,33 @@ const playersExtraPoint = (net, game, score, gor, handleExtraWinningPointChange,
             }
 
 
-            // else if (gor === 2) {
-            //     let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-            //     // 1ST & 2ND VS 3RD & 4TH 
-            //     return (<div className="player-point d-flex flex-column">
-            //         <div className="two-p-input two-p-input-1 ">
-            //             <div className="point-extra d-flex jusitify-content-center align-items-center">
-            //                 {getDefaultValue(one, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
-            //                     <div className="actual-point got-point text-success">{getDefaultValue(one, score, game, props.roundNum)}</div>
-            //                     <div className="extra d-flex">
-            //                         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, one._id, game, props.round)} className="extra-icon" />
-            //                         <input type="text" style={{ display: showInput(one._id, game, props.round) }}
-            //                             onChange={e => handleInputChange(e, null, game, score, net._id, true, null, one._id, false, null)} className="extra-input form-control" />
-            //                     </div>
-            //                 </React.Fragment>)}
-            //             </div>
+            else if (gor === 2) {
+                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+                // 1ST & 2ND VS 3RD & 4TH 
+                return (<div className="player-score d-flex flex-column">
+                    <div className="two-p-input two-p-i-1">
+                        {checkDefaultVal(getDefaultValue(one, POINT, game, roundNum), [one._id, two._id], false, null)}
+                    </div>
+                    <div className="line"></div>
 
-            //             <div className="point-extra d-flex jusitify-content-center align-items-center">
-            //                 {getDefaultValue(two, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
-            //                     <div className="actual-point got-point text-success">{getDefaultValue(two, score, game, props.roundNum)}</div>
-            //                     <div className="extra d-flex">
-            //                         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, two._id, game, props.round)} className="extra-icon" />
-            //                         <input type="text" style={{ display: showInput(two._id, game, props.round) }}
-            //                             onChange={e => handleInputChange(e, null, game, score, net._id, true, null, two._id, false, null)} className="extra-input form-control" />
-            //                     </div>
-            //                 </React.Fragment>)}
-            //             </div>
+                    <div className="two-p-input two-p-i-2">
+                        {checkDefaultVal(getDefaultValue(three, POINT, game, roundNum), [three._id, four._id], false, null)}
+                    </div>
+                </div>);
+            } else if (gor === 3) {
+                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+                // 1ST VS 3RD & 2ND VS 4TH 
+                return (<div className="player-score d-flex flex-column">
+                    <div className="two-p-input two-p-i-1">
+                        {checkDefaultVal(getDefaultValue(one, POINT, game, roundNum), [one._id, three._id], false, null)}
+                    </div>
+                    <div className="line"></div>
 
-            //         </div>
-
-
-            //         <div className="line"></div>
-
-
-            //         <div className="two-p-input two-p-input-2 ">
-            //             <div className="point-extra d-flex jusitify-content-center align-items-center">
-            //                 {getDefaultValue(three, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
-            //                     <div className="actual-point got-point text-success">{getDefaultValue(three, score, game, props.roundNum)}</div>
-            //                     <div className="extra d-flex">
-            //                         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, three._id, game, props.round)} className="extra-icon" />
-            //                         <input type="text" style={{ display: showInput(three._id, game, props.round) }}
-            //                             onChange={e => handleInputChange(e, null, game, score, net._id, true, null, three._id, false, null)} className="extra-input form-control" />
-            //                     </div>
-            //                 </React.Fragment>)}
-            //             </div>
-
-            //             <div className="point-extra d-flex jusitify-content-center align-items-center">
-            //                 {getDefaultValue(four, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
-            //                     <div className="actual-point got-point text-success">{getDefaultValue(four, score, game, props.roundNum)}</div>
-            //                     <div className="extra d-flex">
-            //                         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, four._id, game, props.round)} className="extra-icon" />
-            //                         <input type="text" style={{ display: showInput(four._id, game, props.round) }}
-            //                             onChange={e => handleInputChange(e, null, game, score, net._id, true, null, four._id, false, null)} className="extra-input form-control" />
-            //                     </div>
-            //                 </React.Fragment>)}
-            //             </div>
-
-            //         </div>
-
-
-            //     </div>);
-            // } else if (gor === 3) {
-            //     let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-            //     // 1ST VS 3RD & 2ND VS 4TH 
-            //     return (<div className="player-point d-flex flex-column">
-            //         <div className="two-p-input two-p-input-1 ">
-            //             <div className="point-extra d-flex jusitify-content-center align-items-center">
-            //                 {getDefaultValue(one, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
-            //                     <div className="actual-point got-point text-success">{getDefaultValue(one, score, game, props.roundNum)}</div>
-            //                     <div className="extra d-flex">
-            //                         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, one._id, game, props.round)} className="extra-icon" />
-            //                         <input type="text" style={{ display: showInput(one._id, game, props.round) }}
-            //                             onChange={e => handleInputChange(e, null, game, score, net._id, true, null, one._id, false, null)} className="extra-input form-control" />
-            //                     </div>
-            //                 </React.Fragment>)}
-            //             </div>
-
-            //             <div className="point-extra d-flex jusitify-content-center align-items-center">
-            //                 {getDefaultValue(three, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
-            //                     <div className="actual-point got-point text-success">{getDefaultValue(three, score, game, props.roundNum)}</div>
-            //                     <div className="extra d-flex">
-            //                         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, three._id, game, props.round)} className="extra-icon" />
-            //                         <input type="text" style={{ display: showInput(three._id, game, props.round) }}
-            //                             onChange={e => handleInputChange(e, null, game, score, net._id, true, null, three._id, false, null)} className="extra-input form-control" />
-            //                     </div>
-            //                 </React.Fragment>)}
-            //             </div>
-            //         </div>
-
-
-            //         <div className="line"></div>
-            //         <div className="two-p-input two-p-input-2 ">
-            //             <div className="point-extra d-flex jusitify-content-center align-items-center">
-            //                 {getDefaultValue(two, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
-            //                     <div className="actual-point got-point text-success">{getDefaultValue(two, score, game, props.roundNum)}</div>
-            //                     <div className="extra d-flex">
-            //                         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, two._id, game, props.round)} className="extra-icon" />
-            //                         <input type="text" style={{ display: showInput(two._id, game, props.round) }}
-            //                             onChange={e => handleInputChange(e, null, game, score, net._id, true, null, two._id, false, null)} className="extra-input form-control" />
-            //                     </div>
-            //                 </React.Fragment>)}
-            //             </div>
-
-            //             <div className="point-extra d-flex jusitify-content-center align-items-center">
-            //                 {getDefaultValue(four, score, game, props.roundNum) < 1 ? <div className="actual-point no-point"></div> : (<React.Fragment>
-            //                     <div className="actual-point got-point text-success">{getDefaultValue(four, score, game, props.roundNum)}</div>
-            //                     <div className="extra d-flex">
-            //                         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, four._id, game, props.round)} className="extra-icon" />
-            //                         <input type="text" style={{ display: showInput(four._id, game, props.round) }}
-            //                             onChange={e => handleInputChange(e, null, game, score, net._id, true, null, four._id, false, null)} className="extra-input form-control" />
-            //                     </div>
-            //                 </React.Fragment>)}
-            //             </div>
-            //         </div>
-
-
-
-            //     </div>);
-            // }
+                    <div className="two-p-input two-p-i-2">
+                        {checkDefaultVal(getDefaultValue(two, POINT, game, roundNum), [two._id, four._id], false, null)}
+                    </div>
+                </div>);
+            }
         }
     }
 
