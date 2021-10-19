@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { hostname, POINT, POINT_DIFFERENTIAL, SCORE, NO_SCORE } from '../../utils/global';
+import { hostname, POINT, POINT_DIFFERENTIAL, SCORE, NO_SCORE, EXTRA_POINT } from '../../utils/global';
 import { getTotalPPD } from '../../utils/getTotalPPD';
 import getDefaultValue from '../../utils/defaultValue';
-import allPerformers from '../../utils/allPerformers';
+import allPerformers from '../../utils/allPerformers.backup';
 import AddParticipant from '../participant/AddParticipant';
 import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
 import { showLiftedPefrormance } from '../../utils/performance';
-import inputChange from '../../utils/inputChange';
+// import inputChange from '../../utils/inputChange';
+import { scoreInputChange, extraPointInputChange } from '../../utils/inputChange';
 import { arrangingPerformer, serializePerformer } from '../../utils/arrangePerformer';
 import { Modal, Button } from 'react-bootstrap'
 
 
 function SingleRound(props) {
-    const initialExtra = { pid: null, g: null, r: null };
+    const initialExtra = { team: null, g: null, r: null };
     // const [showInput, setShowInput] = useState(false);
     const [selectedExtra, setSelectedExtra] = useState(initialExtra);
     // const [expandExtra, setExpandExtra] = useState(false);
@@ -347,17 +348,19 @@ function SingleRound(props) {
 
 
 
-    const addExtra = (e, pid, g, r) => {
-        // E = EVENT, PID = PREFORMANCE ID, G = GAME, R = ROUND 
-        setSelectedExtra({ pid, g, r });
+    const addExtra = (e, team, g, r) => {
+        // E = EVENT, PID = PREFORMANCE ID, G = GAME, R = ROUND, TID = TEAM ID
+        // console.log("extra - ", selectedExtra);
+        setSelectedExtra({ team, g, r });
     }
 
-    const showInput = (pid, g, r) => {
-        if (pid === selectedExtra.pid && g === selectedExtra.g && r === selectedExtra.r) {
-            return "block";
-        } else {
-            return "none";
-        }
+    const showInput = (team, g, r) => {
+        // if (team[0] === selectedExtra.team[0] && g === selectedExtra.g && r === selectedExtra.r) {
+        //     console.log(team);
+        //     return "block";
+        // } else {
+        //     return "none";
+        // }
     }
 
 
@@ -454,9 +457,9 @@ function SingleRound(props) {
                                         <thead className="r-thead bg-dark text-light text-center">
                                             <tr>
                                                 <th colSpan="1" scope="colgroup"></th>
-                                                <th colSpan="4" scope="colgroup">Game {props.game[0]}</th>
-                                                <th colSpan="4" scope="colgroup">Game {props.game[1]}</th>
-                                                <th colSpan="4" scope="colgroup">Game {props.game[2]}</th>
+                                                <th colSpan="5" scope="colgroup">Game {props.game[0]}</th>
+                                                <th colSpan="5" scope="colgroup">Game {props.game[1]}</th>
+                                                <th colSpan="5" scope="colgroup">Game {props.game[2]}</th>
                                                 <th colSpan="3" scope="colgroup">Total</th>
                                             </tr>
                                             <tr>
@@ -464,18 +467,21 @@ function SingleRound(props) {
 
                                                 <th scope="col">Team</th>
                                                 <th scope="col">Score</th>
+                                                <th scope="col"><button className="p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
                                                 <th scope="col">Point</th>
                                                 <th scope="col">point differential</th>
 
 
                                                 <th scope="col">Team</th>
                                                 <th scope="col">Score</th>
+                                                <th scope="col"><button className="p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
                                                 <th scope="col">Point</th>
                                                 <th scope="col">point differential</th>
 
 
                                                 <th scope="col">Team</th>
                                                 <th scope="col">Score</th>
+                                                <th scope="col"><button className="p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
                                                 <th scope="col">Point</th>
                                                 <th scope="col">point differential</th>
 
@@ -491,6 +497,7 @@ function SingleRound(props) {
                                                     <th scope="row">Net {net.sl || i + 1}</th>
                                                     <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT, props.roundNum)} </td>
                                                     <td >{allPerformers(net, props.game[0], SCORE, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                                    <td >{allPerformers(net, props.game[0], EXTRA_POINT, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td >{allPerformers(net, props.game[0], POINT, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td>{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
@@ -498,12 +505,14 @@ function SingleRound(props) {
 
                                                     <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT, props.roundNum)} </td>
                                                     <td >{allPerformers(net, props.game[1], SCORE, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                                    <td >{allPerformers(net, props.game[1], EXTRA_POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td >{allPerformers(net, props.game[1], POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td>{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 
 
                                                     <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT, props.roundNum)} </td>
                                                     <td >{allPerformers(net, props.game[2], SCORE, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
+                                                    <td >{allPerformers(net, props.game[2], EXTRA_POINT, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td >{allPerformers(net, props.game[2], POINT, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
                                                     <td>{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
 

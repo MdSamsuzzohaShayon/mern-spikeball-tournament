@@ -1,9 +1,7 @@
 @import "./variables";
 @import "./mixins";
 
-
-
-.Rounds{
+.Rounds {
     width: 100%;
     margin-left: 0;
     margin-top: 0;
@@ -20,28 +18,35 @@
             min-height: $t-p-height;
             @include center_horizontally();
         }
-        .player-point, .player-point-differential, .player-score{
+        .player-point,
+        .player-point-differential,
+        .player-score {
             padding: 0 !important;
             margin: 0 !important;
-    
         }
 
-
-
-        input[type=text]{
+        input[type="text"] {
             height: 32px;
         }
-        .net-less-four{
+        .net-less-four {
             height: 100%;
             @include center_horizontally();
-            .short-net-player{
+            .short-net-player {
                 min-height: 70px;
             }
         }
 
-        .players-in-net{
+        .players-in-net {
             height: $t-p-height * 2;
             @include center_horizontally();
+        }
+        .btn-outline-transparent:focus {
+            border-color: inherit;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            &:focus {
+                outline: none !important;
+            }
         }
         // .got-point-name{
         //     color: green;
@@ -62,9 +67,6 @@
         //     height: 48px;
         //     align-items: center;
         // }
-
-
-
 
         // .player-sl{
         //     margin: $t-p-p-m !important;
@@ -138,13 +140,13 @@
             margin-left: 10px;
         }
 
-        .extra-icon {
-            width: 10px;
-            margin-left: 5px;
-        }
-        .extra-input {
-            width: $input-w;
-            margin-left: 5px;
-        }
+        // .extra-icon {
+        //     width: 10px;
+        //     margin-left: 5px;
+        // }
+        // .extra-input {
+        //     width: $input-w;
+        //     margin-left: 5px;
+        // }
     }
 }

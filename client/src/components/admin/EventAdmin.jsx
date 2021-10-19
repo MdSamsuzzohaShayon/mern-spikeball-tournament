@@ -101,18 +101,18 @@ export class EventAdmin extends Component {
                     return (<div className="tab-pane fade show active" >
                         <div className="row">
                             <div className="col">
-                                <div class="card" >
-                                    <div class="card-body">
-                                        <h5 class="card-title">Total Participants</h5>
-                                        <p class="card-text">{this.state.currentEvent.participants.length}</p>
+                                <div className="card" >
+                                    <div className="card-body">
+                                        <h5 className="card-title">Total Participants</h5>
+                                        <p className="card-text">{this.state.currentEvent.participants.length}</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="col">
-                                <div class="card" >
-                                    <div class="card-body">
-                                        <h5 class="card-title">Tournament date</h5>
-                                        <p class="card-text">{`${new Date(this.state.currentEvent.date).getDay()}`}-{`${new Date(this.state.currentEvent.date).getMonth()}`}-{`${new Date(this.state.currentEvent.date).getFullYear()}`}</p>
+                                <div className="card" >
+                                    <div className="card-body">
+                                        <h5 className="card-title">Tournament date</h5>
+                                        <p className="card-text">{`${new Date(this.state.currentEvent.date).getDay()}`}-{`${new Date(this.state.currentEvent.date).getMonth()}`}-{`${new Date(this.state.currentEvent.date).getFullYear()}`}</p>
                                     </div>
                                 </div>
                             </div>
@@ -178,12 +178,12 @@ export class EventAdmin extends Component {
 
 
     render() {
-        console.log(this.state.currentEvent);
+        // console.log(this.state.currentEvent);
         if (this.state.currentEventID) {
             return (
                 <div className="EventAdmin">
                     {/* Event admin ID: {this.state.currentEventID} */}
-                    {console.log("Event -")}
+                    {/* {console.log("Event -")} */}
                     <div className="Overview">
                         <div className="d-flex align-items-start dashboard-nav container-fluid">
                             <div className="nav nav-pills dashboard-nav-items bg-dark text-center">

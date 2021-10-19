@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Round1 from './Round1';
-import SingleRound from './SingleRound';
+// import SingleRound from './SingleRound';
 import { hostname } from '../../utils/global';
 import "../../style/Rounds.css";
 
@@ -133,87 +133,87 @@ const Rounds = (props) => {
                             eventID={props.eventID} />
                     </div>);
                 }
-            case 2:
-                if (isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
-                } else {
+            // case 2:
+            //     if (isLoading) {
+            //         return (
+            //             <div className="text-center spinner-parent">
+            //                 <div className="spinner-border text-danger spinner-child" role="status">
+            //                 </div>
+            //             </div>
+            //         );
+            //     } else {
 
-                    return (<div className="tab-pane fade show active" >
-                        <SingleRound
-                            initialize={initialize}
-                            round={round}
-                            roundNum={activeItem}
-                            updateNets={updateFindNets}
-                            leftRound={leftRound}
-                            game={[4, 5, 6]}
-                            eventID={props.eventID} />
-                    </div>);
-                }
-            case 3:
-                if (isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
-                } else {
-                    return (<div className="tab-pane fade show active" >
-                        <SingleRound
-                            initialize={initialize}
-                            round={round}
-                            roundNum={activeItem}
-                            updateNets={updateFindNets}
-                            leftRound={leftRound}
-                            game={[7, 8, 9]}
-                            eventID={props.eventID} />
-                    </div>);
-                }
-            case 4:
-                if (isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
-                } else {
-                    return (<div className="tab-pane fade show active" >
-                        <SingleRound
-                            initialize={initialize}
-                            round={round}
-                            roundNum={activeItem}
-                            updateNets={updateFindNets}
-                            leftRound={leftRound}
-                            game={[10, 11, 12]}
-                            eventID={props.eventID} />
-                    </div>);
-                }
-            case 5:
-                if (isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
-                } else {
-                    return (<div className="tab-pane fade show active" >
-                        <SingleRound
-                            initialize={initialize}
-                            round={round}
-                            roundNum={activeItem}
-                            updateNets={updateFindNets}
-                            leftRound={leftRound}
-                            game={[13, 14, 15]}
-                            eventID={props.eventID} />
-                    </div>);
-                }
+            //         return (<div className="tab-pane fade show active" >
+            //             <SingleRound
+            //                 initialize={initialize}
+            //                 round={round}
+            //                 roundNum={activeItem}
+            //                 updateNets={updateFindNets}
+            //                 leftRound={leftRound}
+            //                 game={[4, 5, 6]}
+            //                 eventID={props.eventID} />
+            //         </div>);
+            //     }
+            // case 3:
+            //     if (isLoading) {
+            //         return (
+            //             <div className="text-center spinner-parent">
+            //                 <div className="spinner-border text-danger spinner-child" role="status">
+            //                 </div>
+            //             </div>
+            //         );
+            //     } else {
+            //         return (<div className="tab-pane fade show active" >
+            //             <SingleRound
+            //                 initialize={initialize}
+            //                 round={round}
+            //                 roundNum={activeItem}
+            //                 updateNets={updateFindNets}
+            //                 leftRound={leftRound}
+            //                 game={[7, 8, 9]}
+            //                 eventID={props.eventID} />
+            //         </div>);
+            //     }
+            // case 4:
+            //     if (isLoading) {
+            //         return (
+            //             <div className="text-center spinner-parent">
+            //                 <div className="spinner-border text-danger spinner-child" role="status">
+            //                 </div>
+            //             </div>
+            //         );
+            //     } else {
+            //         return (<div className="tab-pane fade show active" >
+            //             <SingleRound
+            //                 initialize={initialize}
+            //                 round={round}
+            //                 roundNum={activeItem}
+            //                 updateNets={updateFindNets}
+            //                 leftRound={leftRound}
+            //                 game={[10, 11, 12]}
+            //                 eventID={props.eventID} />
+            //         </div>);
+            //     }
+            // case 5:
+            //     if (isLoading) {
+            //         return (
+            //             <div className="text-center spinner-parent">
+            //                 <div className="spinner-border text-danger spinner-child" role="status">
+            //                 </div>
+            //             </div>
+            //         );
+            //     } else {
+            //         return (<div className="tab-pane fade show active" >
+            //             <SingleRound
+            //                 initialize={initialize}
+            //                 round={round}
+            //                 roundNum={activeItem}
+            //                 updateNets={updateFindNets}
+            //                 leftRound={leftRound}
+            //                 game={[13, 14, 15]}
+            //                 eventID={props.eventID} />
+            //         </div>);
+            //     }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);
         }
