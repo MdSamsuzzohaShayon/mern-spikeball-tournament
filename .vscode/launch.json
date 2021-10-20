@@ -5,18 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach to Chrome",
+            "name": "Launch Node app",
             "port": 9222,
             "request": "attach",
-            "type": "pwa-chrome",
-            "webRoot": "${workspaceFolder}/client"
-        },
-
-        {
-            "type": "pwa-chrome",
-            "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:3000",
+            "type": "node",
+            "cwd": "",
             "webRoot": "${workspaceFolder}/client"
         }
     ]

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { hostname, POINT, POINT_DIFFERENTIAL, SCORE, NO_SCORE, EXTRA_POINT } from '../../utils/global';
 import { getTotalPPD } from '../../utils/getTotalPPD';
-import getDefaultValue from '../../utils/defaultValue';
 
 
 // import inputChange from '../../utils/inputChange';

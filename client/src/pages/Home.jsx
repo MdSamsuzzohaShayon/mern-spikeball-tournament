@@ -76,10 +76,15 @@ class Home extends Component {
 
     }
 
+
+
+
     render() {
         return (
             <div className="Home">
                 <i className="bi bi-plus-lg"></i>
+
+
                 
                 <div className="container mt-3">
                     <EventList isLoading={this.state.isLoading}
