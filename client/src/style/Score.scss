@@ -21,7 +21,7 @@
         @include center_horizontally();
     }
     .players-in-net {
-        height: $t-p-height * 2;
+        // height: $t-p-height * 2;
         @include center_horizontally();
     }
     .net-less-four {
