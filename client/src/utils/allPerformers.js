@@ -16,7 +16,7 @@ const playersExtraPoint = (net, game, scoreType, gor, handleExtraWinningPointCha
 
             // if (shortNet === true) classList = classList + " short-net-player";
             if (shortNet === true) {
-                if (defaultVal && defaultVal <= 1) {
+                if (defaultVal && defaultVal > 0) {
                     return (
                         <div className="extra d-flex short-net-player" key={j}>
                             <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
@@ -28,7 +28,7 @@ const playersExtraPoint = (net, game, scoreType, gor, handleExtraWinningPointCha
                     return <div className="extra" key={j}></div>;
                 }
             } else {
-                if (defaultVal && defaultVal <= 1) {
+                if (defaultVal && defaultVal > 0) {
                     return (
                         <div className="extra d-flex" >
                             <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
@@ -233,7 +233,7 @@ const playersPointDifferential = (net, game, scoreType, gor, roundNum) => {
 
 // net, props.game[0], SCORE, 1, handleScoreChange, getDefaultValue, props
 // gor= GAME OF ROUND 
-const playersScore = (net, gor, scoreType, game, handleScoreChange, roundNum, updateScore, setUpdateScore) => {
+const playersScore = (net, game, scoreType, gor, handleScoreChange, roundNum, updateScore, setUpdateScore) => {
 
     if (scoreType === SCORE) {
         if (net.performance.length < 4) {

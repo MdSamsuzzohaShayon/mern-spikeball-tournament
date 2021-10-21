@@ -1,5 +1,7 @@
 @import "./variables";
 
+
+// ROOT STYLING 
 .App {
   font-size: 1em;
   @media screen and (max-width: $br-lg) {
@@ -21,4 +23,7 @@
 
 .table {
   overflow-x: auto !important;
+}
+.horizontal-border{
+  border-color: rgba(33, 51, 216, 0.712);
 }

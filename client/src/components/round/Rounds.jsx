@@ -34,39 +34,44 @@ const Rounds = (props) => {
     // ⛏️⛏️ GET ALL NETS FROM A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const findRound = async (r) => {
 
-        const requestOptions = {
-            method: 'GET',
-            headers: { "Content-Type": 'application/json' },
-            credentials: "include"
-        };
-        // console.log(props.eventID);
-        setIsLoading(true);
-        // console.log("Loading - ",isLoading);
-        // console.log(r);
-        const response = await fetch(`${hostname}/api/round/get-single-round/${props.eventID}/${r}`, requestOptions);
-        console.log("Get nets from round - ", response);
-        const text = await response.text();
-        const jsonRes = await JSON.parse(text);
-        // console.log("JSON");
-        // console.log(jsonRes);
-        if (jsonRes.leftRound && jsonRes.leftRound.length > 0) {
-            setLeftRound([...jsonRes.leftRound]);
-        }
-        // CHECK FOR INITIAL NET 
-        if (jsonRes.findRound) {
-            setRounds(jsonRes.findRound);
-            if (jsonRes.findRound.nets || jsonRes.findRound.nets.length < 1) {
-                setInitialize(false);
+        try {
+            const requestOptions = {
+                method: 'GET',
+                headers: { "Content-Type": 'application/json' },
+                credentials: "include"
+            };
+            // console.log(props.eventID);
+            setIsLoading(true);
+            // console.log("Loading - ",isLoading);
+            // console.log(r);
+            const response = await fetch(`${hostname}/api/round/get-single-round/${props.eventID}/${r}`, requestOptions);
+            console.log("Get nets from round - ", response);
+            const text = await response.text();
+            const jsonRes = await JSON.parse(text);
+            // console.log("JSON");
+            // console.log(jsonRes);
+            if (jsonRes.leftRound && jsonRes.leftRound.length > 0) {
+                setLeftRound([...jsonRes.leftRound]);
+            }
+            // CHECK FOR INITIAL NET 
+            if (jsonRes.findRound) {
+                setRounds(jsonRes.findRound);
+                if (jsonRes.findRound.nets || jsonRes.findRound.nets.length < 1) {
+                    setInitialize(false);
+                } else {
+                    setInitialize(true);
+                }
             } else {
+                setRounds([]);
                 setInitialize(true);
             }
-        } else {
-            setRounds([]);
-            setInitialize(true);
+
+            setIsLoading(false);
+            // console.log("Loading - ",isLoading);
+        } catch (error) {
+            console.log(error);
         }
 
-        setIsLoading(false);
-        // console.log("Loading - ",isLoading);
     }
 
 

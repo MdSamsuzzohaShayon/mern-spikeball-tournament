@@ -218,6 +218,78 @@ router.post('/multiple/:eventID', (req, res, next) => {
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.put('/update-performance/:eventID/:round', async (req, res, next) => {
 
+
+    const { updateScore, winningExtraPoint } = req.body;
+    const { round, event } = req.params;
+    // console.log(updateScore);
+    // console.log(winningExtraPoint);
+
+
+    updateScore.forEach(async (us, i) => {
+        // console.log(us);
+
+        if (us.team2 === null) {
+            // WITHOUR NET 
+            let team1Score = 0, t1p = 0, t1pd = 0;
+            if (Math.sign(us.team1.score) === 1) {
+                team1Score = us.team1.score, t1p = 1, t1pd = us.team1.score;
+                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, round, team1Score, t1p, t1pd, us.netID) });
+            } else {
+                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, round, team1Score, t1p, t1pd, us.netID) });
+            }
+        } else {
+            // WITH NET 
+            let team1Score = us.team1.score, team2Score = us.team2.score;
+
+            if (team1Score === null) {
+                const doc = await Performance.findById(us.team1.players[0]);
+                team1Score = getScoreFromDoc(us.game, doc);
+            }
+            if (team2Score === null) {
+                // FIND PREVIOUS ITEM AND UPDATE 
+                const doc = await Performance.findById(us.team2.players[0]);
+                team2Score = getScoreFromDoc(us.game, doc);
+            }
+
+            let t1pd = team1Score - team2Score;
+            let t2pd = team2Score - team1Score;
+
+            let t1p = 0, t2p = 0;
+            if (t1pd > t2pd) {
+                t1p = 1;
+            } else if (t1pd < t2pd) {
+                t2p = 1;
+            }
+
+
+
+            // console.log("Current net point and point differential");
+            // console.log(t1p);
+            // console.log(t2p);
+            // console.log("-----------");
+            // console.log(t1pd);
+            // console.log(t2pd);
+            // console.log(updatedPerformance(us, round, t1p, t1pd, us.netID), us.game);
+            // console.log(us.game);
+            // us, round, team1Score, t1p, t1pd, us.netID
+            const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, round, team1Score, t1p, t1pd, us.netID) });
+            const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, round, team2Score, t2p, t2pd, us.netID) });
+            // console.log(updateTeam1);
+            // console.log(updateTeam2);
+
+        }
+    });
+
+
+
+
+    winningExtraPoint.forEach(async (wxp, i) => {
+        const findFirstPlayerOfTeam = await Performance.findById(wxp.teamIDList[0]);
+        const updateTeam2 = await Performance.updateMany({ _id: { $in: wxp.teamIDList } }, { $set: updatedExtraPerformance(wxp, round, wxp.netID, findFirstPlayerOfTeam) });
+    });
+
+
+
     /*
     const { updatePerformance, updateTeam } = req.body;
     const { round, event } = req.params;
@@ -285,7 +357,7 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
 
 
     // UPDATE EXISTING PERFORMANCE
-    res.status(200).json({ msg: 'Get net and participant' });
+    res.status(200).json({ msg: req.body });
 });
 
 

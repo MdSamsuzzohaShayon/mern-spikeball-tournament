@@ -24,4 +24,8 @@
   overflow-x: auto !important;
 }
 
+.horizontal-border {
+  border-color: rgba(33, 51, 216, 0.712);
+}
+
 /*# sourceMappingURL=App.css.map */

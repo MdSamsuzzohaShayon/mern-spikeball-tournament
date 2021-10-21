@@ -80,32 +80,35 @@ function Round1(props) {
     // ⛏️⛏️ UPDATE GAME POINT AND POINT DIFfERENTIAL ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const handleUpdate = async (e) => {
         e.preventDefault();
+        try {
+            // const uniqueData = [...updateScore.reduce((map, obj) => map.set(obj.performanceID, obj), new Map()).values()];
+            // reduce(function callbackFn(previousValue, currentValue) { ... })
+            // const uniqueData = updateScore.reduce((previousValue, currentValue) => {
+            //     console.log("Previous - ",previousValue);
+            //     console.log("Current - ",currentValue);
+            // });
+            // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
+            const requestOptions = {
+                method: 'PUT',
+                headers: { "Content-Type": 'application/json' },
+                credentials: "include",
+                body: JSON.stringify({ updateScore, winningExtraPoint })
+            };
+            // console.log(props.eventID);
 
-        // const uniqueData = [...updateScore.reduce((map, obj) => map.set(obj.performanceID, obj), new Map()).values()];
-        // reduce(function callbackFn(previousValue, currentValue) { ... })
-        // const uniqueData = updateScore.reduce((previousValue, currentValue) => {
-        //     console.log("Previous - ",previousValue);
-        //     console.log("Current - ",currentValue);
-        // });
-        // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
-        const requestOptions = {
-            method: 'PUT',
-            headers: { "Content-Type": 'application/json' },
-            credentials: "include",
-            body: JSON.stringify({ updateScore, winningExtraPoint })
-        };
-        // console.log(props.eventID);
 
+            // console.log(props.round._id);
+            // console.log("Update team - ", updateScore);
+            // console.log("Update Performance - ", updatePerformance);
 
-        // console.log(props.round._id);
-        // console.log("Update team - ", updateScore);
-        // console.log("Update Performance - ", updatePerformance);
-
-        // CHANGE REQUEST BODY 
-        const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
-        console.log("Update - ", response);
-        setUpdateScore([]);
-        props.updateNets(true);
+            // CHANGE REQUEST BODY 
+            const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
+            console.log("Update - ", response);
+            setUpdateScore([]);
+            props.updateNets(true);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
@@ -129,7 +132,7 @@ function Round1(props) {
                 <div className="show-all-nets">
                     {!props.initialize && (
                         <div className="table-responsive">
-                            <table className="table r-table table-bordered  table-striped">
+                            <table className="table r-table table-striped">
                                 <thead className="r-thead bg-dark text-light text-center">
                                     <tr>
                                         <th colSpan="1" scope="colgroup"></th>
@@ -169,7 +172,7 @@ function Round1(props) {
                                 </thead>
                                 <tbody>
                                     {nets && nets.map((net, i) => (
-                                        <tr key={i}>
+                                        <tr key={i} className="horizontal-border">
                                             <th scope="row">Net {net.sl || i + 1}</th>
                                             {/* {console.log("net performance - ", net.performance)} */}
 
@@ -189,7 +192,7 @@ function Round1(props) {
 
                                             <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT, props.roundNum)} </td>
                                             {/* SCORE  */}
-                                            <td >{playersScore(net, props.game[1], SCORE, 1, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
+                                            <td >{playersScore(net, props.game[1], SCORE, 2, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
                                             <td >{playersExtraPoint(net, props.game[1], EXTRA_POINT, 2, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
                                             <td >{playersPoint(net, props.game[1], POINT, 2, props.roundNum)} </td>
                                             <td>{playersPointDifferential(net, props.game[1], POINT_DIFFERENTIAL, 2, props.roundNum)}</td>
