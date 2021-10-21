@@ -18,6 +18,7 @@ class App extends Component {
     super(props);
     this.isMountedValue = false;
     this.state = {
+      isLoading: false,
       isAuthenticated: false,
       currentEventId: null
     };
@@ -35,6 +36,7 @@ class App extends Component {
   // ⛏️⛏️ GET AUTHENTICATED USER ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
   async getAuthenticatedUser() {
     this.isMountedValue = true;
+    this.setState({ isLoading: true });
     const response = await fetch(`${hostname}/api/admin/dashboard`, {
       method: "GET",
       credentials: 'include',
@@ -52,6 +54,7 @@ class App extends Component {
         this.setState({ isAuthenticated: false });
       }
     }
+    this.setState({ isLoading: false });
   }
 
 
@@ -90,16 +93,22 @@ class App extends Component {
           <Route exact path="/"><Home /></Route>
           <Route exact path="/home"><Home /></Route>
           <Route exact path="/admin">
-            {this.state.isAuthenticated ? <Redirect to="/admin/dashboard" /> : <Admin authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}
+            {this.state.isAuthenticated === true ? <Redirect to="/admin/dashboard" /> : <Admin authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}
           </Route>
           <Route exact path="/admin/dashboard">
-            {this.state.isAuthenticated ? <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
+            {this.state.isAuthenticated === true ? <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
           </Route>
           <Route exact path="/admin/dashboard/event/:id" >
-             <EventAdmin isAuthenticated={this.state.isAuthenticated} /> 
+            {/* {this.state.isLoading ? (<div className="text-center spinner-parent">
+              <div className="spinner-border text-danger spinner-child" role="status">
+              </div>
+            </div>) : <React.Fragment>
+              {this.state.isAuthenticated ? <EventAdmin isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
+            </React.Fragment>} */}
+            <EventAdmin isAuthenticated={this.state.isAuthenticated} />
           </Route>
           <Route exact path="/event/:id" >
-             <Score admin={false} /> 
+            <Score admin={false} />
           </Route>
           <Route path="*">
             <Page404 />

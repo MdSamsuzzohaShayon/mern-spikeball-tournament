@@ -81,10 +81,10 @@ router.post('/login',
 
 
 /* ⛏️⛏️ LOGOUT USERS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.get('/logout', (req, res) => {
+router.get('/logout', ensureAuth, (req, res) => {
     req.session.destroy(null);
     req.logout();
-    console.log(req.user);
+    // console.log(req.user);
     res.status(200).json({ user: null });
 });
 

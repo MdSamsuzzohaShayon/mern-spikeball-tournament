@@ -110,6 +110,10 @@ function SingleRound(props) {
 
 
 
+    // const setAllIdsOfScoreInput=()=>{
+
+    // }
+
 
 
     // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
@@ -117,7 +121,9 @@ function SingleRound(props) {
     useEffect(() => {
         // STYLE GOT POINT 
 
+
         console.log("Component did mount [SingleRound.jsx]");
+        // setAllIdsOfScoreInput();
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);
         // console.log(props.leftRound);
@@ -166,21 +172,25 @@ function SingleRound(props) {
 
 
 
+    const beforeUnloadListener = (event) => {
+        event.preventDefault();
+        // alert("hi");
+        // console.log("hi");
+        return ;
+    };
 
 
-    // useEffect(() => {
-    //     return () => {
-    //         console.log("Component unmount [SingleRound.jsx]");
-    //         // setIsLoading(false);
-    //         // setPerformances([]); // PARTICIPANTS
-    //         // setUpdateTeam([]);
-    //         // setShowPerformances(true);
-    //         // setLeftedPerformance([]);
-    //         // return controller?.abort();
-    //         // rank = 0;
-
-    //     };
-    // });
+    useEffect(() => {
+        // window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
+        // alert("hi");
+        if (winningExtraPoint.length > 0 || updateScore.length > 0) {
+            window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
+        }
+        return () => {
+            console.log("Component unmount [SingleRound.jsx]");
+            // window.addEventListener('unload', beforeUnloadListener, { capture: true });
+        };
+    });
 
 
 

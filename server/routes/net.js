@@ -5,7 +5,9 @@ const Net = require('../models/Net');
 const Performance = require('../models/Performance');
 const Round = require('../models/Round');
 
-const { rankingRound1, rankingRound2, rankingRound3, rankingRound4, wholeRanking, rankingRoundNine, rankingRoundThirteen } = require('../utils/ranking');
+const { rankingRound1, rankingRound2, rankingRound3, rankingRound4 } = require('../utils/ranking');
+const { ensureAuth, ensureGuast } = require('../config/auth');
+
 
 const router = express.Router();
 // arr[Math.floor(Math.random() * arr.length)];
@@ -19,7 +21,7 @@ const router = express.Router();
 
 
 // ⛏️⛏️ ASSIGN PLAYER TO THE NET FOR THE FIRST ROUND - CREATE PERFORMANCE FOR ALL PLAYER  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.post('/assign-initial-net/:eventID', async (req, res, next) => {
+router.post('/assign-initial-net/:eventID', ensureAuth, async (req, res, next) => {
     try {
         // console.log("Hit");
         // console.log(req.params.eventID);
@@ -117,8 +119,8 @@ router.post('/assign-initial-net/:eventID', async (req, res, next) => {
 
 
 
-// ⛏️⛏️ ASSIGN PLAYER TO THE NET - CREATE CREATE MORE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
+// ⛏️⛏️ ASSIGN PLAYER TO THE NET - CREATE MORE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
     try {
 
         const { performances, leftedPerformance } = req.body;
@@ -301,7 +303,7 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
 
 
 // ⛏️⛏️ RANDOM REASSIGN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
+router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
     try {
 
         // console.log("Random assign");

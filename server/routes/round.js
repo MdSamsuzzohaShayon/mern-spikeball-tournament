@@ -2,7 +2,7 @@ const express = require('express');
 const Performance = require('../models/Performance');
 const Round = require('../models/Round');
 const Net = require('../models/Net');
-
+const { ensureAuth } = require('../config/auth');
 const { rankingRound1, wholeRanking, rankingRound2Ind, rankingRound3Ind, rankingRound4Ind, rankingRound5Ind } = require('../utils/ranking');
 
 
@@ -175,7 +175,7 @@ router.get('/ranking/:eventID', async (req, res, next) => {
 
 
 // ⛏️⛏️ DELETE A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.delete('/:eventID/:roundNum', async (req, res, next) => {
+router.delete('/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
     try {
         const deleteRound = await Round.findOneAndDelete({ no: req.params.roundNum, event: req.params.eventID });
         // console.log(deleteRound);

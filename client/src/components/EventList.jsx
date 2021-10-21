@@ -108,7 +108,9 @@ const EventList = (props) => {
             )}
 
             {props.isLoading || isLoading ? (
-                <div className="spinner-border text-danger text-center" role="status">
+                <div className="text-center spinner-parent">
+                    <div className="spinner-border text-danger spinner-child" role="status">
+                    </div>
                 </div>
             ) : (
                 <table className="table">
@@ -125,7 +127,7 @@ const EventList = (props) => {
                             <tr key={index}>
                                 <th >{event.title}</th>
                                 <td>{new Date(event.date).getFullYear() + '-' + (new Date(event.date).getMonth() + 1) + '-' + new Date(event.date).getDate()}</td>
-                                <td>{props.isAuthenticated ? <Link to={`/admin/dashboard/event/${event._id}`} className='text-white btn btn-primary'>View Details</Link> : <Link to={`/event/${event._id}`} className="btn btn-primary">View Details Public</Link> }</td>
+                                <td>{props.isAuthenticated ? <Link to={`/admin/dashboard/event/${event._id}`} className='text-white btn btn-primary'>View Details</Link> : <Link to={`/event/${event._id}`} className="btn btn-primary">View Details Public</Link>}</td>
                                 {props.isAuthenticated && <td><button className="btn btn-danger" onClick={e => deleteEvent(e, event._id)} >Delete</button></td>}
                             </tr>)
                         )}

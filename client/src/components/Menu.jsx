@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { hostname } from '../utils/global';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 
 
 const Menu = (props) => {
+    let history = useHistory();
+
     /* ⛏️⛏️ LOGOUT EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
     const handleLogout = async () => {
 
@@ -20,6 +22,8 @@ const Menu = (props) => {
             if (response.status === 200) {
                 const text = await response.text();
                 console.log(JSON.parse(text));
+                history.push('/admin')
+                // return <Redirect to="/admin/dashboard" /> ;
             }
         } catch (error) {
             console.log(error);

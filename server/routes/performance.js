@@ -9,9 +9,11 @@ const Performance = require('../models/Performance');
 
 
 const { check, validationResult } = require('express-validator');
+
 const { wholeRanking } = require('../utils/ranking');
 const { updatedPerformance, updatedExtraPerformance, getScoreFromDoc } = require('../utils/updatedPerformance');
 const { replaceKeys } = require('../utils/helpers');
+const { ensureAuth, ensureGuast } = require('../config/auth');
 
 
 const router = express.Router();
@@ -30,7 +32,7 @@ router.get('/:eventID', async (req, res, next) => {
 
 
 /* ⛏️⛏️ CREATE PARTICIPANT OR PERFORMANCE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/:eventID',
+router.post('/:eventID', ensureAuth,
     check('firstname', "Firstname must not empty").notEmpty(),
     check('lastname', "Lastname must not empty").notEmpty(),
     check('city', "City must not empty").notEmpty(),
@@ -87,7 +89,7 @@ router.post('/:eventID',
 
 
 /* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/multiple/:eventID', (req, res, next) => {
+router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
 
 
     const form = formidable({ multiples: false });
@@ -216,7 +218,7 @@ router.post('/multiple/:eventID', (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-performance/:eventID/:round', async (req, res, next) => {
+router.put('/update-performance/:eventID/:round', ensureAuth, async (req, res, next) => {
 
 
     const { updateScore, winningExtraPoint } = req.body;
@@ -290,73 +292,6 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
     });
 
 
-
-    /*
-    const { updatePerformance, updateTeam } = req.body;
-    const { round, event } = req.params;
-
-    updateTeam.forEach(async (ut, i) => {
-        let team1Score = ut.team1.score, team2Score = ut.team2.score;
-        if (team1Score === null) {
-
-            const doc = await Performance.findById(ut.team1.player1)
-            team1Score = getScoreFromDoc(ut.game, doc);
-        }
-        if (team2Score === null) {
-            // FIND PREVIOUS ITEM AND UPDATE 
-            const doc = await Performance.findById(ut.team2.player1);
-            team2Score = getScoreFromDoc(ut.game, doc);
-        }
-
-        let t1pd = team1Score - team2Score;
-        let t2pd = team2Score - team1Score;
-
-        let t1p = 0, t2p = 0;
-        if (t1pd > t2pd) {
-            t1p = 1;
-        } else if (t1pd < t2pd) {
-            t2p = 1;
-        }
-
-
-
-        // TEAM 1
-        Performance.findByIdAndUpdate(ut.team1.player1, updatedPerformance(ut, round, team1Score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 1 player 1'); });
-        Performance.findByIdAndUpdate(ut.team1.player2, updatedPerformance(ut, round, team1Score, t1p, t1pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 1 player 2'); });
-
-        // TEAM 2
-        Performance.findByIdAndUpdate(ut.team2.player1, updatedPerformance(ut, round, team2Score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 2 player 1'); });
-        Performance.findByIdAndUpdate(ut.team2.player2, updatedPerformance(ut, round, team2Score, t2p, t2pd, ut.netID), (err, docs) => { if (err) throw err; console.log('Updated team 2 player 2'); });
-    });
-
-
-
-    updatePerformance.forEach((pu, i) => {
-        // UPDATE EXTRA POINT - AWARD POINT
-        if (pu.extraPoint === true) {
-            // UPDATE PERFORMANCE POINT FOR ANY PLAYER - AWARD POINT
-            Performance.findOne({ _id: pu.pId })
-                .then(doc => Performance.updateOne({ _id: doc._id }, updatedExtraPerformance(pu, round, pu.netID, doc)))
-                .then(result => console.log("Updated point - award point ", result))
-                .catch(err => console.log(err));
-        } else {
-            // UPDATE SCORE FOR LESS THAN 4 PLAYERS NET 
-            let point = 0, pointDeferential = 0, score = 0;
-            if (pu.score > 0) {
-                point = 1;
-                pointDeferential = pu.score;
-                score = pu.score;
-            }
-            Performance.findByIdAndUpdate(pu.pId, updatedPerformance(pu, round, score, point, pointDeferential, pu.netID), (err, docs) => { if (err) throw err });
-        }
-    });
-    */
-
-
-
-
-
-
     // UPDATE EXISTING PERFORMANCE
     res.status(200).json({ msg: req.body });
 });
@@ -370,7 +305,7 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
 // doc.subdocs.push({ _id: 4815162342 })
 // doc.subdocs.pull({ _id: 4815162342 }) // removed
 /* ⛏️⛏️ DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', ensureAuth, async (req, res, next) => {
     try {
         const participant = await Participant.findByIdAndDelete(req.params.id);
         // console.log(participant);

@@ -48,6 +48,35 @@ function Round1(props) {
     // console.log(props);
     const { nets } = props.round;
 
+    const beforeUnloadListener = (event) => {
+        event.preventDefault();
+        // alert("hi");
+        // console.log("hi");
+        return;
+    };
+
+
+    // const setAllIdsOfScoreInput=()=>{
+    //     // const scoreInputs = 
+    // }
+
+    // useEffect(()=>{
+    //     setAllIdsOfScoreInput();
+    // });
+
+
+    useEffect(() => {
+        // window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
+        // alert("hi");
+        if (winningExtraPoint.length > 0 || updateScore.length > 0) {
+            window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
+        }
+        return () => {
+            console.log("Component unmount [SingleRound.jsx]");
+            // window.addEventListener('unload', beforeUnloadListener, { capture: true });
+        };
+    });
+
 
 
 
