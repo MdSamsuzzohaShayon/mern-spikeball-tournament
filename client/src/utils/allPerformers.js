@@ -105,11 +105,32 @@ const playersExtraPoint = (net, game, scoreType, gor, handleExtraWinningPointCha
 
 // net, props.game[2], POINT, 3, getDefaultValue, props.roundNum
 const playersPoint = (net, game, scoreType, gor, roundNum) => {
+    const returnPoint = (t1p1, t1p2, t2p1, t2p2) => {
+        // t1p1default = TEAM ONE PLAYER ONE DEFAULT VALUE 
+        const t1p1default = getDefaultValue(t1p1, scoreType, game, roundNum);
+        const t1p2default = getDefaultValue(t1p2, scoreType, game, roundNum);
+        const t2p1default = getDefaultValue(t2p1, scoreType, game, roundNum);
+        const t2p2default = getDefaultValue(t2p2, scoreType, game, roundNum);
+
+        return (<div className="players-in-net">
+            <div className="two-p-input two-p-input-1">
+                {t1p1default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t1p1default}</div>)}
+                {t1p2default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t1p2default}</div>)}
+            </div>
+
+            <div className="line"></div>
+
+            <div className="two-p-input two-p-input-2 ">
+                {t2p1default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t2p1default}</div>)}
+                {t2p2default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t2p2default}</div>)}
+            </div>
+        </div>);
+    }
     if (scoreType === POINT) {
         if (net.performance.length < 4) {
             return (<div className="net-less-four">{(net.performance.map((p, j) => (
                 <div className="short-net-player" key={j}>
-                    {getDefaultValue(p, scoreType, game, roundNum) < 1 ? null : (<div className="text-success">{getDefaultValue(p, scoreType, game, roundNum)}</div>)}
+                    {getDefaultValue(p, scoreType, game, roundNum) > 0 ? null : (<div className="text-success">{getDefaultValue(p, scoreType, game, roundNum)}</div>)}
                 </div>
             )))}</div>);
 
@@ -117,52 +138,16 @@ const playersPoint = (net, game, scoreType, gor, roundNum) => {
             if (gor === 1) {
                 // 1ST & 4TH VS 2ND  4TH 
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-                return (<div className="players-in-net">
-                    <div className="two-p-input two-p-input-1">
-                        {getDefaultValue(one, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(one, scoreType, game, roundNum)}</div>)}
-                        {getDefaultValue(four, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(four, scoreType, game, roundNum)}</div>)}
-                    </div>
-
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-input-2 ">
-                        {getDefaultValue(two, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(two, scoreType, game, roundNum)}</div>)}
-                        {getDefaultValue(three, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(three, scoreType, game, roundNum)}</div>)}
-                    </div>
-                </div>);
+                return returnPoint(one, four, two, three);
 
             } else if (gor === 2) {
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 // 1ST & 2ND VS 3RD & 4TH 
-                return (<div className="players-in-net">
-                    <div className="two-p-input two-p-input-1">
-                        {getDefaultValue(one, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(one, scoreType, game, roundNum)}</div>)}
-                        {getDefaultValue(two, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(two, scoreType, game, roundNum)}</div>)}
-                    </div>
-
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-input-2 ">
-                        {getDefaultValue(three, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(three, scoreType, game, roundNum)}</div>)}
-                        {getDefaultValue(four, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(four, scoreType, game, roundNum)}</div>)}
-                    </div>
-                </div>);
+                return returnPoint(one, two, three, four);
             } else if (gor === 3) {
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 // 1ST VS 3RD & 2ND VS 4TH 
-                return (<div className="players-in-net">
-                    <div className="two-p-input two-p-input-1">
-                        {getDefaultValue(one, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(one, scoreType, game, roundNum)}</div>)}
-                        {getDefaultValue(three, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(three, scoreType, game, roundNum)}</div>)}
-                    </div>
-
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-input-2 ">
-                        {getDefaultValue(two, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(two, scoreType, game, roundNum)}</div>)}
-                        {getDefaultValue(four, scoreType, game, roundNum) < 1 ? <div className="text-danger"></div> : (<div className="text-success">{getDefaultValue(four, scoreType, game, roundNum)}</div>)}
-                    </div>
-                </div>);
+                return returnPoint(one, three, two, four);
             }
         }
     }
@@ -173,6 +158,25 @@ const playersPoint = (net, game, scoreType, gor, roundNum) => {
 
 //net, props.game[2], POINT_DIFFERENTIAL, 3, props.roundNum
 const playersPointDifferential = (net, game, scoreType, gor, roundNum) => {
+    const returnPointDifferential = (t1p1, t1p2, t2p1, t2p2) => {
+        const t1p1default = getDefaultValue(t1p1, scoreType, game, roundNum);
+        const t1p2default = getDefaultValue(t1p2, scoreType, game, roundNum);
+        const t2p1default = getDefaultValue(t2p1, scoreType, game, roundNum);
+        const t2p2default = getDefaultValue(t2p2, scoreType, game, roundNum);
+
+        return (<div className="players-in-net">
+            <div className="two-p-input two-p-i-1">
+                {checkNegativePD(t1p1default, "pd-i-1")}
+                {checkNegativePD(t1p2default, "pd-i-2")}
+            </div>
+            <div className="line"></div>
+
+            <div className="two-p-input two-p-i-2">
+                {checkNegativePD(t2p1default, "pd-i-1")}
+                {checkNegativePD(t2p2default, "pd-i-2")}
+            </div>
+        </div>);
+    }
     if (scoreType === POINT_DIFFERENTIAL) {
         if (net.performance.length < 4) {
             return (<div className="net-less-four">{(net.performance.map((p, j) => (
@@ -182,46 +186,15 @@ const playersPointDifferential = (net, game, scoreType, gor, roundNum) => {
             if (gor === 1) {
                 // 1ST & 4TH VS 2ND  4TH 
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-                return (<div className="players-in-net">
-                    <div className="two-p-input two-p-i-1">
-                        {checkNegativePD(getDefaultValue(one, scoreType, game, roundNum), "pd-i-1")}
-                        {checkNegativePD(getDefaultValue(four, scoreType, game, roundNum), "pd-i-2")}
-                    </div>
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-i-2">
-                        {checkNegativePD(getDefaultValue(two, scoreType, game, roundNum), "pd-i-1")}
-                        {checkNegativePD(getDefaultValue(three, scoreType, game, roundNum), "pd-i-2")}
-                    </div>
-                </div>);
+                return returnPointDifferential(one, four, two, three);
             } else if (gor === 2) {
+                // 1ST & 2ND VS 3RD & 4TH
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-                return (<div className="player-point-differential d-flex flex-column">
-                    <div className="two-p-input two-p-i-1">
-                        {checkNegativePD(getDefaultValue(one, scoreType, game, roundNum), "pd-i-1")}
-                        {checkNegativePD(getDefaultValue(two, scoreType, game, roundNum), "pd-i-2")}
-                    </div>
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-i-2">
-                        {checkNegativePD(getDefaultValue(three, scoreType, game, roundNum), "pd-i-1")}
-                        {checkNegativePD(getDefaultValue(four, scoreType, game, roundNum), "pd-i-2")}
-                    </div>
-                </div>);
+                return returnPointDifferential(one, two, three, four);
             } else if (gor === 3) {
+                // 1ST & 3RD VS 2ND & 4TH
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-                return (<div className="player-point-differential d-flex flex-column">
-                    <div className="two-p-input two-p-i-1">
-                        {checkNegativePD(getDefaultValue(one, scoreType, game, roundNum), "pd-i-1")}
-                        {checkNegativePD(getDefaultValue(three, scoreType, game, roundNum), "pd-i-2")}
-                    </div>
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-i-2">
-                        {checkNegativePD(getDefaultValue(two, scoreType, game, roundNum), "pd-i-1")}
-                        {checkNegativePD(getDefaultValue(four, scoreType, game, roundNum), "pd-i-2")}
-                    </div>
-                </div>);
+                return returnPointDifferential(one, three, two, four);
             }
         }
     }
@@ -234,6 +207,28 @@ const playersPointDifferential = (net, game, scoreType, gor, roundNum) => {
 // net, props.game[0], SCORE, 1, handleScoreChange, getDefaultValue, props
 // gor= GAME OF ROUND 
 const playersScore = (net, game, scoreType, gor, handleScoreChange, roundNum, updateScore, setUpdateScore) => {
+
+    const returnScore = (t1p1, t1p2, t2p1, t2p2) => {
+        const team1 = [t1p1._id, t1p2._id], team2 = [t2p1._id, t2p2._id];
+        const t1p1default = getDefaultValue(t1p1, scoreType, game, roundNum);
+        const t2p1default = getDefaultValue(t2p1, scoreType, game, roundNum);
+
+
+        return (<div className="player-score d-flex flex-column">
+            <div className="two-p-input two-p-i-1">
+                <input className="form-control" type="text"
+                    onChange={e => handleScoreChange(e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore, false)}
+                    defaultValue={t1p1default} />
+            </div>
+            <div className="line"></div>
+
+            <div className="two-p-input two-p-i-2">
+                <input className="form-control" type="text"
+                    onChange={e => handleScoreChange(e, game, net._id, scoreType, team2, team1, false, updateScore, setUpdateScore, false)}
+                    defaultValue={t2p1default} />
+            </div>
+        </div>);
+    }
 
     if (scoreType === SCORE) {
         if (net.performance.length < 4) {
@@ -256,23 +251,25 @@ const playersScore = (net, game, scoreType, gor, handleScoreChange, roundNum, up
             // console.log("player 4 - ", net.performance[3]._id);
 
             if (gor === 1) {
-                // 1ST & 4TH VS 2ND & 4TH 
-                const team1 = [net.performance[0]._id, net.performance[3]._id];
-                const team2 = [net.performance[1]._id, net.performance[2]._id];
-                return (<div className="player-score d-flex flex-column">
-                    <div className="two-p-input two-p-i-1">
-                        <input className="form-control" type="text"
-                            onChange={e => handleScoreChange(e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore, false)}
-                            defaultValue={getDefaultValue(net.performance[0], scoreType, game, roundNum)} />
-                    </div>
-                    <div className="line"></div>
+                // 1ST & 4TH VS 2ND & 3RD 
+                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+                return returnScore(one, four, two, three);
+                // const team1 = [net.performance[0]._id, net.performance[3]._id];
+                // const team2 = [net.performance[1]._id, net.performance[2]._id];
+                // return (<div className="player-score d-flex flex-column">
+                //     <div className="two-p-input two-p-i-1">
+                //         <input className="form-control" type="text"
+                //             onChange={e => handleScoreChange(e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore, false)}
+                //             defaultValue={getDefaultValue(net.performance[0], scoreType, game, roundNum)} />
+                //     </div>
+                //     <div className="line"></div>
 
-                    <div className="two-p-input two-p-i-2">
-                        <input className="form-control" type="text"
-                            onChange={e => handleScoreChange(e, game, net._id, scoreType, team2, team1, false, updateScore, setUpdateScore, false)}
-                            defaultValue={getDefaultValue(net.performance[1], scoreType, game, roundNum)} />
-                    </div>
-                </div>);
+                //     <div className="two-p-input two-p-i-2">
+                //         <input className="form-control" type="text"
+                //             onChange={e => handleScoreChange(e, game, net._id, scoreType, team2, team1, false, updateScore, setUpdateScore, false)}
+                //             defaultValue={getDefaultValue(net.performance[1], scoreType, game, roundNum)} />
+                //     </div>
+                // </div>);
             }
 
 
@@ -282,52 +279,14 @@ const playersScore = (net, game, scoreType, gor, handleScoreChange, roundNum, up
             // UNCOMMENT IT 
             else if (gor === 2) {
                 // 1ST & 2ND VS 3RD & 4TH 
-                const team1 = [net.performance[0]._id, net.performance[1]._id];
-                const team2 = [net.performance[2]._id, net.performance[3]._id];
-                return (<div className="player-score d-flex flex-column">
-                    <div className="two-p-input two-p-i-1">
-                        <input className="form-control" type="text"
-                            onChange={e => handleScoreChange(e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore, false)}
-                            defaultValue={getDefaultValue(net.performance[0], scoreType, game, roundNum)} />
-                    </div>
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-i-2">
-                        <input className="form-control" type="text"
-                            onChange={e => handleScoreChange(e, game, net._id, scoreType, team2, team1, false, updateScore, setUpdateScore, false)}
-                            defaultValue={getDefaultValue(net.performance[2], scoreType, game, roundNum)} />
-                    </div>
-                </div>);
+                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+                return returnScore(one, two, three, four);
 
             } else if (gor === 3) {
                 // 1ST & 3RD VS 2ND & 4TH 
-                const team1 = [net.performance[0]._id, net.performance[2]._id];
-                const team2 = [net.performance[1]._id, net.performance[3]._id];
-                return (<div className="player-score d-flex flex-column">
-                    <div className="two-p-input two-p-i-1">
-                        <input className="form-control" type="text"
-                            onChange={e => handleScoreChange(e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore, false)}
-                            defaultValue={getDefaultValue(net.performance[0], scoreType, game, roundNum)} />
-                    </div>
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-i-2">
-                        <input className="form-control" type="text"
-                            onChange={e => handleScoreChange(e, game, net._id, scoreType, team2, team1, false, updateScore, setUpdateScore, false)}
-                            defaultValue={getDefaultValue(net.performance[1], scoreType, game, roundNum)} />
-                    </div>
-                </div>);
+                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+                return returnScore(one, three, two, four);
             }
-
-
-
-
-
-
-
-
-
-
         }
     }
 

@@ -132,7 +132,7 @@ function Round1(props) {
                 <div className="show-all-nets">
                     {!props.initialize && (
                         <div className="table-responsive">
-                            <table className="table r-table table-striped">
+                            <table className="table r-table table-bordered table-striped">
                                 <thead className="r-thead bg-dark text-light text-center">
                                     <tr>
                                         <th colSpan="1" scope="colgroup"></th>
@@ -176,7 +176,7 @@ function Round1(props) {
                                             <th scope="row">Net {net.sl || i + 1}</th>
                                             {/* {console.log("net performance - ", net.performance)} */}
 
-                                            <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT, props.roundNum)} </td>
+                                            <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT_DIFFERENTIAL, props.roundNum)} </td>
                                             {/* SCORE  */}
                                             <td >{playersScore(net, props.game[0], SCORE, 1, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
                                             <td >{playersExtraPoint(net, props.game[0], EXTRA_POINT, 1, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
@@ -190,7 +190,7 @@ function Round1(props) {
 
 
 
-                                            <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT, props.roundNum)} </td>
+                                            <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT_DIFFERENTIAL, props.roundNum)} </td>
                                             {/* SCORE  */}
                                             <td >{playersScore(net, props.game[1], SCORE, 2, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
                                             <td >{playersExtraPoint(net, props.game[1], EXTRA_POINT, 2, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
@@ -202,7 +202,7 @@ function Round1(props) {
 
 
 
-                                            <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT, props.roundNum)} </td>
+                                            <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT_DIFFERENTIAL, props.roundNum)} </td>
                                             {/* SCORE  */}
                                             <td >{playersScore(net, props.game[2], SCORE, 1, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
                                             <td >{playersExtraPoint(net, props.game[2], EXTRA_POINT, 3, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
