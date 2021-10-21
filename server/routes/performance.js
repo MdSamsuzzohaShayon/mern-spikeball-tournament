@@ -285,7 +285,8 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
 
     winningExtraPoint.forEach(async (wxp, i) => {
         const findFirstPlayerOfTeam = await Performance.findById(wxp.teamIDList[0]);
-        const updateTeam2 = await Performance.updateMany({ _id: { $in: wxp.teamIDList } }, { $set: updatedExtraPerformance(wxp, round, wxp.netID, findFirstPlayerOfTeam) });
+        const updateTeam = await Performance.updateMany({ _id: { $in: wxp.teamIDList } }, { $set: updatedExtraPerformance(wxp, round, wxp.netID, findFirstPlayerOfTeam) });
+        // console.log(updateTeam);
     });
 
 

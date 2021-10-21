@@ -130,7 +130,7 @@ const playersPoint = (net, game, scoreType, gor, roundNum) => {
         if (net.performance.length < 4) {
             return (<div className="net-less-four">{(net.performance.map((p, j) => (
                 <div className="short-net-player" key={j}>
-                    {getDefaultValue(p, scoreType, game, roundNum) > 0 ? null : (<div className="text-success">{getDefaultValue(p, scoreType, game, roundNum)}</div>)}
+                    {getDefaultValue(p, scoreType, game, roundNum) < 0 ? null : (<div className="text-success">{getDefaultValue(p, scoreType, game, roundNum)}</div>)}
                 </div>
             )))}</div>);
 
@@ -180,7 +180,7 @@ const playersPointDifferential = (net, game, scoreType, gor, roundNum) => {
     if (scoreType === POINT_DIFFERENTIAL) {
         if (net.performance.length < 4) {
             return (<div className="net-less-four">{(net.performance.map((p, j) => (
-                <div className="short-net-player" key={j}>{getDefaultValue(p, scoreType, game, roundNum)}</div>
+                <div className="short-net-player" key={j}>{checkNegativePD(getDefaultValue(p, scoreType, game, roundNum), `pd-i-${j}`)}</div>
             )))}</div>);
         } else {
             if (gor === 1) {

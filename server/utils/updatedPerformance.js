@@ -7,6 +7,7 @@ const Performance = require('../models/Performance');
 // pu, round, pu.extra, pu.netID, doc
 module.exports.updatedExtraPerformance = (wxp, roundNum, netID, doc) => {
     // console.log("extra performance - ", wxp);
+    // console.log("doc - ", doc);
     // const extra_performance = {
     //     pId: '61524bd34cd211193b3359ed',
     //     score: null,
