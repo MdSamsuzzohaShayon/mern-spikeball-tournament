@@ -48,7 +48,7 @@ export const arrangingPerformer = (performer, gor, game, scoreType, roundNum) =>
                 <div className="vs text-uppercase">VS</div>
                 <div className="two-participant team-2">
                     {checkWon(t2p1default, t2p1.participant.firstname, t2p1.participant.lastname)}
-                    {checkWon(t2p1default, t2p2.participant.firstname, t2p2.participant.lastname)}
+                    {checkWon(t2p2default, t2p2.participant.firstname, t2p2.participant.lastname)}
                 </div>
             </div>);
     }
@@ -115,7 +115,7 @@ export const serializePerformer = (performers, roundNum) => {
 
     if (performersAccending.length < 4) {
         return (
-            <div className="net-less-four">
+            <div className="net-less-four-total">
                 {performersAccending.map((p, j) => (
                     <div className="player-name player-sl short-net-player" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
                 ))
@@ -123,7 +123,7 @@ export const serializePerformer = (performers, roundNum) => {
             </div>);
     } else {
         return (
-            <div className="players-in-net">
+            <div className="players-in-net-total">
                 {performersAccending.map((p, j) => (
                     <div className="player-name player-sl" key={j}>{p.participant.firstname} {p.participant.lastname}</div>
                 ))

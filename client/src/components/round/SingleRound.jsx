@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { hostname, POINT, POINT_DIFFERENTIAL, SCORE, NO_SCORE, EXTRA_POINT } from '../../utils/global';
 import { getTotalPPD } from '../../utils/getTotalPPD';
-import getDefaultValue from '../../utils/defaultValue';
-import allPerformers from '../../utils/allPerformers.backup';
 import AddParticipant from '../participant/AddParticipant';
 import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
 import { showLiftedPefrormance } from '../../utils/performance';
-// import inputChange from '../../utils/inputChange';
-import { scoreInputChange, extraPointInputChange } from '../../utils/inputChange';
-import { arrangingPerformer, serializePerformer } from '../../utils/arrangePerformer';
+
+
+import { handleScoreChange, handleExtraWinningPointChange } from '../../utils/inputChange';
+import { playersExtraPoint, playersPoint, playersPointDifferential, playersScore } from '../../utils/allPerformers';
+import { arrangingPerformer, serializePerformer } from "../../utils/arrangePerformer";
+
 import { Modal, Button } from 'react-bootstrap'
 
 
 function SingleRound(props) {
     const initialExtra = { team: null, g: null, r: null };
-    // const [showInput, setShowInput] = useState(false);
-    const [selectedExtra, setSelectedExtra] = useState(initialExtra);
-    // const [expandExtra, setExpandExtra] = useState(false);
+
 
     const [isLoading, setIsLoading] = useState(false);
     const [performances, setPerformances] = useState([]); // PARTICIPANTS
-    const [updateTeam, setUpdateTeam] = useState([]);
-    const [updatePerformance, setUpdatePerformance] = useState([]);
+
+
+    const [selectedExtra, setSelectedExtra] = useState(initialExtra);
+    const [winningExtraPoint, setWinningExtraPoint] = useState([]);
+    const [updateScore, setUpdateScore] = useState([]);
+
+
     const [showPerformances, setShowPerformances] = useState(true);
     const [leftedPerformance, setLeftedPerformance] = useState([]);
     // const [assignNet, setAssignNet] = useState(false);
@@ -128,7 +132,7 @@ function SingleRound(props) {
             setShowPerformances(false);
             setPerformances([]);
         }
-        setUpdateTeam([]);
+        setUpdateScore([]);
     }, []);
 
 
@@ -298,7 +302,7 @@ function SingleRound(props) {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
             credentials: "include",
-            body: JSON.stringify({ updatePerformance, updateTeam })
+            body: JSON.stringify({ updateScore, winningExtraPoint })
         };
         // console.log(props.eventID);
 
@@ -308,7 +312,7 @@ function SingleRound(props) {
 
         const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${props.roundNum}`, requestOptions);
         console.log("Update - ", response);
-        setUpdateTeam([]);
+        setUpdateScore([]);
         props.updateNets(true);
     }
 
@@ -316,28 +320,6 @@ function SingleRound(props) {
 
 
 
-
-
-
-    // ⛏️⛏️ INPUT VALUE CHANGE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const handleInputChange = (e, team, game, scoreType, netID, isExtra, oponent, extraPlayer, individual, teamNum) => {
-        e.preventDefault();
-        // console.log("Change - ", e.target.checked);
-        // console.log("Performance ID - ", id);
-        // console.log("round - ", round);
-        // console.log("score - ", score);
-        // console.log("Net ID - ", netID);
-        // console.log("PointType isExtra - ", isExtra); // true or false
-
-        // console.log(e.target.checked);
-        // console.log(e.target.value);
-
-        inputChange(e, netID, game, scoreType, isExtra, team, oponent, updateTeam, setUpdateTeam, extraPlayer, individual, teamNum, updatePerformance, setUpdatePerformance);
-        // inputChange(updateTeam, team, game, isExtra, scoreType, e, setUpdateTeam, netID, oponent);
-
-
-        // console.log(updateTeam);
-    }
 
 
 
@@ -350,17 +332,21 @@ function SingleRound(props) {
 
     const addExtra = (e, team, g, r) => {
         // E = EVENT, PID = PREFORMANCE ID, G = GAME, R = ROUND, TID = TEAM ID
-        // console.log("extra - ", selectedExtra);
         setSelectedExtra({ team, g, r });
     }
 
     const showInput = (team, g, r) => {
-        // if (team[0] === selectedExtra.team[0] && g === selectedExtra.g && r === selectedExtra.r) {
-        //     console.log(team);
-        //     return "block";
-        // } else {
-        //     return "none";
-        // }
+        // console.log("extra - ", selectedExtra);
+        if (selectedExtra.team) {
+            if (team[0] === selectedExtra.team[0] && g === selectedExtra.g && r === selectedExtra.r) {
+                // console.log(selectedExtra);
+                // console.log(team);
+                return "block";
+            } else {
+                return "none";
+            }
+        }
+        return "none";
     }
 
 
@@ -467,76 +453,86 @@ function SingleRound(props) {
 
                                                 <th scope="col">Team</th>
                                                 <th scope="col">Score</th>
-                                                <th scope="col"><button className="p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
+                                                <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
                                                 <th scope="col">Point</th>
                                                 <th scope="col">point differential</th>
 
 
                                                 <th scope="col">Team</th>
                                                 <th scope="col">Score</th>
-                                                <th scope="col"><button className="p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
+                                                <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
                                                 <th scope="col">Point</th>
                                                 <th scope="col">point differential</th>
 
 
                                                 <th scope="col">Team</th>
                                                 <th scope="col">Score</th>
-                                                <th scope="col"><button className="p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
+                                                <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
                                                 <th scope="col">Point</th>
                                                 <th scope="col">point differential</th>
 
-                                                {/* AVERAGE  */}
+                                                {/* Total  */}
                                                 <th scope="col">Participant</th>
                                                 <th scope="col">point</th>
-                                                <th scope="col">point deferential</th>
+                                                <th scope="col">point differential</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {nets && nets.map((net, i) => (
-                                                <tr key={i}>
+                                                <tr key={i} className="horizontal-border">
                                                     <th scope="row">Net {net.sl || i + 1}</th>
-                                                    <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT, props.roundNum)} </td>
-                                                    <td >{allPerformers(net, props.game[0], SCORE, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                                    <td >{allPerformers(net, props.game[0], EXTRA_POINT, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                                    <td >{allPerformers(net, props.game[0], POINT, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                                    <td>{allPerformers(net, props.game[0], POINT_DIFFERENTIAL, 1, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
+                                                    {/* {console.log("net performance - ", net.performance)} */}
 
+                                                    <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT_DIFFERENTIAL, props.roundNum)} </td>
+                                                    {/* SCORE  */}
+                                                    <td >{playersScore(net, props.game[0], SCORE, 1, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
+                                                    <td >{playersExtraPoint(net, props.game[0], EXTRA_POINT, 1, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
+                                                    <td >{playersPoint(net, props.game[0], POINT, 1, props.roundNum)} </td>
 
-
-                                                    <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT, props.roundNum)} </td>
-                                                    <td >{allPerformers(net, props.game[1], SCORE, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                                    <td >{allPerformers(net, props.game[1], EXTRA_POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                                    <td >{allPerformers(net, props.game[1], POINT, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                                    <td>{allPerformers(net, props.game[1], POINT_DIFFERENTIAL, 2, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
-
-
-                                                    <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT, props.roundNum)} </td>
-                                                    <td >{allPerformers(net, props.game[2], SCORE, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                                    <td >{allPerformers(net, props.game[2], EXTRA_POINT, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                                    <td >{allPerformers(net, props.game[2], POINT, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)} </td>
-                                                    <td>{allPerformers(net, props.game[2], POINT_DIFFERENTIAL, 3, handleInputChange, getDefaultValue, addExtra, showInput, props)}</td>
+                                                    <td>{playersPointDifferential(net, props.game[0], POINT_DIFFERENTIAL, 1, props.roundNum)}</td>
 
 
 
 
-                                                    {/* TOTAL  */}
-                                                    {/* <td>{i+1} </td> */}
-                                                    {/* <td>{rankLoop(net, i + 1, rank)} </td> */}
-                                                    {/* {console.log("single net before - ", net)} */}
-                                                    <td>{serializePerformer(net.performance, props.roundNum, NO_SCORE)} </td>
-                                                    {/* {console.log("single net after - ", net)} */}
+
+
+
+                                                    <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT_DIFFERENTIAL, props.roundNum)} </td>
+                                                    {/* SCORE  */}
+                                                    <td >{playersScore(net, props.game[1], SCORE, 2, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
+                                                    <td >{playersExtraPoint(net, props.game[1], EXTRA_POINT, 2, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
+                                                    <td >{playersPoint(net, props.game[1], POINT, 2, props.roundNum)} </td>
+                                                    <td>{playersPointDifferential(net, props.game[1], POINT_DIFFERENTIAL, 2, props.roundNum)}</td>
+
+
+
+
+
+
+                                                    <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT_DIFFERENTIAL, props.roundNum)} </td>
+                                                    {/* SCORE  */}
+                                                    <td >{playersScore(net, props.game[2], SCORE, 1, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
+                                                    <td >{playersExtraPoint(net, props.game[2], EXTRA_POINT, 3, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
+                                                    <td >{playersPoint(net, props.game[2], POINT, 3, props.roundNum)} </td>
+                                                    <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, props.roundNum)}</td>
+
+
+
+
+                                                    {/* AVERAGE  */}
+                                                    <td> {serializePerformer(net.performance, props.roundNum, NO_SCORE)} </td>
                                                     <td >  {getTotalPPD(net, POINT, props.roundNum)} </td>
                                                     <td >{getTotalPPD(net, POINT_DIFFERENTIAL, props.roundNum)}</td>
-
-
+                                                    {/* <td > <div className="players-in-net"> {getTotalPPD(net, POINT, 4)}</div></td>
+                                            <td > <div className="players-in-net"> {getTotalPPD(net, POINT_DIFFERENTIAL, 4)}</div></td> */}
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table>
                                 </div>
+
                             )}
                             <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
-                            <br />
                         </div>
                     )}
 

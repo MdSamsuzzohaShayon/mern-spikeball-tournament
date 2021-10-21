@@ -33,7 +33,23 @@
 .show-all-nets tr .net-less-four .short-net-player {
   min-height: 70px;
 }
+.show-all-nets tr .net-less-four-total {
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+.show-all-nets tr .net-less-four-total .short-net-player {
+  min-height: 70px;
+}
 .show-all-nets tr .players-in-net {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+.show-all-nets tr .players-in-net-total {
   height: 252px;
   display: flex;
   justify-content: space-evenly;
@@ -95,6 +111,10 @@
 }
 .show-all-nets tr .vs::after {
   margin-left: 10px;
+}
+.show-all-nets tr .extra-icon {
+  width: 15px;
+  margin-left: 5px;
 }
 
 /*# sourceMappingURL=Rounds.css.map */
