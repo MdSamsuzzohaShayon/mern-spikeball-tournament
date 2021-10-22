@@ -108,6 +108,11 @@ function SingleRound(props) {
 
 
 
+    useEffect(()=>{
+        tabKeyFocusChange();
+    })
+
+
 
 
 
@@ -118,7 +123,6 @@ function SingleRound(props) {
 
 
         console.log("Component did mount [SingleRound.jsx]");
-        tabKeyFocusChange();
         // setAllIdsOfScoreInput();
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);

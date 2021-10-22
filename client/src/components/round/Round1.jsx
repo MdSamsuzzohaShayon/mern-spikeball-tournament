@@ -51,12 +51,11 @@ function Round1(props) {
 
 
 
+
+    
+    
     useEffect(() => {
         tabKeyFocusChange();
-    }, [])
-
-
-    useEffect(() => {
         // window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
         // alert("hi");
         if (winningExtraPoint.length > 0 || updateScore.length > 0) {
@@ -141,15 +140,14 @@ function Round1(props) {
 
     return (
         <div className="Round1">
-            {props.initialize && <button className="btn btn-primary" onClick={initializeNetHandler} >Initialize net for first round</button>}
-            <br />
+            {props.initialize && <button className="btn btn-primary my-3" onClick={initializeNetHandler} >Initialize net for first round</button>}
             {isLoading ? (
                 <div className="text-center spinner-parent">
                     <div className="spinner-border text-danger spinner-child" role="status">
                     </div>
                 </div>
             ) : (
-                <div className="show-all-nets">
+                <div className="show-all-nets mt-2">
                     {!props.initialize && (
                         <div className="table-responsive">
                             <table className="table r-table table-bordered table-striped">
@@ -245,7 +243,7 @@ function Round1(props) {
                         </div>
 
                     )}
-                    <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
+                    {!props.initialize && <button onClick={handleUpdate} className="btn btn-primary">Submit</button>}
                 </div>
             )}
         </div>
