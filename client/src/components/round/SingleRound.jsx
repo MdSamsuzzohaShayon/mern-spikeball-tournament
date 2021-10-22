@@ -4,11 +4,11 @@ import { getTotalPPD } from '../../utils/getTotalPPD';
 import AddParticipant from '../participant/AddParticipant';
 import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
 import { showLiftedPefrormance } from '../../utils/performance';
-
-
 import { handleScoreChange, handleExtraWinningPointChange } from '../../utils/inputChange';
 import { playersExtraPoint, playersPoint, playersPointDifferential, playersScore } from '../../utils/allPerformers';
 import { arrangingPerformer, serializePerformer } from "../../utils/arrangePerformer";
+import { tabKeyFocusChange } from '../../utils/helpers';
+
 
 import { Modal, Button } from 'react-bootstrap'
 
@@ -110,11 +110,6 @@ function SingleRound(props) {
 
 
 
-    // const setAllIdsOfScoreInput=()=>{
-
-    // }
-
-
 
     // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
@@ -123,6 +118,7 @@ function SingleRound(props) {
 
 
         console.log("Component did mount [SingleRound.jsx]");
+        tabKeyFocusChange();
         // setAllIdsOfScoreInput();
         // console.log("All nets - ", props.nets);
         // console.log("Round - ", props.round);

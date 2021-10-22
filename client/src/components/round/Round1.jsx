@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { hostname, POINT, POINT_DIFFERENTIAL, SCORE, NO_SCORE, EXTRA_POINT } from '../../utils/global';
 import { getTotalPPD } from '../../utils/getTotalPPD';
-
-
-// import inputChange from '../../utils/inputChange';
 import { handleScoreChange, handleExtraWinningPointChange } from '../../utils/inputChange';
-
-
-// import allPerformers from '../../utils/allPerformers';
 import { playersExtraPoint, playersPoint, playersPointDifferential, playersScore } from '../../utils/allPerformers';
-
-
 import { arrangingPerformer, serializePerformer } from "../../utils/arrangePerformer";
+import { tabKeyFocusChange } from '../../utils/helpers';
+
 
 
 
@@ -56,13 +50,10 @@ function Round1(props) {
     };
 
 
-    // const setAllIdsOfScoreInput=()=>{
-    //     // const scoreInputs = 
-    // }
 
-    // useEffect(()=>{
-    //     setAllIdsOfScoreInput();
-    // });
+    useEffect(() => {
+        tabKeyFocusChange();
+    }, [])
 
 
     useEffect(() => {
@@ -262,3 +253,5 @@ function Round1(props) {
 }
 
 export default Round1;
+
+

@@ -216,14 +216,14 @@ const playersScore = (net, game, scoreType, gor, handleScoreChange, roundNum, up
 
         return (<div className="player-score d-flex flex-column">
             <div className="two-p-input two-p-i-1">
-                <input className="form-control" type="text"
+                <input className="form-control input-score" type="text"
                     onChange={e => handleScoreChange(e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore, false)}
                     defaultValue={t1p1default} />
             </div>
             <div className="line"></div>
 
             <div className="two-p-input two-p-i-2">
-                <input className="form-control" type="text"
+                <input className="form-control input-score" type="text"
                     onChange={e => handleScoreChange(e, game, net._id, scoreType, team2, team1, false, updateScore, setUpdateScore, false)}
                     defaultValue={t2p1default} />
             </div>
@@ -236,7 +236,7 @@ const playersScore = (net, game, scoreType, gor, handleScoreChange, roundNum, up
                 <div className="short-net-player player-score" key={j}>
                     <input
                         type="text"
-                        className="form-control"
+                        className="form-control input-score-no-net"
                         defaultValue={getDefaultValue(p, scoreType, game, roundNum)}
                         style={{ width: "80px" }} name={net.sl}
                         // e, game, netID, scoreType, team, oponent, updateScore, setUpdateScore
