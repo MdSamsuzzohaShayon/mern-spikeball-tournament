@@ -35,26 +35,30 @@ class App extends Component {
 
   // ⛏️⛏️ GET AUTHENTICATED USER ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
   async getAuthenticatedUser() {
-    this.isMountedValue = true;
-    this.setState({ isLoading: true });
-    const response = await fetch(`${hostname}/api/admin/dashboard`, {
-      method: "GET",
-      credentials: 'include',
-      headers: {
-        "Content-Type": "application/json"
+    try {
+      this.isMountedValue = true;
+      this.setState({ isLoading: true });
+      const response = await fetch(`${hostname}/api/admin/dashboard`, {
+        method: "GET",
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      const textRes = await response.text();
+      const jsonRes = await JSON.parse(textRes);
+      // console.log("User - ",jsonRes.user);
+      if (this.isMountedValue) {
+        if (jsonRes.user) {
+          this.setState({ isAuthenticated: true });
+        } else {
+          this.setState({ isAuthenticated: false });
+        }
       }
-    });
-    const textRes = await response.text();
-    const jsonRes = await JSON.parse(textRes);
-    // console.log("User - ",jsonRes.user);
-    if (this.isMountedValue) {
-      if (jsonRes.user) {
-        this.setState({ isAuthenticated: true });
-      } else {
-        this.setState({ isAuthenticated: false });
-      }
+      this.setState({ isLoading: false });
+    } catch (error) {
+      console.log(error);
     }
-    this.setState({ isLoading: false });
   }
 
 

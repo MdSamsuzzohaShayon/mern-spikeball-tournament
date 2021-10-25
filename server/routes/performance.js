@@ -22,11 +22,25 @@ const router = express.Router();
 
 
 
+// router.get('/findteam', async (req, res, next) => {
+//     //         // const { player1, player2 } = req.body;
+//     //         // // [0]['61750e90f27635275693d7cc', '61750e90f27635275693d7d2']
+//     //         // // [0]['61750e90f27635275693d7cd', '61750e90f27635275693d7d1']
+//     //         // console.log(req.body);
+
+//     const performance1 = await Performance.findById('61750e90f27635275693d7cc').populate({ path: "participant", select: "firstname lastname" });
+//     const performance2 = await Performance.findById('61750e90f27635275693d7d2').populate({ path: "participant", select: "firstname lastname" });
+//     res.status(200).json({ request: 'Success', performance1, performance2 });
+// });
+
 
 router.get('/:eventID', async (req, res, next) => {
     const allPerformance = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" });
     res.status(200).json({ performances: allPerformance });
 });
+
+
+
 
 
 
@@ -228,7 +242,7 @@ router.put('/update-performance/:eventID/:round', ensureAuth, async (req, res, n
 
 
     updateScore.forEach(async (us, i) => {
-        // console.log(us);
+        console.log(us);
 
         if (us.team2 === null) {
             // WITHOUR NET 
@@ -274,10 +288,10 @@ router.put('/update-performance/:eventID/:round', ensureAuth, async (req, res, n
             // console.log(updatedPerformance(us, round, t1p, t1pd, us.netID), us.game);
             // console.log(us.game);
             // us, round, team1Score, t1p, t1pd, us.netID
+            // console.log(us.team1.players);
+            // console.log(us.team2.players);
             const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, round, team1Score, t1p, t1pd, us.netID) });
             const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, round, team2Score, t2p, t2pd, us.netID) });
-            // console.log(updateTeam1);
-            // console.log(updateTeam2);
 
         }
     });
@@ -295,6 +309,12 @@ router.put('/update-performance/:eventID/:round', ensureAuth, async (req, res, n
     // UPDATE EXISTING PERFORMANCE
     res.status(200).json({ msg: req.body });
 });
+
+
+
+
+
+
 
 
 

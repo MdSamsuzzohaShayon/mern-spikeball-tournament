@@ -108,7 +108,7 @@ function SingleRound(props) {
 
 
 
-    useEffect(()=>{
+    useEffect(() => {
         tabKeyFocusChange();
     })
 
@@ -176,7 +176,7 @@ function SingleRound(props) {
         event.preventDefault();
         // alert("hi");
         // console.log("hi");
-        return ;
+        return;
     };
 
 
@@ -420,8 +420,10 @@ function SingleRound(props) {
                             {performances && performances.map((p, i) => (<tr key={i} >
                                 <td>{p.participant.firstname + " " + p.participant.lastname}</td>
                                 <td>{i + 1}</td>
-                                <td>{getTotalPointOfARound(p, props.roundNum).toFixed(2)}</td>
-                                {Math.sign(getTDRound(p, props.roundNum)) === -1 ? <td className="text-danger">{getTDRound(p, props.roundNum).toFixed(2)}</td> : <td className="text-success">{getTDRound(p, props.roundNum).toFixed(2)}</td>}
+                                {getTotalPointOfARound(p, props.roundNum)? <td>{getTotalPointOfARound(p, props.roundNum).toFixed(2)}</td>: <td></td>}
+                                {getTDRound(p, props.roundNum) ? <React.Fragment>
+                                    {Math.sign(getTDRound(p, props.roundNum)) === -1 ? <td className="text-danger">{getTDRound(p, props.roundNum).toFixed(2)}</td> : <td className="text-success">{getTDRound(p, props.roundNum).toFixed(2)}</td>}
+                                </React.Fragment>: <td></td>}
                                 <td><button className="btn btn-danger" onClick={e => leftNet(e, p._id)}>Left</button></td>
                             </tr>))}
                         </tbody>
@@ -521,7 +523,7 @@ function SingleRound(props) {
 
                                                     <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT_DIFFERENTIAL, props.roundNum)} </td>
                                                     {/* SCORE  */}
-                                                    <td >{playersScore(net, props.game[2], SCORE, 1, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
+                                                    <td >{playersScore(net, props.game[2], SCORE, 3, handleScoreChange, props.roundNum, updateScore, setUpdateScore)} </td>
                                                     <td >{playersExtraPoint(net, props.game[2], EXTRA_POINT, 3, handleExtraWinningPointChange, addExtra, showInput, props.roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
                                                     <td >{playersPoint(net, props.game[2], POINT, 3, props.roundNum)} </td>
                                                     <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, props.roundNum)}</td>

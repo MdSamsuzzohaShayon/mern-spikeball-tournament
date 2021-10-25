@@ -194,6 +194,7 @@ const playersPointDifferential = (net, game, scoreType, gor, roundNum) => {
             } else if (gor === 3) {
                 // 1ST & 3RD VS 2ND & 4TH
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+                // console.log(net.performance);
                 return returnPointDifferential(one, three, two, four);
             }
         }
