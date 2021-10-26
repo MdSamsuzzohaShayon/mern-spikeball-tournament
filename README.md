@@ -157,6 +157,7 @@ EMOJIES - 📜 ⛏️ ➖ ✅
  - __http://adnan-tech.com/how-to-export-and-download-csv-in-node-js/__
  - __https://expressjs.com/en/api.html#res.download__
  - __https://www.npmjs.com/package/objects-to-csv__
+ - __https://www.npmjs.com/package/excel4node__
 
 
 __HTTPS://GITHUB.COM/WOODBURYDEV/TYPESCRIPTPASSPORTWREACT/BLOB/MAIN/BACKEND/SRC/INDEX.TS__

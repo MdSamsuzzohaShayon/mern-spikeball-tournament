@@ -1,6 +1,8 @@
 const express = require('express');
 const formidable = require('formidable');
 const csv = require('csvtojson');
+// const fsPromise = require('fs').promises;
+const fs = require('fs');
 // Require library
 const xl = require('excel4node');
 
@@ -353,12 +355,37 @@ router.post('/exports/:eventID', async (req, res, next) => {
             numberFormat: '$#,##0.00; ($#,##0.00); -',
         });
 
-        workbook.write(`./temp/${filename}.xlsx`);
+
+
+        // const statistics = await workbook.write(`./temp/${filename}.xlsx`);
+        const file_dir = `./temp/${filename}.xlsx`;
+        workbook.write(file_dir, (err, stats) => {
+            if (err) throw err;
+            // console.log(stats);
+            res.download(file_dir, downloadErr => {
+                if (downloadErr) {
+                    res.json({ downloadErr });
+                } else {
+                    // DELETE FILE 
+                    // try {
+                    //    const deletedFile = await fsPromise.unlink(file_dir);
+                    //    console.log("File download - ",deletedFile);
+                    // } catch (deleteErr) {
+                    //     console.log(deleteErr);
+                    // }
+                    fs.unlink(file_dir, (deleteErr)=>{
+                        if(deleteErr) throw deleteErr;
+                        // console.log(doc);
+                    });
+                }
+            })
+        });
 
 
 
 
-        res.json({ filename });
+
+        // res.json({ filename });
         // res.download();
     } catch (error) {
         console.log(error);

@@ -25,12 +25,33 @@ const ExportField = (props) => {
                 method: 'POST',
                 headers: { "Content-Type": 'application/json' },
                 credentials: "include",
-                body: JSON.stringify({ filename})
+                body: JSON.stringify({ filename })
             };
             // console.log(props.eventID);
-    
+
             const response = await fetch(`${hostname}/api/performance/exports/${props.eventID}`, requestOptions);
             console.log("Exported - ", response);
+            const blob = await response.blob();
+            console.log("blob - ", blob);
+            // Create blob link to download
+            const url = window.URL.createObjectURL(
+                new Blob([blob]),
+            );
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute(
+                'download',
+                `${filename}.xlsx`,
+            );
+
+            // Append to html link element page
+            document.body.appendChild(link);
+
+            // Start download
+            link.click();
+
+            // Clean up and remove the link
+            link.parentNode.removeChild(link);
             setIsLoading(false);
         } catch (error) {
             console.log(error);

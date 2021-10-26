@@ -41,9 +41,9 @@ const excelCell = (allPerformances, worksheet) => {
             }
         } else {
             return {
-                score: 0,
-                point: 0,
-                pointDeferential: 0
+                score: null,
+                point: null,
+                pointDeferential: null
             }
         }
     }
@@ -137,101 +137,133 @@ const excelCell = (allPerformances, worksheet) => {
         worksheet.cell(startRow + i, 1).string(precisePerformance[i].fullname);
 
         // SPECIFIC GAME 1
-        worksheet.cell(startRow + i, 2).number(precisePerformance[i].game1.score);
-        worksheet.cell(startRow + i, 3).number(precisePerformance[i].game1.point);
-        worksheet.cell(startRow + i, 4).number(precisePerformance[i].game1.pointDeferential);
+        if(precisePerformance[i].game1.score !== null && precisePerformance[i].game1.point !== null && precisePerformance[i].game1.pointDeferential !== null){
+            worksheet.cell(startRow + i, 2).number(precisePerformance[i].game1.score);
+            worksheet.cell(startRow + i, 3).number(precisePerformance[i].game1.point);
+            worksheet.cell(startRow + i, 4).number(precisePerformance[i].game1.pointDeferential);
+        }
         // console.log("Score - ",precisePerformance[i].game1.score);
         // console.log("point - ",precisePerformance[i].game1.point);
         // console.log("pointDeferential - ",precisePerformance[i].game1.pointDeferential);
 
 
+
+        // CHECK EVERY GAME EXIST OR NOT 
         // SPECIFIC GAME 2
-        worksheet.cell(startRow + i, 5).number(precisePerformance[i].game2.score);
-        worksheet.cell(startRow + i, 6).number(precisePerformance[i].game2.point);
-        worksheet.cell(startRow + i, 7).number(precisePerformance[i].game2.pointDeferential);
+        if(precisePerformance[i].game2.score !== null && precisePerformance[i].game2.point !== null && precisePerformance[i].game2.pointDeferential !== null){
+            worksheet.cell(startRow + i, 5).number(precisePerformance[i].game2.score);
+            worksheet.cell(startRow + i, 6).number(precisePerformance[i].game2.point);
+            worksheet.cell(startRow + i, 7).number(precisePerformance[i].game2.pointDeferential);
+        }
 
 
         // SPECIFIC GAME 3
-        worksheet.cell(startRow + i, 8).number(precisePerformance[i].game3.score);
-        worksheet.cell(startRow + i, 9).number(precisePerformance[i].game3.point);
-        worksheet.cell(startRow + i, 10).number(precisePerformance[i].game3.pointDeferential);
+        if(precisePerformance[i].game3.score !== null && precisePerformance[i].game3.point !== null && precisePerformance[i].game3.pointDeferential !== null){
+            worksheet.cell(startRow + i, 8).number(precisePerformance[i].game3.score);
+            worksheet.cell(startRow + i, 9).number(precisePerformance[i].game3.point);
+            worksheet.cell(startRow + i, 10).number(precisePerformance[i].game3.pointDeferential);
+        }
 
 
         // SPECIFIC GAME 4
-        worksheet.cell(startRow + i, 11).number(precisePerformance[i].game4.score);
-        worksheet.cell(startRow + i, 12).number(precisePerformance[i].game4.point);
-        worksheet.cell(startRow + i, 13).number(precisePerformance[i].game4.pointDeferential);
+        if(precisePerformance[i].game4.score !== null && precisePerformance[i].game4.point !== null && precisePerformance[i].game4.pointDeferential !== null){
+            worksheet.cell(startRow + i, 11).number(precisePerformance[i].game4.score);
+            worksheet.cell(startRow + i, 12).number(precisePerformance[i].game4.point);
+            worksheet.cell(startRow + i, 13).number(precisePerformance[i].game4.pointDeferential);
+        }
 
 
         // SPECIFIC GAME 5
-        worksheet.cell(startRow + i, 14).number(precisePerformance[i].game5.score);
-        worksheet.cell(startRow + i, 15).number(precisePerformance[i].game5.point);
-        worksheet.cell(startRow + i, 16).number(precisePerformance[i].game5.pointDeferential);
+        if(precisePerformance[i].game5.score !== null && precisePerformance[i].game5.point !== null && precisePerformance[i].game5.pointDeferential !== null){
+            worksheet.cell(startRow + i, 14).number(precisePerformance[i].game5.score);
+            worksheet.cell(startRow + i, 15).number(precisePerformance[i].game5.point);
+            worksheet.cell(startRow + i, 16).number(precisePerformance[i].game5.pointDeferential);
+        }
 
 
         // SPECIFIC game6
-        worksheet.cell(startRow + i, 17).number(precisePerformance[i].game6.score);
-        worksheet.cell(startRow + i, 18).number(precisePerformance[i].game6.point);
-        worksheet.cell(startRow + i, 19).number(precisePerformance[i].game6.pointDeferential);
+        if(precisePerformance[i].game6.score !== null && precisePerformance[i].game6.point !== null && precisePerformance[i].game6.pointDeferential !== null){
+            worksheet.cell(startRow + i, 17).number(precisePerformance[i].game6.score);
+            worksheet.cell(startRow + i, 18).number(precisePerformance[i].game6.point);
+            worksheet.cell(startRow + i, 19).number(precisePerformance[i].game6.pointDeferential);
+        }
 
 
         // SPECIFIC game7
-        worksheet.cell(startRow + i, 20).number(precisePerformance[i].game7.score);
-        worksheet.cell(startRow + i, 21).number(precisePerformance[i].game7.point);
-        worksheet.cell(startRow + i, 22).number(precisePerformance[i].game7.pointDeferential);
+        if(precisePerformance[i].game7.score !== null && precisePerformance[i].game7.point !== null && precisePerformance[i].game7.pointDeferential !== null){
+            worksheet.cell(startRow + i, 20).number(precisePerformance[i].game7.score);
+            worksheet.cell(startRow + i, 21).number(precisePerformance[i].game7.point);
+            worksheet.cell(startRow + i, 22).number(precisePerformance[i].game7.pointDeferential);
+        }
 
 
         // SPECIFIC game8
-        worksheet.cell(startRow + i, 23).number(precisePerformance[i].game8.score);
-        worksheet.cell(startRow + i, 24).number(precisePerformance[i].game8.point);
-        worksheet.cell(startRow + i, 25).number(precisePerformance[i].game8.pointDeferential);
+        if(precisePerformance[i].game8.score !== null && precisePerformance[i].game8.point !== null && precisePerformance[i].game8.pointDeferential !== null){
+            worksheet.cell(startRow + i, 23).number(precisePerformance[i].game8.score);
+            worksheet.cell(startRow + i, 24).number(precisePerformance[i].game8.point);
+            worksheet.cell(startRow + i, 25).number(precisePerformance[i].game8.pointDeferential);
+        }
 
 
 
         // SPECIFIC game9
-        worksheet.cell(startRow + i, 26).number(precisePerformance[i].game9.score);
-        worksheet.cell(startRow + i, 27).number(precisePerformance[i].game9.point);
-        worksheet.cell(startRow + i, 28).number(precisePerformance[i].game9.pointDeferential);
+        if(precisePerformance[i].game9.score !== null && precisePerformance[i].game9.point !== null && precisePerformance[i].game9.pointDeferential !== null){
+            worksheet.cell(startRow + i, 26).number(precisePerformance[i].game9.score);
+            worksheet.cell(startRow + i, 27).number(precisePerformance[i].game9.point);
+            worksheet.cell(startRow + i, 28).number(precisePerformance[i].game9.pointDeferential);
+        }
 
 
 
         // SPECIFIC game10
-        worksheet.cell(startRow + i, 29).number(precisePerformance[i].game10.score);
-        worksheet.cell(startRow + i, 30).number(precisePerformance[i].game10.point);
-        worksheet.cell(startRow + i, 31).number(precisePerformance[i].game10.pointDeferential);
+        if(precisePerformance[i].game10.score !== null && precisePerformance[i].game10.point !== null && precisePerformance[i].game10.pointDeferential !== null){
+            worksheet.cell(startRow + i, 29).number(precisePerformance[i].game10.score);
+            worksheet.cell(startRow + i, 30).number(precisePerformance[i].game10.point);
+            worksheet.cell(startRow + i, 31).number(precisePerformance[i].game10.pointDeferential);
+        }
 
 
 
         // SPECIFIC game11
-        worksheet.cell(startRow + i, 32).number(precisePerformance[i].game11.score);
-        worksheet.cell(startRow + i, 33).number(precisePerformance[i].game11.point);
-        worksheet.cell(startRow + i, 34).number(precisePerformance[i].game11.pointDeferential);
+        if(precisePerformance[i].game11.score !== null && precisePerformance[i].game11.point !== null && precisePerformance[i].game11.pointDeferential !== null){
+            worksheet.cell(startRow + i, 32).number(precisePerformance[i].game11.score);
+            worksheet.cell(startRow + i, 33).number(precisePerformance[i].game11.point);
+            worksheet.cell(startRow + i, 34).number(precisePerformance[i].game11.pointDeferential);
+        }
 
 
         // SPECIFIC game12
-        worksheet.cell(startRow + i, 35).number(precisePerformance[i].game12.score);
-        worksheet.cell(startRow + i, 36).number(precisePerformance[i].game12.point);
-        worksheet.cell(startRow + i, 37).number(precisePerformance[i].game12.pointDeferential);
+        if(precisePerformance[i].game12.score !== null && precisePerformance[i].game12.point !== null && precisePerformance[i].game12.pointDeferential !== null){
+            worksheet.cell(startRow + i, 35).number(precisePerformance[i].game12.score);
+            worksheet.cell(startRow + i, 36).number(precisePerformance[i].game12.point);
+            worksheet.cell(startRow + i, 37).number(precisePerformance[i].game12.pointDeferential);
+        }
 
 
 
         // SPECIFIC game13
-        worksheet.cell(startRow + i, 38).number(precisePerformance[i].game13.score);
-        worksheet.cell(startRow + i, 39).number(precisePerformance[i].game13.point);
-        worksheet.cell(startRow + i, 40).number(precisePerformance[i].game13.pointDeferential);
+        if(precisePerformance[i].game13.score !== null && precisePerformance[i].game13.point !== null && precisePerformance[i].game13.pointDeferential !== null){
+            worksheet.cell(startRow + i, 38).number(precisePerformance[i].game13.score);
+            worksheet.cell(startRow + i, 39).number(precisePerformance[i].game13.point);
+            worksheet.cell(startRow + i, 40).number(precisePerformance[i].game13.pointDeferential);
+        }
 
 
 
         // SPECIFIC game14
-        worksheet.cell(startRow + i, 41).number(precisePerformance[i].game14.score);
-        worksheet.cell(startRow + i, 42).number(precisePerformance[i].game14.point);
-        worksheet.cell(startRow + i, 43).number(precisePerformance[i].game14.pointDeferential);
+        if(precisePerformance[i].game14.score !== null && precisePerformance[i].game14.point !== null && precisePerformance[i].game14.pointDeferential !== null){
+            worksheet.cell(startRow + i, 41).number(precisePerformance[i].game14.score);
+            worksheet.cell(startRow + i, 42).number(precisePerformance[i].game14.point);
+            worksheet.cell(startRow + i, 43).number(precisePerformance[i].game14.pointDeferential);
+        }
 
 
         // SPECIFIC game15
-        worksheet.cell(startRow + i, 44).number(precisePerformance[i].game15.score);
-        worksheet.cell(startRow + i, 45).number(precisePerformance[i].game15.point);
-        worksheet.cell(startRow + i, 46).number(precisePerformance[i].game15.pointDeferential);
+        if(precisePerformance[i].game15.score !== null && precisePerformance[i].game15.point !== null && precisePerformance[i].game15.pointDeferential !== null){
+            worksheet.cell(startRow + i, 44).number(precisePerformance[i].game15.score);
+            worksheet.cell(startRow + i, 45).number(precisePerformance[i].game15.point);
+            worksheet.cell(startRow + i, 46).number(precisePerformance[i].game15.pointDeferential);
+        }
 
         gameCol++;
         // console.log(precisePerformance[i].game1);
