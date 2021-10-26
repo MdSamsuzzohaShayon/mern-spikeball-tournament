@@ -1,4 +1,4 @@
-import {POINT_DIFFERENTIAL, POINT, SCORE} from "../utils/global";
+import { POINT_DIFFERENTIAL, POINT, SCORE } from "../utils/global";
 const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
     // console.log("Performance - ", p);
     // console.log("Game num - ", gameNum);
@@ -13,6 +13,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game2 && p.game2 !== undefined) { return p.game2.point } else { return null };
                 case 3:
                     if (p.game3 && p.game3 !== undefined) { return p.game3.point } else { return null };
+                default:
+                    return;
             }
         } else if (scoreType === POINT_DIFFERENTIAL) {
             // console.log(p, round2.pointDeferential);
@@ -23,6 +25,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game2 && p.game2 !== undefined) { return p.game2.pointDeferential } else { return null };
                 case 3:
                     if (p.game3 && p.game3 !== undefined) { return p.game3.pointDeferential } else { return null };
+                default:
+                    return;
             }
         } else if (scoreType === SCORE) {
             switch (gameNum) {
@@ -32,6 +36,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game2 && p.game2 !== undefined) { return p.game2.score } else { return null };
                 case 3:
                     if (p.game3 && p.game3 !== undefined) { return p.game3.score } else { return null };
+                default:
+                    return;
             }
         }
     }
@@ -47,6 +53,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game5 && p.game5 !== undefined) { return p.game5.point } else { return null };
                 case 6:
                     if (p.game6 && p.game6 !== undefined) { return p.game6.point } else { return null };
+                default:
+                    return;
             }
         }
 
@@ -59,6 +67,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game5 && p.game5 !== undefined) { return p.game5.pointDeferential } else { return null };
                 case 6:
                     if (p.game6 && p.game6 !== undefined) { return p.game6.pointDeferential } else { return null };
+                default:
+                    return;
             }
         } else if (scoreType === SCORE) {
             switch (gameNum) {
@@ -68,6 +78,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game5 && p.game5 !== undefined) { return p.game5.score } else { return null };
                 case 6:
                     if (p.game6 && p.game6 !== undefined) { return p.game6.score } else { return null };
+                default:
+                    return;
             }
         }
     } else if (roundNum === 3) {
@@ -80,6 +92,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game8 && p.game8 !== undefined) { return p.game8.point } else { return null };
                 case 9:
                     if (p.game9 && p.game9 !== undefined) { return p.game9.point } else { return null };
+                default:
+                    return;
             }
         }
 
@@ -92,6 +106,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game8 && p.game8 !== undefined) { return p.game8.pointDeferential } else { return null };
                 case 9:
                     if (p.game9 && p.game9 !== undefined) { return p.game9.pointDeferential } else { return null };
+                default:
+                    return;
             }
         } else if (scoreType === SCORE) {
             switch (gameNum) {
@@ -101,6 +117,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game8 && p.game8 !== undefined) { return p.game8.score } else { return null };
                 case 9:
                     if (p.game9 && p.game9 !== undefined) { return p.game9.score } else { return null };
+                default:
+                    return;
             }
         }
     } else if (roundNum === 4) {
@@ -113,6 +131,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game11 && p.game11 !== undefined) { return p.game11.point } else { return null };
                 case 12:
                     if (p.game12 && p.game12 !== undefined) { return p.game12.point } else { return null };
+                default:
+                    return;
             }
         }
 
@@ -125,6 +145,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game11 && p.game11 !== undefined) { return p.game11.pointDeferential } else { return null };
                 case 12:
                     if (p.game12 && p.game12 !== undefined) { return p.game12.pointDeferential } else { return null };
+                default:
+                    return;
             }
         } else if (scoreType === SCORE) {
             switch (gameNum) {
@@ -134,6 +156,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game11 && p.game11 !== undefined) { return p.game11.score } else { return null };
                 case 12:
                     if (p.game12 && p.game12 !== undefined) { return p.game12.score } else { return null };
+                default:
+                    return;
             }
         }
     } else if (roundNum === 5) {
@@ -146,6 +170,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game14 && p.game14 !== undefined) { return p.game14.point } else { return null };
                 case 15:
                     if (p.game15 && p.game15 !== undefined) { return p.game15.point } else { return null };
+                default:
+                    return;
             }
         }
 
@@ -158,6 +184,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game14 && p.game14 !== undefined) { return p.game14.pointDeferential } else { return null };
                 case 15:
                     if (p.game15 && p.game15 !== undefined) { return p.game15.pointDeferential } else { return null };
+                default:
+                    return;
             }
         } else if (scoreType === SCORE) {
             switch (gameNum) {
@@ -167,6 +195,8 @@ const getDefaultValue = (p, scoreType, gameNum, roundNum) => {
                     if (p.game14 && p.game14 !== undefined) { return p.game14.score } else { return null };
                 case 15:
                     if (p.game15 && p.game15 !== undefined) { return p.game15.score } else { return null };
+                default:
+                    return;
             }
         }
     }

@@ -1,38 +1,3 @@
-import getDefaultValue from "./defaultValue";
-
-// team1.player1, score, game, props.roundNum
-// ⛏️⛏️ SETTING DEFAULT VALUE OF INPUT  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-
-
-// let r = 0;
-// export const rankLoop = (net, i, rank) => {
-//     // rank ++;
-//     // console.log(rank);
-//     // console.log("Called");
-//     // r = r + 1;
-//     return net.performance.map((p, pi) => {
-//         // console.log("J - ", j);
-//         rank++;
-//         return rank;
-//     });
-//     // return <div>{i}</div>
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const checkNegativePD = (val, cls) => {
     // <div className="pd-item">{getDefaultValue(net.performance[0], score, game, props.roundNum)}</div>
     if (Math.sign(val) === -1) {

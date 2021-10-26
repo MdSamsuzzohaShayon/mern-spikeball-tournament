@@ -1,10 +1,11 @@
 // import { useParams } from 'react-router-dom';
 import React, { Component } from 'react';
-import { withRouter, Redirect } from "react-router";
+import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
 import Participants from '../participant/Participants';
 import Rounds from '../round/Rounds'
 import Score from "../score/Score";
+import ExportField from '../export/ExportField';
 import '../../style/EventAdmin.css';
 
 export class EventAdmin extends Component {
@@ -160,6 +161,17 @@ export class EventAdmin extends Component {
                 } else {
                     return (<div className="tab-pane fade show active score-board" ><Score admin={true} /></div>);
                 }
+            case "export":
+                if (this.state.isLoading) {
+                    return (
+                        <div className="text-center spinner-parent">
+                            <div className="spinner-border text-danger spinner-child" role="status">
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (<div className="tab-pane fade show active score-board" ><ExportField eventID={this.state.currentEventID} /></div>);
+                }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);
         }
@@ -194,6 +206,7 @@ export class EventAdmin extends Component {
                                 <button className={this.state.activeTab === "participants" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "participants")}  >Participants</button>
                                 <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Round</button>
                                 <button className={this.state.activeTab === "score" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "score")}  >Score</button>
+                                <button className={this.state.activeTab === "export" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "export")}  >Export</button>
                             </div>
                             <div className="tab-content" >
                                 {this.showAllNavItem()}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { hostname } from '../utils/global';
 import { Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -123,7 +123,7 @@ const EventList = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {props.eventList.map((event, index) => (
+                        {props.eventList && props.eventList.map((event, index) => (
                             <tr key={index}>
                                 <th >{event.title}</th>
                                 <td>{new Date(event.date).getFullYear() + '-' + (new Date(event.date).getMonth() + 1) + '-' + new Date(event.date).getDate()}</td>

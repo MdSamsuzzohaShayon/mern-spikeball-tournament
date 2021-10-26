@@ -79,6 +79,7 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
                             return elm;
                         }
                     }
+                    return null;
                 });
                 if (findTeam) {
                     // UPDATE TEAM 
@@ -89,6 +90,7 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
                                 up.team1.score = parseInt(e.target.value);
                             }
                         }
+                        return;
                     });
                 } else {
                     // CREATE NEW TEAM 
@@ -102,6 +104,7 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
                                 return elm;
                             }
                         }
+                        return null;
                     });
                     if (findOpnent) oponentScore = findOpnent.team2.score;
 
@@ -129,6 +132,7 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
                             return elm;
                         }
                     }
+                    return null;
                 });
                 if (findTeam) {
                     // UPDATE TEAM 
@@ -151,6 +155,7 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
                                 return elm;
                             }
                         }
+                        return null;
                     });
                     if (findOpnent) oponentScore = findOpnent.team1.score;
 
@@ -181,47 +186,3 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
 export { handleScoreChange, handleExtraWinningPointChange };
 
 
-
-
-
-// expocred output 
-const updatedTeams = [
-    {
-        "team1": { "players": ["61524bd34cd211193b3359f4", "61524bd34cd211193b3359ef"], "score": 12 },
-        "team2": { "players": ["61524bd34cd211193b3359f8", "61524bd34cd211193b3359f7"], "score": 14 },
-        "game": 1,
-        "netID": "61524bda4cd211193b335a14"
-    },
-    {
-        "team1": { "players": ["61524bd34cd211193b3359f2"], "score": 7 },
-        "team2": null,
-        "game": 1,
-        "netID": "61524bdb4cd211193b335a1a"
-    }, {
-        "team1": { "players": ["61524bd34cd211193b3359fb"], "score": 4 },
-        "team2": null,
-        "game": 1,
-        "netID": "61524bdb4cd211193b335a1a"
-    }, {
-        "team1": { "players": ["61524bd34cd211193b3359ed", "61524bd34cd211193b3359f1"], "score": 13 },
-        "team2": { "players": ["61524bd34cd211193b3359fa", "61524bd34cd211193b3359f5"], "score": 17 },
-        "game": 1,
-        "netID": "61524bda4cd211193b335a16"
-    }];
-
-const updatedExtra = [{
-    "teamIDList": ["61524bd34cd211193b3359f2"],
-    "game": 1,
-    "netID": "61524bdb4cd211193b335a1a",
-    "extraPoint": 12
-}, {
-    "teamIDList": ["61524bd34cd211193b3359f6", "61524bd34cd211193b3359f3"],
-    "game": 1,
-    "netID": "61524bdb4cd211193b335a18",
-    "extraPoint": 12
-}, {
-    "teamIDList": ["61524bd34cd211193b3359f5", "61524bd34cd211193b3359f1"],
-    "game": 2,
-    "netID": "61524bda4cd211193b335a16",
-    "extraPoint": 11
-}]

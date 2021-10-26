@@ -1,6 +1,10 @@
 const express = require('express');
 const formidable = require('formidable');
 const csv = require('csvtojson');
+// Require library
+const xl = require('excel4node');
+
+
 
 
 const Event = require('../models/Event');
@@ -14,6 +18,7 @@ const { wholeRanking } = require('../utils/ranking');
 const { updatedPerformance, updatedExtraPerformance, getScoreFromDoc } = require('../utils/updatedPerformance');
 const { replaceKeys } = require('../utils/helpers');
 const { ensureAuth, ensureGuast } = require('../config/auth');
+const excelCell = require('../utils/excelCell');
 
 
 const router = express.Router();
@@ -312,6 +317,53 @@ router.put('/update-performance/:eventID/:round', ensureAuth, async (req, res, n
 
 
 
+
+
+
+
+
+router.post('/exports/:eventID', async (req, res, next) => {
+    try {
+
+        const { filename } = req.body;
+        const allPerformances = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" });
+
+
+
+
+
+
+
+
+        // Create a new instance of a Workbook class
+        const workbook = new xl.Workbook();
+
+        // Add Worksheets to the workbook
+        const worksheet = workbook.addWorksheet('Sheet 1');
+
+        excelCell(allPerformances, worksheet);
+
+
+
+        const style = workbook.createStyle({
+            font: {
+                color: '#FF0800',
+                size: 12,
+            },
+            numberFormat: '$#,##0.00; ($#,##0.00); -',
+        });
+
+        workbook.write(`./temp/${filename}.xlsx`);
+
+
+
+
+        res.json({ filename });
+        // res.download();
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 
 

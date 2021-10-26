@@ -1,7 +1,5 @@
 import React from "react";
 import getDefaultValue from "./defaultValue";
-import { POINT_DIFFERENTIAL } from "./global";
-// import { rankingRound1, rankingRound2, rankingRound3, rankingRound4, rankingRound5, wholeRanking } from "./ranking";
 
 
 

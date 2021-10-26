@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { hostname } from '../../utils/global';
 import { Button, Modal } from "react-bootstrap";
 
@@ -27,23 +27,6 @@ const Participants = (props) => {
 
 
 
-
-
-
-
-
-
-
-    // useEffect(()=>{
-    //     // setPartitipant({});
-    //     // setSelectedFile(null);
-    //     // setErrors([]);
-    //     return ()=>{
-    //         console.log("Participants component unmount");
-    //         setSelectedFile(null);
-    //         // setPartitipant({});
-    //     }
-    // }, []);
 
 
 
