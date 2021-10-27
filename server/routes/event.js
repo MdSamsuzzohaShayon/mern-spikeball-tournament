@@ -18,7 +18,7 @@ const router = express.Router();
 
 
 /* ⛏️⛏️ CREATE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/', ensureAuth,
+router.post('/', 
     check('title', "Title must not empty and a valid email").notEmpty(),
     (req, res, next) => {
         const valErrs = validationResult(req);

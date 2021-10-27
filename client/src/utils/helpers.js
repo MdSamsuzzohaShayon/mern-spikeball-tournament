@@ -25,7 +25,7 @@ export const checkNegativeP = (val, d_cls) => {
 
 
 export const tabKeyFocusChange=()=>{
-    console.log("Tab key focus change");
+    // console.log("Tab key focus change");
     const scoreInputs = document.querySelectorAll('.input-score');
     const scoreInputsNoNet = document.querySelectorAll('.input-score-no-net');
 

@@ -4,6 +4,7 @@ const Round = require('../models/Round');
 const Net = require('../models/Net');
 const { ensureAuth } = require('../config/auth');
 const { rankingRound1, wholeRanking, rankingRound2Ind, rankingRound3Ind, rankingRound4Ind, rankingRound5Ind } = require('../utils/ranking');
+const { findRound } = require('../utils/helpers');
 
 
 const router = express.Router();
@@ -12,50 +13,94 @@ const router = express.Router();
 
 
 
+// GET PERFORMANCE 
+/*
+
+try {
+    // console.log("Req params - ",req.params);
+    const {roundNum, eventID} = req.params;
+    const rNumInt = parseInt(roundNum);
+    if (rNumInt === 1) {
+        // SEARCH FOR EXISTING ROUND - IF THERE IS NOT EXISTING ROUND USE ALL PERFORMANCE
+        const roundExist = await Round.findOne({event: eventID, no: roundNum});
+        console.log("round Exist - ",roundExist);
+        let performances = null;
+        if(roundExist){
+            // performances = roundExist
+            console.log(roundExist);
+        }else{
+            performances = await Performance.find({ event: eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
+        }
+        const rankingPerformance = performances.sort(wholeRanking)
+        // // console.log(performances.length);
+        res.status(200).json({ msg: 'Get all performance of an event', rankingPerformance });
+    } else {
+        console.log(roundNum);
+    //     const findPreviousRound = await Round.findOne({ event: eventID, no: roundNum })
+    //         .populate({
+    //             path: "nets",
+    //             select: "performance",
+    //             populate: {
+    //                 path: 'performance',
+    //                 select: 'participant nog net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15',
+    //                 populate: {
+    //                     path: "participant",
+    //                     select: "firstname lastname"
+    //                 }
+    //             }
+    //         })
+    //         .exec();
+    }
+} catch (error) {
+    console.log(error);
+}
+*/
+
+
+
+
 
 // ⛏️⛏️ GET SINGLE ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.get('/get-single-round/:eventID/:round', async (req, res, next) => {
+router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
+    const { eventID, roundNum } = req.params;
     try {
-        const findRound = await Round.findOne({ event: req.params.eventID, no: req.params.round })
-            .populate({
-                path: "nets",
-                select: "performance",
-                populate: {
-                    path: 'performance',
-                    select: 'participant nog net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15',
-                    populate: {
-                        path: "participant",
-                        select: "firstname lastname"
-                    }
-                }
-            })
-            // .populate({
-            //     path: "left",
-            //     select: "performance",
-            //     populate: {
-            //         path: 'performance',
-            //         select: 'participant',
-            //         populate: {
-            //             path: "participant",
-            //             select: "firstname lastname"
-            //         }
-            //     }
-            // })
-            .exec();
+        const roundExist = await findRound(eventID, roundNum, Round);
 
-
-        // console.log(findRound);
+        // console.log("round Exist - ",roundExist);
+        let performances = null;
         let leftRound = null;
-
-        if (findRound) {
-            leftRound = await Performance.find({ _id: { $in: findRound.left } })
+        // SHOW EXISTING PERFORMANCES EXISTING LEFT NETS AND MORE
+        if (roundExist) {
+            performances = roundExist.performances;
+            leftRound = await Performance.find({ _id: { $in: roundExist.left } })
                 .populate({
                     path: "participant",
                     select: "firstname lastname"
-
                 });
+            // console.log(roundExist);
+        } else {
+            // IF ROUND IS NOT EXIST SHOW PERFORMANCES, LETF NETS FROM PREVIOUS ROUND 
+            // AT FIRST CHECK PREVIOUS ROUND - IS THERE ANY PERFORMANCES AND LEFT NETS
+            const previousRound = await findRound(eventID, roundNum - 1, Round);
+            // console.log("previous round - ",previousRound);
+            if (previousRound === null) {
+                performances = await Performance.find({ event: eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
+            } else {
+                performances = previousRound.performances;
+                leftRound = await Performance.find({ _id: { $in: previousRound.left } })
+                    .populate({
+                        path: "participant",
+                        select: "firstname lastname"
+                    });
+            }
         }
-        res.status(200).json({ msg: 'Getting Rounds', findRound, leftRound });
+
+        if (performances !== null) {
+            performances = performances.sort(wholeRanking);
+        }
+
+
+        res.status(200).json({ msg: 'Getting Rounds', findRound: roundExist, leftRound, performances });
     } catch (error) {
         console.log(error);
     }
@@ -175,7 +220,7 @@ router.get('/ranking/:eventID', async (req, res, next) => {
 
 
 // ⛏️⛏️ DELETE A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.delete('/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
+router.delete('/:eventID/:roundNum', async (req, res, next) => {
     try {
         const deleteRound = await Round.findOneAndDelete({ no: req.params.roundNum, event: req.params.eventID });
         // console.log(deleteRound);

@@ -1,5 +1,6 @@
 import React from "react";
 import getDefaultValue from "./defaultValue";
+import {rankingRound1, rankingRound2, rankingRound3, rankingRound4, rankingRound5} from "./ranking"
 
 
 
@@ -88,28 +89,28 @@ export const arrangingPerformer = (performer, gor, game, scoreType, roundNum) =>
 
 
 // ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-export const serializePerformer = (performers, roundNum) => {
+export const serializePerformer = (performers, roundNum, NO_SCORE) => {
     // console.log("Game of round - ",gor);
     // console.log("Performers - ",performers);
 
     let performersAccending = performers;
 
 
-    // if (roundNum === 1) {
-    //     // console.log("Sorted - ", roundNum);
-    //     performersAccending = performers.sort(rankingRound1);
-    // } else if (roundNum === 2) {
-    //     // console.log("Sorted - ", roundNum);
-    //     performersAccending = performers.sort(rankingRound2); 
-    // } else if (roundNum === 3) {
-    //     performersAccending = performers.sort(rankingRound3);
-    // } else if (roundNum === 4) {
-    //     performersAccending = performers.sort(rankingRound4);
-    // } else if (roundNum === 5) {
-    //     performersAccending = performers.sort(rankingRound5);
-    // } else {
-    //     return;
-    // }
+    if (roundNum === 1) {
+        // console.log("Sorted - ", roundNum);
+        performersAccending = performersAccending.sort(rankingRound1);
+    } else if (roundNum === 2) {
+        // console.log("Sorted - ", roundNum);
+        performersAccending = performersAccending.sort(rankingRound2); 
+    } else if (roundNum === 3) {
+        performersAccending = performersAccending.sort(rankingRound3);
+    } else if (roundNum === 4) {
+        performersAccending = performersAccending.sort(rankingRound4);
+    } else if (roundNum === 5) {
+        performersAccending = performersAccending.sort(rankingRound5);
+    } else {
+        return;
+    }
 
     if (performersAccending.length < 4) {
         return (

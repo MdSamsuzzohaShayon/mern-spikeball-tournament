@@ -53,7 +53,7 @@ router.get('/:eventID', async (req, res, next) => {
 
 
 /* ⛏️⛏️ CREATE PARTICIPANT OR PERFORMANCE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/:eventID', ensureAuth,
+router.post('/:eventID', 
     check('firstname', "Firstname must not empty").notEmpty(),
     check('lastname', "Lastname must not empty").notEmpty(),
     check('city', "City must not empty").notEmpty(),
@@ -110,7 +110,7 @@ router.post('/:eventID', ensureAuth,
 
 
 /* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
+router.post('/multiple/:eventID',  (req, res, next) => {
 
 
     const form = formidable({ multiples: false });
@@ -174,7 +174,7 @@ router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
                         }
                         // console.log("insert many performance - ");
                         Performance.insertMany(performanceList).then(p => {
-                            console.log("Inserted all performance - ", p);
+                            console.log("Inserted all performance - ");
                         });
 
                         participant.forEach((p, i) => {
@@ -239,7 +239,7 @@ router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-performance/:eventID/:round', ensureAuth, async (req, res, next) => {
+router.put('/update-performance/:eventID/:round', async (req, res, next) => {
 
 
     const { updateScore, winningExtraPoint } = req.body;
@@ -249,7 +249,7 @@ router.put('/update-performance/:eventID/:round', ensureAuth, async (req, res, n
 
 
     updateScore.forEach(async (us, i) => {
-        console.log(us);
+        // console.log(us);
 
         if (us.team2 === null) {
             // WITHOUR NET 
@@ -373,8 +373,8 @@ router.post('/exports/:eventID', async (req, res, next) => {
                     // } catch (deleteErr) {
                     //     console.log(deleteErr);
                     // }
-                    fs.unlink(file_dir, (deleteErr)=>{
-                        if(deleteErr) throw deleteErr;
+                    fs.unlink(file_dir, (deleteErr) => {
+                        if (deleteErr) throw deleteErr;
                         // console.log(doc);
                     });
                 }
@@ -440,13 +440,18 @@ router.get('/dashboard/participant', async (req, res, next) => {
 
 // ⛏️⛏️ GET ALL PERFORMANCES OF ALL NETS OF A SINGLE EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.get('/get-performance/:eventID/:roundNum', async (req, res, next) => {
-    console.log(req.params.roundNum);
+    // console.log(req.params.roundNum);
     // console.log("Get performance");
-    const performances = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
-    const rankingPerformance = performances.sort(wholeRanking)
-    // console.log(performances.length);
-    res.status(200).json({ msg: 'Get all performance of an event', rankingPerformance });
+    try {        
+        const performances = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
+        const rankingPerformance = performances.sort(wholeRanking)
+        // console.log(performances.length);
+        res.status(200).json({ msg: 'Get all performance of an event', rankingPerformance });
+    } catch (error) {
+        console.log(error);
+    }
 });
+
 
 
 

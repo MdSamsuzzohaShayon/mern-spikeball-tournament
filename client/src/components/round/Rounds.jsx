@@ -12,6 +12,7 @@ const Rounds = (props) => {
     const [round, setRounds] = useState([]);
     const [leftRound, setLeftRound] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [performances, setPerformances] = useState([]);
     // const [reassignToNet, setReassignToNet] = useState(false);
 
     const activeItemHandler = (e, item) => {
@@ -49,11 +50,14 @@ const Rounds = (props) => {
             const jsonRes = await JSON.parse(text);
             // console.log("JSON");
             // console.log(jsonRes);
+            if (jsonRes.performances.length > 0) {
+                setPerformances(jsonRes.performances);
+            }
             if (jsonRes.leftRound && jsonRes.leftRound.length > 0) {
                 setLeftRound([...jsonRes.leftRound]);
             }
             // CHECK FOR INITIAL NET 
-            if (jsonRes.findRound) {
+            if (jsonRes.findRound || jsonRes.findRound !== null) {
                 setRounds(jsonRes.findRound);
                 if (jsonRes.findRound.nets || jsonRes.findRound.nets.length < 1) {
                     setInitialize(false);
@@ -78,25 +82,7 @@ const Rounds = (props) => {
 
 
     useEffect(() => {
-        // console.log("findRound called from use effect");
         findRound(activeItem);
-        // console.log("Round - ", activeItem);
-
-
-        // const netTeam = document.querySelectorAll('.f-net');
-
-
-
-        // UNMOUNT 
-        // return () => {
-        //     // // console.log("Rounds Component Unmount");
-        //     // setActiveItem(1);
-        //     // // const [round, setRound] = useState(1);
-        //     // setInitialize(false);
-        //     // setRounds([]);
-        //     // setLeftRound([]);
-        //     // setIsLoading(false);
-        // }
     }, []);
 
 
@@ -137,6 +123,7 @@ const Rounds = (props) => {
                             eventID={props.eventID} /> */}
                         <SingleRound
                             initialize={initialize}
+                            performances={performances}
                             round={round}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
@@ -158,6 +145,7 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
                             initialize={initialize}
+                            performances={performances}
                             round={round}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
@@ -178,6 +166,7 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
                             initialize={initialize}
+                            performances={performances}
                             round={round}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
@@ -198,6 +187,7 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
                             initialize={initialize}
+                            performances={performances}
                             round={round}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
@@ -218,6 +208,7 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
                             initialize={initialize}
+                            performances={performances}
                             round={round}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
