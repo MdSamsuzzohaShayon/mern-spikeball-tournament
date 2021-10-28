@@ -320,7 +320,25 @@ export const wholeRanking = (a, b) => {
 
 
 
-
+export const netRanking = (rankPerformanceInNet, roundNum) => {
+    const netRank = [];
+    for (let i = 0; i < rankPerformanceInNet.length; i++) {
+        if (roundNum === 1) {
+            netRank.push(rankPerformanceInNet[i].performance.sort(rankingRound1));
+            // console.log("Sorted - ", roundNum);
+        } else if (roundNum === 2) {
+            // console.log("Sorted - ", roundNum);
+            netRank.push(rankPerformanceInNet[i].performance.sort(rankingRound2));
+        } else if (roundNum === 3) {
+            netRank.push(rankPerformanceInNet[i].performance.sort(rankingRound3));
+        } else if (roundNum === 4) {
+            netRank.push(rankPerformanceInNet[i].performance.sort(rankingRound4));
+        } else if (roundNum === 5) {
+            netRank.push(rankPerformanceInNet[i].performance.sort(rankingRound5));
+        }
+    }
+    return netRank;
+}
 
 
 

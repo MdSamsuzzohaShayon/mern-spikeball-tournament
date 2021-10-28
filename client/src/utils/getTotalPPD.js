@@ -151,7 +151,7 @@ export const getTotal = (net, round, score) => {
 
 
 // ⛏️⛏️ GET TOTAL POINT AND DIFERENTIAL FOR THIS ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-export const getTotalPPD = (net, score, roundNum) => {
+export const getTotalPPD = (performance, score, roundNum) => {
     // console.log(net.performance.length);
     // console.log("Round - ", round);
     // console.log("net - ", net);
@@ -196,15 +196,15 @@ export const getTotalPPD = (net, score, roundNum) => {
 
     if (score === POINT) {
         if (roundNum === 1) {
-            return returnPointSpecificRound(net.performance, round1Total)
+            return returnPointSpecificRound(performance, round1Total)
         } else if (roundNum === 2) {
-            return returnPointSpecificRound(net.performance, round2Total);
+            return returnPointSpecificRound(performance, round2Total);
         } else if (roundNum === 3) {
-            return returnPointSpecificRound(net.performance, round3Total);
+            return returnPointSpecificRound(performance, round3Total);
         } else if (roundNum === 4) {
-            return returnPointSpecificRound(net.performance, round4Total)
+            return returnPointSpecificRound(performance, round4Total)
         } else if (roundNum === 5) {
-            return returnPointSpecificRound(net.performance, round5Total);
+            return returnPointSpecificRound(performance, round5Total);
         } else {
             return;
         }
@@ -245,15 +245,15 @@ export const getTotalPPD = (net, score, roundNum) => {
 
 
         if (roundNum === 1) {
-            return returnSpecificPointDifferential(net.performance, round1TD)
+            return returnSpecificPointDifferential(performance, round1TD)
         } else if (roundNum === 2) {
-            return returnSpecificPointDifferential(net.performance, round2TD)
+            return returnSpecificPointDifferential(performance, round2TD)
         } else if (roundNum === 3) {
-            return returnSpecificPointDifferential(net.performance, round3TD)
+            return returnSpecificPointDifferential(performance, round3TD)
         } else if (roundNum === 4) {
-            return returnSpecificPointDifferential(net.performance, round4TD)
+            return returnSpecificPointDifferential(performance, round4TD)
         } else if (roundNum === 5) {
-            return returnSpecificPointDifferential(net.performance, round5TD)
+            return returnSpecificPointDifferential(performance, round5TD)
         } else {
             return;
         }

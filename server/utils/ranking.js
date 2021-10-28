@@ -1,4 +1,3 @@
-
 function addR1(ab) {
     let pointA = 0;
     if (ab.game1) pointA += ab.game1.point; if (ab.game2) pointA += ab.game2.point; if (ab.game3) pointA += ab.game3.point;
@@ -413,6 +412,29 @@ module.exports.wholeRanking = (a, b) => {
     return 0;
 }
 
+
+
+
+module.exports.netRanking = (rankPerformanceInNet, roundNum) => {
+    const netRank = [];
+    for (let i = 0; i < rankPerformanceInNet.length; i++) {
+        if (roundNum === 1) {
+            // console.log("ROund - 1");
+            netRank.push(rankPerformanceInNet[i].performance.sort(this.rankingRound1));
+            // console.log("Sorted - ", roundNum);
+        } else if (roundNum === 2) {
+            // console.log("Sorted - ", roundNum);
+            netRank.push(rankPerformanceInNet[i].performance.sort(this.rankingRound2Ind));
+        } else if (roundNum === 3) {
+            netRank.push(rankPerformanceInNet[i].performance.sort(this.rankingRound3Ind));
+        } else if (roundNum === 4) {
+            netRank.push(rankPerformanceInNet[i].performance.sort(this.rankingRound4Ind));
+        } else if (roundNum === 5) {
+            netRank.push(rankPerformanceInNet[i].performance.sort(this.rankingRound5Ind));
+        }
+    }
+    return netRank;
+}
 
 
 

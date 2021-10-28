@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SingleRound from './SingleRound';
 import { hostname } from '../../utils/global';
+import { netRanking } from '../../utils/ranking';
 import "../../style/Rounds.css";
 
 
@@ -13,6 +14,7 @@ const Rounds = (props) => {
     const [leftRound, setLeftRound] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [performances, setPerformances] = useState([]);
+    const [rankPerformanceInNet, setRankPerformanceInNet] = useState([]);
     // const [reassignToNet, setReassignToNet] = useState(false);
 
     const activeItemHandler = (e, item) => {
@@ -60,6 +62,7 @@ const Rounds = (props) => {
             if (jsonRes.findRound || jsonRes.findRound !== null) {
                 setRounds(jsonRes.findRound);
                 if (jsonRes.findRound.nets || jsonRes.findRound.nets.length < 1) {
+                    setRankPerformanceInNet(jsonRes.rankNets);
                     setInitialize(false);
                 } else {
                     setInitialize(true);
@@ -84,6 +87,7 @@ const Rounds = (props) => {
     useEffect(() => {
         findRound(activeItem);
     }, []);
+
 
 
     const updateFindNets = (update) => {
@@ -125,6 +129,7 @@ const Rounds = (props) => {
                             initialize={initialize}
                             performances={performances}
                             round={round}
+                            rankPerformanceInNet={rankPerformanceInNet}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
                             leftRound={leftRound}
@@ -147,6 +152,7 @@ const Rounds = (props) => {
                             initialize={initialize}
                             performances={performances}
                             round={round}
+                            // rankPerformanceInNet={rankPerformanceInNet}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
                             leftRound={leftRound}
@@ -168,6 +174,7 @@ const Rounds = (props) => {
                             initialize={initialize}
                             performances={performances}
                             round={round}
+                            // rankPerformanceInNet={rankPerformanceInNet}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
                             leftRound={leftRound}
@@ -189,6 +196,7 @@ const Rounds = (props) => {
                             initialize={initialize}
                             performances={performances}
                             round={round}
+                            // rankPerformanceInNet={rankPerformanceInNet}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
                             leftRound={leftRound}
@@ -210,6 +218,7 @@ const Rounds = (props) => {
                             initialize={initialize}
                             performances={performances}
                             round={round}
+                            // rankPerformanceInNet={rankPerformanceInNet}
                             roundNum={activeItem}
                             updateNets={updateFindNets}
                             leftRound={leftRound}

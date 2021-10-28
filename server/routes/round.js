@@ -3,7 +3,7 @@ const Performance = require('../models/Performance');
 const Round = require('../models/Round');
 const Net = require('../models/Net');
 const { ensureAuth } = require('../config/auth');
-const { rankingRound1, wholeRanking, rankingRound2Ind, rankingRound3Ind, rankingRound4Ind, rankingRound5Ind } = require('../utils/ranking');
+const { rankingRound1, wholeRanking, rankingRound2Ind, rankingRound3Ind, rankingRound4Ind, rankingRound5Ind, netRanking } = require('../utils/ranking');
 const { findRound } = require('../utils/helpers');
 
 
@@ -69,6 +69,7 @@ router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
         // console.log("round Exist - ",roundExist);
         let performances = null;
         let leftRound = null;
+        let rankNets = null;
         // SHOW EXISTING PERFORMANCES EXISTING LEFT NETS AND MORE
         if (roundExist) {
             performances = roundExist.performances;
@@ -77,7 +78,24 @@ router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
                     path: "participant",
                     select: "firstname lastname"
                 });
-            // console.log(roundExist);
+            // const existingNet = roundExist.nets;
+            // 61765dbdd966262e8bccd5fc
+            const allNetsIds = new Array();
+            for (let i = 0; i < roundExist.nets.length; i++) {
+                allNetsIds.push(roundExist.nets[i]._id);
+            }
+            const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15";
+            // console.log(allNetsIds);
+            const findNets = await Net.find({ _id: { $in: allNetsIds } }).populate({
+                path: "performance", select, populate: {
+                    path: "participant",
+                    select: "firstname lastname"
+                }
+            });
+            // console.log(nets);
+            rankNets = netRanking(findNets, parseInt(roundNum));
+            // const netRank = roundExist.nets[0].performance.sort(rankingRound1);
+            // console.log(rankNets);
         } else {
             // IF ROUND IS NOT EXIST SHOW PERFORMANCES, LETF NETS FROM PREVIOUS ROUND 
             // AT FIRST CHECK PREVIOUS ROUND - IS THERE ANY PERFORMANCES AND LEFT NETS
@@ -100,7 +118,7 @@ router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
         }
 
 
-        res.status(200).json({ msg: 'Getting Rounds', findRound: roundExist, leftRound, performances });
+        res.status(200).json({ msg: 'Getting Rounds', findRound: roundExist, rankNets, leftRound, performances });
     } catch (error) {
         console.log(error);
     }
