@@ -61,7 +61,7 @@ const Rounds = (props) => {
             // CHECK FOR INITIAL NET 
             if (jsonRes.findRound || jsonRes.findRound !== null) {
                 setRounds(jsonRes.findRound);
-                if (jsonRes.findRound.nets || jsonRes.findRound.nets.length < 1) {
+                if (jsonRes.findRound.nets || jsonRes.findRound.nets.length > 0) {
                     setRankPerformanceInNet(jsonRes.rankNets);
                     setInitialize(false);
                 } else {

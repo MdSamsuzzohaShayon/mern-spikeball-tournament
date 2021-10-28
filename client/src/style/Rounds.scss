@@ -37,6 +37,7 @@
         }
         .net-less-four-total{
             height: 100%;
+            padding-bottom: 8px;
             @include center_horizontally();
             .short-net-player {
                 min-height: 70px;
@@ -50,8 +51,11 @@
 
 
         .players-in-net-total{
-            height: $t-p-height * 2;
+            height: 276px;
             @include center_horizontally();
+            @media screen and(max-width: $br-lg) {
+                height: 268px;
+            }
         }
 
 

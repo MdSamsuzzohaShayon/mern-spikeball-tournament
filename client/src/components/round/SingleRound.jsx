@@ -442,7 +442,7 @@ function SingleRound(props) {
                         </div>
                     ) : (
                         <div className="nets-table-wrapper">
-                            <div className="show-all-nets d-flex">
+                            <div className="show-all-nets">
                                 {!props.initialize && (<React.Fragment>
                                     {/* PLAYER GAME, SCORE, POINT, POINT DIFFRENTIAL  */}
                                     <div className="table-responsive left-table mx-0 px-0">
@@ -453,6 +453,7 @@ function SingleRound(props) {
                                                     <th colSpan="5" scope="colgroup">Game {props.game[0]}</th>
                                                     <th colSpan="5" scope="colgroup">Game {props.game[1]}</th>
                                                     <th colSpan="5" scope="colgroup">Game {props.game[2]}</th>
+                                                    <th colSpan="3" scope="colgroup">Total</th>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">Net</th>
@@ -476,6 +477,15 @@ function SingleRound(props) {
                                                     <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
                                                     <th scope="col">Point</th>
                                                     <th scope="col">point differential</th>
+
+
+
+
+
+                                                    <th scope="col">Participant</th>
+                                                    <th scope="col">point</th>
+                                                    <th scope="col">point differential</th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -518,30 +528,14 @@ function SingleRound(props) {
                                                         <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, roundNum)}</td>
 
 
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    {/* TOTAL POINT - RANKING OF PARTICULAR NET  */}
-                                    <div className="table-responsive right-table px-0 mx-0">
-                                        <table className="table r-table table-bordered table-striped">
-                                            <thead className="r-thead bg-dark text-light text-center">
-                                                <tr>
-                                                    <th colSpan="3" scope="colgroup">Total</th>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="col">Participant</th>
-                                                    <th scope="col">point</th>
-                                                    <th scope="col">point differential</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {rankPerformanceInNet && rankPerformanceInNet.map((rankPN, i) => (
-                                                    <tr key={i} className="horizontal-border">
-                                                        <td> {serializePerformer(rankPN)} </td>
-                                                        <td >  {getTotalPPD(rankPN, POINT, roundNum)} </td>
-                                                        <td >{getTotalPPD(rankPN, POINT_DIFFERENTIAL, roundNum)} </td>
+
+
+                                                        <td> {serializePerformer(rankPerformanceInNet[i])} </td>
+                                                        <td >  {getTotalPPD(rankPerformanceInNet[i], POINT, roundNum)} </td>
+                                                        <td >{getTotalPPD(rankPerformanceInNet[i], POINT_DIFFERENTIAL, roundNum)} </td>
+
+
+
                                                     </tr>
                                                 ))}
                                             </tbody>
