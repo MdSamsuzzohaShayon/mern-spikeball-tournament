@@ -202,7 +202,7 @@ router.post('/multiple/:eventID',  (req, res, next) => {
                         }
                         // console.log("insert many performance - ");
                         Performance.insertMany(performanceList).then(p => {
-                            console.log("Inserted all performance - ", p);
+                            console.log("Inserted all performance - ");
                         });
                         // console.log("Data inserted", participant)  // Success
                         participant.forEach((p, i) => {

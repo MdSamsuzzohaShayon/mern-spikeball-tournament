@@ -13,12 +13,12 @@ const scoreSchema = new Schema({
 
 
 scoreSchema.pre('validate', function (next) {
-    console.log('Child - 2');
+    // console.log('Child - 2');
     next();
 });
 
 scoreSchema.pre('save', function (next) {
-    console.log('child - 3');
+    // console.log('child - 3');
     next();
 });
 
@@ -65,12 +65,12 @@ const performanceSchema = new Schema({
 });
 
 performanceSchema.pre('validate', function (next) {
-    console.log('parent - 1');
+    // console.log('parent - 1');
     next();
 });
 
 performanceSchema.pre('save', function (next) {
-    console.log('parent - 4');
+    // console.log('parent - 4');
     next();
 });
 

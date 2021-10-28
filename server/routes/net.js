@@ -119,7 +119,7 @@ router.post('/assign-initial-net/:eventID', ensureAuth, async (req, res, next) =
 
 
 
-// ⛏️⛏️ ASSIGN PLAYER TO THE NET - CREATE MORE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+// ⛏️⛏️ ASSIGN PLAYER TO THE NET BY RANK - CREATE MORE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
     try {
 
@@ -307,26 +307,29 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
     try {
 
         // console.log("Random assign");
+        const { eventID } = req.params;
 
 
         const { performances, leftedPerformance } = req.body;
         const roundNum = parseInt(req.params.roundNum);
         // console.log(req.body);
-        const findRound = await Round.findOne({ event: req.params.eventID, no: roundNum });
-
-        // console.log("Find round - ",findRound);
-
+        const findRound = await Round.findOne({ event: eventID, no: roundNum });
+        const currentRound = findRound;
 
 
 
+
+
+
+        // NO PERFORMANCE FOUND - CREATE NEW ROUND 
         if (!findRound || findRound === null) {
             const allPerformanceIds = [];
             for (let per of performances) {
                 allPerformanceIds.push(per._id);
             }
-            const allLeftedPerFormance = [];
+            const allLeftedPerformance = [];
             for (let lp of leftedPerformance) {
-                allLeftedPerFormance.push(lp._id);
+                allLeftedPerformance.push(lp._id);
             }
 
             // console.log("pid -",allPerformanceIds);
@@ -364,7 +367,7 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
                 const newNet = new Net({
                     sl: netNo,
                     // performance: performanceIds,
-                    event: req.params.eventID,
+                    event: eventID,
                 });
                 const net = await newNet.save();
                 // console.log("NET sl - ", netNo);
@@ -385,7 +388,7 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
             }
             // console.log("Net ids - ", allNetsIds);
             // console.log("p ids - ", allPerformanceIds);
-            // console.log("pp ids - ", allLeftedPerFormance);
+            // console.log("pp ids - ", allLeftedPerformance);
 
 
 
@@ -393,10 +396,10 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
 
             const new_round = new Round({
                 no: roundNum,
-                event: req.params.eventID,
+                event: eventID,
                 performances: allPerformanceIds,
                 nets: allNetsIds,
-                left: allLeftedPerFormance
+                left: allLeftedPerformance
             });
             // console.log("New Round - ", new_round);
             // console.log("Round Num - ", roundNum);
@@ -406,13 +409,25 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
 
         } else {
 
+            // console.log("Find round - ",currentRound);
             // UPDATE EXISTING ROUND OR RESORT OR REASSIGN
-            console.log("Update existing");
+            // console.log("Update existing");
             // console.log(findRound.performances);
             const allPerformanceIds = [];
-            for (let per of findRound.performances) {
+            for (let per of performances) {
                 allPerformanceIds.push(per._id);
             }
+
+            // console.log("All performance IDS - ", allPerformanceIds);
+
+
+            const allLeftedPerformance = [];
+            for (let lp of leftedPerformance) {
+                allLeftedPerformance.push(lp._id);
+            }
+
+            // console.log("All lefted nets - ", allLeftedPerformance);
+
 
             let randomPerformance = [];
             while (randomPerformance.length < allPerformanceIds.length) {
@@ -422,30 +437,65 @@ router.post('/random-assign-net/:eventID/:roundNum', async (req, res, next) => {
             }
 
 
+            // console.log("Randomise performance - ", randomPerformance);
 
 
+
+
+            // DELETE ALL NETS 
+            // console.log("Find Rounds - ", findRound);
+            const deleteNets = await Net.deleteMany({ event: eventID, round: currentRound._id });
+            // console.log("Delete all nets - ", deleteNets);
             // CREATING NET AND PERFORMANCE OF THE PLAYER            
 
             let i, j, temporary, chunk = 4, netNo = 1, k = 0;
+            const allNetsIds = new Array();
 
+            // console.log("random performances - ", randomPerformance);
             for (i = 0, j = randomPerformance.length; i < j; i += chunk) {
                 temporary = randomPerformance.slice(i, i + chunk);
-                const performance = [];
+                // console.log("Temporary - ",temporary);
 
+
+                const newNet = new Net({
+                    sl: netNo,
+                    event: eventID,
+                    round: currentRound._id,
+                });
+                const net = await newNet.save();
+                allNetsIds.push(net._id);
+
+
+                let netPerformanceIds = [];
                 for (let k of temporary) {
-                    performance.push(k._id);
+                    netPerformanceIds.push(k);
                 }
+                // console.log("net performances IDs - ", netPerformanceIds);
 
-                const updateNet = await Net.findOneAndUpdate({ _id: findRound.nets[k]._id }, { performance: performance });
+                const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { performance: netPerformanceIds }, { new: true });
+                // console.log("Update net - ", updateNet);
+
+
 
 
                 netNo++;
                 k++;
             }
+            // console.log("All nets ids - ", allNetsIds);
+            // performances: allPerformanceIds, left: allLeftedPerFormance
+            // console.log({ performances: allPerformanceIds, left: allLeftedPerformance, nets: allNetsIds });
+            // UPDATE NETS AND ROUND 
+            const updateRound = await Round.findOneAndUpdate(
+                { event: eventID, no: roundNum },
+                { performances: allPerformanceIds, left: allLeftedPerformance, nets: allNetsIds }
+            );
+
+
+            // console.log("Updated round - ", updateRound);
+
+
 
         }
-
-
 
 
 

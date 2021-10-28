@@ -8,7 +8,7 @@ import { handleScoreChange, handleExtraWinningPointChange } from '../../utils/in
 import { playersExtraPoint, playersPoint, playersPointDifferential, playersScore } from '../../utils/allPerformers';
 import { arrangingPerformer, serializePerformer } from "../../utils/arrangePerformer";
 import { tabKeyFocusChange } from '../../utils/helpers';
-import { rankingRound1, rankingRound2, rankingRound3, rankingRound4, rankingRound5 } from "../../utils/ranking";
+// import { rankingRound1, rankingRound2, rankingRound3, rankingRound4, rankingRound5 } from "../../utils/ranking";
 
 import { Modal, Button } from 'react-bootstrap'
 
@@ -132,10 +132,6 @@ function SingleRound(props) {
 
         // console.log(props.performances);
         setPerformances([...props.performances]);
-        // setAllIdsOfScoreInput();
-        // console.log("All nets - ", props.nets);
-        // console.log("Round - ", props.round);
-        // console.log(props.leftRound);
         // IF THIS IS NOT INITIALIZEABLE
         setLeftedPerformance(props.leftRound);
         // if (!props.initialize) {
@@ -172,8 +168,8 @@ function SingleRound(props) {
 
 
 
-    const beforeUnloadListener = (event) => {
-        event.preventDefault();
+    const beforeUnloadListener = (e) => {
+        e.preventDefault();
         // alert("hi");
         // console.log("hi");
         return;
@@ -190,8 +186,6 @@ function SingleRound(props) {
         // console.log(e);
         // console.log(pId);
         e.preventDefault();
-        // console.log(performances);
-        // console.log(leftedPerformance);
         setPerformances(performances.filter(p => p._id !== pId));
         setLeftedPerformance((prevState) => {
             // console.log(prevState);
@@ -201,9 +195,6 @@ function SingleRound(props) {
                 return [...performances.filter(p => p._id === pId)]
             }
         });
-        // const newElement = performances.filter(p => p._id === pId)[0];
-        // setLeftedPerformance(prevState => [...prevState, newElement])
-        //setLeftedPerformance([...leftedPerformance, ...performances.filter(p => p._id === pId)]);
     }
 
 
@@ -270,6 +261,7 @@ function SingleRound(props) {
     const randomAssign = async () => {
         // e.preventDefault();
         // console.log("random");
+        // console.log({ performances, leftedPerformance });
         setIsLoading(true);
         // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
         const requestOptions = {
@@ -351,6 +343,11 @@ function SingleRound(props) {
 
 
 
+    const toggleGameParticipant = (e) => {
+        e.preventDefault();
+        setShowPerformances(prevState => !prevState);
+    }
+
 
 
 
@@ -363,14 +360,23 @@ function SingleRound(props) {
     // ⛏️⛏️ THIS IS MAIN RETURN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     return (
         <div className="SingleRound">
-            <div className="d-flex my-3 justify-content-start align-items-center">
-                {roundNum === 1 ? <React.Fragment>
-                    <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Assign Initial Net</button>
-                </React.Fragment> : <React.Fragment>
-                    {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
-                    {!props.initialize && <button className="btn btn-primary mx-3" onClick={e => handleNetShow(e, false)} >Rank Assign</button>}
-                    <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
-                </React.Fragment>}
+            <div className="d-flex align-items-center">
+                <div className="d-flex my-3 justify-content-between w-full">
+                    <div className="">
+                        {roundNum === 1 ? <React.Fragment>
+                            <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
+                        </React.Fragment> : <React.Fragment>
+                            {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
+                            {!props.initialize && <button className="btn btn-primary mx-3" onClick={e => handleNetShow(e, false)} >Rank Assign</button>}
+                            <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
+                        </React.Fragment>}
+                    </div>
+
+                    <div className="btn-group">
+                        {showPerformances === true ? <button onClick={toggleGameParticipant} className="btn btn-primary" >Participants</button> : <button onClick={toggleGameParticipant} className="btn btn-light" >Participants</button>}
+                        {showPerformances === true ? <button onClick={toggleGameParticipant} className="btn btn-light" >Game</button> : <button onClick={toggleGameParticipant} className="btn btn-primary" >Game</button>}
+                    </div>
+                </div>
 
 
 
@@ -526,6 +532,8 @@ function SingleRound(props) {
                                                         <td >{playersExtraPoint(net, props.game[2], EXTRA_POINT, 3, handleExtraWinningPointChange, addExtra, showInput, roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
                                                         <td >{playersPoint(net, props.game[2], POINT, 3, roundNum)} </td>
                                                         <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, roundNum)}</td>
+
+
 
 
 

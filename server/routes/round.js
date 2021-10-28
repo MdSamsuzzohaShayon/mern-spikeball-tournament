@@ -3,7 +3,7 @@ const Performance = require('../models/Performance');
 const Round = require('../models/Round');
 const Net = require('../models/Net');
 const { ensureAuth } = require('../config/auth');
-const { rankingRound1, wholeRanking, rankingRound2Ind, rankingRound3Ind, rankingRound4Ind, rankingRound5Ind, netRanking } = require('../utils/ranking');
+const { rankingRound1, wholeRanking, rankingRound2Ind, rankingRound3Ind, rankingRound4Ind, rankingRound5Ind, netRanking, roundwiseRanking } = require('../utils/ranking');
 const { findRound } = require('../utils/helpers');
 
 
@@ -70,6 +70,7 @@ router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
         let performances = null;
         let leftRound = null;
         let rankNets = null;
+
         // SHOW EXISTING PERFORMANCES EXISTING LEFT NETS AND MORE
         if (roundExist) {
             performances = roundExist.performances;
@@ -100,6 +101,7 @@ router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
             // IF ROUND IS NOT EXIST SHOW PERFORMANCES, LETF NETS FROM PREVIOUS ROUND 
             // AT FIRST CHECK PREVIOUS ROUND - IS THERE ANY PERFORMANCES AND LEFT NETS
             const previousRound = await findRound(eventID, roundNum - 1, Round);
+            // console.log("Round exist - ", previousRound);
             // console.log("previous round - ",previousRound);
             if (previousRound === null) {
                 performances = await Performance.find({ event: eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
@@ -114,7 +116,7 @@ router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
         }
 
         if (performances !== null) {
-            performances = performances.sort(wholeRanking);
+            performances = roundwiseRanking(performances, parseInt(roundNum));
         }
 
 
