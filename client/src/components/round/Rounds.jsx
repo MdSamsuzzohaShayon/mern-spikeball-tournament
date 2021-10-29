@@ -51,7 +51,7 @@ const Rounds = (props) => {
             const text = await response.text();
             const jsonRes = await JSON.parse(text);
             // console.log("JSON");
-            console.log(jsonRes);
+            // console.log(jsonRes);
             if (jsonRes.performances.length > 0) {
                 setPerformances(jsonRes.performances);
             }

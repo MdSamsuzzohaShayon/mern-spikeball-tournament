@@ -5,7 +5,7 @@ const Net = require('../models/Net');
 const Performance = require('../models/Performance');
 const Round = require('../models/Round');
 
-const { rankingRound1, rankingRound2, rankingRound3, rankingRound4 } = require('../utils/ranking');
+const { rankingRound1, rankingRound2, rankingRound3, rankingRound4, rankingRound5 } = require('../utils/ranking');
 const { ensureAuth, ensureGuast } = require('../config/auth');
 
 
@@ -125,6 +125,7 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
 
         const { performances, leftedPerformance } = req.body;
         const roundNum = parseInt(req.params.roundNum);
+        const { eventID } = req.params;
         // console.log(req.body);
         const findRound = await Round.findOne({ event: req.params.eventID, no: roundNum });
 
@@ -221,47 +222,86 @@ router.post('/assign-net/:eventID/:roundNum', async (req, res, next) => {
 
         } else {
             // UPDATE EXISTING ROUND OR RESORT OR REASSIGN
-            console.log("Update existing");
+            // console.log("Update existing");
             // console.log(findRound.performances);
             const allPerformanceIds = [];
-            for (let per of findRound.performances) {
+            for (let per of performances) {
                 allPerformanceIds.push(per._id);
             }
+
+            const allLeftedPerformance = [];
+            for (let lp of leftedPerformance) {
+                allLeftedPerformance.push(lp._id);
+            }
+
 
             const findPerformances = await Performance.find({ _id: { $in: allPerformanceIds } }).populate({ path: "participant", select: "firstname lastname" });
             let ranking = findPerformances;
 
-            if (roundNum === 2) {
+            if (roundNum === 1) {
                 // console.log("Round 2");
                 ranking = findPerformances.sort(rankingRound1);
-            } else if (roundNum === 3) {
+            } else if (roundNum === 2) {
                 ranking = findPerformances.sort(rankingRound2);
-            } else if (roundNum === 4) {
+            } else if (roundNum === 3) {
                 ranking = findPerformances.sort(rankingRound3);
-            } else if (roundNum === 5) {
+            } else if (roundNum === 4) {
                 ranking = findPerformances.sort(rankingRound4);
+            } else if (roundNum === 5) {
+                ranking = findPerformances.sort(rankingRound5);
             }
 
+
+
+
+            const deleteNets = await Net.deleteMany({ event: eventID, round: findRound._id });
+            const allNetsIds = new Array();
 
 
             // CREATING NET AND PERFORMANCE OF THE PLAYER            
 
-            let i, j, temporary, chunk = 4, netNo = 1, k = 0;
+            let i, j, temporary, chunk = 4, netNo = 1;
 
             for (i = 0, j = ranking.length; i < j; i += chunk) {
                 temporary = ranking.slice(i, i + chunk);
-                const performance = [];
 
+                let netPerformanceIds = [];
                 for (let k of temporary) {
-                    performance.push(k._id);
+                    netPerformanceIds.push(k._id);
                 }
 
-                const updateNet = await Net.findOneAndUpdate({ _id: findRound.nets[k]._id }, { performance: performance });
+                // console.log("All performances in a net - ", netPerformanceIds);
+
+                const newNet = new Net({
+                    sl: netNo,
+                    event: eventID,
+                    round: findRound._id,
+                    performance: netPerformanceIds
+                });
+                const net = await newNet.save();
+                allNetsIds.push(net._id);
+
+
+
+                // console.log("net performances IDs - ", netPerformanceIds);
+
+                // const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { performance: netPerformanceIds }, { new: true });
 
 
                 netNo++;
-                k++;
             }
+
+
+            // console.log("All nets ids - ", allNetsIds);
+
+
+
+            // UPDATE NETS AND ROUND 
+            const updateRound = await Round.findOneAndUpdate(
+                { event: eventID, no: roundNum },
+                { performances: allPerformanceIds, left: allLeftedPerformance, nets: allNetsIds }
+            );
+            // console.log("Update round - ", updateRound);
 
         }
 
