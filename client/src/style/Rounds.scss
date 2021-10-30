@@ -7,6 +7,14 @@
     margin-top: 0;
 }
 
+.sticky-top {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: -1px !important;
+    align-self: flex-start !important;
+    overflow-y: auto !important;
+}
+
 // ⛏️⛏️ ROUND ONE TO FIVE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 .show-all-nets {
     tr {
@@ -35,7 +43,7 @@
                 min-height: 70px;
             }
         }
-        .net-less-four-total{
+        .net-less-four-total {
             height: 100%;
             padding-bottom: 8px;
             @include center_horizontally();
@@ -49,15 +57,13 @@
             @include center_horizontally();
         }
 
-
-        .players-in-net-total{
+        .players-in-net-total {
             height: 276px;
             @include center_horizontally();
             @media screen and(max-width: $br-lg) {
                 height: 268px;
             }
         }
-
 
         .btn-outline-transparent:focus {
             border-color: inherit;

@@ -13,68 +13,13 @@ const playersExtraPoint = (net, handleExtraWinningPointChange, addExtra, showInp
 
 
     return (
-        <div className="extra d-flex short-net-player" >
+        <div className="extra d-flex mt-3 short-net-player" >
             <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, net._id)} className="extra-icon" />
             <input type="text" style={{ display: showInput(net._id) }}
                 onChange={e => handleExtraWinningPointChange(e, net._id, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control"
             />
         </div>
     );
-
-
-    /*
-    const checkDefaultVal = (defaultVal, selectedTeam, shortNet, j) => {
-
-        // if (shortNet === true) classList = classList + " short-net-player";
-        if (shortNet === true) {
-            if (defaultVal && defaultVal > 0) {
-                return (
-                    <div className="extra d-flex short-net-player" key={j}>
-                        <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
-                        <input type="text" style={{ display: showInput(selectedTeam, game, roundNum) }}
-                            onChange={e => handleExtraWinningPointChange(e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control" />
-                    </div>
-                );
-            } else {
-                return <div className="extra" key={j}></div>;
-            }
-        } else {
-            if (defaultVal && defaultVal > 0) {
-                return (
-                    <div className="extra d-flex" >
-                        <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
-                        <input type="text" style={{ display: showInput(selectedTeam, game, roundNum) }}
-                            onChange={e => handleExtraWinningPointChange(e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control" />
-                    </div>
-                );
-            } else {
-                return <div className="extra" ></div>;
-            }
-        }
-
-    }
-
-
-    if (net.performance.length < 4) {
-        // return (<div className="net-less-four">{net.performance.map((p, j) => <div className="short-net-player" key={j}>  <input type="text" className="form-control extra-point" onChange={e => handleInputChange(e, null, game, scoreType, net._id, true, null, p._id, false, null)} /> </div>)}</div>);
-        return (<div className="net-less-four">{net.performance.map((p, j) => checkDefaultVal(getDefaultValue(p, POINT, game, roundNum), [p._id], true, j))}</div>);
-
-    } else {
-
-        // 1ST & 4TH VS 2ND  4TH 
-        let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-        return (<div className="player-score d-flex flex-column">
-            <div className="two-p-input two-p-i-1">
-                {checkDefaultVal(getDefaultValue(one, POINT, game, roundNum), [one._id, four._id], false, null)}
-            </div>
-            <div className="line"></div>
-
-            <div className="two-p-input two-p-i-2">
-                {checkDefaultVal(getDefaultValue(two, POINT, game, roundNum), [two._id, three._id], false, null)}
-            </div>
-        </div>);
-    }
-    */
 }
 
 

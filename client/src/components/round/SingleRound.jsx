@@ -374,7 +374,7 @@ function SingleRound(props) {
 
 
 
-
+{/* <button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary sticky-top align-items-start justify-content-start">Submit</button> */}
 
 
 
@@ -460,7 +460,10 @@ function SingleRound(props) {
                     handleSaveParticipant={handleSaveParticipant}
                 />
 
-            </React.Fragment>) : (
+
+                
+            </React.Fragment>) : (<React.Fragment>
+                <button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary sticky-top">Submit</button>
                 <div className="show table">
                     {isLoading ? (
                         <div className="text-center spinner-parent">
@@ -570,13 +573,13 @@ function SingleRound(props) {
                                 </React.Fragment>
                                 )}
                             </div>
-                            <button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary">Submit</button>
                         </div>
                     )}
 
 
                     {showLiftedPefrormance(leftedPerformance, roundNum, null, false)}
                 </div>
+            </React.Fragment>
             )}
             <br />
 

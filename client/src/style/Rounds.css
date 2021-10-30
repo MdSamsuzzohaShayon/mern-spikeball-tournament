@@ -4,6 +4,14 @@
   margin-top: 0;
 }
 
+.sticky-top {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: -1px !important;
+  align-self: flex-start !important;
+  overflow-y: auto !important;
+}
+
 .show-all-nets tr td {
   padding: 0 !important;
 }
