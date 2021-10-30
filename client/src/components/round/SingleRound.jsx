@@ -14,7 +14,6 @@ import { Modal, Button } from 'react-bootstrap'
 
 
 function SingleRound(props) {
-    const initialExtra = { team: null, g: null, r: null };
     const { nets } = props.round;
     const { roundNum, rankPerformanceInNet } = props;
     // console.log("Found Round");
@@ -25,7 +24,7 @@ function SingleRound(props) {
     const [isLoading, setIsLoading] = useState(false);
 
 
-    const [selectedExtra, setSelectedExtra] = useState(initialExtra);
+    const [selectedNet, setSelectedNet] = useState(null);
     const [winningExtraPoint, setWinningExtraPoint] = useState([]);
     const [updateScore, setUpdateScore] = useState([]);
 
@@ -319,17 +318,16 @@ function SingleRound(props) {
 
 
 
-    const addExtra = (e, team, g, r) => {
+    const addExtra = (e, netID) => {
+        e.preventDefault();
         // E = EVENT, PID = PREFORMANCE ID, G = GAME, R = ROUND, TID = TEAM ID
-        setSelectedExtra({ team, g, r });
+        setSelectedNet(netID);
     }
 
-    const showInput = (team, g, r) => {
-        // console.log("extra - ", selectedExtra);
-        if (selectedExtra.team) {
-            if (team[0] === selectedExtra.team[0] && g === selectedExtra.g && r === selectedExtra.r) {
-                // console.log(selectedExtra);
-                // console.log(team);
+    const showInput = (netID) => {
+        // console.log("extra - ", selectedNet);
+        if (netID && netID !== null) {
+            if (netID === selectedNet) {
                 return "block";
             } else {
                 return "none";
@@ -362,13 +360,13 @@ function SingleRound(props) {
         <div className="SingleRound">
             <div className="d-flex align-items-center">
                 <div className="d-flex my-3 justify-content-between w-full">
-                    <div className="">
+                    <div >
                         {roundNum === 1 ? <React.Fragment>
                             <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
                         </React.Fragment> : <React.Fragment>
                             {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
-                            {!props.initialize && <button className="btn btn-primary mx-3" onClick={e => handleNetShow(e, false)} >Rank Assign</button>}
-                            <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
+                            {!props.initialize && <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>}
+                            <button className="btn btn-primary mx-3" onClick={e => handleNetShow(e, true)} >Random Assign</button>
                         </React.Fragment>}
                     </div>
 
@@ -455,32 +453,31 @@ function SingleRound(props) {
                                         <table className="table r-table table-bordered table-striped">
                                             <thead className="r-thead bg-dark text-light text-center">
                                                 <tr>
-                                                    <th colSpan="1" scope="colgroup"></th>
-                                                    <th colSpan="5" scope="colgroup">Game {props.game[0]}</th>
-                                                    <th colSpan="5" scope="colgroup">Game {props.game[1]}</th>
-                                                    <th colSpan="5" scope="colgroup">Game {props.game[2]}</th>
+                                                    <th colSpan="2" scope="colgroup"></th>
+                                                    <th colSpan="4" scope="colgroup">Game {props.game[0]}</th>
+                                                    <th colSpan="4" scope="colgroup">Game {props.game[1]}</th>
+                                                    <th colSpan="4" scope="colgroup">Game {props.game[2]}</th>
                                                     <th colSpan="3" scope="colgroup">Total</th>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">Net</th>
+                                                    <th><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
 
                                                     <th scope="col">Team</th>
                                                     <th scope="col">Score</th>
-                                                    <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
+                                                    {/* <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th> */}
                                                     <th scope="col">Point</th>
                                                     <th scope="col">point differential</th>
 
 
                                                     <th scope="col">Team</th>
                                                     <th scope="col">Score</th>
-                                                    <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
                                                     <th scope="col">Point</th>
                                                     <th scope="col">point differential</th>
 
 
                                                     <th scope="col">Team</th>
                                                     <th scope="col">Score</th>
-                                                    <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
                                                     <th scope="col">Point</th>
                                                     <th scope="col">point differential</th>
 
@@ -498,12 +495,12 @@ function SingleRound(props) {
                                                 {nets && nets.map((net, i) => (
                                                     <tr key={i} className="horizontal-border">
                                                         <th scope="row">Net {net.sl || i + 1}</th>
+                                                        <td >{playersExtraPoint(net, handleExtraWinningPointChange, addExtra, showInput, winningExtraPoint, setWinningExtraPoint)} </td>
                                                         {/* {console.log("net performance - ", net.performance)} */}
 
                                                         <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT_DIFFERENTIAL, roundNum)} </td>
                                                         {/* SCORE  */}
                                                         <td >{playersScore(net, props.game[0], SCORE, 1, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
-                                                        <td >{playersExtraPoint(net, props.game[0], EXTRA_POINT, 1, handleExtraWinningPointChange, addExtra, showInput, roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
                                                         <td >{playersPoint(net, props.game[0], POINT, 1, roundNum)} </td>
 
                                                         <td>{playersPointDifferential(net, props.game[0], POINT_DIFFERENTIAL, 1, roundNum)}</td>
@@ -517,7 +514,6 @@ function SingleRound(props) {
                                                         <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT_DIFFERENTIAL, roundNum)} </td>
                                                         {/* SCORE  */}
                                                         <td >{playersScore(net, props.game[1], SCORE, 2, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
-                                                        <td >{playersExtraPoint(net, props.game[1], EXTRA_POINT, 2, handleExtraWinningPointChange, addExtra, showInput, roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
                                                         <td >{playersPoint(net, props.game[1], POINT, 2, roundNum)} </td>
                                                         <td>{playersPointDifferential(net, props.game[1], POINT_DIFFERENTIAL, 2, roundNum)}</td>
 
@@ -529,7 +525,6 @@ function SingleRound(props) {
                                                         <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT_DIFFERENTIAL, roundNum)} </td>
                                                         {/* SCORE  */}
                                                         <td >{playersScore(net, props.game[2], SCORE, 3, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
-                                                        <td >{playersExtraPoint(net, props.game[2], EXTRA_POINT, 3, handleExtraWinningPointChange, addExtra, showInput, roundNum, winningExtraPoint, setWinningExtraPoint)} </td>
                                                         <td >{playersPoint(net, props.game[2], POINT, 3, roundNum)} </td>
                                                         <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, roundNum)}</td>
 

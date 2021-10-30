@@ -2,31 +2,27 @@ import { EXTRA_POINT, SCORE } from '../utils/global';
 
 
 
-// e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint
-const handleExtraWinningPointChange = (e, game, scoreType, netID, teamIDList, shortNet, winningExtraPoint, setWinningExtraPoint) => {
-    if (scoreType === EXTRA_POINT) {
-        let extraPoint = parseFloat(e.target.value);
-        if (isNaN(extraPoint)) extraPoint = 0;
+// e, net._id, winningExtraPoint, setWinningExtraPoint
+const handleExtraWinningPointChange = (e, netID, winningExtraPoint, setWinningExtraPoint) => {
+    let extraPoint = parseFloat(e.target.value);
+    if (isNaN(extraPoint)) extraPoint = 0;
 
-        const findWinningTeam = winningExtraPoint.find((elm, i) => elm.teamIDList[0] === teamIDList[0] && elm.game === game && elm.netID === netID);
-        if (findWinningTeam) {
-            // UPDATE TEAM 
-            winningExtraPoint.forEach((up, i) => {
-                if (up.teamIDList[0] === teamIDList[0] && up.netID === netID && up.game === game) {
-                    up.extraPoint = extraPoint;
-                }
-            });
-        } else {
-            // CREATE NEW TEAM 
-            setWinningExtraPoint(oldState => [...oldState,
-            {
-                teamIDList,
-                game,
-                netID,
-                extraPoint
-            }]);
+    const findWinningTeam = winningExtraPoint.find((elm, i) => elm.netID === netID);
+    if (findWinningTeam) {
+        // UPDATE TEAM 
+        winningExtraPoint.forEach((up, i) => {
+            if (up.netID === netID) {
+                up.extraPoint = extraPoint;
+            }
+        });
+    } else {
+        // CREATE NEW TEAM 
+        setWinningExtraPoint(oldState => [...oldState,
+        {
+            netID,
+            extraPoint
+        }]);
 
-        }
     }
 }
 
@@ -50,10 +46,12 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
             const findPerformance = updateScore.find((elm, i) => elm.team1.players[0] === team[0] && elm.game === game && elm.netID === netID);
             // console.log("find ", findPerformance);
             if (findPerformance) {
+                // console.log("item found");
                 // UPDATE TEAM 
                 updateScore.forEach((up, i) => {
                     if (up.team1.players[0] === team[0] && up.netID === netID && up.game === game) {
-                        up.score = score;
+                        // console.log("match - ");
+                        up.team1.score = score;
                     }
                 });
             } else {

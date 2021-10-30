@@ -64,7 +64,7 @@ const ExportField = (props) => {
                 <div className="spinner-border text-danger spinner-child" role="status">
                 </div>
             </div>) : (<React.Fragment>
-                <h2 className="h2">Export result of this event as CSV file.</h2>
+                <h2 className="h2">Export result of this event as MS excel.</h2>
                 <div className="mb-3">
                     <label htmlFor="file-name" className="form-label">File name</label>
                     <input type="text" className="form-control" id="file-name" onChange={changeFilename} />

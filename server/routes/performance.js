@@ -12,6 +12,7 @@ const xl = require('excel4node');
 const Event = require('../models/Event');
 const Participant = require('../models/Participant');
 const Performance = require('../models/Performance');
+const Net = require('../models/Net');
 
 
 const { check, validationResult } = require('express-validator');
@@ -53,7 +54,7 @@ router.get('/:eventID', async (req, res, next) => {
 
 
 /* ⛏️⛏️ CREATE PARTICIPANT OR PERFORMANCE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/:eventID', 
+router.post('/:eventID',
     check('firstname', "Firstname must not empty").notEmpty(),
     check('lastname', "Lastname must not empty").notEmpty(),
     check('city', "City must not empty").notEmpty(),
@@ -110,7 +111,7 @@ router.post('/:eventID',
 
 
 /* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/multiple/:eventID',  (req, res, next) => {
+router.post('/multiple/:eventID', (req, res, next) => {
 
 
     const form = formidable({ multiples: false });
@@ -239,11 +240,12 @@ router.post('/multiple/:eventID',  (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-performance/:eventID/:round', async (req, res, next) => {
+router.put('/update-performance/:eventID/:roundNum', async (req, res, next) => {
 
 
     const { updateScore, winningExtraPoint } = req.body;
-    const { round, event } = req.params;
+    const { event } = req.params;
+    const roundNum = parseInt(req.params.roundNum)
     // console.log(updateScore);
     // console.log(winningExtraPoint);
 
@@ -256,9 +258,9 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
             let team1Score = 0, t1p = 0, t1pd = 0;
             if (Math.sign(us.team1.score) === 1) {
                 team1Score = us.team1.score, t1p = 1, t1pd = us.team1.score;
-                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, round, team1Score, t1p, t1pd, us.netID) });
+                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
             } else {
-                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, round, team1Score, t1p, t1pd, us.netID) });
+                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
             }
         } else {
             // WITH NET 
@@ -297,20 +299,68 @@ router.put('/update-performance/:eventID/:round', async (req, res, next) => {
             // us, round, team1Score, t1p, t1pd, us.netID
             // console.log(us.team1.players);
             // console.log(us.team2.players);
-            const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, round, team1Score, t1p, t1pd, us.netID) });
-            const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, round, team2Score, t2p, t2pd, us.netID) });
+            const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+            const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, us.netID) });
 
         }
     });
 
 
 
+    // const wxp = [
+    //     {
+    //         netID: "617b22d589c3d144e7ca4d53",
+    //         extraPoint: 0.45
+    //     }
+    //     , {
+    //         netID: "617b22d589c3d144e7ca4d56",
+    //         extraPoint: 1.2
+    //     }
+    // ];
 
+    // // console.log(winningExtraPoint);
+    // const wxpIDS = [];
+    // for (let i = 0; i < winningExtraPoint.length; i++) {
+    //     wxpIDS.push(winningExtraPoint[i]._id);
+    // }
+
+
+
+    const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15";
     winningExtraPoint.forEach(async (wxp, i) => {
-        const findFirstPlayerOfTeam = await Performance.findById(wxp.teamIDList[0]);
-        const updateTeam = await Performance.updateMany({ _id: { $in: wxp.teamIDList } }, { $set: updatedExtraPerformance(wxp, round, wxp.netID, findFirstPlayerOfTeam) });
-        // console.log(updateTeam);
+        const findNet = await Net.findById(wxp.netID)
+            .populate({
+                path: "performance",
+                select,
+                populate: {
+                    path: "participant",
+                    select: "firstname lastname"
+                }
+            });
+
+        // console.log("find nets- ", findNet);
+        // console.log(typeof roundNum);
+        
+        if(findNet.performance.length < 4){
+            // console.log("find nets- ", findNet);
+            const updateExtra = await updatedExtraPerformance(findNet, roundNum, wxp.extraPoint, true);
+
+            // IF SOMEONE HAS POINT , GIVE HIM EXTRA POINT 
+        }else{
+            // THIS NET HAS TOTAL OF 4 PLAYER 
+            // console.log("findNet, roundNum, wxp.extraPoint - ");
+            // console.log(findNet, roundNum, wxp.extraPoint);
+            const updateExtra = await updatedExtraPerformance(findNet, roundNum, wxp.extraPoint, false);
+        }
+
     });
+
+
+    // winningExtraPoint.forEach(async (wxp, i) => {
+    //     const findFirstPlayerOfTeam = await Performance.findById(wxp.teamIDList[0]);
+    //     const updateTeam = await Performance.updateMany({ _id: { $in: wxp.teamIDList } }, { $set: updatedExtraPerformance(wxp, round, wxp.netID, findFirstPlayerOfTeam) });
+    //     // console.log(updateTeam);
+    // });
 
 
     // UPDATE EXISTING PERFORMANCE
@@ -442,7 +492,7 @@ router.get('/dashboard/participant', async (req, res, next) => {
 router.get('/get-performance/:eventID/:roundNum', async (req, res, next) => {
     // console.log(req.params.roundNum);
     // console.log("Get performance");
-    try {        
+    try {
         const performances = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
         const rankingPerformance = performances.sort(wholeRanking)
         // console.log(performances.length);

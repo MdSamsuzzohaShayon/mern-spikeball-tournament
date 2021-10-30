@@ -21,7 +21,7 @@ export const showLiftedPefrormance = (lp, rn, recoverLeftedPerformance, concatin
                 <tbody>
                     {lp.map((p, i) => (<tr key={i} >
                         <td>{p.participant.firstname + " " + p.participant.lastname}</td>
-                        <td>{getTotalPointOfARound(p, rn)}</td>
+                        <td>{getTotalPointOfARound(p, rn).toFixed(2)}</td>
                         <td>{getTDRound(p, rn)}</td>
                         {concatinable && <td><button className="btn btn-primary" onClick={(e) => recoverLeftedPerformance(e, p._id)} > Add</button></td>}
 

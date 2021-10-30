@@ -4,102 +4,77 @@ import { POINT, POINT_DIFFERENTIAL, SCORE, EXTRA_POINT } from './global';
 import getDefaultValue from './defaultValue';
 // gor = GAME OF ROUND 
 // ⛏️⛏️ INPUT FIELD FOR ALL PARTICIPANT OR PERFORMANCE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-const playersExtraPoint = (net, game, scoreType, gor, handleExtraWinningPointChange, addExtra, showInput, roundNum, winningExtraPoint, setWinningExtraPoint) => {
-    // console.log(net.performance);
+const playersExtraPoint = (net, handleExtraWinningPointChange, addExtra, showInput, winningExtraPoint, setWinningExtraPoint) => {
+    // console.log("Nets - ",net);
     // console.log("s - ", scoreType);
     // console.log(props.round);
     // console.log("Game - ", game, props.game);
 
 
-    if (scoreType === EXTRA_POINT) {
-        const checkDefaultVal = (defaultVal, selectedTeam, shortNet, j) => {
 
-            // if (shortNet === true) classList = classList + " short-net-player";
-            if (shortNet === true) {
-                if (defaultVal && defaultVal > 0) {
-                    return (
-                        <div className="extra d-flex short-net-player" key={j}>
-                            <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
-                            <input type="text" style={{ display: showInput(selectedTeam, game, roundNum) }}
-                                onChange={e => handleExtraWinningPointChange(e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control" />
-                        </div>
-                    );
-                } else {
-                    return <div className="extra" key={j}></div>;
-                }
+    return (
+        <div className="extra d-flex short-net-player" >
+            <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, net._id)} className="extra-icon" />
+            <input type="text" style={{ display: showInput(net._id) }}
+                onChange={e => handleExtraWinningPointChange(e, net._id, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control"
+            />
+        </div>
+    );
+
+
+    /*
+    const checkDefaultVal = (defaultVal, selectedTeam, shortNet, j) => {
+
+        // if (shortNet === true) classList = classList + " short-net-player";
+        if (shortNet === true) {
+            if (defaultVal && defaultVal > 0) {
+                return (
+                    <div className="extra d-flex short-net-player" key={j}>
+                        <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
+                        <input type="text" style={{ display: showInput(selectedTeam, game, roundNum) }}
+                            onChange={e => handleExtraWinningPointChange(e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control" />
+                    </div>
+                );
             } else {
-                if (defaultVal && defaultVal > 0) {
-                    return (
-                        <div className="extra d-flex" >
-                            <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
-                            <input type="text" style={{ display: showInput(selectedTeam, game, roundNum) }}
-                                onChange={e => handleExtraWinningPointChange(e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control" />
-                        </div>
-                    );
-                } else {
-                    return <div className="extra" ></div>;
-                }
+                return <div className="extra" key={j}></div>;
             }
-
-        }
-
-
-        if (net.performance.length < 4) {
-            // return (<div className="net-less-four">{net.performance.map((p, j) => <div className="short-net-player" key={j}>  <input type="text" className="form-control extra-point" onChange={e => handleInputChange(e, null, game, scoreType, net._id, true, null, p._id, false, null)} /> </div>)}</div>);
-            return (<div className="net-less-four">{net.performance.map((p, j) => checkDefaultVal(getDefaultValue(p, POINT, game, roundNum), [p._id], true, j))}</div>);
-
         } else {
-
-            if (gor === 1) {
-                // 1ST & 4TH VS 2ND  4TH 
-                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-                return (<div className="player-score d-flex flex-column">
-                    <div className="two-p-input two-p-i-1">
-                        {checkDefaultVal(getDefaultValue(one, POINT, game, roundNum), [one._id, four._id], false, null)}
+            if (defaultVal && defaultVal > 0) {
+                return (
+                    <div className="extra d-flex" >
+                        <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, selectedTeam, game, roundNum)} className="extra-icon" />
+                        <input type="text" style={{ display: showInput(selectedTeam, game, roundNum) }}
+                            onChange={e => handleExtraWinningPointChange(e, game, scoreType, net._id, selectedTeam, shortNet, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control" />
                     </div>
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-i-2">
-                        {checkDefaultVal(getDefaultValue(two, POINT, game, roundNum), [two._id, three._id], false, null)}
-                    </div>
-                </div>);
-            }
-
-
-            else if (gor === 2) {
-                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-                // 1ST & 2ND VS 3RD & 4TH 
-                return (<div className="player-score d-flex flex-column">
-                    <div className="two-p-input two-p-i-1">
-                        {checkDefaultVal(getDefaultValue(one, POINT, game, roundNum), [one._id, two._id], false, null)}
-                    </div>
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-i-2">
-                        {checkDefaultVal(getDefaultValue(three, POINT, game, roundNum), [three._id, four._id], false, null)}
-                    </div>
-                </div>);
-            } else if (gor === 3) {
-                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
-                // 1ST VS 3RD & 2ND VS 4TH 
-                return (<div className="player-score d-flex flex-column">
-                    <div className="two-p-input two-p-i-1">
-                        {checkDefaultVal(getDefaultValue(one, POINT, game, roundNum), [one._id, three._id], false, null)}
-                    </div>
-                    <div className="line"></div>
-
-                    <div className="two-p-input two-p-i-2">
-                        {checkDefaultVal(getDefaultValue(two, POINT, game, roundNum), [two._id, four._id], false, null)}
-                    </div>
-                </div>);
+                );
+            } else {
+                return <div className="extra" ></div>;
             }
         }
+
     }
 
 
+    if (net.performance.length < 4) {
+        // return (<div className="net-less-four">{net.performance.map((p, j) => <div className="short-net-player" key={j}>  <input type="text" className="form-control extra-point" onChange={e => handleInputChange(e, null, game, scoreType, net._id, true, null, p._id, false, null)} /> </div>)}</div>);
+        return (<div className="net-less-four">{net.performance.map((p, j) => checkDefaultVal(getDefaultValue(p, POINT, game, roundNum), [p._id], true, j))}</div>);
 
+    } else {
 
+        // 1ST & 4TH VS 2ND  4TH 
+        let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+        return (<div className="player-score d-flex flex-column">
+            <div className="two-p-input two-p-i-1">
+                {checkDefaultVal(getDefaultValue(one, POINT, game, roundNum), [one._id, four._id], false, null)}
+            </div>
+            <div className="line"></div>
 
+            <div className="two-p-input two-p-i-2">
+                {checkDefaultVal(getDefaultValue(two, POINT, game, roundNum), [two._id, three._id], false, null)}
+            </div>
+        </div>);
+    }
+    */
 }
 
 
@@ -114,15 +89,15 @@ const playersPoint = (net, game, scoreType, gor, roundNum) => {
 
         return (<div className="players-in-net">
             <div className="two-p-input two-p-input-1">
-                {t1p1default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t1p1default}</div>)}
-                {t1p2default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t1p2default}</div>)}
+                {t1p1default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t1p1default.toFixed(2)}</div>)}
+                {t1p2default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t1p2default.toFixed(2)}</div>)}
             </div>
 
             <div className="line"></div>
 
             <div className="two-p-input two-p-input-2 ">
-                {t2p1default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t2p1default}</div>)}
-                {t2p2default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t2p2default}</div>)}
+                {t2p1default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t2p1default.toFixed(2)}</div>)}
+                {t2p2default <= 0 ? <div className="text-danger"></div> : (<div className="text-success">{t2p2default.toFixed(2)}</div>)}
             </div>
         </div>);
     }
