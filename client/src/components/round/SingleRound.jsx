@@ -115,6 +115,16 @@ function SingleRound(props) {
     */
 
 
+    const listener = e => {
+        if (e.code === "Enter" || e.code === "NumpadEnter") {
+            // e.preventDefault();
+            console.log("Enter key was pressed. Run your function.");
+            handleUpdate(e);
+            // callMyFunction();
+        }
+    };
+
+
 
 
 
@@ -147,6 +157,7 @@ function SingleRound(props) {
 
     useEffect(() => {
         tabKeyFocusChange();
+        document.addEventListener("keydown", listener);
         // window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
         // alert("hi");
         if (winningExtraPoint.length > 0 || updateScore.length > 0) {
@@ -154,9 +165,15 @@ function SingleRound(props) {
         }
         return () => {
             console.log("Component unmount [SingleRound.jsx]");
+            document.removeEventListener("keydown", listener);
             // window.addEventListener('unload', beforeUnloadListener, { capture: true });
         };
     });
+
+
+
+
+
 
 
 
@@ -302,6 +319,12 @@ function SingleRound(props) {
         console.log("Update - ", response);
         setUpdateScore([]);
         props.updateNets(true);
+    }
+
+
+
+    const handleKeyPress = (e) => {
+        console.log("Event - ", e);
     }
 
 
@@ -547,7 +570,7 @@ function SingleRound(props) {
                                 </React.Fragment>
                                 )}
                             </div>
-                            <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
+                            <button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary">Submit</button>
                         </div>
                     )}
 
