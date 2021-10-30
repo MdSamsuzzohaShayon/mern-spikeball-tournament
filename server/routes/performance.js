@@ -54,7 +54,7 @@ router.get('/:eventID', async (req, res, next) => {
 
 
 /* ⛏️⛏️ CREATE PARTICIPANT OR PERFORMANCE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/:eventID',
+router.post('/:eventID', ensureAuth,
     check('firstname', "Firstname must not empty").notEmpty(),
     check('lastname', "Lastname must not empty").notEmpty(),
     check('city', "City must not empty").notEmpty(),
@@ -111,7 +111,7 @@ router.post('/:eventID',
 
 
 /* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/multiple/:eventID', (req, res, next) => {
+router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
 
 
     const form = formidable({ multiples: false });
@@ -240,7 +240,7 @@ router.post('/multiple/:eventID', (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-performance/:eventID/:roundNum', async (req, res, next) => {
+router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
 
 
     const { updateScore, winningExtraPoint } = req.body;
@@ -374,7 +374,7 @@ router.put('/update-performance/:eventID/:roundNum', async (req, res, next) => {
 
 
 
-router.post('/exports/:eventID', async (req, res, next) => {
+router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
     try {
 
         const { filename } = req.body;

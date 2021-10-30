@@ -1,6 +1,7 @@
 // import { useParams } from 'react-router-dom';
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
+import { Redirect } from "react-router-dom";
 import { hostname } from '../../utils/global';
 import Participants from '../participant/Participants';
 import Rounds from '../round/Rounds'
@@ -32,6 +33,7 @@ export class EventAdmin extends Component {
 
 
     componentDidMount() {
+        console.log("Event auth - ", this.props.isAuthenticated);
         // console.log("Event admin component mounted - ",this.props);
         this.is_mounted = true;
         this.setState({ currentEventID: this.props.match.params.id });

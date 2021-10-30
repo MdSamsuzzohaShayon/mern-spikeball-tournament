@@ -24,7 +24,7 @@ const Event = require('../models/Event');
 
 
 /* ⛏️⛏️ ALL ROUTES WILL BE PROTECTED EXCEPT LOGIN ROUTE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/register', 
+router.post('/register', ensureAuth,
     check('username', "Must input a name").notEmpty(),
     // username must be an email
     check('email', "Email must not empty and a valid email").notEmpty().isEmail(),

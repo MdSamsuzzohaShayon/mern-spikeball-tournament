@@ -63,6 +63,7 @@ class App extends Component {
 
 
   componentDidMount() {
+    // console.log("Auth - ",this.state.isAuthenticated);
     this.getAuthenticatedUser();
   }
 
@@ -70,6 +71,7 @@ class App extends Component {
 
   // NEVER UPDATE STATE INSIDE COMPONENT DID UPDATE 
   // PROBLEM WITH THIS AS WELL 
+  /*
   componentDidUpdate(prevProps, prevState, snapshot) {
     // console.log("Previous props - ", prevProps);
     // console.log("Previous State - ", prevState.isAuthenticated + " Current state - ", this.state.isAuthenticated);
@@ -82,6 +84,7 @@ class App extends Component {
     }
     // debugger;
   }
+  */
 
   componentWillUnmount() {
     // console.log("Appjs unmounted");
@@ -109,7 +112,8 @@ class App extends Component {
             </div>) : <React.Fragment>
               {this.state.isAuthenticated ? <EventAdmin isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
             </React.Fragment>} */}
-            <EventAdmin isAuthenticated={this.state.isAuthenticated} />
+
+            <EventAdmin isAuthenticated={this.state.isAuthenticated} /> 
           </Route>
           <Route exact path="/event/:id" >
             <Score admin={false} />
