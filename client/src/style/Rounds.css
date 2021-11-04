@@ -4,14 +4,44 @@
   margin-top: 0;
 }
 
-.sticky-top {
-  position: -webkit-sticky !important;
-  position: sticky !important;
-  top: -1px !important;
-  align-self: flex-start !important;
-  overflow-y: auto !important;
+.submit-btn-wrap {
+  background-color: white;
+  position: sticky;
+  z-index: 4;
+  top: 0;
+  padding: 7px 0;
+}
+.submit-btn-wrap .submit-btn {
+  top: 0.5rem;
+  margin-left: 48%;
+}
+@media screen and (max-width: 992px) {
+  .submit-btn-wrap .submit-btn {
+    margin-left: 0;
+  }
 }
 
+.r-table {
+  overflow: auto;
+  z-index: 1;
+}
+.r-table thead {
+  position: sticky;
+  top: 3rem;
+}
+
+.table-responsive {
+  overflow-x: unset;
+}
+@media screen and (max-width: 992px) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+}
+
+.show-all-nets {
+  background-color: white;
+}
 .show-all-nets tr td {
   padding: 0 !important;
 }

@@ -7,16 +7,45 @@
     margin-top: 0;
 }
 
-.sticky-top {
-    position: -webkit-sticky !important;
-    position: sticky !important;
-    top: -1px !important;
-    align-self: flex-start !important;
-    overflow-y: auto !important;
+.submit-btn-wrap {
+    background-color: white;
+    position: sticky;
+    z-index: 4;
+    top: 0;
+    padding: 7px 0;
+    .submit-btn {
+        top: 0.5rem;
+        margin-left: 48%;
+        @media screen and(max-width: $br-lg) {
+            margin-left: 0;
+        }
+    }
+}
+
+.r-table {
+    overflow: auto;
+    // height: 100px;
+    z-index: 1;
+    thead {
+        position: sticky;
+        top: 3rem;
+    }
+}
+
+.table-responsive {
+    overflow-x: unset;
+    // -webkit-overflow-scrolling: touch;
+    @media screen and(max-width: $br-lg) {
+        overflow-x: auto;
+        // thead {
+        //     position: sticky;
+        // }
+    }
 }
 
 // ⛏️⛏️ ROUND ONE TO FIVE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 .show-all-nets {
+    background-color: white;
     tr {
         td {
             padding: 0 !important;

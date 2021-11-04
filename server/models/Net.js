@@ -16,6 +16,10 @@ const netSchema = new Schema({
             ref: 'performance'
         }
     ],
+    wp: {
+        type: Number,
+        required: false
+    },
     event: {
         type: Schema.Types.ObjectId,
         required: true,

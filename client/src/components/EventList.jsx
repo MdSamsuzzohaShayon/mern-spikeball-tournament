@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { hostname } from '../utils/global';
 import { Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -16,8 +16,7 @@ const EventList = (props) => {
 
 
     // ⛏️⛏️ CREATE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const createAnEvent = async () => {
         try {
             setIsLoading(true);
             // http://localhost:4000/api/admin/dashboard/participant
@@ -30,8 +29,8 @@ const EventList = (props) => {
                 body: JSON.stringify(event)
             });
             console.log("Create An Event - ", response);
+            setEvent({});
             setShow(false);
-            props.updateList(true);
             setIsLoading(false);
         } catch (error) {
             console.log(error);
@@ -40,12 +39,25 @@ const EventList = (props) => {
     }
 
 
+
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await createAnEvent();
+        props.updateList(true);
+    }
+
+
     const handleChange = (e) => {
         setEvent({
             ...event,
             [e.target.name]: e.target.value
         });
+        // console.log(event);
     }
+
 
 
 
@@ -65,6 +77,25 @@ const EventList = (props) => {
         }
 
     }
+
+
+
+    const listenKeypress = async e => {
+        // e.preventDefault();
+        if (e.key === 'Enter' && !e.repeat) {
+            console.log("Event - ", event);
+            await createAnEvent();
+            props.updateList(true);
+        }
+    }
+
+
+    useEffect(() => {
+        document.addEventListener('keydown', listenKeypress);
+        return () => {
+            document.removeEventListener('keydown', listenKeypress);
+        }
+    });
 
 
 
@@ -127,7 +158,7 @@ const EventList = (props) => {
                             <tr key={index}>
                                 <th >{event.title}</th>
                                 <td>{new Date(event.date).getFullYear() + '-' + (new Date(event.date).getMonth() + 1) + '-' + new Date(event.date).getDate()}</td>
-                                <td>{props.isAuthenticated ? <Link to={`/admin/dashboard/event/${event._id}`} className='text-white btn btn-primary'>View Details</Link> : <Link to={`/event/${event._id}`} className="btn btn-primary">View Details Public</Link>}</td>
+                                <td>{props.isAuthenticated ? <Link to={`/admin/dashboard/event/${event._id}`} className='text-white btn btn-primary'>Edit Details</Link> : <Link to={`/event/${event._id}`} className="btn btn-primary">View Details</Link>}</td>
                                 {props.isAuthenticated && <td><button className="btn btn-danger" onClick={e => deleteEvent(e, event._id)} >Delete</button></td>}
                             </tr>)
                         )}

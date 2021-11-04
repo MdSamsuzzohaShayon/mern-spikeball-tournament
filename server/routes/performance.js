@@ -54,7 +54,7 @@ router.get('/:eventID', async (req, res, next) => {
 
 
 /* ⛏️⛏️ CREATE PARTICIPANT OR PERFORMANCE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/:eventID', ensureAuth,
+router.post('/:eventID',
     check('firstname', "Firstname must not empty").notEmpty(),
     check('lastname', "Lastname must not empty").notEmpty(),
     check('city', "City must not empty").notEmpty(),
@@ -111,7 +111,7 @@ router.post('/:eventID', ensureAuth,
 
 
 /* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
+router.post('/multiple/:eventID', (req, res, next) => {
 
 
     const form = formidable({ multiples: false });
@@ -240,7 +240,7 @@ router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE PERFORMANCE AND ROUND (Round 1 - 4) ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
+router.put('/update-performance/:eventID/:roundNum', async (req, res, next) => {
 
 
     const { updateScore, winningExtraPoint } = req.body;
@@ -340,13 +340,13 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
 
         // console.log("find nets- ", findNet);
         // console.log(typeof roundNum);
-        
-        if(findNet.performance.length < 4){
+
+        if (findNet.performance.length < 4) {
             // console.log("find nets- ", findNet);
             const updateExtra = await updatedExtraPerformance(findNet, roundNum, wxp.extraPoint, true);
 
             // IF SOMEONE HAS POINT , GIVE HIM EXTRA POINT 
-        }else{
+        } else {
             // THIS NET HAS TOTAL OF 4 PLAYER 
             // console.log("findNet, roundNum, wxp.extraPoint - ");
             // console.log(findNet, roundNum, wxp.extraPoint);
@@ -374,7 +374,7 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
 
 
 
-router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
+router.post('/exports/:eventID', async (req, res, next) => {
     try {
 
         const { filename } = req.body;
@@ -454,7 +454,7 @@ router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
 // doc.subdocs.push({ _id: 4815162342 })
 // doc.subdocs.pull({ _id: 4815162342 }) // removed
 /* ⛏️⛏️ DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.delete('/:id', ensureAuth, async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
     try {
         const participant = await Participant.findByIdAndDelete(req.params.id);
         // console.log(participant);

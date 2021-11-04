@@ -240,7 +240,7 @@ router.get('/ranking/:eventID', async (req, res, next) => {
 
 
 // ⛏️⛏️ DELETE A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.delete('/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
+router.delete('/:eventID/:roundNum', async (req, res, next) => {
     try {
         const deleteRound = await Round.findOneAndDelete({ no: req.params.roundNum, event: req.params.eventID });
         // console.log(deleteRound);

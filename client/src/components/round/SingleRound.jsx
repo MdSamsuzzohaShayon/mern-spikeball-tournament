@@ -38,6 +38,11 @@ function SingleRound(props) {
     // const [assignNet, setAssignNet] = useState(false);
     const [randomNet, setRandomNet] = useState(null);
 
+
+    // SMS ON ASSIGN NET 
+    const [openSMS, setOpenSMS] = useState(false);
+    const [negativeSMS, setNegativeSMS] = useState(false);
+
     // MODAL 
     const [assignNetShow, setAssignNetShow] = useState(false);
     const handleNetClose = (e, update) => {
@@ -46,12 +51,16 @@ function SingleRound(props) {
 
             // e.preventDefault();
             // console.log("UPdate - ", update);
+            setOpenSMS(true);
             if (update === true) {
+                setNegativeSMS(false);
                 if (randomNet === true) {
                     randomAssign();
                 } else {
                     assignNetHandler();
                 }
+            } else {
+                setNegativeSMS(true);
             }
             setAssignNetShow(false);
         } catch (error) {
@@ -169,6 +178,19 @@ function SingleRound(props) {
             // window.addEventListener('unload', beforeUnloadListener, { capture: true });
         };
     });
+
+
+
+    useEffect(() => {
+        let timer;
+        if (openSMS === true) {
+            timer = setTimeout(() => {
+                setOpenSMS(false);
+                setNegativeSMS(false);
+            }, 3000);
+        }
+        return () => clearTimeout(timer);
+    }, [assignNetShow, openSMS, negativeSMS])
 
 
 
@@ -374,20 +396,31 @@ function SingleRound(props) {
 
 
 
-{/* <button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary sticky-top align-items-start justify-content-start">Submit</button> */}
+    {/* <button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary sticky-top align-items-start justify-content-start">Submit</button> */ }
 
 
+    const showMessage = () => {
+        // {assignNetShow === false && <div className="alert alert-success">You can't reassign once the score is inputed</div> }
+        if (assignNetShow === false && openSMS === true) {
+            if (negativeSMS === true) {
+                return <div className="alert alert-danger">You can't reassign once the score is inputed</div>;
+            } else {
+                return <div className="alert alert-success">You can't reassign once the score is inputed</div>
+            }
+        }
+        return null;
+    }
 
     // ⛏️⛏️ THIS IS MAIN RETURN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     return (
         <div className="SingleRound">
-            <div className="d-flex align-items-center">
+            <div className="">
                 <div className="d-flex my-3 justify-content-between w-full">
                     <div >
                         {roundNum === 1 ? <React.Fragment>
                             <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
                         </React.Fragment> : <React.Fragment>
-                            {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Assign Nets</button>}
+                            {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Rank Assign</button>}
                             {!props.initialize && <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>}
                             <button className="btn btn-primary mx-3" onClick={e => handleNetShow(e, true)} >Random Assign</button>
                         </React.Fragment>}
@@ -398,6 +431,8 @@ function SingleRound(props) {
                         {showPerformances === true ? <button onClick={toggleGameParticipant} className="btn btn-light" >Game</button> : <button onClick={toggleGameParticipant} className="btn btn-primary" >Game</button>}
                     </div>
                 </div>
+
+                {showMessage()}
 
 
 
@@ -461,9 +496,9 @@ function SingleRound(props) {
                 />
 
 
-                
+
             </React.Fragment>) : (<React.Fragment>
-                <button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary sticky-top">Submit</button>
+                {!props.initialize && <div className="submit-btn-wrap"><button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary submit-btn">Submit</button></div>}
                 <div className="show table">
                     {isLoading ? (
                         <div className="text-center spinner-parent">
@@ -475,9 +510,9 @@ function SingleRound(props) {
                             <div className="show-all-nets">
                                 {!props.initialize && (<React.Fragment>
                                     {/* PLAYER GAME, SCORE, POINT, POINT DIFFRENTIAL  */}
-                                    <div className="table-responsive left-table mx-0 px-0">
+                                    <div className="table-responsive">
                                         <table className="table r-table table-bordered table-striped">
-                                            <thead className="r-thead bg-dark text-light text-center">
+                                            <thead className="table-head bg-dark text-light text-center">
                                                 <tr>
                                                     <th colSpan="2" scope="colgroup"></th>
                                                     <th colSpan="4" scope="colgroup">Game {props.game[0]}</th>

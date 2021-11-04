@@ -78,6 +78,8 @@ export class Dashboard extends Component {
 
 
 
+
+
     componentWillUnmount() {
         this.isMountedValue = false;
         this.props.authValidation(false);
