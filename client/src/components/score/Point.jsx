@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { round1Total, round2Total, round3Total, round4Total, round5Total, totalPoint } from '../../utils/addTotalPoint';
 import { round1TD, round2TD, round3TD, round4TD, round5TD, totalDeferential } from '../../utils/pointDeferential';
 

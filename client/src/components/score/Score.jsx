@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router";
 import { hostname } from '../../utils/global';
 import Point from './Point';
 import Round from './Round';
+import withRouter from '../../HOC/withRouter';
 import "../../style/Score.css";
 
 
@@ -11,7 +11,8 @@ class Score extends Component {
         super(props);
         this.is_mounted = false;
         this.state = {
-            currentEventID: this.props.match.params.id,
+            currentEventID: this.props.params.id,
+            // currentEventID: this.props.match.params.id,
             isLoading: false,
             round1: [],
             round2: [],
@@ -122,6 +123,7 @@ class Score extends Component {
 
 
     componentDidMount() {
+        // console.log(this.props);
         this.is_mounted = true;
         this.findRankingRound();
         if (!this.props.admin) {

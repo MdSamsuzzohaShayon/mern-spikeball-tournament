@@ -28,28 +28,30 @@ export class Dashboard extends Component {
 
     // ⛏️⛏️ FETCH ALL EVENTS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     async getAllEvents() {
-        if (this.props.isAuthenticated) {
-            try {
-                this.setState({ isLoading: true });
-                const response = await fetch(`${hostname}/api/event`, { method: "GET", credentials: "include" });
-                console.log("Get all events [Dashboard.jsx] - ", response);
-                const text = await response.text();
-                const jsonResponse = await JSON.parse(text);
-                if (this.isMountedValue) {
-                    this.setState({
-                        eventList: jsonResponse.events,
-                        isLoading: false
-                    });
-                }
-
-                // console.log("JSON - ", jsonResponse.events);
-            } catch (error) {
-                console.log(error);
+        try {
+            this.setState({ isLoading: true });
+            const response = await fetch(`${hostname}/api/event`, { method: "GET", credentials: "include" });
+            console.log("Get all events [Dashboard.jsx] - ", response);
+            const text = await response.text();
+            console.log(text);
+            const jsonResponse = await JSON.parse(text);
+            console.log(jsonResponse);
+            if (this.isMountedValue) {
+                this.setState({
+                    eventList: jsonResponse.events,
+                    isLoading: false
+                });
             }
+
+            // console.log("JSON - ", jsonResponse.events);
+        } catch (error) {
+            console.log(error);
         }
+        // if (this.props.isAuthenticated) {
+        // }
     }
 
-    
+
     componentDidMount() {
         // console.log("Authenticated - ", this.props.isAuthenticated);
         this.isMountedValue = true;

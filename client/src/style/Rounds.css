@@ -27,7 +27,6 @@
 }
 .r-table thead {
   position: sticky;
-  top: 3rem;
 }
 
 .table-responsive {

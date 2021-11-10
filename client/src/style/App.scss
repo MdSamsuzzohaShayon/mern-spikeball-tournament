@@ -4,6 +4,10 @@
 // ROOT STYLING 
 .App {
   font-size: 1em;
+  .btn-primary{
+    background-color: #079b8e;
+  }
+  
   @media screen and (max-width: $br-lg) {
     font-size: 0.7em;
     .btn {

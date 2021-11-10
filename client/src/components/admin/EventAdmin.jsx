@@ -1,7 +1,8 @@
 // import { useParams } from 'react-router-dom';
 import React, { Component } from 'react';
-import { withRouter } from "react-router";
-import { Redirect } from "react-router-dom";
+// import { withRouter } from "react-router";
+// import { useParams } from "react-router-dom";
+import withRouter from '../../HOC/withRouter';
 import { hostname } from '../../utils/global';
 import Participants from '../participant/Participants';
 import Rounds from '../round/Rounds'
@@ -32,14 +33,18 @@ export class EventAdmin extends Component {
     }
 
 
-    componentDidMount() {
+
+    async componentDidMount() {
         console.log("Event auth - ", this.props.isAuthenticated);
         // console.log("Event admin component mounted - ",this.props);
+        // console.log("Event admin component mounted - ", this.props?.params?.id);
+        // {this.state.currentEvent.title}
         this.is_mounted = true;
-        this.setState({ currentEventID: this.props.match.params.id });
+        await this.getSingleEvent(this.props.params.id);
+        this.setState({ currentEventID: this.props.params.id });
         // console.log("Auth - ",this.props.isAuthenticated);
-        // console.log("ID - ",this.props.match.params.id);
-        this.getSingleEvent(this.props.match.params.id);
+        // console.log("ID - ", this.state.currentEvent);
+        document.title = "Spikers Scramble - " + this.state.currentEvent.title;
     }
 
 
@@ -51,14 +56,15 @@ export class EventAdmin extends Component {
     // ⛏️⛏️ GET AN EVENT WITH DETAILS - AFTER GETTING SINGLE EVENT REDIRECT TO EVENT ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     async getSingleEvent(id) {
         try {
-            // console.log(id);
+            // console.log("IDDDDDDDDDDDDDDDDDDDD- ",id);
             // console.log(participants);
             this.setState({ isLoading: true });
             const response = await fetch(`${hostname}/api/event/${id}`, { method: "GET", credentials: "include" });
             console.log("Get single event [EventAdmin.jsx] - ", response);
             const text = await response.text();
             const jsonResponse = await JSON.parse(text);
-            if (this.is_mounted) {
+            // console.log(jsonResponse);
+            if (this.is_mounted == true) {
                 this.setState({ currentEvent: jsonResponse.events });
                 // console.log(jsonResponse);
             }

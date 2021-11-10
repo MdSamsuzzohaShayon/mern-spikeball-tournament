@@ -1,7 +1,8 @@
 // ⛏️⛏️ MAIN APP FILE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style/App.css';
-import { Switch, Route, Redirect } from "react-router-dom";
+// import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route } from 'react-router-dom';
 import Menu from './components/Menu';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
@@ -96,32 +97,30 @@ class App extends Component {
     return (
       <div className="App">
         <Menu authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />
-        <Switch>
-          <Route exact path="/"><Home /></Route>
-          <Route exact path="/home"><Home /></Route>
-          <Route exact path="/admin">
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/home" element={<Home />}></Route>
+          <Route path="/admin" element={<Admin authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}></Route>
+          {/* <Route path="/admin">
             {this.state.isAuthenticated === true ? <Redirect to="/admin/dashboard" /> : <Admin authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}
-          </Route>
-          <Route exact path="/admin/dashboard">
+          </Route> */}
+          <Route path="/admin/dashboard" element={<Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}></Route>
+          {/* <Route path="/admin/dashboard">
             {this.state.isAuthenticated === true ? <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
-          </Route>
-          <Route exact path="/admin/dashboard/event/:id" >
-            {/* {this.state.isLoading ? (<div className="text-center spinner-parent">
-              <div className="spinner-border text-danger spinner-child" role="status">
-              </div>
-            </div>) : <React.Fragment>
-              {this.state.isAuthenticated ? <EventAdmin isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
-            </React.Fragment>} */}
-
-            <EventAdmin isAuthenticated={this.state.isAuthenticated} /> 
-          </Route>
-          <Route exact path="/event/:id" >
+          </Route> */}
+          <Route path="/admin/dashboard/event/:id" element={<EventAdmin isAuthenticated={this.state.isAuthenticated} />}></Route>
+          {/* <Route path="/admin/dashboard/event/:id" >
+            <EventAdmin isAuthenticated={this.state.isAuthenticated} />
+          </Route> */}
+          <Route path="/event/:id" element={<Score admin={false} />}></Route>
+          {/* <Route path="/event/:id" >
             <Score admin={false} />
-          </Route>
-          <Route path="*">
+          </Route> */}
+          <Route path="/home" element={<Page404 />}></Route>
+          {/* <Route path="*">
             <Page404 />
-          </Route>
-        </Switch>
+          </Route> */}
+        </Routes>
       </div>
     );
   }

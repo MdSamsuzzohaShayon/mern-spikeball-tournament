@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import Login from '../components/admin/Login';
 import '../style/Admin.css';
+import withNavigate from '../HOC/withNavigate';
 
 
 
@@ -59,16 +60,17 @@ class Admin extends Component {
             this.setState({ isLoading: false });
 
             if (response.status === 200) {
-                // const textRes = await response.text();
-                // const jsonRes = await JSON.parse(textRes);
-                // // console.log("Json - ", jsonRes);
-                // // if (jsonRes.user) {
-                // //     this.setState({
-                // //         errors: [],
-                // //         success: "Login successfull"
-                // //     });
-                // //     // REDIRECT FROM  HERE TO DASHBOARD 
-                // // }
+                const textRes = await response.text();
+                const jsonRes = await JSON.parse(textRes);
+                // console.log("Json - ", jsonRes);
+                if (jsonRes.user) {
+                    this.setState({
+                        errors: [],
+                        success: "Login successfull"
+                    });
+                    // REDIRECT FROM  HERE TO DASHBOARD 
+                    this.props.navigateToTarget('/admin/dashboard');
+                }
 
                 console.log("Login success - ", response);
 
@@ -125,4 +127,4 @@ class Admin extends Component {
 }
 
 
-export default Admin;
+export default withNavigate(Admin);

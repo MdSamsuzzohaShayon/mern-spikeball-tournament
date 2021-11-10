@@ -1,10 +1,11 @@
 import React from 'react';
 import { checkNegativePD } from './helpers';
-import { POINT, POINT_DIFFERENTIAL, SCORE, EXTRA_POINT } from './global';
+import { POINT, POINT_DIFFERENTIAL, SCORE } from './global';
 import getDefaultValue from './defaultValue';
 // gor = GAME OF ROUND 
 // ⛏️⛏️ INPUT FIELD FOR ALL PARTICIPANT OR PERFORMANCE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-const playersExtraPoint = (net, handleExtraWinningPointChange, addExtra, showInput, winningExtraPoint, setWinningExtraPoint) => {
+// net, handleExtraWinningPointChange, roundNum, updateScore, setUpdateScore
+const playersExtraPoint = (net, handleExtraWinningPointChange, roundNum, updateScore, setUpdateScore, defaultValue) => {
     // console.log("Nets - ",net);
     // console.log("s - ", scoreType);
     // console.log(props.round);
@@ -12,13 +13,23 @@ const playersExtraPoint = (net, handleExtraWinningPointChange, addExtra, showInp
 
 
 
+    // return (
+    //     <div className="extra d-flex mt-3 short-net-player" >
+    //         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, net._id)} className="extra-icon" />
+    //         <input type="text" style={{ display: showInput(net._id) }}
+    //             onChange={e => handleExtraWinningPointChange(e, net._id, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control"
+    //         />
+    //     </div>
+    // );
+
+
     return (
-        <div className="extra d-flex mt-3 short-net-player" >
-            <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, net._id)} className="extra-icon" />
-            <input type="text" style={{ display: showInput(net._id) }}
-                onChange={e => handleExtraWinningPointChange(e, net._id, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control"
-            />
-        </div>
+        <input
+            type="text"
+            className="form-control"
+            defaultValue={defaultValue.toFixed(2)}
+            onChange={e => handleExtraWinningPointChange(e, net._id, roundNum, updateScore, setUpdateScore)}
+        />
     );
 }
 

@@ -1,6 +1,9 @@
 .App {
   font-size: 1em;
 }
+.App .btn-primary {
+  background-color: #079b8e;
+}
 @media screen and (max-width: 992px) {
   .App {
     font-size: 0.7em;

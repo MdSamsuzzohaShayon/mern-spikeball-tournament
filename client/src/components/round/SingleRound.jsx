@@ -25,7 +25,6 @@ function SingleRound(props) {
 
 
     const [selectedNet, setSelectedNet] = useState(null);
-    const [winningExtraPoint, setWinningExtraPoint] = useState([]);
     const [updateScore, setUpdateScore] = useState([]);
 
 
@@ -167,11 +166,11 @@ function SingleRound(props) {
     useEffect(() => {
         tabKeyFocusChange();
         document.addEventListener("keydown", listener);
-        // window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
-        // alert("hi");
-        if (winningExtraPoint.length > 0 || updateScore.length > 0) {
-            window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
-        }
+        // // window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
+        // // alert("hi");
+        // if (winningExtraPoint.length > 0 || updateScore.length > 0) {
+        //     window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
+        // }
         return () => {
             console.log("Component unmount [SingleRound.jsx]");
             document.removeEventListener("keydown", listener);
@@ -276,6 +275,8 @@ function SingleRound(props) {
     // ⛏️⛏️ INITIALIZE TO NEW NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const assignNetHandler = async () => {
         // console.log("Initialize nets");
+        // handleNetShow(e, true);
+
         setIsLoading(true);
         // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
         const requestOptions = {
@@ -329,7 +330,7 @@ function SingleRound(props) {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
             credentials: "include",
-            body: JSON.stringify({ updateScore, winningExtraPoint })
+            body: JSON.stringify({ updateScore })
         };
         // console.log(props.eventID);
 
@@ -420,8 +421,8 @@ function SingleRound(props) {
                         {roundNum === 1 ? <React.Fragment>
                             <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
                         </React.Fragment> : <React.Fragment>
-                            {props.initialize && <button className="btn btn-primary" onClick={assignNetHandler} >Rank Assign</button>}
-                            {!props.initialize && <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>}
+                            <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>
+                            {/* {!props.initialize && <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>} */}
                             <button className="btn btn-primary mx-3" onClick={e => handleNetShow(e, true)} >Random Assign</button>
                         </React.Fragment>}
                     </div>
@@ -556,7 +557,8 @@ function SingleRound(props) {
                                                 {nets && nets.map((net, i) => (
                                                     <tr key={i} className="horizontal-border">
                                                         <th scope="row">Net {net.sl || i + 1}</th>
-                                                        <td >{playersExtraPoint(net, handleExtraWinningPointChange, addExtra, showInput, winningExtraPoint, setWinningExtraPoint)} </td>
+                                                        {/* {console.log(net)} */}
+                                                        <td >{playersExtraPoint(net, handleExtraWinningPointChange, roundNum, updateScore, setUpdateScore, net.wp)} </td>
                                                         {/* {console.log("net performance - ", net.performance)} */}
 
                                                         <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT_DIFFERENTIAL, roundNum)} </td>
