@@ -8,7 +8,6 @@ const netSchema = new Schema({
     sl: {
         type: Number,
         required: true,
-
     },
     performance: [
         {
@@ -18,7 +17,8 @@ const netSchema = new Schema({
     ],
     wp: {
         type: Number,
-        required: false
+        required: false,
+        default: 1
     },
     event: {
         type: Schema.Types.ObjectId,

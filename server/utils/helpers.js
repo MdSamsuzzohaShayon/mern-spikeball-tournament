@@ -38,7 +38,7 @@ module.exports.findRound = async (eventID, roundNum, Round) => {
     const round = await Round.findOne({ event: eventID, no: roundNum })
         .populate([{
             path: "nets",
-            select: "performance",
+            select: "performance wp sl",
             populate: {
                 path: 'performance',
                 select,
@@ -58,6 +58,7 @@ module.exports.findRound = async (eventID, roundNum, Round) => {
         }
         ])
         .exec();
+    // console.log("Find Round - ", round);
     return round;
 }
 

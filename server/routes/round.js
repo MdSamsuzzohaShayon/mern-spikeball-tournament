@@ -120,6 +120,7 @@ router.get('/get-single-round/:eventID/:roundNum',  async (req, res, next) => {
         }
 
 
+        // console.log(roundExist);
         res.status(200).json({ msg: 'Getting Rounds', findRound: roundExist, rankNets, leftRound, performances });
     } catch (error) {
         console.log(error);
