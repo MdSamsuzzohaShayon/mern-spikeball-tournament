@@ -26,7 +26,7 @@ const playersExtraPoint = (net, handleExtraWinningPointChange, roundNum, updateS
     return (
         <input
             type="text"
-            className="form-control"
+            className="form-control winning-point"
             defaultValue={defaultValue.toFixed(2)}
             onChange={e => handleExtraWinningPointChange(e, net._id, roundNum, updateScore, setUpdateScore)}
         />

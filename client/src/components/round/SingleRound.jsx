@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { hostname, POINT, POINT_DIFFERENTIAL, SCORE, NO_SCORE, EXTRA_POINT } from '../../utils/global';
 import { getTotalPPD } from '../../utils/getTotalPPD';
 import AddParticipant from '../participant/AddParticipant';
@@ -160,11 +160,13 @@ function SingleRound(props) {
             setShowPerformances(false);
             // setPerformances([]);
         }
+        setTimeout(()=>{
+            tabKeyFocusChange();
+        }, 1000);
         // setUpdateScore([]);
     }, []);
 
     useEffect(() => {
-        tabKeyFocusChange();
         document.addEventListener("keydown", listener);
         // // window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
         // // alert("hi");
@@ -177,6 +179,9 @@ function SingleRound(props) {
             // window.addEventListener('unload', beforeUnloadListener, { capture: true });
         };
     });
+    // useLayoutEffect(() => {
+    //     tabKeyFocusChange();
+    // }, []);
 
 
 

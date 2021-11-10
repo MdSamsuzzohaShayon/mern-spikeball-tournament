@@ -24,15 +24,23 @@ export const checkNegativeP = (val, d_cls) => {
 
 
 
-export const tabKeyFocusChange=()=>{
+export const tabKeyFocusChange = () => {
     // console.log("Tab key focus change");
+    const wp = document.querySelectorAll('.winning-point');
     const scoreInputs = document.querySelectorAll('.input-score');
     const scoreInputsNoNet = document.querySelectorAll('.input-score-no-net');
 
     const firstGameInput = new Array();
     const secondGameInput = new Array();
     const thirdGameInput = new Array();
-    // console.log(scoreInputs);
+
+
+    for (let i = 0; i < wp.length; i++) {
+        wp[i].setAttribute('tabIndex', `${i + 1}`);
+    }
+
+
+    // ARRANGING ALL GAME ELEMENTS 
     let i = 0, chunk = 6;
     while (i < scoreInputs.length) {
         try {
@@ -47,33 +55,27 @@ export const tabKeyFocusChange=()=>{
 
     const numOfGame = 3;
     const noNetDivider = scoreInputsNoNet.length / numOfGame;
-    // const firstDivider = firstGameInput.length / numOfGame;
-    // const secondDivider = secondGameInput.length / numOfGame;
-    // const thirdDivider = thirdGameInput.length / numOfGame;
-    // scoreInputsNoNet.forEach((scin, i)=>{
-    //     scin.setAttribute("tabIndex", `${i + firstGameInput.length + secondGameInput.length + thirdGameInput.length + 1}`);
-    // });
     firstGameInput.forEach((fgi, i) => {
         // fgi.setAttribute("id", `score-input-${i + 1}`);
-        fgi.setAttribute("tabIndex", `${i + 1}`);
+        fgi.setAttribute("tabIndex", `${i + 1 + wp.length}`);
     });
 
     for (let i = 0; i < noNetDivider; i++) {
-        scoreInputsNoNet[i].setAttribute('tabIndex', `${i + 1 + firstGameInput.length}`);
+        scoreInputsNoNet[i].setAttribute('tabIndex', `${i + 1 + firstGameInput.length + wp.length}`);
     }
 
     secondGameInput.forEach((sgi, i) => {
-        sgi.setAttribute("tabIndex", `${i + 1 + firstGameInput.length + noNetDivider}`);
+        sgi.setAttribute("tabIndex", `${i + 1 + firstGameInput.length + noNetDivider + wp.length}`);
     });
 
     for (let i = 0; i < noNetDivider; i++) {
-        scoreInputsNoNet[i + noNetDivider].setAttribute('tabIndex', `${i + 1 + firstGameInput.length + noNetDivider + secondGameInput.length}`);
+        scoreInputsNoNet[i + noNetDivider].setAttribute('tabIndex', `${i + 1 + firstGameInput.length + noNetDivider + secondGameInput.length + wp.length}`);
     }
 
     thirdGameInput.forEach((tgi, i) => {
-        tgi.setAttribute("tabIndex", `${i + 1 + firstGameInput.length + noNetDivider + secondGameInput.length + noNetDivider}`);
+        tgi.setAttribute("tabIndex", `${i + 1 + firstGameInput.length + noNetDivider + secondGameInput.length + noNetDivider + wp.length}`);
     });
     for (let i = 0; i < noNetDivider; i++) {
-        scoreInputsNoNet[i + noNetDivider + noNetDivider].setAttribute('tabIndex', `${i + 1 + firstGameInput.length + noNetDivider + secondGameInput.length + noNetDivider + thirdGameInput.length}`);
+        scoreInputsNoNet[i + noNetDivider + noNetDivider].setAttribute('tabIndex', `${i + 1 + firstGameInput.length + noNetDivider + secondGameInput.length + noNetDivider + thirdGameInput.length + wp.length}`);
     }
 }
