@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { hostname, POINT, POINT_DIFFERENTIAL, SCORE, NO_SCORE, EXTRA_POINT } from '../../utils/global';
+import Loader from '../elements/Loader';
 import { getTotalPPD } from '../../utils/getTotalPPD';
 import AddParticipant from '../participant/AddParticipant';
-import { getTotalPointOfARound, getTDRound } from '../../utils/tptd';
+import { getTotalPointOfARound, getTDRound, getRankingNumber } from '../../utils/tptd';
 import { showLiftedPefrormance } from '../../utils/performance';
 import { handleScoreChange, handleExtraWinningPointChange } from '../../utils/inputChange';
 import { playersExtraPoint, playersPoint, playersPointDifferential, playersScore } from '../../utils/allPerformers';
@@ -160,7 +161,7 @@ function SingleRound(props) {
             setShowPerformances(false);
             // setPerformances([]);
         }
-        setTimeout(()=>{
+        setTimeout(() => {
             tabKeyFocusChange();
         }, 1000);
         // setUpdateScore([]);
@@ -460,12 +461,7 @@ function SingleRound(props) {
 
             </div>
             {showPerformances ? (<React.Fragment>
-                {isLoading ? (
-                    <div className="text-center spinner-parent">
-                        <div className="spinner-border text-danger spinner-child" role="status">
-                        </div>
-                    </div>
-                ) : (<React.Fragment>
+                {isLoading ? <Loader /> : (<React.Fragment>
                     <h2 className="h2">All players in the tournament</h2>
                     <table className="table table-bordered table-striped">
                         <thead className="table-dark">
@@ -480,7 +476,7 @@ function SingleRound(props) {
                         <tbody>
                             {performances && performances.map((p, i) => (<tr key={i} >
                                 <td>{p.participant.firstname + " " + p.participant.lastname}</td>
-                                <td>{i + 1}</td>
+                                <td>{getRankingNumber(i, performances, roundNum)}</td>
                                 {getTotalPointOfARound(p, roundNum) ? <td>{getTotalPointOfARound(p, roundNum).toFixed(2)}</td> : <td></td>}
                                 {getTDRound(p, roundNum) ? <React.Fragment>
                                     {Math.sign(getTDRound(p, roundNum)) === -1 ? <td className="text-danger">{getTDRound(p, roundNum).toFixed(2)}</td> : <td className="text-success">{getTDRound(p, roundNum).toFixed(2)}</td>}
@@ -506,12 +502,7 @@ function SingleRound(props) {
             </React.Fragment>) : (<React.Fragment>
                 {!props.initialize && <div className="submit-btn-wrap"><button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary submit-btn">Submit</button></div>}
                 <div className="show table">
-                    {isLoading ? (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    ) : (
+                    {isLoading ? <Loader /> : (
                         <div className="nets-table-wrapper">
                             <div className="show-all-nets">
                                 {!props.initialize && (<React.Fragment>

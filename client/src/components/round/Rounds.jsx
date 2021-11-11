@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SingleRound from './SingleRound';
 import { hostname } from '../../utils/global';
 import { netRanking } from '../../utils/ranking';
+import Loader from '../elements/Loader';
 import "../../style/Rounds.css";
 
 
@@ -109,12 +110,7 @@ const Rounds = (props) => {
             case 1:
                 if (isLoading) {
                     // console.log("Loading (true) - ", isLoading);
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
                     // console.log("Loading(false) - ", isLoading);
                     return (<div className="tab-pane fade show active" >
@@ -139,12 +135,7 @@ const Rounds = (props) => {
                 }
             case 2:
                 if (isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
 
                     return (<div className="tab-pane fade show active" >
@@ -162,12 +153,7 @@ const Rounds = (props) => {
                 }
             case 3:
                 if (isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
@@ -184,12 +170,7 @@ const Rounds = (props) => {
                 }
             case 4:
                 if (isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
@@ -206,12 +187,7 @@ const Rounds = (props) => {
                 }
             case 5:
                 if (isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound

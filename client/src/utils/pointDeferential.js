@@ -16,6 +16,18 @@ export const totalDeferential = (performance) => {
 }
 
 
+export const roundwiseTotalPD = (performance, game1, game2, game3) => {
+    let pointDifferential = 0;
+    if (performance) {
+        if (performance[game1]) pointDifferential += performance[game1].pointDeferential;
+        if (performance[game2]) pointDifferential += performance[game2].pointDeferential;
+        if (performance[game3]) pointDifferential += performance[game3].pointDeferential;
+    }
+
+    return pointDifferential;
+}
+
+
 
 
 export const round1TD = (performance) => {

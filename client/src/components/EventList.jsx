@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { hostname } from '../utils/global';
 import { Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Loader from './elements/Loader';
 
 
 const EventList = (props) => {
@@ -138,12 +139,7 @@ const EventList = (props) => {
                 </div>
             )}
 
-            {props.isLoading || isLoading ? (
-                <div className="text-center spinner-parent">
-                    <div className="spinner-border text-danger spinner-child" role="status">
-                    </div>
-                </div>
-            ) : (
+            {props.isLoading || isLoading ? <Loader /> : (
                 <table className="table">
                     <thead className="bg-dark text-light">
                         <tr>

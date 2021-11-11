@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Loader from '../elements/Loader';
 import { hostname } from '../../utils/global';
 
 const ExportField = (props) => {
@@ -60,10 +61,7 @@ const ExportField = (props) => {
 
     return (
         <div className="ExportField">
-            {isLoading ? (<div className="text-center spinner-parent">
-                <div className="spinner-border text-danger spinner-child" role="status">
-                </div>
-            </div>) : (<React.Fragment>
+            {isLoading ? <Loader />: (<React.Fragment>
                 <h2 className="h2">Export result of this event as MS excel.</h2>
                 <div className="mb-3">
                     <label htmlFor="file-name" className="form-label">File name</label>

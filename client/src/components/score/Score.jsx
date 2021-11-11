@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { hostname } from '../../utils/global';
 import Point from './Point';
 import Round from './Round';
+import Loader from '../elements/Loader';
 import withRouter from '../../HOC/withRouter';
 import "../../style/Score.css";
 
@@ -171,12 +172,7 @@ class Score extends Component {
             case 1:
                 if (this.state.isLoading) {
                     // console.log("Loading (true) - ", isLoading);
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
                     // console.log("Loading(false) - ", isLoading);
                     return (<div className="tab-pane fade show active" >
@@ -185,12 +181,7 @@ class Score extends Component {
                 }
             case 2:
                 if (this.state.isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
 
                     return (<div className="tab-pane fade show active" >
@@ -199,12 +190,7 @@ class Score extends Component {
                 }
             case 3:
                 if (this.state.isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
                     return (<div className="tab-pane fade show active" >
                         <Round public={this.props.admin} roundNum={this.state.activeItem} pp={this.state.round3} round={this.state.allRound} game={this.state.game} />
@@ -212,12 +198,7 @@ class Score extends Component {
                 }
             case 4:
                 if (this.state.isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
                     return (<div className="tab-pane fade show active" >
                         <Round public={this.props.admin} roundNum={this.state.activeItem} pp={this.state.round4} round={this.state.allRound} game={this.state.game} />
@@ -225,12 +206,7 @@ class Score extends Component {
                 }
             case 5:
                 if (this.state.isLoading) {
-                    return (
-                        <div className="text-center spinner-parent">
-                            <div className="spinner-border text-danger spinner-child" role="status">
-                            </div>
-                        </div>
-                    );
+                    return <Loader />;
                 } else {
                     return (<div className="tab-pane fade show active" >
                         <Round public={this.props.admin} roundNum={this.state.activeItem} pp={this.state.round5} round={this.state.allRound} game={this.state.game} />
@@ -249,10 +225,7 @@ class Score extends Component {
         return (
             <div className="Score">
                 <div className="container">
-                    {this.state.isLoading ? (<div className="text-center spinner-parent">
-                        <div className="spinner-border text-danger spinner-child" role="status">
-                        </div>
-                    </div>) : (<div className="display-event-details">
+                    {this.state.isLoading ? <Loader /> : (<div className="display-event-details">
                         <div className="whole-ranking">
                             <h2 className="h2">Overall ranking</h2>
                             <Point roundNum={5} pp={this.state.allRank} roundwise={false} />

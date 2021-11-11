@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { hostname } from '../../utils/global';
 import { Button, Modal } from "react-bootstrap";
+import Loader from '../elements/Loader';
 
 const Participants = (props) => {
 

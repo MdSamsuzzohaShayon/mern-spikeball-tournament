@@ -14,6 +14,18 @@ export const totalPoint = (performance) => {
 }
 
 
+export const roundwiseTotalPoint = (performance, game1, game2, game3) => {
+    let point = 0;
+    // console.log("performance, ", performance);
+    if(performance){
+        if (performance[game1] && performance[game1] !== "undefined") point += performance[game1].point;
+        if (performance[game2] && performance[game2] !== "undefined") point += performance[game2].point;
+        if (performance[game3] && performance[game3] !== "undefined") point += performance[game3].point;
+    }
+
+    return point;
+}
+
 
 
 
