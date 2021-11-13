@@ -340,7 +340,7 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
             // WITHOUR NET 
             const findNet = await Net.findById(us.netID);
             let team1Score = 0, t1p = findNet.wp, t1pd = 0;
-            console.log(findNet);
+            // console.log(findNet);
             if (Math.sign(us.team1.score) === 1) {
                 team1Score = us.team1.score, t1pd = us.team1.score;
                 const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
