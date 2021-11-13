@@ -55,6 +55,7 @@ router.get('/:eventID', async (req, res, next) => {
 
 /* ⛏️⛏️ CREATE PARTICIPANT OR PERFORMANCE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.post('/:eventID',
+    ensureAuth,
     check('firstname', "Firstname must not empty").notEmpty(),
     check('lastname', "Lastname must not empty").notEmpty(),
     check('city', "City must not empty").notEmpty(),
@@ -111,7 +112,7 @@ router.post('/:eventID',
 
 
 /* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/multiple/:eventID', (req, res, next) => {
+router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
 
 
     const form = formidable({ multiples: false });
@@ -240,7 +241,7 @@ router.post('/multiple/:eventID', (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE ALL PERFORMANCE OF A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-performance/:eventID/:roundNum', async (req, res, next) => {
+router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
 
 
     const { updateScore } = req.body;
@@ -464,7 +465,7 @@ router.put('/update-performance/:eventID/:roundNum', async (req, res, next) => {
 
 
 
-router.post('/exports/:eventID', async (req, res, next) => {
+router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
     try {
 
         const { filename } = req.body;
@@ -544,7 +545,7 @@ router.post('/exports/:eventID', async (req, res, next) => {
 // doc.subdocs.push({ _id: 4815162342 })
 // doc.subdocs.pull({ _id: 4815162342 }) // removed
 /* ⛏️⛏️ DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', ensureAuth, async (req, res, next) => {
     try {
         const participant = await Participant.findByIdAndDelete(req.params.id);
         // console.log(participant);

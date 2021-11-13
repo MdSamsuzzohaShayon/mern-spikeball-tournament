@@ -18,7 +18,8 @@ const router = express.Router();
 
 
 /* ⛏️⛏️ CREATE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/', 
+router.post('/',
+    ensureAuth,
     check('title', "Title must not empty and a valid email").notEmpty(),
     (req, res, next) => {
         const valErrs = validationResult(req);
@@ -73,7 +74,7 @@ router.get('/:id', async (req, res, next) => {
 
 
 /* ⛏️⛏️ DELETE AN EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.delete('/:id',  async (req, res, next) => {
+router.delete('/:id', ensureAuth, async (req, res, next) => {
     try {
         const event = await Event.findByIdAndDelete({ _id: req.params.id });
         const participant = await Participant.deleteMany({ _id: { $in: event.participants } });

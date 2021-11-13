@@ -61,7 +61,7 @@ try {
 
 
 // ⛏️⛏️ GET SINGLE ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.get('/get-single-round/:eventID/:roundNum',  async (req, res, next) => {
+router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
     const { eventID, roundNum } = req.params;
     try {
         const roundExist = await findRound(eventID, roundNum, Round);
@@ -241,7 +241,7 @@ router.get('/ranking/:eventID', async (req, res, next) => {
 
 
 // ⛏️⛏️ DELETE A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.delete('/:eventID/:roundNum', async (req, res, next) => {
+router.delete('/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
     try {
         const deleteRound = await Round.findOneAndDelete({ no: req.params.roundNum, event: req.params.eventID });
         // console.log(deleteRound);
