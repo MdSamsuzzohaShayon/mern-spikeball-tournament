@@ -90,7 +90,7 @@ class Home extends Component {
                     <EventList isLoading={this.state.isLoading}
                         pullEventID={this.getEventID}
                         eventList={this.state.eventList}
-                        isAuthenticated={this.state.isAuthenticated} />
+                        pageFor="home" />
                     {/* <Events isLoading={this.state.isLoading} pullEventID={this.getEventID} eventList={this.state.eventList} /> */}
                 </div>
             </div>

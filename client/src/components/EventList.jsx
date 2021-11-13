@@ -10,6 +10,7 @@ const EventList = (props) => {
     const [show, setShow] = useState(false);
     const [event, setEvent] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState();
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -92,6 +93,16 @@ const EventList = (props) => {
 
 
     useEffect(() => {
+        if (localStorage.getItem('user')) {
+            setIsAuthenticated(true);
+        } else {
+            setIsAuthenticated(false);
+        }
+    }, []);
+
+
+    useEffect(() => {
+
         document.addEventListener('keydown', listenKeypress);
         return () => {
             document.removeEventListener('keydown', listenKeypress);
@@ -108,7 +119,7 @@ const EventList = (props) => {
     return (
         <div className="EventList ml-2">
             <h2 className="h2">All EventList</h2>
-            {props.isAuthenticated && (
+            {isAuthenticated && (
                 <div className="create-new-event mb-2">
                     <Button variant="primary" onClick={handleShow}>  Create new event</Button>
                     <Modal show={show} onHide={handleClose}>
@@ -146,7 +157,7 @@ const EventList = (props) => {
                             <th scope="col">Title</th>
                             <th scope="col">Date</th>
                             <th scope="col">Details </th>
-                            {props.isAuthenticated && <th scope="col">Handle</th>}
+                            {isAuthenticated && <th scope="col">Handle</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -154,8 +165,8 @@ const EventList = (props) => {
                             <tr key={index}>
                                 <th >{event.title}</th>
                                 <td>{new Date(event.date).getFullYear() + '-' + (new Date(event.date).getMonth() + 1) + '-' + new Date(event.date).getDate()}</td>
-                                <td>{props.isAuthenticated ? <Link to={`/admin/dashboard/event/${event._id}`} className='text-white btn btn-primary'>Edit Details</Link> : <Link to={`/event/${event._id}`} className="btn btn-primary">View Details</Link>}</td>
-                                {props.isAuthenticated && <td><button className="btn btn-danger" onClick={e => deleteEvent(e, event._id)} >Delete</button></td>}
+                                <td>{props.pageFor !== "home" ? <Link to={`/admin/dashboard/event/${event._id}`} className='text-white btn btn-primary'>Edit Details</Link> : <Link to={`/event/${event._id}`} className="btn btn-primary">View Details</Link>}</td>
+                                {props.pageFor !== "home" && <td><button className="btn btn-danger" onClick={e => deleteEvent(e, event._id)} >Delete</button></td>}
                             </tr>)
                         )}
                     </tbody>

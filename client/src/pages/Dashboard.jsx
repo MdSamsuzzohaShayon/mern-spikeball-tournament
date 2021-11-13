@@ -5,6 +5,7 @@ import { hostname } from '../utils/global';
 import EventList from '../components/EventList';
 import { Navigate } from 'react-router-dom';
 import "../style/Dashboard.css";
+import { Link } from 'react-router-dom';
 
 export class Dashboard extends Component {
     constructor(props) {
@@ -120,20 +121,23 @@ export class Dashboard extends Component {
 
 
     render() {
-        if(localStorage.getItem('user')){
+        if (localStorage.getItem('user')) {
             return (
                 <div className="Dashboard">
                     <div className="container">
-                        
+                        <br />
+                        <Link className="btn btn-primary" to="/admin/list">Admin List</Link>
+                        <br />
+                        <br />
                         <EventList
                             isLoading={this.state.isLoading}
                             updateList={this.updateList}
                             eventList={this.state.eventList}
-                            isAuthenticated={this.props.isAuthenticated} />
+                            pageFor="dashobard" />
                     </div>
                 </div>
             );
-        }else{
+        } else {
             return <Navigate to="/admin" />
         }
     }

@@ -37,7 +37,7 @@ router.post('/register',
     (req, res, next) => {
         const allErr = new Array();
         if (req.user.role === SUPER) {
-            // console.log("Hit");
+            console.log(req.body);
             const { email, username, password } = req.body;
             const valErrs = validationResult(req);
             if (!valErrs.isEmpty()) {
@@ -89,32 +89,43 @@ router.post('/login',
 
 router.get('/list', ensureAuth, async (req, res, next) => {
     // console.log(req.user.role);
-    const errors = [];
-    if (req.user.role === SUPER) {
-        try {
-            const admin = await Admin.find();
-            res.status(200).json({ admin });
-        } catch (error) {
-            console.log(error);
-        }
-    } else {
-        errors.push("You are not a super user")
-        res.status(400).json({ errors })
+    try {
+        const admin = await Admin.find();
+        const newAdmins = admin.map((a, i) => {
+            return {
+                name: a.name,
+                role: a.role,
+                _id: a._id,
+                email: a.email
+            }
+        });
+        // for (let index = 0; index < admin.length; index++) {
+        //     newAdmins.push({})
+        // }
+        res.status(200).json({ admin: newAdmins });
+    } catch (error) {
+        console.log(error);
     }
 });
 
 router.delete("/delete/:adminID", ensureAuth, async (req, res, next) => {
     const errors = [];
+    // console.log(req.params.adminID , req.user._id);
     if (req.user.role === SUPER) {
-        try {
-            const deleteAdmin = await Admin.deleteOne({ _id: req.params.adminID });
-            res.status(200).json({ deleteAdmin });
-        } catch (error) {
-            console.log(error);
+        if (req.params.adminID === req.user._id) {
+            errors.push("Can't delete a super user");
+            res.status(400).json({ errors });
+        } else {
+            try {
+                const deleteAdmin = await Admin.deleteOne({ _id: req.params.adminID });
+                res.status(200).json({ deleteAdmin });
+            } catch (error) {
+                console.log(error);
+            }
         }
     } else {
         errors.push("You are not a super user")
-        res.status(400).json({ errors })
+        res.status(400).json({ errors });
     }
 });
 

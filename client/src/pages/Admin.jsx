@@ -6,6 +6,7 @@ import Register from '../components/admin/Register';
 import Loader from "../components/elements/Loader";
 import '../style/Admin.css';
 import withNavigate from '../HOC/withNavigate';
+import { Navigate } from 'react-router-dom';
 
 
 
@@ -105,22 +106,26 @@ class Admin extends Component {
 
 
     render() {
-        return (
-            <div className="Admin">
-                <div className="container">
-                    {this.state.isLoading ? <Loader /> : (<React.Fragment>
-                        <Login
-                            success={this.state.success}
-                            handleChange={this.handleChange}
-                            errors={this.state.errors}
-                            handleLogin={this.handleLogin}
-                        />
-                    </React.Fragment>
-                    )}
+        if (localStorage.getItem('user')) {
+            return <Navigate to="/admin/dashboard" />;
+        } else {
+            return (
+                <div className="Admin">
+                    <div className="container">
+                        {this.state.isLoading ? <Loader /> : (<React.Fragment>
+                            <Login
+                                success={this.state.success}
+                                handleChange={this.handleChange}
+                                errors={this.state.errors}
+                                handleLogin={this.handleLogin}
+                            />
+                        </React.Fragment>
+                        )}
+                    </div>
+                    {/* {this.checkErrors()} */}
                 </div>
-                {/* {this.checkErrors()} */}
-            </div>
-        );
+            );
+        }
     }
 }
 

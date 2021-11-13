@@ -12,6 +12,7 @@ import { hostname } from "./utils/global";
 import Page404 from './pages/Page404';
 import EventAdmin from './components/admin/EventAdmin';
 import Score from './components/score/Score';
+import AdminList from './components/admin/AdminList';
 
 
 class App extends Component {
@@ -123,6 +124,7 @@ class App extends Component {
           {/* <Route path="/admin">
             {this.state.isAuthenticated === true ? <Redirect to="/admin/dashboard" /> : <Admin authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}
           </Route> */}
+          <Route path="/admin/list" element={ <AdminList /> }></Route>
           <Route path="/admin/dashboard" element={ <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}></Route>
           {/* <Route path="/admin/dashboard">
             {this.state.isAuthenticated === true ? <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
