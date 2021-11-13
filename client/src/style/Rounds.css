@@ -21,23 +21,6 @@
   }
 }
 
-.r-table {
-  overflow: auto;
-  z-index: 1;
-}
-.r-table thead {
-  position: sticky;
-}
-
-.table-responsive {
-  overflow-x: unset;
-}
-@media screen and (max-width: 992px) {
-  .table-responsive {
-    overflow-x: auto;
-  }
-}
-
 .show-all-nets {
   background-color: white;
 }

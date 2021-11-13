@@ -1,5 +1,5 @@
 @import "./variables";
-
+@import "./mixins";
 
 // ROOT STYLING 
 .App {
@@ -34,4 +34,45 @@
 }
 .w-full{
   width: 100%;
+}
+
+.equal-icon{
+  width: 1.5rem;
+}
+
+.net-table {
+  thead {
+      .header-group-1 {
+          // border: 1px solid white;
+
+          th {
+              @include sticky_header(3.25em, 2);
+          }
+      }
+      .header-group-2 {
+          th {
+              @include sticky_header(5.8em, 2);
+          }
+      }
+
+      th[scope="row"] {
+          @include sticky_header(0, 1);
+      }
+  }
+
+  @media screen and(max-width: $br-lg) {
+      // overflow-x: visible;
+      thead {
+          .header-group-1{
+              th {
+                  position: static;
+              }
+          }
+          .header-group-2{
+              th {
+                  position: static;
+              }
+          }
+      }
+  }
 }

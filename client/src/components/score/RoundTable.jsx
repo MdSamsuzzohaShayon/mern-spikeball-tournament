@@ -20,17 +20,17 @@ function RoundTable(props) {
         <div className="RoundTable">
             <div className="show-all-nets">
                 {!props.initialize && (
-                    <div className="table-responsive">
-                        <table className="table table-bordered table-striped">
-                            <thead className="bg-dark text-light text-center">
-                                <tr>
+                    <div className="table-responsive-lg net-table ">
+                        <table className="table table-striped table-bordered">
+                            <thead className="table-dark">
+                                <tr className="header-group-1">
                                     <th colSpan="1" scope="colgroup"></th>
                                     <th colSpan="3" scope="colgroup">Game {props.game[0]}</th>
                                     <th colSpan="3" scope="colgroup">Game {props.game[1]}</th>
                                     <th colSpan="3" scope="colgroup">Game {props.game[2]}</th>
                                     {/* <th colSpan="4" scope="colgroup">Average</th> */}
                                 </tr>
-                                <tr>
+                                <tr className="header-group-2">
                                     <th scope="col">Net</th>
 
                                     <th scope="col">Team</th>

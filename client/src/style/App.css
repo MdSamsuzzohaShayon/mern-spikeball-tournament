@@ -35,4 +35,35 @@
   width: 100%;
 }
 
+.equal-icon {
+  width: 1.5rem;
+}
+
+.net-table thead .header-group-1 th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 3.25em;
+  z-index: 2;
+}
+.net-table thead .header-group-2 th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 5.8em;
+  z-index: 2;
+}
+.net-table thead th[scope=row] {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+@media screen and (max-width: 992px) {
+  .net-table thead .header-group-1 th {
+    position: static;
+  }
+  .net-table thead .header-group-2 th {
+    position: static;
+  }
+}
+
 /*# sourceMappingURL=App.css.map */

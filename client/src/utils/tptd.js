@@ -1,5 +1,6 @@
 import { roundwiseTotalPoint } from './addTotalPoint';
 import {  roundwiseTotalPD } from './pointDeferential';
+// import equal from '/icon/equal_math_sign_icon.svg';
 
 export const getTotalPointOfARound = (p, rn) => {
     // console.log(p);
@@ -53,11 +54,11 @@ export const getRankingNumber = (index, pList, rn) => {
     const nextPlayerTD = getTDRound(pList[index + 1], rn);
 
     if (currentPlyerTotal === nextPlayerTotal && currentPlyerPD === nextPlayerTD) {
-        cell = <><div>{index + 1}</div><div>Tie</div></>;
+        cell = <><div>{index + 1}</div><div><img src="/icon/equal_math_sign_icon.svg" className="equal-icon" alt="image" /></div></>;
     } else {
         if (currentPlyerTotal === previousPlayerTotal && currentPlyerPD === previousPlayerTD) {
             // cell = `${index + 1} = `;
-            cell = <><div>{index + 1}</div><div>Tie</div></>;
+            cell = <><div>{index + 1}</div><div><img src="/icon/equal_math_sign_icon.svg" className="equal-icon"  alt="image" /></div></>;
         } else {
             // cell = `<div>${index + 1}</div>`;
             cell = <><div>{index + 1}</div></>;

@@ -1,3 +1,9 @@
+.RoundTable .net-table thead .header-group-1 th {
+  top: 0;
+}
+.RoundTable .net-table thead .header-group-2 th {
+  top: 2.52em;
+}
 .RoundTable td {
   padding: 0;
   margin: 0;

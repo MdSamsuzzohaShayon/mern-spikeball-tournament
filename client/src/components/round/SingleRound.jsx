@@ -369,30 +369,6 @@ function SingleRound(props) {
 
 
 
-
-    const addExtra = (e, netID) => {
-        e.preventDefault();
-        // E = EVENT, PID = PREFORMANCE ID, G = GAME, R = ROUND, TID = TEAM ID
-        setSelectedNet(netID);
-    }
-
-    const showInput = (netID) => {
-        // console.log("extra - ", selectedNet);
-        if (netID && netID !== null) {
-            if (netID === selectedNet) {
-                return "block";
-            } else {
-                return "none";
-            }
-        }
-        return "none";
-    }
-
-
-
-
-
-
     const toggleGameParticipant = (e) => {
         e.preventDefault();
         setShowPerformances(prevState => !prevState);
@@ -421,7 +397,9 @@ function SingleRound(props) {
     // ⛏️⛏️ THIS IS MAIN RETURN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     return (
         <div className="SingleRound">
-            <div className="">
+
+
+            <div className="all-btns-message-modal">
                 <div className="d-flex my-3 justify-content-between w-full">
                     <div >
                         {roundNum === 1 ? <React.Fragment>
@@ -460,6 +438,12 @@ function SingleRound(props) {
 
 
             </div>
+
+
+
+
+
+
             {showPerformances ? (<React.Fragment>
                 {isLoading ? <Loader /> : (<React.Fragment>
                     <h2 className="h2">All players in the tournament</h2>
@@ -501,115 +485,114 @@ function SingleRound(props) {
 
             </React.Fragment>) : (<React.Fragment>
                 {!props.initialize && <div className="submit-btn-wrap"><button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary submit-btn">Submit</button></div>}
-                <div className="show table">
-                    {isLoading ? <Loader /> : (
-                        <div className="nets-table-wrapper">
-                            <div className="show-all-nets">
-                                {!props.initialize && (<React.Fragment>
-                                    {/* PLAYER GAME, SCORE, POINT, POINT DIFFRENTIAL  */}
-                                    <div className="table-responsive">
-                                        <table className="table r-table table-bordered table-striped">
-                                            <thead className="table-head bg-dark text-light text-center">
-                                                <tr>
-                                                    <th colSpan="2" scope="colgroup"></th>
-                                                    <th colSpan="4" scope="colgroup">Game {props.game[0]}</th>
-                                                    <th colSpan="4" scope="colgroup">Game {props.game[1]}</th>
-                                                    <th colSpan="4" scope="colgroup">Game {props.game[2]}</th>
-                                                    <th colSpan="3" scope="colgroup">Total</th>
+
+                {isLoading ? <Loader /> : (
+                    <div className="nets-table-wrapper">
+                        <div className="show-all-nets">
+                            {!props.initialize && (<React.Fragment>
+                                {/* PLAYER GAME, SCORE, POINT, POINT DIFFRENTIAL  */}
+                                <div className="table-responsive-lg net-table">
+                                    <table className="table table-striped table-bordered">
+                                        <thead className="table-dark">
+                                            <tr className="header-group-1">
+                                                <th colSpan="2" scope="colgroup"></th>
+                                                <th colSpan="4" scope="colgroup">Game {props.game[0]}</th>
+                                                <th colSpan="4" scope="colgroup">Game {props.game[1]}</th>
+                                                <th colSpan="4" scope="colgroup">Game {props.game[2]}</th>
+                                                <th colSpan="3" scope="colgroup">Total</th>
+                                            </tr>
+                                            <tr className="header-group-2">
+                                                <th scope="col">Net</th>
+                                                <th><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
+
+                                                <th scope="col">Team</th>
+                                                <th scope="col">Score</th>
+                                                {/* <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th> */}
+                                                <th scope="col">Point</th>
+                                                <th scope="col">point differential</th>
+
+
+                                                <th scope="col">Team</th>
+                                                <th scope="col">Score</th>
+                                                <th scope="col">Point</th>
+                                                <th scope="col">point differential</th>
+
+
+                                                <th scope="col">Team</th>
+                                                <th scope="col">Score</th>
+                                                <th scope="col">Point</th>
+                                                <th scope="col">point differential</th>
+
+
+
+
+
+                                                <th scope="col">Participant</th>
+                                                <th scope="col">point</th>
+                                                <th scope="col">point differential</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {nets && nets.map((net, i) => (
+                                                <tr key={i} className="horizontal-border">
+                                                    <th scope="row">Net {net.sl || i + 1}</th>
+                                                    {/* {console.log(net)} */}
+                                                    <td >{playersExtraPoint(net, handleExtraWinningPointChange, roundNum, updateScore, setUpdateScore, net.wp)} </td>
+                                                    {/* {console.log("net performance - ", net.performance)} */}
+
+                                                    <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT_DIFFERENTIAL, roundNum)} </td>
+                                                    {/* SCORE  */}
+                                                    <td >{playersScore(net, props.game[0], SCORE, 1, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
+                                                    <td >{playersPoint(net, props.game[0], POINT, 1, roundNum)} </td>
+
+                                                    <td>{playersPointDifferential(net, props.game[0], POINT_DIFFERENTIAL, 1, roundNum)}</td>
+
+
+
+
+
+
+
+                                                    <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT_DIFFERENTIAL, roundNum)} </td>
+                                                    {/* SCORE  */}
+                                                    <td >{playersScore(net, props.game[1], SCORE, 2, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
+                                                    <td >{playersPoint(net, props.game[1], POINT, 2, roundNum)} </td>
+                                                    <td>{playersPointDifferential(net, props.game[1], POINT_DIFFERENTIAL, 2, roundNum)}</td>
+
+
+
+
+
+
+                                                    <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT_DIFFERENTIAL, roundNum)} </td>
+                                                    {/* SCORE  */}
+                                                    <td >{playersScore(net, props.game[2], SCORE, 3, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
+                                                    <td >{playersPoint(net, props.game[2], POINT, 3, roundNum)} </td>
+                                                    <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, roundNum)}</td>
+
+
+
+
+
+
+                                                    <td> {serializePerformer(rankPerformanceInNet[i])} </td>
+                                                    <td >  {getTotalPPD(rankPerformanceInNet[i], POINT, roundNum)} </td>
+                                                    <td >{getTotalPPD(rankPerformanceInNet[i], POINT_DIFFERENTIAL, roundNum)} </td>
+
+
+
                                                 </tr>
-                                                <tr>
-                                                    <th scope="col">Net</th>
-                                                    <th><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th>
-
-                                                    <th scope="col">Team</th>
-                                                    <th scope="col">Score</th>
-                                                    {/* <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th> */}
-                                                    <th scope="col">Point</th>
-                                                    <th scope="col">point differential</th>
-
-
-                                                    <th scope="col">Team</th>
-                                                    <th scope="col">Score</th>
-                                                    <th scope="col">Point</th>
-                                                    <th scope="col">point differential</th>
-
-
-                                                    <th scope="col">Team</th>
-                                                    <th scope="col">Score</th>
-                                                    <th scope="col">Point</th>
-                                                    <th scope="col">point differential</th>
-
-
-
-
-
-                                                    <th scope="col">Participant</th>
-                                                    <th scope="col">point</th>
-                                                    <th scope="col">point differential</th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {nets && nets.map((net, i) => (
-                                                    <tr key={i} className="horizontal-border">
-                                                        <th scope="row">Net {net.sl || i + 1}</th>
-                                                        {/* {console.log(net)} */}
-                                                        <td >{playersExtraPoint(net, handleExtraWinningPointChange, roundNum, updateScore, setUpdateScore, net.wp)} </td>
-                                                        {/* {console.log("net performance - ", net.performance)} */}
-
-                                                        <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT_DIFFERENTIAL, roundNum)} </td>
-                                                        {/* SCORE  */}
-                                                        <td >{playersScore(net, props.game[0], SCORE, 1, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
-                                                        <td >{playersPoint(net, props.game[0], POINT, 1, roundNum)} </td>
-
-                                                        <td>{playersPointDifferential(net, props.game[0], POINT_DIFFERENTIAL, 1, roundNum)}</td>
-
-
-
-
-
-
-
-                                                        <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT_DIFFERENTIAL, roundNum)} </td>
-                                                        {/* SCORE  */}
-                                                        <td >{playersScore(net, props.game[1], SCORE, 2, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
-                                                        <td >{playersPoint(net, props.game[1], POINT, 2, roundNum)} </td>
-                                                        <td>{playersPointDifferential(net, props.game[1], POINT_DIFFERENTIAL, 2, roundNum)}</td>
-
-
-
-
-
-
-                                                        <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT_DIFFERENTIAL, roundNum)} </td>
-                                                        {/* SCORE  */}
-                                                        <td >{playersScore(net, props.game[2], SCORE, 3, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
-                                                        <td >{playersPoint(net, props.game[2], POINT, 3, roundNum)} </td>
-                                                        <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, roundNum)}</td>
-
-
-
-
-
-
-                                                        <td> {serializePerformer(rankPerformanceInNet[i])} </td>
-                                                        <td >  {getTotalPPD(rankPerformanceInNet[i], POINT, roundNum)} </td>
-                                                        <td >{getTotalPPD(rankPerformanceInNet[i], POINT_DIFFERENTIAL, roundNum)} </td>
-
-
-
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </React.Fragment>
-                                )}
-                            </div>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </React.Fragment>
+                            )}
                         </div>
-                    )}
-
-
+                    </div>
+                )}
+                <div className="show table">
                     {showLiftedPefrormance(leftedPerformance, roundNum, null, false)}
                 </div>
             </React.Fragment>

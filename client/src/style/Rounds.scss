@@ -22,26 +22,8 @@
     }
 }
 
-.r-table {
-    overflow: auto;
-    // height: 100px;
-    z-index: 1;
-    thead {
-        position: sticky;
-        // top: 3rem;
-    }
-}
 
-.table-responsive {
-    overflow-x: unset;
-    // -webkit-overflow-scrolling: touch;
-    @media screen and(max-width: $br-lg) {
-        overflow-x: auto;
-        // thead {
-        //     position: sticky;
-        // }
-    }
-}
+
 
 // ⛏️⛏️ ROUND ONE TO FIVE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 .show-all-nets {
