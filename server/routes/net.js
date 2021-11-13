@@ -343,7 +343,7 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
 
 
 // ⛏️⛏️ RANDOM REASSIGN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.post('/random-assign-net/:eventID/:roundNum', ensureAuth async (req, res, next) => {
+router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
     try {
 
         // console.log("Random assign");
