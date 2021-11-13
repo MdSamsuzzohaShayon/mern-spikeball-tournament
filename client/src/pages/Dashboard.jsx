@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import EventList from '../components/EventList';
+import { Navigate } from 'react-router-dom';
 import "../style/Dashboard.css";
 
 export class Dashboard extends Component {
@@ -14,7 +15,7 @@ export class Dashboard extends Component {
         this.state = {
             activeTab: "events",
             eventList: [],
-            isLoading: false
+            isLoading: false,
         };
 
         // this.getSingleEvent = this.getSingleEvent.bind(this);
@@ -33,9 +34,9 @@ export class Dashboard extends Component {
             const response = await fetch(`${hostname}/api/event`, { method: "GET", credentials: "include" });
             console.log("Get all events [Dashboard.jsx] - ", response);
             const text = await response.text();
-            console.log(text);
+            // console.log(text);
             const jsonResponse = await JSON.parse(text);
-            console.log(jsonResponse);
+            // console.log(jsonResponse);
             if (this.isMountedValue) {
                 this.setState({
                     eventList: jsonResponse.events,
@@ -54,6 +55,10 @@ export class Dashboard extends Component {
 
     componentDidMount() {
         // console.log("Authenticated - ", this.props.isAuthenticated);
+        // console.log("Local - ",localStorage.getItem('user'));
+        // if(localStorage.getItem('user')){
+        //     console.log(localStorage.getItem('user'));
+        // }
         this.isMountedValue = true;
         this.getAllEvents();
 
@@ -115,17 +120,22 @@ export class Dashboard extends Component {
 
 
     render() {
-        return (
-            <div className="Dashboard">
-                <div className="container">
-                    <EventList
-                        isLoading={this.state.isLoading}
-                        updateList={this.updateList}
-                        eventList={this.state.eventList}
-                        isAuthenticated={this.props.isAuthenticated} />
+        if(localStorage.getItem('user')){
+            return (
+                <div className="Dashboard">
+                    <div className="container">
+                        
+                        <EventList
+                            isLoading={this.state.isLoading}
+                            updateList={this.updateList}
+                            eventList={this.state.eventList}
+                            isAuthenticated={this.props.isAuthenticated} />
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }else{
+            return <Navigate to="/admin" />
+        }
     }
 }
 

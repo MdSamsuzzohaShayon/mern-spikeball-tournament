@@ -1,7 +1,8 @@
-// ⛏️⛏️ ALL OPERATIONS OF ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+// ⛏️⛏️ ALL OPERATIONS OF ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import Login from '../components/admin/Login';
+import Register from '../components/admin/Register';
 import Loader from "../components/elements/Loader";
 import '../style/Admin.css';
 import withNavigate from '../HOC/withNavigate';
@@ -28,7 +29,7 @@ class Admin extends Component {
     }
 
 
-    // ⛏️⛏️ VALUE IS COMING FROM CHILD COMPONENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  
+    // ⛏️⛏️ VALUE IS COMING FROM CHILD COMPONENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -40,8 +41,7 @@ class Admin extends Component {
 
 
 
-
-    // ⛏️⛏️ LOGIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+    // ⛏️⛏️ LOGIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     async handleLogin(e) {
         e.preventDefault();
         try {
@@ -69,18 +69,19 @@ class Admin extends Component {
                         errors: [],
                         success: "Login successfull"
                     });
-                    // REDIRECT FROM  HERE TO DASHBOARD 
+                    this.props.authValidation(true);
+                    localStorage.setItem("user", JSON.stringify(jsonRes.user));
+                    // REDIRECT FROM  HERE TO DASHBOARD
                     this.props.navigateToTarget('/admin/dashboard');
                 }
 
-                console.log("Login success - ", response);
+                // console.log("Login success - ", response);
 
-                this.setState({
-                    errors: [],
-                    success: "Login successfull"
-                });
+                // this.setState({
+                //     errors: [],
+                //     success: "Login successfull"
+                // });
 
-                this.props.authValidation(true);
             }
 
             if (response.status === 400 || response.status === 401) {
@@ -107,13 +108,14 @@ class Admin extends Component {
         return (
             <div className="Admin">
                 <div className="container">
-                    {this.state.isLoading ? <Loader /> : (
+                    {this.state.isLoading ? <Loader /> : (<React.Fragment>
                         <Login
                             success={this.state.success}
                             handleChange={this.handleChange}
                             errors={this.state.errors}
                             handleLogin={this.handleLogin}
                         />
+                    </React.Fragment>
                     )}
                 </div>
                 {/* {this.checkErrors()} */}

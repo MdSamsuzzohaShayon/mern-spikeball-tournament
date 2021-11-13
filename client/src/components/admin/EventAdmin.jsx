@@ -10,6 +10,7 @@ import Score from "../score/Score";
 import ExportField from '../export/ExportField';
 import '../../style/EventAdmin.css';
 import Loader from '../elements/Loader';
+import {Navigate} from 'react-router-dom';
 
 export class EventAdmin extends Component {
     constructor(props) {
@@ -175,41 +176,46 @@ export class EventAdmin extends Component {
 
 
     render() {
-        if(this.state.isLoading){
-            return <Loader />
-        }else{            
-            // console.log(this.state.currentEvent);
-            if (this.state.currentEventID) {
-                return (
-                    <div className="EventAdmin">
-                        {/* Event admin ID: {this.state.currentEventID} */}
-                        {/* {console.log("Event -")} */}
-                        <div className="Overview">
-                            <div className="d-flex align-items-start dashboard-nav container-fluid">
-                                <div className="nav nav-pills dashboard-nav-items bg-dark text-center">
-                                    <h3 className="text-secondary nav-link" >{this.state.currentEvent.title}</h3>
-                                    <br />
-                                    <button className={this.state.activeTab === "event" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "event")} >Events</button>
-                                    <button className={this.state.activeTab === "participants" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "participants")}  >Participants</button>
-                                    <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Round</button>
-                                    <button className={this.state.activeTab === "score" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "score")}  >Score</button>
-                                    <button className={this.state.activeTab === "export" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "export")}  >Export</button>
+        if(localStorage.getItem('user')){
+            // /admin/dashboard/event/:id
+            if(this.state.isLoading){
+                return <Loader />
+            }else{            
+                // console.log(this.state.currentEvent);
+                if (this.state.currentEventID) {
+                    return (
+                        <div className="EventAdmin">
+                            {/* Event admin ID: {this.state.currentEventID} */}
+                            {/* {console.log("Event -")} */}
+                            <div className="Overview">
+                                <div className="d-flex align-items-start dashboard-nav container-fluid">
+                                    <div className="nav nav-pills dashboard-nav-items bg-dark text-center">
+                                        <h3 className="text-secondary nav-link" >{this.state.currentEvent.title}</h3>
+                                        <br />
+                                        <button className={this.state.activeTab === "event" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "event")} >Events</button>
+                                        <button className={this.state.activeTab === "participants" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "participants")}  >Participants</button>
+                                        <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Round</button>
+                                        <button className={this.state.activeTab === "score" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "score")}  >Score</button>
+                                        <button className={this.state.activeTab === "export" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "export")}  >Export</button>
+                                    </div>
+                                    <div className="tab-content" >
+                                        {this.showAllNavItem()}
+                                    </div>
                                 </div>
-                                <div className="tab-content" >
-                                    {this.showAllNavItem()}
-                                </div>
+                                {/* <button className="btn btn-danger" onClick={handleLogout}>Logout</button> */}
                             </div>
-                            {/* <button className="btn btn-danger" onClick={handleLogout}>Logout</button> */}
                         </div>
-                    </div>
-                );
-            } else {
-                return (
-                    <div className="EventAdmin">
-                        No event id or incorrect event id
-                    </div>
-                );
+                    );
+                } else {
+                    return (
+                        <div className="EventAdmin">
+                            No event id or incorrect event id
+                        </div>
+                    );
+                }
             }
+        }else{
+            return <Navigate to="/admin" />;
         }
     }
 }

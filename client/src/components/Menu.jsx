@@ -19,11 +19,12 @@ const Menu = (props) => {
                     "Content-Type": "application/json"
                 }
             });
-            props.authValidation(false);
+
             if (response.status === 200) {
-                const text = await response.text();
-                console.log(JSON.parse(text));
+                // const text = await response.text();
+                // console.log(JSON.parse(text));
                 // history.push('/admin');
+                localStorage.removeItem('user');
                 navigate('/admin');
 
                 // return <Redirect to="/admin/dashboard" /> ;
@@ -31,7 +32,6 @@ const Menu = (props) => {
         } catch (error) {
             console.log(error);
         }
-
     }
     return (
         <div className="Navbar">
@@ -55,7 +55,7 @@ const Menu = (props) => {
                             <Link className="nav-link" to="/admin">Admin</Link>
                         </Nav>
                         <Nav>
-                            {props.isAuthenticated ? (<li className="nav-item"><button className="btn btn-danger" onClick={handleLogout}>Logout</button></li>) : null}
+                            {localStorage.getItem('user') ? (<li className="nav-item"><button className="btn btn-danger" onClick={handleLogout}>Logout</button></li>) : null}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

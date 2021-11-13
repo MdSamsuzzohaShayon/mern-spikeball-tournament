@@ -2,7 +2,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style/App.css';
 // import { Switch, Route, Redirect } from "react-router-dom";
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Menu from './components/Menu';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
@@ -20,11 +20,24 @@ class App extends Component {
     this.isMountedValue = false;
     this.state = {
       isLoading: false,
-      isAuthenticated: false,
+      isAuthenticated: this.checkAuth,
       currentEventId: null
     };
     this.getAuthenticatedUser = this.getAuthenticatedUser.bind(this);
+    this.checkAuth = this.checkAuth.bind(this);
   }
+
+
+  checkAuth = () => {
+    if (localStorage.getItem('user')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+
 
 
   authValidation = (isAuthenticated) => {
@@ -52,8 +65,14 @@ class App extends Component {
       if (this.isMountedValue) {
         if (jsonRes.user) {
           this.setState({ isAuthenticated: true });
+          if (!localStorage.getItem('user')) {
+            localStorage.setItem('user', JSON.stringify(jsonRes.user));
+          }
         } else {
           this.setState({ isAuthenticated: false });
+          if (localStorage.getItem('user')) {
+            localStorage.removeItem('user');
+          }
         }
       }
       this.setState({ isLoading: false });
@@ -104,7 +123,7 @@ class App extends Component {
           {/* <Route path="/admin">
             {this.state.isAuthenticated === true ? <Redirect to="/admin/dashboard" /> : <Admin authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}
           </Route> */}
-          <Route path="/admin/dashboard" element={<Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}></Route>
+          <Route path="/admin/dashboard" element={ <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} />}></Route>
           {/* <Route path="/admin/dashboard">
             {this.state.isAuthenticated === true ? <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
           </Route> */}

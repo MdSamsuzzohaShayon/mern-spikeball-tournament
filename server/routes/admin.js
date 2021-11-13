@@ -6,8 +6,11 @@ const passport = require('passport');
 
 
 
+
 const { sendUser, replaceKeys } = require('../utils/helpers');
 const { ensureAuth, ensureGuast } = require('../config/auth');
+
+const { GENERAL, SUPER } = require("../utils/Role");
 
 const Admin = require('../models/Admin');
 const Event = require('../models/Event');
@@ -24,7 +27,7 @@ const Event = require('../models/Event');
 
 
 /* ⛏️⛏️ ALL ROUTES WILL BE PROTECTED EXCEPT LOGIN ROUTE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/register', ensureAuth,
+router.post('/register',
     check('username', "Must input a name").notEmpty(),
     // username must be an email
     check('email', "Email must not empty and a valid email").notEmpty().isEmail(),
@@ -32,35 +35,39 @@ router.post('/register', ensureAuth,
     check('password', "Password should be more than 5 character long").isLength({ min: 5 }),
     // check('role', "You must select a role").notEmpty(),
     (req, res, next) => {
-        console.log("Hit");
         const allErr = new Array();
-        const { email, username, password } = req.body;
-        const role = "general";
-        const valErrs = validationResult(req);
-        if (!valErrs.isEmpty()) {
-            const errArr = allErr.concat(valErrs.errors);
-            return res.status(400).json({ errors: errArr });
-        }
-        Admin.findOne({ email }, (err, emailResult) => {
-            if (err) throw err;
-            if (emailResult) {
-                allErr.push({ msg: "Email already exist" })
-                return res.status(400).json({ errors: allErr });
-            } else {
-                // SAVE ADMIN 
-                bcrypt.genSalt(10, (saltErr, salt) => {
-                    bcrypt.hash(password, salt, (hashErr, hash) => {
-                        // const newAdmin = new Admin({ name: username, email, role, password: hash });
-                        // newAdmin.save();
-                        console.log(username, email, role, password, hash);
-                        Admin.create({name: username, email, role, password: hash},(err, docs)=>{
-                            if(err) throw err;
-                            return res.status(201).json({ admin: docs });
-                        })
-                    });
-                });
+        if (req.user.role === SUPER) {
+            // console.log("Hit");
+            const { email, username, password } = req.body;
+            const valErrs = validationResult(req);
+            if (!valErrs.isEmpty()) {
+                const errArr = allErr.concat(valErrs.errors);
+                return res.status(400).json({ errors: errArr });
             }
-        });
+            Admin.findOne({ email }, (err, emailResult) => {
+                if (err) throw err;
+                if (emailResult) {
+                    allErr.push({ msg: "Email already exist" });
+                    return res.status(400).json({ errors: allErr });
+                } else {
+                    // SAVE ADMIN 
+                    bcrypt.genSalt(10, (saltErr, salt) => {
+                        bcrypt.hash(password, salt, (hashErr, hash) => {
+                            // const newAdmin = new Admin({ name: username, email, role, password: hash });
+                            // newAdmin.save();
+                            // console.log(username, email, role, password, hash);
+                            Admin.create({ name: username, email, role: GENERAL, password: hash }, (err, docs) => {
+                                if (err) throw err;
+                                return res.status(201).json({ admin: docs });
+                            })
+                        });
+                    });
+                }
+            });
+        } else {
+            allErr.push({ msg: "You are not a super user" });
+            return res.status(400).json({ errors: allErr });
+        }
     });
 
 
@@ -78,6 +85,38 @@ router.post('/login',
         // console.log("User - ", req.user);
         res.status(200).json({ user: sendUser(req.user) });
     });
+
+
+router.get('/list', ensureAuth, async (req, res, next) => {
+    // console.log(req.user.role);
+    const errors = [];
+    if (req.user.role === SUPER) {
+        try {
+            const admin = await Admin.find();
+            res.status(200).json({ admin });
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        errors.push("You are not a super user")
+        res.status(400).json({ errors })
+    }
+});
+
+router.delete("/delete/:adminID", ensureAuth, async (req, res, next) => {
+    const errors = [];
+    if (req.user.role === SUPER) {
+        try {
+            const deleteAdmin = await Admin.deleteOne({ _id: req.params.adminID });
+            res.status(200).json({ deleteAdmin });
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        errors.push("You are not a super user")
+        res.status(400).json({ errors })
+    }
+});
 
 
 /* ⛏️⛏️ LOGOUT USERS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
