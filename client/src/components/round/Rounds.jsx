@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import SingleRound from './SingleRound';
 import { hostname } from '../../utils/global';
-import { netRanking } from '../../utils/ranking';
+import { checkRoundCompleted } from '../../utils/helpers';
 import Loader from '../elements/Loader';
 import "../../style/Rounds.css";
 
 
 
 const Rounds = (props) => {
-    const [activeItem, setActiveItem] = useState(1);
+    const [roundNum, setRoundNum] = useState(1);
     // const [round, setRound] = useState(1);
     const [initialize, setInitialize] = useState(false);
     const [round, setRounds] = useState([]);
@@ -17,16 +17,45 @@ const Rounds = (props) => {
     const [performances, setPerformances] = useState([]);
     const [rankPerformanceInNet, setRankPerformanceInNet] = useState([]);
     // const [reassignToNet, setReassignToNet] = useState(false);
+    const [incompleteErr, setIncompleteErr] = useState([]);
 
     const activeItemHandler = (e, item) => {
         e.preventDefault();
         // console.log(round);
         // console.log(item);
-        setActiveItem(item);
         // setRound(item);
         // console.log("findRound round 1");
-        findRound(item);
+
+
+        // CHECK ALL GAMES IS BEEN COMPLETED 
+        const { complete, incomplete } = checkRoundCompleted(roundNum, round.nets);
+
+        if(item <= 5){
+            if (item > roundNum) {
+                if (incomplete.length > 0) {
+                    // CAN'T GO TO NEXT ROUND 
+                    setIncompleteErr(incomplete);
+                } else {
+                    // SUCCESS - CAN GO TO NEXT ROUND 
+                    setRoundNum(item);
+                    findRound(item);
+                }
+            } else {
+                setRoundNum(item);
+                findRound(item);
+            }
+        }
     }
+
+
+    const incompleteNetNoSMS = (netNo) => {
+        console.log(netNo);
+        let sms = '';
+        netNo.forEach(nn => sms = sms + " " + nn + ", ");
+        return sms;
+    }
+
+
 
 
 
@@ -86,14 +115,27 @@ const Rounds = (props) => {
 
 
     useEffect(() => {
-        findRound(activeItem);
+        findRound(roundNum);
     }, []);
+
+
+
+    useEffect(() => {
+        // ERROR MESSAGE WILL DISAPPAIR AFTER 3 SECOND 
+        let timer;
+        if (incompleteErr.length > 0) {
+            timer = setTimeout(() => {
+                setIncompleteErr([]);
+            }, 3000);
+        }
+        return () => clearTimeout(timer);
+    }, [incompleteErr]);
 
 
 
     const updateFindNets = (update) => {
         // console.log("findRound from update event");
-        if (update) findRound(activeItem);
+        if (update) findRound(roundNum);
     }
 
 
@@ -106,7 +148,7 @@ const Rounds = (props) => {
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
     const showTabContent = () => {
         // console.log("Loading - ", isLoading);
-        switch (activeItem) {
+        switch (roundNum) {
             case 1:
                 if (isLoading) {
                     // console.log("Loading (true) - ", isLoading);
@@ -117,16 +159,17 @@ const Rounds = (props) => {
                         {/* <Round1
                             initialize={initialize}
                             round={round}
-                            roundNum={activeItem}
+                            roundNum={roundNum}
                             updateNets={updateFindNets}
                             game={[1, 2, 3]}
                             eventID={props.eventID} /> */}
                         <SingleRound
                             initialize={initialize}
+                            activeItemHandler={activeItemHandler}
                             performances={performances}
                             round={round}
                             rankPerformanceInNet={rankPerformanceInNet}
-                            roundNum={activeItem}
+                            roundNum={roundNum}
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[1, 2, 3]}
@@ -141,10 +184,11 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
                             initialize={initialize}
+                            activeItemHandler={activeItemHandler}
                             performances={performances}
                             round={round}
                             rankPerformanceInNet={rankPerformanceInNet}
-                            roundNum={activeItem}
+                            roundNum={roundNum}
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[4, 5, 6]}
@@ -158,10 +202,11 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
                             initialize={initialize}
+                            activeItemHandler={activeItemHandler}
                             performances={performances}
                             round={round}
                             rankPerformanceInNet={rankPerformanceInNet}
-                            roundNum={activeItem}
+                            roundNum={roundNum}
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[7, 8, 9]}
@@ -175,10 +220,11 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
                             initialize={initialize}
+                            activeItemHandler={activeItemHandler}
                             performances={performances}
                             round={round}
                             rankPerformanceInNet={rankPerformanceInNet}
-                            roundNum={activeItem}
+                            roundNum={roundNum}
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[10, 11, 12]}
@@ -192,10 +238,11 @@ const Rounds = (props) => {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
                             initialize={initialize}
+                            activeItemHandler={activeItemHandler}
                             performances={performances}
                             round={round}
                             rankPerformanceInNet={rankPerformanceInNet}
-                            roundNum={activeItem}
+                            roundNum={roundNum}
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[13, 14, 15]}
@@ -209,14 +256,15 @@ const Rounds = (props) => {
     return (
         <div className="Rounds">
             <nav className="nav nav-pills bg-dark">
-                <a className="nav-link active" className={activeItem === 1 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 1)}>Round 1</a>
-                <a className="nav-link active" className={activeItem === 2 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 2)}>Round 2</a>
-                <a className="nav-link active" className={activeItem === 3 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 3)}>Round 3</a>
-                <a className="nav-link active" className={activeItem === 4 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 4)}>Round 4</a>
-                <a className="nav-link active" className={activeItem === 5 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 5)}>Round 5</a>
+                <a className="nav-link active" className={roundNum === 1 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 1)}>Round 1</a>
+                <a className="nav-link active" className={roundNum === 2 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 2)}>Round 2</a>
+                <a className="nav-link active" className={roundNum === 3 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 3)}>Round 3</a>
+                <a className="nav-link active" className={roundNum === 4 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 4)}>Round 4</a>
+                <a className="nav-link active" className={roundNum === 5 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 5)}>Round 5</a>
                 {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
             </nav>
             <div className="tab-content" >
+                {incompleteErr.length > 0 && <div className="alert alert-danger">Please complete incomplete games in net {incompleteNetNoSMS(incompleteErr)} to go to next round</div>}
                 {showTabContent()}
             </div>
         </div>

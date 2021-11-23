@@ -3,14 +3,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './style/App.css';
 // import { Switch, Route, Redirect } from "react-router-dom";
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Menu from './components/Menu';
+import Menu from "./components/elements/Menu";
 import Home from './pages/Home';
 import Admin from './pages/Admin';
 import Dashboard from './pages/Dashboard';
 import React, { Component } from 'react';
 import { hostname } from "./utils/global";
 import Page404 from './pages/Page404';
-import EventAdmin from './components/admin/EventAdmin';
+import SingleEvent from './components/events/SingleEvent';
 import Score from './components/score/Score';
 import AdminList from './components/admin/AdminList';
 
@@ -129,9 +129,9 @@ class App extends Component {
           {/* <Route path="/admin/dashboard">
             {this.state.isAuthenticated === true ? <Dashboard authValidation={this.authValidation} isAuthenticated={this.state.isAuthenticated} /> : <Redirect to="/admin" />}
           </Route> */}
-          <Route path="/admin/dashboard/event/:id" element={<EventAdmin isAuthenticated={this.state.isAuthenticated} />}></Route>
+          <Route path="/admin/dashboard/event/:id" element={<SingleEvent isAuthenticated={this.state.isAuthenticated} />}></Route>
           {/* <Route path="/admin/dashboard/event/:id" >
-            <EventAdmin isAuthenticated={this.state.isAuthenticated} />
+            <SingleEvent isAuthenticated={this.state.isAuthenticated} />
           </Route> */}
           <Route path="/event/:id" element={<Score admin={false} />}></Route>
           {/* <Route path="/event/:id" >

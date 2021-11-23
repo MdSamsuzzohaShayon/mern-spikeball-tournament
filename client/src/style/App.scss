@@ -1,14 +1,27 @@
+@import "./fonts";
 @import "./variables";
 @import "./mixins";
 
 // ROOT STYLING 
 .App {
   font-size: 1em;
+  // font-family: 'Amiri', serif;
   .btn-primary{
     background-color: #079b8e;
   }
   
+  .Navbar{
+    font-family: 'Montagu Slab', serif;
+    img{
+      width: 60px;
+      height: 60px;
+    }
+  }
   @media screen and (max-width: $br-lg) {
+    img{
+      width: 30px;
+      height: 30px;
+    }
     font-size: 0.7em;
     .btn {
       font-size: 1em;

@@ -252,207 +252,117 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
 
 
     updateScore.forEach(async (us, i) => {
-        // console.log(us);
+        console.log(us);
 
         // console.log(us);
 
-        // CHECK FOR ONLY UPDATE WINNING POINT - TEAM ONE, TWO IS NULL HERE 
-        if (us.wp !== null && us.team1 === null && us.team2 === null && us.game === null) {
-
-
-
-            const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15";
-            const findNet = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp })
-                .populate({
-                    path: "performance",
-                    select,
-                    populate: {
-                        path: "participant",
-                        select: "firstname lastname"
-                    }
-                });
-
-            await updateOnlyPoint(findNet, roundNum, us.wp);
-
-
-
-        } else if (us.wp !== null && us.team1 !== null && us.team2 !== null && us.game !== null) {
-
-            // WITH NET 
-            let team1Score = us.team1.score, team2Score = us.team2.score;
-
-            if (team1Score === null) {
-                const doc = await Performance.findById(us.team1.players[0]);
-                team1Score = getScoreFromDoc(us.game, doc);
-            }
-            if (team2Score === null) {
-                // FIND PREVIOUS ITEM AND UPDATE 
-                const doc = await Performance.findById(us.team2.players[0]);
-                team2Score = getScoreFromDoc(us.game, doc);
-            }
-            // console.log(team1Score);
-            // console.log(team2Score);
-
-            let t1pd = team1Score - team2Score;
-            let t2pd = team2Score - team1Score;
-
-            let t1p = 0, t2p = 0;
-            if (t1pd > t2pd) {
-                t1p = us.wp;
-            } else if (t1pd < t2pd) {
-                t2p = us.wp;
-            }
-
-            const netUpdate = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp });                                                                                                        //score, tp, tpd, gameSpec
-            const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-            const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, us.netID) });
-        } else if (us.wp === null && us.team1 !== null && us.team2 !== null && us.game !== null) {
-            // WITH NET 
-            let team1Score = us.team1.score, team2Score = us.team2.score;
-
-            if (team1Score === null) {
-                const doc = await Performance.findById(us.team1.players[0]);
-                team1Score = getScoreFromDoc(us.game, doc);
-            }
-            if (team2Score === null) {
-                // FIND PREVIOUS ITEM AND UPDATE 
-                const doc = await Performance.findById(us.team2.players[0]);
-                team2Score = getScoreFromDoc(us.game, doc);
-            }
-            const findNetPoint = await Net.findById(us.netID);
-
-            let t1pd = team1Score - team2Score;
-            let t2pd = team2Score - team1Score;
-            // console.log(`${i}: t 1 score - ${team1Score} , t2 score - ${team2Score}`);
-
-            let t1p = 0, t2p = 0;
-            if (t1pd > t2pd) {
-                t1p = findNetPoint.wp;
-            } else if (t1pd < t2pd) {
-                t2p = findNetPoint.wp;
-            }
-
-            //score, tp, tpd, gameSpec
-            const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-            const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, us.netID) });
-
-        } else if (us.wp === null && us.team1 !== null && us.team2 === null && us.game !== null) {
-            // WITHOUR NET 
-            const findNet = await Net.findById(us.netID);
-            let team1Score = 0, t1p = findNet.wp, t1pd = 0;
-            // console.log(findNet);
-            if (Math.sign(us.team1.score) === 1) {
-                team1Score = us.team1.score, t1pd = us.team1.score;
-                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-            } else {
-                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-            }
-        } else if (us.wp !== null && us.team1 !== null && us.team2 === null && us.game !== null) {
-            const findNet = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp });
-            let team1Score = 0, t1p = us.wp, t1pd = 0;
-            if (Math.sign(us.team1.score) === 1) {
-                team1Score = us.team1.score, t1p = us.wp, t1pd = us.team1.score;
-                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-            } else {
-                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-            }
-        }
-
-        /*
-        if (us.team2 === null) {
-            // WITHOUR NET 
-            let team1Score = 0, t1p = 0, t1pd = 0;
-            if (Math.sign(us.team1.score) === 1) {
-                team1Score = us.team1.score, t1p = 1, t1pd = us.team1.score;
-                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-            } else {
-                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-            }
-        } else {
-            // WITH NET 
-            let team1Score = us.team1.score, team2Score = us.team2.score;
-
-            if (team1Score === null) {
-                const doc = await Performance.findById(us.team1.players[0]);
-                team1Score = getScoreFromDoc(us.game, doc);
-            }
-            if (team2Score === null) {
-                // FIND PREVIOUS ITEM AND UPDATE 
-                const doc = await Performance.findById(us.team2.players[0]);
-                team2Score = getScoreFromDoc(us.game, doc);
-            }
-
-            let t1pd = team1Score - team2Score;
-            let t2pd = team2Score - team1Score;
-
-            let t1p = 0, t2p = 0;
-            if (t1pd > t2pd) {
-                t1p = 1;
-            } else if (t1pd < t2pd) {
-                t2p = 1;
-            }
-            const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-            const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, us.netID) });
-
-        }
-        */
-    });
-
-
-
-    // const wxp = [
-    //     {
-    //         netID: "617b22d589c3d144e7ca4d53",
-    //         extraPoint: 0.45
-    //     }
-    //     , {
-    //         netID: "617b22d589c3d144e7ca4d56",
-    //         extraPoint: 1.2
-    //     }
-    // ];
-
-    // // console.log(winningExtraPoint);
-    // const wxpIDS = [];
-    // for (let i = 0; i < winningExtraPoint.length; i++) {
-    //     wxpIDS.push(winningExtraPoint[i]._id);
-    // }
-
-
-
-    /*
-    const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15";
-    winningExtraPoint.forEach(async (wxp, i) => {
-        const findNet = await Net.findById(wxp.netID)
-            .populate({
-                path: "performance",
-                select,
-                populate: {
-                    path: "participant",
-                    select: "firstname lastname"
+        try {            
+            // CHECK FOR ONLY UPDATE WINNING POINT - TEAM ONE, TWO IS NULL HERE 
+            if (us.wp !== null && us.team1 === null && us.team2 === null && us.game === null) {
+    
+    
+    
+                const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15";
+                const findNet = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp })
+                    .populate({
+                        path: "performance",
+                        select,
+                        populate: {
+                            path: "participant",
+                            select: "firstname lastname"
+                        }
+                    });
+    
+                await updateOnlyPoint(findNet, roundNum, us.wp);
+    
+    
+    
+            } else if (us.wp !== null && us.team1 !== null && us.team2 !== null && us.game !== null) {
+    
+                // WITH NET 
+                let team1Score = us.team1.score, team2Score = us.team2.score;
+    
+                if (team1Score === null) {
+                    const doc = await Performance.findById(us.team1.players[0]);
+                    team1Score = getScoreFromDoc(us.game, doc);
                 }
-            });
-
-        // console.log("find nets- ", findNet);
-        // console.log(typeof roundNum);
-
-        if (findNet.performance.length < 4) {
-            // console.log("find nets- ", findNet);
-            const updateExtra = await updatedExtraPerformance(findNet, roundNum, wxp.extraPoint, true);
-
-            // IF SOMEONE HAS POINT , GIVE HIM EXTRA POINT 
-        } else {
-            // THIS NET HAS TOTAL OF 4 PLAYER 
-            // console.log("findNet, roundNum, wxp.extraPoint - ");
-            // console.log(findNet, roundNum, wxp.extraPoint);
-            const updateExtra = await updatedExtraPerformance(findNet, roundNum, wxp.extraPoint, false);
+                if (team2Score === null) {
+                    // FIND PREVIOUS ITEM AND UPDATE 
+                    const doc = await Performance.findById(us.team2.players[0]);
+                    team2Score = getScoreFromDoc(us.game, doc);
+                }
+                // console.log(team1Score);
+                // console.log(team2Score);
+    
+                let t1pd = team1Score - team2Score;
+                let t2pd = team2Score - team1Score;
+    
+                let t1p = 0, t2p = 0;
+                if (t1pd > t2pd) {
+                    t1p = us.wp;
+                } else if (t1pd < t2pd) {
+                    t2p = us.wp;
+                }
+    
+                const netUpdate = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp });                                                                                                        //score, tp, tpd, gameSpec
+                const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, us.netID) });
+            } else if (us.wp === null && us.team1 !== null && us.team2 !== null && us.game !== null) {
+                // WITH NET 
+                let team1Score = us.team1.score, team2Score = us.team2.score;
+    
+                if (team1Score === null) {
+                    const doc = await Performance.findById(us.team1.players[0]);
+                    team1Score = getScoreFromDoc(us.game, doc);
+                }
+                if (team2Score === null) {
+                    // FIND PREVIOUS ITEM AND UPDATE 
+                    const doc = await Performance.findById(us.team2.players[0]);
+                    team2Score = getScoreFromDoc(us.game, doc);
+                }
+                const findNetPoint = await Net.findById(us.netID);
+    
+                let t1pd = team1Score - team2Score;
+                let t2pd = team2Score - team1Score;
+                // console.log(`${i}: t 1 score - ${team1Score} , t2 score - ${team2Score}`);
+    
+                let t1p = 0, t2p = 0;
+                if (t1pd > t2pd) {
+                    t1p = findNetPoint.wp;
+                } else if (t1pd < t2pd) {
+                    t2p = findNetPoint.wp;
+                }
+    
+                //score, tp, tpd, gameSpec
+                const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, us.netID) });
+    
+            } else if (us.wp === null && us.team1 !== null && us.team2 === null && us.game !== null) {
+                // WITHOUR NET 
+                const findNet = await Net.findById(us.netID);
+                let team1Score = 0, t1p = findNet.wp, t1pd = 0;
+                // console.log(findNet);
+                if (Math.sign(us.team1.score) === 1) {
+                    team1Score = us.team1.score, t1pd = us.team1.score;
+                    const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                } else {
+                    const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                }
+            } else if (us.wp !== null && us.team1 !== null && us.team2 === null && us.game !== null) {
+                const findNet = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp });
+                let team1Score = 0, t1p = us.wp, t1pd = 0;
+                if (Math.sign(us.team1.score) === 1) {
+                    team1Score = us.team1.score, t1p = us.wp, t1pd = us.team1.score;
+                    const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                } else {
+                    const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                }
+            }
+        } catch (error) {
+            console.log(error);
         }
 
     });
-    */
-
-
-
-
 
     // UPDATE EXISTING PERFORMANCE
     res.status(200).json({ msg: req.body });

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { hostname } from '../utils/global';
+import { hostname } from '../../utils/global';
 import { Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Loader from './elements/Loader';
+import Loader from '../elements/Loader';
+import {formattedDate} from '../../utils/helpers';
 
 
 const EventList = (props) => {
@@ -161,12 +162,12 @@ const EventList = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {props.eventList && props.eventList.map((event, index) => (
+                        {props.eventList && props.eventList.map((pe, index) => (
                             <tr key={index}>
-                                <th >{event.title}</th>
-                                <td>{new Date(event.date).getFullYear() + '-' + (new Date(event.date).getMonth() + 1) + '-' + new Date(event.date).getDate()}</td>
-                                <td>{props.pageFor !== "home" ? <Link to={`/admin/dashboard/event/${event._id}`} className='text-white btn btn-primary'>Edit Details</Link> : <Link to={`/event/${event._id}`} className="btn btn-primary">View Details</Link>}</td>
-                                {props.pageFor !== "home" && <td><button className="btn btn-danger" onClick={e => deleteEvent(e, event._id)} >Delete</button></td>}
+                                <th >{pe.title}</th>
+                                <td>{formattedDate(pe.date)}</td>
+                                <td>{props.pageFor !== "home" ? <Link to={`/admin/dashboard/event/${pe._id}`} className='text-white btn btn-primary'>Edit Details</Link> : <Link to={`/event/${pe._id}`} className="btn btn-primary">View Details</Link>}</td>
+                                {props.pageFor !== "home" && <td><button className="btn btn-danger" onClick={e => deleteEvent(e, pe._id)} >Delete</button></td>}
                             </tr>)
                         )}
                     </tbody>

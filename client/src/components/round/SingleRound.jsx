@@ -25,7 +25,6 @@ function SingleRound(props) {
     const [isLoading, setIsLoading] = useState(false);
 
 
-    const [selectedNet, setSelectedNet] = useState(null);
     const [updateScore, setUpdateScore] = useState([]);
 
 
@@ -332,29 +331,41 @@ function SingleRound(props) {
     // ⛏️⛏️ UPDATE GAME POINT AND POINT DIFERENTIAL ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const handleUpdate = async (e) => {
         e.preventDefault();
-        const requestOptions = {
-            method: 'PUT',
-            headers: { "Content-Type": 'application/json' },
-            credentials: "include",
-            body: JSON.stringify({ updateScore })
-        };
-        // console.log(props.eventID);
+        try {
+            const requestOptions = {
+                method: 'PUT',
+                headers: { "Content-Type": 'application/json' },
+                credentials: "include",
+                body: JSON.stringify({ updateScore })
+            };
+            // console.log(props.eventID);
 
 
-        // console.log(props.round._id);
+            // console.log(props.round._id);
 
 
-        const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${roundNum}`, requestOptions);
-        console.log("Update - ", response);
-        setUpdateScore([]);
-        props.updateNets(true);
+            const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${roundNum}`, requestOptions);
+            console.log("Update - ", response);
+            setUpdateScore([]);
+            props.updateNets(true);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
 
-    const handleKeyPress = (e) => {
-        console.log("Event - ", e);
+
+    const handleNextRound = async (e) => {
+        e.preventDefault();
+        try {
+            props.activeItemHandler(e, roundNum + 1);
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+
 
 
 
@@ -484,7 +495,14 @@ function SingleRound(props) {
 
 
             </React.Fragment>) : (<React.Fragment>
-                {!props.initialize && <div className="submit-btn-wrap"><button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary submit-btn">Submit</button></div>}
+                {!props.initialize && <div className="submit-btn-wrap">
+                    <div className="submit-btn">
+                        <div className="btn-group">
+                            <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
+                            <button onClick={handleNextRound} className="btn btn-primary">Next Round</button>
+                        </div>
+                    </div>
+                </div>}
 
                 {isLoading ? <Loader /> : (
                     <div className="nets-table-wrapper">

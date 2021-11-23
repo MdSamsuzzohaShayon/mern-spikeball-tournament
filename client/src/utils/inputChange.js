@@ -47,19 +47,25 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
         if (individual === true) {
             let score = parseInt(e.target.value);
             if (findNet) {
+                // console.log("Net found");
                 if (findNet.team1 !== null && findNet.game !== null) {
                     const findNetGame = updateScore.find((elm, i) => elm.netID === netID && elm.game === game);
                     // UPDATE TEAM AND GAME 
                     if (findNetGame) {
+                        // console.log("Net found game found");
                         // UPDATE EXISTING GAME 
                         updateScore.forEach((up, i) => {
                             if (up.team1.players[0] === team[0] && up.netID === netID && up.game === game) {
                                 // console.log("match - ");
                                 up.team1.score = score;
+                            }else{
+                                singlePlayerRecord(score, findNet.wp);
                             }
                         });
                     } else {
                         // CREATE NEW RECORD
+                        // NET FOUND BUT GAME NOT FROUND 
+                        // console.log("Net found but game not found");
                         singlePlayerRecord(score, findNet.wp);
                     }
                 } else {
@@ -75,6 +81,7 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
                     });
                 }
             } else {
+                // console.log("Net not found");
                 singlePlayerRecord(score, null);
             }
         } else {

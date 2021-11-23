@@ -10,9 +10,11 @@ import Score from "../score/Score";
 import ExportField from '../export/ExportField';
 import '../../style/EventAdmin.css';
 import Loader from '../elements/Loader';
-import {Navigate} from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { formattedDate } from '../../utils/helpers';
 
-export class EventAdmin extends Component {
+
+class SingleEvent extends Component {
     constructor(props) {
         super(props);
         this.is_mounted = false;
@@ -22,7 +24,7 @@ export class EventAdmin extends Component {
             currentEvent: {
                 title: null,
                 participants: [],
-                Date: null
+                date: null
             },
             participants: "",
             isLoading: false
@@ -62,7 +64,7 @@ export class EventAdmin extends Component {
             // console.log(participants);
             this.setState({ isLoading: true });
             const response = await fetch(`${hostname}/api/event/${id}`, { method: "GET", credentials: "include" });
-            console.log("Get single event [EventAdmin.jsx] - ", response);
+            console.log("Get single event [SingleEvent.jsx] - ", response);
             const text = await response.text();
             const jsonResponse = await JSON.parse(text);
             // console.log(jsonResponse);
@@ -119,7 +121,7 @@ export class EventAdmin extends Component {
                                 <div className="card" >
                                     <div className="card-body">
                                         <h5 className="card-title">Tournament date</h5>
-                                        <p className="card-text">{`${new Date(this.state.currentEvent.date).getDay()}`}-{`${new Date(this.state.currentEvent.date).getMonth()}`}-{`${new Date(this.state.currentEvent.date).getFullYear()}`}</p>
+                                        <p className="card-text">{formattedDate(this.state.currentEvent.date)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -176,15 +178,15 @@ export class EventAdmin extends Component {
 
 
     render() {
-        if(localStorage.getItem('user')){
+        if (localStorage.getItem('user')) {
             // /admin/dashboard/event/:id
-            if(this.state.isLoading){
+            if (this.state.isLoading) {
                 return <Loader />
-            }else{            
+            } else {
                 // console.log(this.state.currentEvent);
                 if (this.state.currentEventID) {
                     return (
-                        <div className="EventAdmin">
+                        <div className="SingleEvent">
                             {/* Event admin ID: {this.state.currentEventID} */}
                             {/* {console.log("Event -")} */}
                             <div className="Overview">
@@ -194,7 +196,7 @@ export class EventAdmin extends Component {
                                         <br />
                                         <button className={this.state.activeTab === "event" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "event")} >Events</button>
                                         <button className={this.state.activeTab === "participants" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "participants")}  >Participants</button>
-                                        <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Round</button>
+                                        <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Scramble</button>
                                         <button className={this.state.activeTab === "score" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "score")}  >Score</button>
                                         <button className={this.state.activeTab === "export" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "export")}  >Export</button>
                                     </div>
@@ -208,17 +210,17 @@ export class EventAdmin extends Component {
                     );
                 } else {
                     return (
-                        <div className="EventAdmin">
+                        <div className="SingleEvent">
                             No event id or incorrect event id
                         </div>
                     );
                 }
             }
-        }else{
+        } else {
             return <Navigate to="/admin" />;
         }
     }
 }
 
-export default withRouter(EventAdmin);
+export default withRouter(SingleEvent);
 

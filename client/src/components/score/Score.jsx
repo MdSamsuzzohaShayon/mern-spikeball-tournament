@@ -127,11 +127,11 @@ class Score extends Component {
         // console.log(this.props);
         this.is_mounted = true;
         this.findRankingRound();
-        if (!this.props.admin) {
-            this.findRound(this.state.activeItem);
-            // console.log("Active item - ", this.state.activeItem);
+        this.findRound(this.state.activeItem);
+        // if (!this.props.admin) {
+        //     // console.log("Active item - ", this.state.activeItem);
 
-        }
+        // }
     }
 
 

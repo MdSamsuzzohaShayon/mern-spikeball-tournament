@@ -24,10 +24,11 @@ function Round(props) {
                         </div>
                     )}
                 </div>
-                {!props.public && (<div className="row">
-                    Who is playing againest who
+                {/* {!props.public && ()} */}
+                <div className="row">
+                    <h3>Match-up</h3>
                     <RoundTable game={props.game} round={props.round} roundNum={props.roundNum} />
-                </div>)}
+                </div>
             </React.Fragment>) : (<div className="row">Round is not assigned yet</div>)}
 
 

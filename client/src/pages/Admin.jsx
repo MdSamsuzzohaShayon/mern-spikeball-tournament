@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import Login from '../components/admin/Login';
-import Register from '../components/admin/Register';
 import Loader from "../components/elements/Loader";
 import '../style/Admin.css';
 import withNavigate from '../HOC/withNavigate';

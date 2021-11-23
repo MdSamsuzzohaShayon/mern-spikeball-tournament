@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
-import EventList from '../components/EventList';
+import EventList from '../components/events/EventList';
 import { Navigate } from 'react-router-dom';
 import "../style/Dashboard.css";
 import { Link } from 'react-router-dom';
@@ -55,34 +55,12 @@ export class Dashboard extends Component {
 
 
     componentDidMount() {
-        // console.log("Authenticated - ", this.props.isAuthenticated);
-        // console.log("Local - ",localStorage.getItem('user'));
-        // if(localStorage.getItem('user')){
-        //     console.log(localStorage.getItem('user'));
-        // }
         this.isMountedValue = true;
         this.getAllEvents();
 
     }
     updateList = (update) => { if (update) this.getAllEvents() };
     // updateList = (update) => { if (update) this.getAllEvents() };
-
-
-
-
-    // // PROBLEM WITH THIS 
-    // https://www.newline.co/@dmitryrogozhny/using-componentdidupdate-in-react--f037b5aa
-    // componentDidUpdate(prevProps, prevState) {
-    //     // console.log("Prev props - ", prevProps);
-    //     // console.log("Prev State - ", prevState);
-    //     // console.log("Current State - ", this.state.currentEvent);
-    //     // console.log("Current State event - ", prevState.currentEvent);
-    //     // debugger;        
-    //     // console.log("Dashboard Updating- ", this.props.isAuthenticated);
-    //     if(prevProps.isAuthenticated !== this.props.isAuthenticated){
-    //         this.getAllEvents(); // HERE THE PROBLEM IS INSIDE THIS FUNCTION STATE IS BEING UPDATING
-    //     }
-    // }
 
 
 
@@ -97,19 +75,6 @@ export class Dashboard extends Component {
             eventList: []
         });
     }
-
-
-
-
-
-
-
-
-
-    // GET SINGLE EVENT 
-
-
-
 
 
 

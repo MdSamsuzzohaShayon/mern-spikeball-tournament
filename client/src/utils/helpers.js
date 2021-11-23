@@ -79,3 +79,59 @@ export const tabKeyFocusChange = () => {
         scoreInputsNoNet[i + noNetDivider + noNetDivider].setAttribute('tabIndex', `${i + 1 + firstGameInput.length + noNetDivider + secondGameInput.length + noNetDivider + thirdGameInput.length + wp.length}`);
     }
 }
+
+
+
+export const formattedDate = (eventISODate) => {
+    // (new Date(event.date).getMonth() + 1) + '-' + new Date(event.date).getDate() + '-' + new Date(event.date).getFullYear();
+    const year = new Date(eventISODate).getFullYear();
+    const day = new Date(eventISODate).getDate();
+    const month = new Date(eventISODate).getMonth() + 1
+    return month + "-" + day + "-" + year;
+}
+
+
+export const checkRoundCompleted = (item, allNets) => {
+    const reportComplete = new Object();
+    reportComplete.complete = [];
+    reportComplete.incomplete = [];
+
+
+    // console.log(item, allNets);
+    function rounwiseCheck(game1, game2, game3, an, ani, anp, anpi) {
+        if (anp[game1] && anp[game2] && anp[game3]) {
+            // RETURN NO INCOMPLETED NET 
+            // console.log("Completed net - ", ani + 1);
+            reportComplete.complete.push(ani + 1);
+        } else {
+            // RETURN INCOMPLETED NET NUMBER 
+            // console.log("Incompleted performance - ", anp);
+            // console.log("Incompleted net - ", ani + 1);
+            reportComplete.incomplete.push(ani + 1);
+        }
+    }
+
+
+
+    allNets.forEach((an, ani) => {
+        an.performance.forEach((anp, anpi) => {
+            if (item === 1) {
+                // CHECK GAME 1, 2, 3
+                rounwiseCheck("game1", "game2", "game2", an, ani, anp, anpi);
+            } else if (item === 2) {
+                rounwiseCheck("game4", "game5", "game6", an, ani, anp, anpi);
+            } else if (item === 3) {
+                rounwiseCheck("game7", "game8", "game9", an, ani, anp, anpi);
+            } else if (item === 4) {
+                rounwiseCheck("game10", "game11", "game12", an, ani, anp, anpi);
+            }
+        });
+    });
+
+
+    // [...new Set(array)];
+    if (reportComplete.complete.length > 0) reportComplete.complete = [...new Set(reportComplete.complete)];
+    if (reportComplete.incomplete.length > 0) reportComplete.incomplete = [...new Set(reportComplete.incomplete)];
+
+    return reportComplete;
+}

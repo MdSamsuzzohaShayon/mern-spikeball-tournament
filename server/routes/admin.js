@@ -38,7 +38,7 @@ router.post('/register',
     (req, res, next) => {
         const allErr = new Array();
         if (req.user.role === SUPER) {
-            console.log(req.body);
+            // console.log(req.body);
             const { email, username, password } = req.body;
             const valErrs = validationResult(req);
             if (!valErrs.isEmpty()) {
