@@ -252,16 +252,16 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
 
 
     updateScore.forEach(async (us, i) => {
-        console.log(us);
+        // console.log(us);
 
         // console.log(us);
 
-        try {            
+        try {
             // CHECK FOR ONLY UPDATE WINNING POINT - TEAM ONE, TWO IS NULL HERE 
             if (us.wp !== null && us.team1 === null && us.team2 === null && us.game === null) {
-    
-    
-    
+
+
+
                 const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15";
                 const findNet = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp })
                     .populate({
@@ -272,16 +272,16 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
                             select: "firstname lastname"
                         }
                     });
-    
+
                 await updateOnlyPoint(findNet, roundNum, us.wp);
-    
-    
-    
+
+
+
             } else if (us.wp !== null && us.team1 !== null && us.team2 !== null && us.game !== null) {
-    
+
                 // WITH NET 
                 let team1Score = us.team1.score, team2Score = us.team2.score;
-    
+
                 if (team1Score === null) {
                     const doc = await Performance.findById(us.team1.players[0]);
                     team1Score = getScoreFromDoc(us.game, doc);
@@ -293,24 +293,24 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
                 }
                 // console.log(team1Score);
                 // console.log(team2Score);
-    
+
                 let t1pd = team1Score - team2Score;
                 let t2pd = team2Score - team1Score;
-    
+
                 let t1p = 0, t2p = 0;
                 if (t1pd > t2pd) {
                     t1p = us.wp;
                 } else if (t1pd < t2pd) {
                     t2p = us.wp;
                 }
-    
+
                 const netUpdate = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp });                                                                                                        //score, tp, tpd, gameSpec
                 const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
                 const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, us.netID) });
             } else if (us.wp === null && us.team1 !== null && us.team2 !== null && us.game !== null) {
                 // WITH NET 
                 let team1Score = us.team1.score, team2Score = us.team2.score;
-    
+
                 if (team1Score === null) {
                     const doc = await Performance.findById(us.team1.players[0]);
                     team1Score = getScoreFromDoc(us.game, doc);
@@ -321,22 +321,22 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
                     team2Score = getScoreFromDoc(us.game, doc);
                 }
                 const findNetPoint = await Net.findById(us.netID);
-    
+
                 let t1pd = team1Score - team2Score;
                 let t2pd = team2Score - team1Score;
                 // console.log(`${i}: t 1 score - ${team1Score} , t2 score - ${team2Score}`);
-    
+
                 let t1p = 0, t2p = 0;
                 if (t1pd > t2pd) {
                     t1p = findNetPoint.wp;
                 } else if (t1pd < t2pd) {
                     t2p = findNetPoint.wp;
                 }
-    
+
                 //score, tp, tpd, gameSpec
                 const updateTeam1 = await Performance.updateMany({ _id: { $in: us.team1.players } }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
                 const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, us.netID) });
-    
+
             } else if (us.wp === null && us.team1 !== null && us.team2 === null && us.game !== null) {
                 // WITHOUR NET 
                 const findNet = await Net.findById(us.netID);
@@ -409,27 +409,35 @@ router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
 
 
         // const statistics = await workbook.write(`./temp/${filename}.xlsx`);
-        const file_dir = `./temp/${filename}.xlsx`;
+        const file_dir =  `./temp/${filename}.xlsx`;
         workbook.write(file_dir, (err, stats) => {
-            if (err) throw err;
-            // console.log(stats);
-            res.download(file_dir, downloadErr => {
-                if (downloadErr) {
-                    res.json({ downloadErr });
-                } else {
-                    // DELETE FILE 
-                    // try {
-                    //    const deletedFile = await fsPromise.unlink(file_dir);
-                    //    console.log("File download - ",deletedFile);
-                    // } catch (deleteErr) {
-                    //     console.log(deleteErr);
-                    // }
-                    fs.unlink(file_dir, (deleteErr) => {
-                        if (deleteErr) throw deleteErr;
-                        // console.log(doc);
-                    });
-                }
-            })
+            if (err) {
+                console.log("Write err - ", err);
+            } else {
+
+                // console.log(stats);
+                res.download(file_dir, downloadErr => {
+                    if (downloadErr) {
+                        console.log("Download err - ", downloadErr);
+                        return res.json({ downloadErr });
+                    } else {
+                        // DELETE FILE 
+                        // try {
+                        //    const deletedFile = await fsPromise.unlink(file_dir);
+                        //    console.log("File download - ",deletedFile);
+                        // } catch (deleteErr) {
+                        //     console.log(deleteErr);
+                        // }
+                        fs.unlink(file_dir, (deleteErr) => {
+                            // if (deleteErr) throw deleteErr;
+                            // // console.log(doc);
+                            if (deleteErr) {
+                                console.log("Delete Err - ", deleteErr);
+                            }
+                        });
+                    }
+                });
+            }
         });
 
 

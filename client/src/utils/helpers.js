@@ -113,20 +113,24 @@ export const checkRoundCompleted = (item, allNets) => {
 
 
 
-    allNets.forEach((an, ani) => {
-        an.performance.forEach((anp, anpi) => {
-            if (item === 1) {
-                // CHECK GAME 1, 2, 3
-                rounwiseCheck("game1", "game2", "game2", an, ani, anp, anpi);
-            } else if (item === 2) {
-                rounwiseCheck("game4", "game5", "game6", an, ani, anp, anpi);
-            } else if (item === 3) {
-                rounwiseCheck("game7", "game8", "game9", an, ani, anp, anpi);
-            } else if (item === 4) {
-                rounwiseCheck("game10", "game11", "game12", an, ani, anp, anpi);
-            }
+    if(allNets){
+        allNets.forEach((an, ani) => {
+            an.performance.forEach((anp, anpi) => {
+                if (item === 1) {
+                    // CHECK GAME 1, 2, 3
+                    rounwiseCheck("game1", "game2", "game2", an, ani, anp, anpi);
+                } else if (item === 2) {
+                    rounwiseCheck("game4", "game5", "game6", an, ani, anp, anpi);
+                } else if (item === 3) {
+                    rounwiseCheck("game7", "game8", "game9", an, ani, anp, anpi);
+                } else if (item === 4) {
+                    rounwiseCheck("game10", "game11", "game12", an, ani, anp, anpi);
+                }
+            });
         });
-    });
+    }else{
+        reportComplete.incomplete.push(" ");
+    }
 
 
     // [...new Set(array)];

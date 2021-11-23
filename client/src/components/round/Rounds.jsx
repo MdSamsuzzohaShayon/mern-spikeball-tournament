@@ -49,7 +49,7 @@ const Rounds = (props) => {
 
 
     const incompleteNetNoSMS = (netNo) => {
-        console.log(netNo);
+        // console.log(netNo);
         let sms = '';
         netNo.forEach(nn => sms = sms + " " + nn + ", ");
         return sms;
