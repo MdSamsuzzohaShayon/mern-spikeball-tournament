@@ -55,7 +55,7 @@ app.use('/api', indexRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/event', eventRoute);
 app.use('/api/net', netRoute);
-app.use('/api/performance', performanceRoute );
+app.use('/api/performance', performanceRoute);
 app.use('/api/round', roundRoute);
 
 

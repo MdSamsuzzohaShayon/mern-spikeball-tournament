@@ -3,6 +3,7 @@ const formidable = require('formidable');
 const csv = require('csvtojson');
 // const fsPromise = require('fs').promises;
 const fs = require('fs');
+const path = require('path');
 // Require library
 const xl = require('excel4node');
 
@@ -409,7 +410,13 @@ router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
 
 
         // const statistics = await workbook.write(`./temp/${filename}.xlsx`);
-        const file_dir =  `./temp/${filename}.xlsx`;
+        // const file_dir =  `./temp/${filename}.xlsx`;
+        const file_dir = path.resolve('temp', `${filename}.xlsx`);
+        // console.log(file_dir);
+        // path.resolve('wwwroot', 'static_files/png/', '../gif/image.gif');
+        // If the current working directory is /home/myself/node,
+        // this returns '/home/myself/node/wwwroot/static_files/gif/image.gif'
+
         workbook.write(file_dir, (err, stats) => {
             if (err) {
                 console.log("Write err - ", err);
