@@ -412,39 +412,15 @@ router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
         // const statistics = await workbook.write(`./temp/${filename}.xlsx`);
         // const file_dir =  `./temp/${filename}.xlsx`;
         const file_dir = path.resolve('temp', `${filename}.xlsx`);
-        // console.log(file_dir);
-        // path.resolve('wwwroot', 'static_files/png/', '../gif/image.gif');
-        // If the current working directory is /home/myself/node,
-        // this returns '/home/myself/node/wwwroot/static_files/gif/image.gif'
-
         workbook.write(file_dir, (err, stats) => {
-            if (err) {
-                console.log("Write err - ", err);
-            } else {
-
-                // console.log(stats);
-                res.download(file_dir, downloadErr => {
-                    if (downloadErr) {
-                        console.log("Download err - ", downloadErr);
-                        return res.json({ downloadErr });
-                    } else {
-                        // DELETE FILE 
-                        // try {
-                        //    const deletedFile = await fsPromise.unlink(file_dir);
-                        //    console.log("File download - ",deletedFile);
-                        // } catch (deleteErr) {
-                        //     console.log(deleteErr);
-                        // }
-                        fs.unlink(file_dir, (deleteErr) => {
-                            // if (deleteErr) throw deleteErr;
-                            // // console.log(doc);
-                            if (deleteErr) {
-                                console.log("Delete Err - ", deleteErr);
-                            }
-                        });
-                    }
+            if (err) throw err;
+            // console.log(stats);
+            res.download(file_dir, downloadErr => {
+                if (downloadErr) throw downloadErr;
+                fs.unlink(file_dir, (deleteErr) => {
+                    if (deleteErr) throw deleteErr;
                 });
-            }
+            });
         });
 
 
