@@ -144,6 +144,14 @@ EMOJIES - 📜 ⛏️ ➖ ✅
  - PROBLEM REGARDING CREATE NEW EVENT
  - PAYLOAD TOO LARGE WHEN UPDATING LESS PLAYER NET
 
+### 9 - NEW REQUIREMENTS
+ - The last two net is going to have a special rule
+ - Create another option for assign called pack
+ - Change net assignment
+ - Pack will effect on last two net
+ - If there are seven people in last two net then anybody that played in three net would be gurrenteed to play with four people net in next round
+ - Main idea is to not to stuck in the last net - they must move to the previous net
+
 
 
 
@@ -192,6 +200,9 @@ __HTTPS://GITHUB.COM/WOODBURYDEV/TYPESCRIPTPASSPORTWREACT/BLOB/MAIN/BACKEND/SRC/
 __HTTPS://STACKOVERFLOW.COM/QUESTIONS/29810914/REACT-JS-ONCLICK-CANT-PASS-VALUE-TO-METHOD__
 
 __https://www.loom.com/share/8072125e420e407eb2bc5e10ce3a46c5__
+__https://www.loom.com/share/85d3c6ffea4f4f0cbe7f02b73e2769f7__
+
+
 
 
 

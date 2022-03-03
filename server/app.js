@@ -20,7 +20,7 @@ const roundRoute = require('./routes/round');
 
 
 // ⛏️⛏️ MONGO DB DATABASE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-mongoose.connect(process.env.MONGO_LOCAL_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false }, (err) => {
+mongoose.connect(process.env.MONGO_ATLES_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false }, (err) => {
     if (err) throw err;
     console.log("Db is connected successfully ");
 });
