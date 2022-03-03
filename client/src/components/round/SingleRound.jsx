@@ -11,7 +11,11 @@ import { arrangingPerformer, serializePerformer } from "../../utils/arrangePerfo
 import { tabKeyFocusChange } from '../../utils/helpers';
 // import { rankingRound1, rankingRound2, rankingRound3, rankingRound4, rankingRound5 } from "../../utils/ranking";
 
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button } from 'react-bootstrap';
+
+
+const RANK_ASSIGN = "RANK_ASSIGN", RANDOM_ASSIGN = "RANDOM_ASSIGN", PACK_ASSIGN = "PACK_ASSIGN";
+
 
 
 function SingleRound(props) {
@@ -35,7 +39,7 @@ function SingleRound(props) {
 
 
     // const [assignNet, setAssignNet] = useState(false);
-    const [randomNet, setRandomNet] = useState(null);
+    const [assignType, setAssignType] = useState(null);
 
 
     // SMS ON ASSIGN NET 
@@ -53,11 +57,27 @@ function SingleRound(props) {
             setOpenSMS(true);
             if (update === true) {
                 setNegativeSMS(false);
-                if (randomNet === true) {
-                    randomAssign();
-                } else {
-                    assignNetHandler();
+                // if (randomNet === true) {
+                //     randomAssign();
+                // } else {
+                //     assignNetHandler();
+                // }
+
+
+                switch (assignType) {
+                    case RANK_ASSIGN:
+                        assignNetHandler();
+                        break;
+                    case RANDOM_ASSIGN:
+                        randomAssign();
+                        break;
+                    case PACK_ASSIGN:
+                        packAssign();
+                        break;
+                    default:
+                        break;
                 }
+
             } else {
                 setNegativeSMS(true);
             }
@@ -66,14 +86,10 @@ function SingleRound(props) {
             console.log(error);
         }
     };
-    const handleNetShow = (e, random) => {
+    const handleNetShow = (e, getAssignType) => {
         try {
             setAssignNetShow(true);
-            if (random === true) {
-                setRandomNet(true);
-            } else {
-                setRandomNet(false);
-            }
+            setAssignType(getAssignType);
         } catch (error) {
             console.log(error);
         }
@@ -90,43 +106,10 @@ function SingleRound(props) {
 
 
 
-    let controller = new AbortController();
-
-    /*
-    // ⛏️⛏️ GET ALL PERFORMERS FROM THIS CURRENT ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-    const getAllPerformance = async () => {
-        try {
-            // console.log("-------------------");
-            const requestOptions = {
-                method: 'GET',
-                headers: { "Content-Type": 'application/json' },
-                credentials: "include",
-                signal: controller.signal
-            };
-            // console.log(props.eventID);
-            setIsLoading(true);
-            // console.log("Loading - ",isLoading);
-            // console.log(r);
-            const response = await fetch(`${hostname}/api/performance/get-performance/${props.eventID}/${roundNum}`, requestOptions);
-            console.log("Get nets from round - ", response);
-            const text = await response.text();
-            const jsonRes = await JSON.parse(text);
-            setPerformances([...jsonRes.rankingPerformance]);
-            // console.log("JSON");
-            // console.log(jsonRes);
-            setIsLoading(false);
-            controller = null
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    */
-
-
     const listener = e => {
         if (e.code === "Enter" || e.code === "NumpadEnter") {
             // e.preventDefault();
-            console.log("Enter key was pressed. Run your function.");
+            // console.log("Enter key was pressed. Run your function.");
             handleUpdate(e);
             // callMyFunction();
         }
@@ -206,16 +189,6 @@ function SingleRound(props) {
 
 
 
-
-
-
-
-    const beforeUnloadListener = (e) => {
-        e.preventDefault();
-        // alert("hi");
-        // console.log("hi");
-        return;
-    };
 
 
 
@@ -324,6 +297,30 @@ function SingleRound(props) {
 
 
 
+    const packAssign = async () => {
+        // e.preventDefault();
+        // console.log("random");
+        // console.log({ performances, leftedPerformance });
+        setIsLoading(true);
+        // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { "Content-Type": 'application/json' },
+            credentials: "include",
+            body: JSON.stringify({ performances, leftedPerformance })
+        };
+        // // console.log(props.eventID);
+
+        const response = await fetch(`${hostname}/api/net/pack-assign-net/${props.eventID}/${roundNum}`, requestOptions);
+
+        console.log("Pack assign net - ", response);
+        props.updateNets(true);
+        setIsLoading(false);
+    }
+
+
+
 
 
 
@@ -414,11 +411,12 @@ function SingleRound(props) {
                 <div className="rank-n-group my-3 w-full">
                     <div >
                         {roundNum === 1 ? <React.Fragment>
-                            <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
+                            <button className="btn btn-primary" onClick={e => handleNetShow(e, RANDOM_ASSIGN)} >Random Assign</button>
                         </React.Fragment> : <React.Fragment>
-                            <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>
+                            <button className="btn btn-primary" onClick={e => handleNetShow(e, RANK_ASSIGN)} >Rank Assign</button>
                             {/* {!props.initialize && <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>} */}
-                            <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
+                            <button className="btn btn-primary" onClick={e => handleNetShow(e, RANDOM_ASSIGN)} >Random Assign</button>
+                            {roundNum > 1 && <button className="btn btn-primary" onClick={e => handleNetShow(e, PACK_ASSIGN)} >Pack Assign</button>}
                         </React.Fragment>}
                     </div>
 

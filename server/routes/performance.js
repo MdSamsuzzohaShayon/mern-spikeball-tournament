@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 // Require library
 const xl = require('excel4node');
-const {SUPER, GENERAL} = require('../utils/Role');
+const { SUPER, GENERAL } = require('../utils/Role');
 
 
 
@@ -243,13 +243,13 @@ router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE ALL PERFORMANCE OF A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-performance/:eventID/:roundNum', ensureAuth,  async (req, res, next) => {
+router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
 
 
     const { updateScore } = req.body;
     const { eventID } = req.params;
     const roundNum = parseInt(req.params.roundNum)
-    // console.log(updateScore);
+    // console.log("updateScore");
     // console.log(winningExtraPoint);
 
 
@@ -324,7 +324,8 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth,  async (req, re
 
                 let t1pd = team1Score - team2Score;
                 let t2pd = team2Score - team1Score;
-                // console.log(`${i}: t 1 score - ${team1Score} , t2 score - ${team2Score}`);
+                // console.log(`t1 - ${us.team1.players} \n t2 - ${us.team2.players}`);
+                // console.log(`${i}: t1 score - ${team1Score} , t2 score - ${team2Score}`);
 
                 let t1p = 0, t2p = 0;
                 if (t1pd > t2pd) {
@@ -458,12 +459,12 @@ router.delete('/:id', ensureAuth, async (req, res, next) => {
     try {
         // console.log(participant);
         // console.log("DELETE parformance");
-        if(req.user.role === SUPER){
-	    const participant = await Participant.findByIdAndDelete(req.params.id);
+        if (req.user.role === SUPER) {
+            const participant = await Participant.findByIdAndDelete(req.params.id);
             const performance = await Performance.findOneAndDelete({ participant: req.params.id });
             const event = await Event.findOneAndUpdate({ participants: participant._id }, { $pull: { participants: participant._id } }, { new: true });
-            res.status(200).json({ msg: 'Delete a participant', participant, performance, event }); 
-        }else{
+            res.status(200).json({ msg: 'Delete a participant', participant, performance, event });
+        } else {
             res.status(200).json({ msg: 'Only super user are able to delete any perticipant' });
         }
         // console.log(performance);

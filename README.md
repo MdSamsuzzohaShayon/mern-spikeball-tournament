@@ -151,6 +151,8 @@ EMOJIES - 📜 ⛏️ ➖ ✅
  - Pack will effect on last two net
  - If there are seven people in last two net then anybody that played in three net would be gurrenteed to play with four people net in next round
  - Main idea is to not to stuck in the last net - they must move to the previous net
+ - Create a button pack - on click - create one more rank assign but with a twist that is last two net would assign diffrently
+ - router.put('/update-performance/:eventID/:roundNum', ensureAuth, (Before deply)
 
 
 
