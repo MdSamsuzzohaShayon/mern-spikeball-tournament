@@ -22,7 +22,21 @@
     }
 }
 
+.rank-n-group{
+    // my-3 d-flex justify-content-between
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-between;
+    @media screen and(max-width: $br-lg) {
+        height: 6em;
+        align-items: center;
+        flex-direction: column;
+        button{
+            border: solid 1px rgb(19, 172, 108);
+        }
+    }
 
+}
 
 
 // ⛏️⛏️ ROUND ONE TO FIVE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖

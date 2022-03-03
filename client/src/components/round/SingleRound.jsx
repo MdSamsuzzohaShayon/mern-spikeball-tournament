@@ -411,14 +411,14 @@ function SingleRound(props) {
 
 
             <div className="all-btns-message-modal">
-                <div className="d-flex my-3 justify-content-between w-full">
+                <div className="rank-n-group my-3 w-full">
                     <div >
                         {roundNum === 1 ? <React.Fragment>
                             <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
                         </React.Fragment> : <React.Fragment>
                             <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>
                             {/* {!props.initialize && <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>} */}
-                            <button className="btn btn-primary mx-3" onClick={e => handleNetShow(e, true)} >Random Assign</button>
+                            <button className="btn btn-primary" onClick={e => handleNetShow(e, true)} >Random Assign</button>
                         </React.Fragment>}
                     </div>
 
@@ -497,10 +497,10 @@ function SingleRound(props) {
             </React.Fragment>) : (<React.Fragment>
                 {!props.initialize && <div className="submit-btn-wrap">
                     <div className="submit-btn">
-                        <div className="btn-group">
-                            <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
+                        <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
+                        {/* <div className="btn-group">
                             <button onClick={handleNextRound} className="btn btn-primary">Next Round</button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>}
 
@@ -610,6 +610,10 @@ function SingleRound(props) {
                         </div>
                     </div>
                 )}
+                {roundNum <= 4 && <>
+                    {props.incomepleteMessage !== null && <div className='alert alert-danger mt-3'>{props.incomepleteMessage}</div>}
+                    <div className="text-md-center"> <button onClick={handleNextRound} className="btn btn-warning">Next Round</button> </div>
+                </>}
                 <div className="show table">
                     {showLiftedPefrormance(leftedPerformance, roundNum, null, false)}
                 </div>

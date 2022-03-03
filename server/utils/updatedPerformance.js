@@ -24,6 +24,35 @@ module.exports.updateOnlyPoint = async (findNet, roundNum, wp) => {
             gameCheck(i, 3, gameObj);
             // console.log(gameObj);
             const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
+        }else if (roundNum === 2) {
+            const gameObj = new Object();
+            gameCheck(i, 4, gameObj);
+            gameCheck(i, 5, gameObj);
+            gameCheck(i, 6, gameObj);
+            // console.log(gameObj);
+            const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
+        }else if (roundNum === 3) {
+            const gameObj = new Object();
+            gameCheck(i, 7, gameObj);
+            gameCheck(i, 8, gameObj);
+            gameCheck(i, 9, gameObj);
+            console.log("Performance - ",findNet.performance[i]);
+            console.log("Game obj - ",gameObj);
+            const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
+        }else if (roundNum === 4) {
+            const gameObj = new Object();
+            gameCheck(i, 10, gameObj);
+            gameCheck(i, 11, gameObj);
+            gameCheck(i, 12, gameObj);
+            // console.log(gameObj);
+            const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
+        }else if (roundNum === 5) {
+            const gameObj = new Object();
+            gameCheck(i, 13, gameObj);
+            gameCheck(i, 14, gameObj);
+            gameCheck(i, 15, gameObj);
+            // console.log(gameObj);
+            const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
         }
     }
     // console.log(performancesIds);
@@ -31,10 +60,14 @@ module.exports.updateOnlyPoint = async (findNet, roundNum, wp) => {
     function gameCheck(i, gameNum, gameObj) {
         const specGame = `game${gameNum}`;
         if (findNet.performance[i][specGame]) {
-            if (Math.sign(findNet.performance[i][specGame].pointDeferential) === 1) {
+            if (findNet.performance[i][specGame].pointDeferential > 0) {
                 performancesIds.push(findNet.performance[i]._id);
                 performances.push(findNet.performance[i]);
                 gameObj[specGame] = updateSG(gameNum, findNet.performance[i][specGame], wp);
+            }else{
+                performancesIds.push(findNet.performance[i]._id);
+                performances.push(findNet.performance[i]);
+                gameObj[specGame] = updateSG(gameNum, findNet.performance[i][specGame], 0);
             }
         }
     }
@@ -50,6 +83,7 @@ module.exports.updatedPerformance = (ut, roundNum, score, tp, tpd, netID) => {
     // window[gameSpec].point = tp;
     // window[gameSpec].pointDeferential = tpd;
     // return { gameSpec: window[gameSpec] }
+    // console.log("Total point ",tp);
     if (roundNum == 1) {
         switch (ut.game) {
             case 1:
@@ -57,6 +91,7 @@ module.exports.updatedPerformance = (ut, roundNum, score, tp, tpd, netID) => {
                 game1.score = score;
                 game1.point = tp;
                 game1.pointDeferential = tpd;
+                // console.log(game1);
                 return { game1 }
             case 2:
                 let game2 = new Object();

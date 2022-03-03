@@ -25,7 +25,7 @@ const Event = require('../models/Event');
 
 
 
-
+// curl --location -X POST 'http://localhost:4000/api/admin/register' -H 'Content-Type: application/json' -H 'Cookie: connect.sid=s%3AzL3n82ulv33g6ZGI9JI866DTawUrP9sX.u13Y%2Fn7Sf0XJLRNB7%2Bxw7RTwpVqeRIQkeiPG%2BkIY2iE' --data-raw '{ "email": "ronaldo@mutd.com", "username": "Ronaldo",  "password": "Ronaldo1234" }'
 /* ⛏️⛏️ ALL ROUTES WILL BE PROTECTED EXCEPT LOGIN ROUTE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.post('/register',
     ensureAuth,

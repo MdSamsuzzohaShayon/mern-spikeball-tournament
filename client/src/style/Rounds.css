@@ -21,6 +21,22 @@
   }
 }
 
+.rank-n-group {
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-between;
+}
+@media screen and (max-width: 992px) {
+  .rank-n-group {
+    height: 6em;
+    align-items: center;
+    flex-direction: column;
+  }
+  .rank-n-group button {
+    border: solid 1px #13ac6c;
+  }
+}
+
 .show-all-nets {
   background-color: white;
 }

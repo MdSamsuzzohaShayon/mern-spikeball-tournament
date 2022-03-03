@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 // Require library
 const xl = require('excel4node');
+const {SUPER, GENERAL} = require('../utils/Role');
 
 
 
@@ -242,7 +243,7 @@ router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
 
 
 // ⛏️⛏️ UPDATE ALL PERFORMANCE OF A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
+router.put('/update-performance/:eventID/:roundNum', ensureAuth,  async (req, res, next) => {
 
 
     const { updateScore } = req.body;
@@ -253,8 +254,6 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
 
 
     updateScore.forEach(async (us, i) => {
-        // console.log(us);
-
         // console.log(us);
 
         try {
@@ -339,25 +338,34 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
                 const updateTeam2 = await Performance.updateMany({ _id: { $in: us.team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, us.netID) });
 
             } else if (us.wp === null && us.team1 !== null && us.team2 === null && us.game !== null) {
+                // console.log("No temp2 - ",us);
                 // WITHOUR NET 
                 const findNet = await Net.findById(us.netID);
                 let team1Score = 0, t1p = findNet.wp, t1pd = 0;
                 // console.log(findNet);
-                if (Math.sign(us.team1.score) === 1) {
-                    team1Score = us.team1.score, t1pd = us.team1.score;
-                    const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-                } else {
-                    const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-                }
+                team1Score = us.team1.score, t1pd = us.team1.score;
+                if (team1Score <= 0) t1p = 0;
+                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                // if (us.team1.score > 0) {
+                //     const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                //     // console.log("Positive single player - ", singlePlayer);
+                // }else {
+                //     const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, 0, t1pd, us.netID) });
+                //     // console.log("--------------");
+                //     // console.log("Negative single player - ", singlePlayer);
+                //     // console.log("Negative single player - ", updatedPerformance(us, roundNum, team1Score, 0, t1pd, us.netID));
+                // }
             } else if (us.wp !== null && us.team1 !== null && us.team2 === null && us.game !== null) {
+                // console.log("Hit- ", us);
                 const findNet = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp });
-                let team1Score = 0, t1p = us.wp, t1pd = 0;
-                if (Math.sign(us.team1.score) === 1) {
-                    team1Score = us.team1.score, t1p = us.wp, t1pd = us.team1.score;
-                    const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-                } else {
-                    const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
-                }
+                let team1Score = us.team1.score, t1p = us.wp, t1pd = us.team1.score;
+                team1Score > 0 ? t1p = us.wp : t1p = 0;
+                const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                // if (Math.sign(us.team1.score) === 1) {
+                //     const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                // } else {
+                //     const singlePlayer = await Performance.updateOne({ _id: us.team1.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, us.netID) });
+                // }
             }
         } catch (error) {
             console.log(error);
@@ -448,14 +456,18 @@ router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
 /* ⛏️⛏️ DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.delete('/:id', ensureAuth, async (req, res, next) => {
     try {
-        const participant = await Participant.findByIdAndDelete(req.params.id);
         // console.log(participant);
         // console.log("DELETE parformance");
-        const performance = await Performance.findOneAndDelete({ participant: req.params.id });
+        if(req.user.role === SUPER){
+	    const participant = await Participant.findByIdAndDelete(req.params.id);
+            const performance = await Performance.findOneAndDelete({ participant: req.params.id });
+            const event = await Event.findOneAndUpdate({ participants: participant._id }, { $pull: { participants: participant._id } }, { new: true });
+            res.status(200).json({ msg: 'Delete a participant', participant, performance, event }); 
+        }else{
+            res.status(200).json({ msg: 'Only super user are able to delete any perticipant' });
+        }
         // console.log(performance);
         // { $pull: { templates: { _id: templateid } } },
-        const event = await Event.findOneAndUpdate({ participants: participant._id }, { $pull: { participants: participant._id } }, { new: true });
-        res.status(200).json({ msg: 'Delete a participant', participant, performance, event });
     } catch (error) {
         res.json(error)
     }
@@ -498,4 +510,3 @@ router.get('/get-performance/:eventID/:roundNum', async (req, res, next) => {
 
 
 module.exports = router;
-

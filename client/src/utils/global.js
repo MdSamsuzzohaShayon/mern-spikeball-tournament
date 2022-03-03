@@ -1,6 +1,7 @@
 export const hostname = "http://localhost:4000";
+// export const hostname = "http://18.216.248.251";
 
-export const POINT = "point", POINT_DIFFERENTIAL = "pointDeferential", SCORE = "score", NO_SCORE="noScore", EXTRA_POINT="extraPoint";
+export const POINT = "point", POINT_DIFFERENTIAL = "pointDeferential", SCORE = "score", NO_SCORE = "noScore", EXTRA_POINT = "extraPoint";
 
 
 

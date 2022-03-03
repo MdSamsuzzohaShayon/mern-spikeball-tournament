@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { Button, Modal } from "react-bootstrap";
 import Loader from '../elements/Loader';
+import ModalElement from '../elements/ModalElement';
 
 const Participants = (props) => {
 
@@ -11,7 +12,7 @@ const Participants = (props) => {
     const [csvShow, setCsvShow] = useState(false);
     const [participant, setPartitipant] = useState({});
     const [selectedFile, setSelectedFile] = useState(null);
-    const [errors, setErrors] = useState([]);
+    const [errorList, setErrorList] = useState([]);
 
 
 
@@ -19,7 +20,7 @@ const Participants = (props) => {
 
 
     const handleClose = () => {
-        setErrors([]);
+        setErrorList([]);
         setShow(false)
     };
     const handleShow = () => setShow(true);
@@ -34,7 +35,7 @@ const Participants = (props) => {
     // ⛏️⛏️ ADD A PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     const handleSaveParticipant = async (e) => {
         e.preventDefault();
-        setErrors([]);
+        setErrorList([]);
 
         try {
             const options = {
@@ -53,7 +54,7 @@ const Participants = (props) => {
             // console.log(jsonRes.errors.length);
             if (jsonRes.errors) {
                 if (jsonRes.errors.length >= 1) {
-                    setErrors([...jsonRes.errors]);
+                    setErrorList([...jsonRes.errors]);
                 }
             } else {
                 // console.log(jsonRes);
@@ -98,22 +99,41 @@ const Participants = (props) => {
     const deleteParticipant = async (e, id) => {
         e.preventDefault();
         try {
-            // http://localhost:4000/api/admin/dashboard/participant
-            const response = await fetch(`${hostname}/api/performance/${id}`, {
-                method: "DELETE",
-                credentials: 'include',
-                headers: {
-                    "Content-Type": "application/json"
+            // console.log("HIT. ", id);
+            // console.log(JSON.parse(localStorage.getItem('user')));
+            const checkUser = JSON.parse(localStorage.getItem('user'));
+            if (checkUser.role === "SUPER") {
+                // http://localhost:4000/api/admin/dashboard/participant
+                const response = await fetch(`${hostname}/api/performance/${id}`, {
+                    method: "DELETE",
+                    credentials: 'include',
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (response.status === 200) {
+                    console.log("Delete participant [Participant.jsx] - ", response);
+                    props.updateEvent(true);
                 }
-            });
-            if (response.status === 200) {
-                console.log("Delete participant [Participant.jsx] - ", response);
-                props.updateEvent(true);
+            } else {
+                // SHOW ERROR YOU CAN DELETE ANY PARTICIPANT 
+                setErrorList(prevState => [...prevState, { msg: "Only super admin is able to delete any participant." }]);
+                // console.log(errorList);
             }
+
         } catch (error) {
             console.log(error);
         }
     }
+
+
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setErrorList([]);
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, [errorList])
 
 
 
@@ -148,9 +168,9 @@ const Participants = (props) => {
             console.log("Upload multiple participant[Participant.jsx] - ", response);
             const text = await response.text();
             const json = JSON.parse(text);
-            console.log(json);
+            // console.log(json);
             if (json.errors) {
-                setErrors([...json.errors]);
+                setErrorList([...json.errors]);
             }
             props.updateEvent(true);
         } catch (error) {
@@ -168,6 +188,9 @@ const Participants = (props) => {
         return (
             <div className="Participants">
                 <h2 className="h2">{props.event.title}</h2>
+
+
+
                 {props.participants.length > 0 && (
                     <div className="table-responsive">
                         <table className="table table-bordered table-hover participant-table">
@@ -195,7 +218,19 @@ const Participants = (props) => {
                                         <td>{p.payment_amount}</td>
                                         <td>{p.payment_method}</td>
                                         <td>{p.city}</td>
-                                        <td><button className="btn btn-danger" onClick={e => deleteParticipant(e, p._id)}>Delete</button></td>
+                                        {/* <td><button className="btn btn-danger" onClick={e => deleteParticipant(e, p._id)}>Delete</button></td> */}
+                                        <td>
+                                            <ModalElement
+                                                btnColor="danger"
+                                                openBtn="Delete"
+                                                modalTitle="Alert"
+                                                modalBody={<div>If you have sorted them in a round, please mark them as "left" rather than delete!</div>}
+                                                failureBtn="Cancel"
+                                                successBtn="Yes"
+                                                successModal={e => deleteParticipant(e, p._id)}
+                                            />
+                                        </td>
+
                                     </tr>
                                 ))}
                             </tbody>
@@ -205,9 +240,9 @@ const Participants = (props) => {
 
 
                 <div className="upload-single-participant">
+                    {errorList && [...new Set(errorList)].map((e, i) => <p key={i} className="text-danger">{e.msg}</p>)}
 
                     <h3 className="h3">Add participants for this events</h3>
-                    {errors && [...new Set(errors)].map((e, i) => <p key={i} className="text-warning">{e.msg}</p>)}
 
                     <Button variant="primary" onClick={handleShow}>
                         Add participants
@@ -218,7 +253,7 @@ const Participants = (props) => {
                             <Modal.Title>{props.event.title}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            {errors && [...new Set(errors)].map((e, i) => <p key={i} className="text-danger">{e.msg}</p>)}
+                            {errorList && [...new Set(errorList)].map((e, i) => <p key={i} className="text-danger">{e.msg}</p>)}
                             {/* // firstname,lastname,email,cell,birthdate,city, eventID */}
                             <form>
                                 <div className="form-group">

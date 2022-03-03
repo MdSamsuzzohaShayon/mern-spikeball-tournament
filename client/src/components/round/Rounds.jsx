@@ -9,6 +9,7 @@ import "../../style/Rounds.css";
 
 const Rounds = (props) => {
     const [roundNum, setRoundNum] = useState(1);
+    const [incomepleteMessage, setIncomepleteMessage] = useState(null);
     // const [round, setRound] = useState(1);
     const [initialize, setInitialize] = useState(false);
     const [round, setRounds] = useState([]);
@@ -30,7 +31,7 @@ const Rounds = (props) => {
         // CHECK ALL GAMES IS BEEN COMPLETED 
         const { complete, incomplete } = checkRoundCompleted(roundNum, round.nets);
 
-        if(item <= 5){
+        if (item <= 5) {
             if (item > roundNum) {
                 if (incomplete.length > 0) {
                     // CAN'T GO TO NEXT ROUND 
@@ -124,8 +125,10 @@ const Rounds = (props) => {
         // ERROR MESSAGE WILL DISAPPAIR AFTER 3 SECOND 
         let timer;
         if (incompleteErr.length > 0) {
+            setIncomepleteMessage(`Please complete all games in net ${incompleteNetNoSMS(incompleteErr)} to go to next round`);
             timer = setTimeout(() => {
                 setIncompleteErr([]);
+                setIncomepleteMessage(null);
             }, 3000);
         }
         return () => clearTimeout(timer);
@@ -140,7 +143,7 @@ const Rounds = (props) => {
 
 
 
-
+    // {incompleteErr.length > 0 && <div className="alert alert-danger">Please complete all games in net {incompleteNetNoSMS(incompleteErr)} to go to next round</div>}
 
 
 
@@ -151,19 +154,11 @@ const Rounds = (props) => {
         switch (roundNum) {
             case 1:
                 if (isLoading) {
-                    // console.log("Loading (true) - ", isLoading);
                     return <Loader />;
                 } else {
-                    // console.log("Loading(false) - ", isLoading);
                     return (<div className="tab-pane fade show active" >
-                        {/* <Round1
-                            initialize={initialize}
-                            round={round}
-                            roundNum={roundNum}
-                            updateNets={updateFindNets}
-                            game={[1, 2, 3]}
-                            eventID={props.eventID} /> */}
                         <SingleRound
+                            incomepleteMessage={incomepleteMessage}
                             initialize={initialize}
                             activeItemHandler={activeItemHandler}
                             performances={performances}
@@ -183,6 +178,7 @@ const Rounds = (props) => {
 
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
+                            incomepleteMessage={incomepleteMessage}
                             initialize={initialize}
                             activeItemHandler={activeItemHandler}
                             performances={performances}
@@ -201,6 +197,7 @@ const Rounds = (props) => {
                 } else {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
+                            incomepleteMessage={incomepleteMessage}
                             initialize={initialize}
                             activeItemHandler={activeItemHandler}
                             performances={performances}
@@ -219,6 +216,7 @@ const Rounds = (props) => {
                 } else {
                     return (<div className="tab-pane fade show active" >
                         <SingleRound
+                            incomepleteMessage={incomepleteMessage}
                             initialize={initialize}
                             activeItemHandler={activeItemHandler}
                             performances={performances}
@@ -264,7 +262,6 @@ const Rounds = (props) => {
                 {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
             </nav>
             <div className="tab-content" >
-                {incompleteErr.length > 0 && <div className="alert alert-danger">Please complete incomplete games in net {incompleteNetNoSMS(incompleteErr)} to go to next round</div>}
                 {showTabContent()}
             </div>
         </div>

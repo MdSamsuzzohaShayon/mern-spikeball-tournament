@@ -23,7 +23,7 @@ export const arrangingPerformer = (performer, gor, game, scoreType, roundNum) =>
         if (pointValue === null) {
             return (<div className="p-rival">{firstname} {lastname}  </div>);
         } else if (pointValue === 0) {
-            return (<div className="p-rival text-primary">{firstname} {lastname}  </div>);
+            return (<div className="p-rival">{firstname} {lastname}  </div>);
         } else if (pointValue > 0) {
             return (<div className="p-rival text-success">{firstname} {lastname}  </div>);
         } else if (pointValue < 0) {

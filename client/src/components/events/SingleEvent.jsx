@@ -1,4 +1,5 @@
 // import { useParams } from 'react-router-dom';
+import '../../style/SingleEvent.css';
 import React, { Component } from 'react';
 // import { withRouter } from "react-router";
 // import { useParams } from "react-router-dom";
@@ -8,7 +9,6 @@ import Participants from '../participant/Participants';
 import Rounds from '../round/Rounds'
 import Score from "../score/Score";
 import ExportField from '../export/ExportField';
-import '../../style/EventAdmin.css';
 import Loader from '../elements/Loader';
 import { Navigate } from 'react-router-dom';
 import { formattedDate } from '../../utils/helpers';
@@ -194,11 +194,13 @@ class SingleEvent extends Component {
                                     <div className="nav nav-pills dashboard-nav-items bg-dark text-center">
                                         <h3 className="text-secondary nav-link" >{this.state.currentEvent.title}</h3>
                                         <br />
-                                        <button className={this.state.activeTab === "event" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "event")} >Events</button>
-                                        <button className={this.state.activeTab === "participants" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "participants")}  >Participants</button>
-                                        <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Scramble</button>
-                                        <button className={this.state.activeTab === "score" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "score")}  >Score</button>
-                                        <button className={this.state.activeTab === "export" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "export")}  >Export</button>
+                                        <div className="nv-btns-list">
+                                            <button className={this.state.activeTab === "event" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "event")} >Events</button>
+                                            <button className={this.state.activeTab === "participants" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "participants")}  >Participants</button>
+                                            <button className={this.state.activeTab === "rounds" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "rounds")}  >Scramble</button>
+                                            <button className={this.state.activeTab === "score" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "score")}  >Score</button>
+                                            <button className={this.state.activeTab === "export" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "export")}  >Export</button>
+                                        </div>
                                     </div>
                                     <div className="tab-content" >
                                         {this.showAllNavItem()}
