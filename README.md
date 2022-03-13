@@ -154,6 +154,7 @@ EMOJIES - 📜 ⛏️ ➖ ✅
  - Create a button pack - on click - create one more rank assign but with a twist that is last two net would assign diffrently
  - router.put('/update-performance/:eventID/:roundNum', ensureAuth, (Before deply)
  - Make sure last less than 4 people doesn't play in the last net in next round
+ - Auth change, 
 
 
 

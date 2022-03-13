@@ -1,6 +1,4 @@
 const express = require('express');
-
-const Event = require('../models/Event');
 const Net = require('../models/Net');
 const Performance = require('../models/Performance');
 const Round = require('../models/Round');
@@ -23,17 +21,11 @@ const router = express.Router();
 // ⛏️⛏️ ASSIGN PLAYER TO THE NET FOR THE FIRST ROUND - CREATE PERFORMANCE FOR ALL PLAYER  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.post('/assign-initial-net/:eventID', ensureAuth, async (req, res, next) => {
     try {
-        // console.log("Hit");
-        // console.log(req.params.eventID);
-        // const findNets = "Nets";
-        const findNets = await Net.find({ event: req.params.eventID });
-        // console.log("True - l65 ", findNets);
-        if (findNets.length < 1) {
-            // console.log("True condition");
 
+        const findNets = await Net.find({ event: req.params.eventID });
+        if (findNets.length < 1) {
             // RANDOMIZE PERFORMANCE 
             const performances = await Performance.find({ event: req.params.eventID });
-            // console.log({performances});
             // const event = await Event.findById({ _id: req.params.eventID }).populate('participants').exec();
             // const participants = event.participants;
             let randomPerformance = [];
@@ -42,8 +34,6 @@ router.post('/assign-initial-net/:eventID', ensureAuth, async (req, res, next) =
                 randomPerformance.push(random);
                 randomPerformance = [...new Set(randomPerformance)];
             }
-
-            // console.log(randomPerformance);
 
 
 
@@ -54,7 +44,6 @@ router.post('/assign-initial-net/:eventID', ensureAuth, async (req, res, next) =
 
 
 
-            // console.log({randomPerformance});
 
             let i, j, temporary, chunk = 4, netNo = 1;
             for (i = 0, j = randomPerformance.length; i < j; i += chunk) {
@@ -94,7 +83,6 @@ router.post('/assign-initial-net/:eventID', ensureAuth, async (req, res, next) =
                 performances: allPerformanceIds,
                 nets: allNetsIds
             });
-            // console.log(new_round);
             const round = await new_round.save();
             // UPDATE NET 
             // const updateNetRound = await Net.updateMany({ event: req.params.eventID }, { round: round._id }, { new: true });
@@ -126,31 +114,26 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
         const { performances, leftedPerformance } = req.body;
         const roundNum = parseInt(req.params.roundNum);
         const { eventID } = req.params;
-        // console.log(req.body);
         const findRound = await Round.findOne({ event: req.params.eventID, no: roundNum });
 
-        // console.log("Found rounds - ", findRound);
         if (!findRound || findRound === null) {
-            console.log("No Round - create new one");
 
 
             const allPerformanceIds = [];
             for (let per of performances) {
                 allPerformanceIds.push(per._id);
             }
-            const allLeftedPerFormance = [];
+            const allLeftedPerformance = [];
             for (let lp of leftedPerformance) {
-                allLeftedPerFormance.push(lp._id);
+                allLeftedPerformance.push(lp._id);
             }
 
-            // console.log("pid -",allPerformanceIds);
             const findPerformances = await Performance.find({ _id: { $in: allPerformanceIds } }).populate({ path: "participant", select: "firstname lastname" });
             const assending = true;
             if (assending) {
                 let ranking = findPerformances;
 
                 if (roundNum === 2) {
-                    // console.log("Round 2");
                     ranking = findPerformances.sort(rankingRound1);
                 } else if (roundNum === 3) {
                     ranking = findPerformances.sort(rankingRound2);
@@ -160,8 +143,6 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
                     ranking = findPerformances.sort(rankingRound4);
                 }
 
-                // console.log("Ranking - ", ranking);
-                // console.log("------------------------BREAK--------------------------");
 
                 // CREATE NETS 
 
@@ -183,8 +164,6 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
                         event: req.params.eventID,
                     });
                     const net = await newNet.save();
-                    // console.log("NET sl - ", netNo);
-                    // console.log("NET - ", net);
                     allNetsIds.push(net._id);
 
 
@@ -194,9 +173,6 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
                     }
                     netNo++;
                 }
-                // console.log("Net ids - ", allNetsIds);
-                // console.log("p ids - ", allPerformanceIds);
-                // console.log("pp ids - ", allLeftedPerFormance);
 
 
 
@@ -205,15 +181,12 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
                     event: req.params.eventID,
                     performances: allPerformanceIds,
                     nets: allNetsIds,
-                    left: allLeftedPerFormance
+                    left: allLeftedPerformance
                 });
-                // console.log("New Round - ", new_round);
-                // console.log("Round Num - ", roundNum);
+
                 const round = await new_round.save();
                 const updateNetRound = await Net.updateMany({ _id: { $in: allNetsIds } }, { round: round._id }, { new: true });
 
-
-                // console.log("Ranking - ", ranking);
             } else {
                 // RANDOM ASSIGN
                 console.log("Random assign");
@@ -222,8 +195,6 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
 
         } else {
             // UPDATE EXISTING ROUND OR RESORT OR REASSIGN
-            // console.log("Update existing");
-            // console.log(findRound.performances);
             const allPerformanceIds = [];
             for (let per of performances) {
                 allPerformanceIds.push(per._id);
@@ -239,7 +210,6 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
             let ranking = findPerformances;
 
             if (roundNum === 1) {
-                // console.log("Round 2");
                 ranking = findPerformances.sort(rankingRound1);
             } else if (roundNum === 2) {
                 ranking = findPerformances.sort(rankingRound2);
@@ -270,8 +240,6 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
                     netPerformanceIds.push(k._id);
                 }
 
-                // console.log("All performances in a net - ", netPerformanceIds);
-
                 const newNet = new Net({
                     sl: netNo,
                     event: eventID,
@@ -282,17 +250,12 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
                 allNetsIds.push(net._id);
 
 
-
-                // console.log("net performances IDs - ", netPerformanceIds);
-
                 // const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { performance: netPerformanceIds }, { new: true });
 
 
                 netNo++;
             }
 
-
-            // console.log("All nets ids - ", allNetsIds);
 
 
 
@@ -301,7 +264,6 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
                 { event: eventID, no: roundNum },
                 { performances: allPerformanceIds, left: allLeftedPerformance, nets: allNetsIds }
             );
-            // console.log("Update round - ", updateRound);
 
         }
 
@@ -346,13 +308,11 @@ router.post('/assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next)
 router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res, next) => {
     try {
 
-        // console.log("Random assign");
         const { eventID } = req.params;
 
 
         const { performances, leftedPerformance } = req.body;
         const roundNum = parseInt(req.params.roundNum);
-        // console.log(req.body);
         const findRound = await Round.findOne({ event: eventID, no: roundNum });
         const currentRound = findRound;
 
@@ -372,23 +332,16 @@ router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res
                 allLeftedPerformance.push(lp._id);
             }
 
-            // console.log("pid -",allPerformanceIds);
             const findPerformances = await Performance.find({ _id: { $in: allPerformanceIds } }).populate({ path: "participant", select: "firstname lastname" });
-            // console.log(findPerformances);
 
 
 
-            // console.log("Random assign");
             let randomPerformance = [];
             while (randomPerformance.length < findPerformances.length) {
                 let random = findPerformances[Math.floor(Math.random() * findPerformances.length)];
                 randomPerformance.push(random);
                 randomPerformance = [...new Set(randomPerformance)];
             }
-            // console.log("Random Performance - ", randomPerformance);
-
-            // console.log("Ranking - ", ranking);
-            // console.log("------------------------BREAK--------------------------");
 
 
             // CREATE NETS 
@@ -410,25 +363,17 @@ router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res
                     event: eventID,
                 });
                 const net = await newNet.save();
-                // console.log("NET sl - ", netNo);
-                // console.log("NET - ", net);
                 allNetsIds.push(net._id);
 
 
                 let netPerformanceIds = [];
-                // console.log("Temporary - ", temporary);
                 for (let k of temporary) {
                     netPerformanceIds.push(k._id);
                 }
-                // console.log("performance ID by net- ",netPerformanceIds);
-                // console.log("------------------------BREAK--------------------------");
 
                 const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { performance: netPerformanceIds }, { new: true });
                 netNo++;
             }
-            // console.log("Net ids - ", allNetsIds);
-            // console.log("p ids - ", allPerformanceIds);
-            // console.log("pp ids - ", allLeftedPerformance);
 
 
 
@@ -441,24 +386,18 @@ router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res
                 nets: allNetsIds,
                 left: allLeftedPerformance
             });
-            // console.log("New Round - ", new_round);
-            // console.log("Round Num - ", roundNum);
             const round = await new_round.save();
             const updateNetRound = await Net.updateMany({ _id: { $in: allNetsIds } }, { round: round._id }, { new: true });
 
 
         } else {
 
-            // console.log("Find round - ",currentRound);
             // UPDATE EXISTING ROUND OR RESORT OR REASSIGN
-            // console.log("Update existing");
-            // console.log(findRound.performances);
             const allPerformanceIds = [];
             for (let per of performances) {
                 allPerformanceIds.push(per._id);
             }
 
-            // console.log("All performance IDS - ", allPerformanceIds);
 
 
             const allLeftedPerformance = [];
@@ -466,7 +405,6 @@ router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res
                 allLeftedPerformance.push(lp._id);
             }
 
-            // console.log("All lefted nets - ", allLeftedPerformance);
 
 
             let randomPerformance = [];
@@ -477,24 +415,19 @@ router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res
             }
 
 
-            // console.log("Randomise performance - ", randomPerformance);
 
 
 
 
             // DELETE ALL NETS 
-            // console.log("Find Rounds - ", findRound);
             const deleteNets = await Net.deleteMany({ event: eventID, round: currentRound._id });
-            // console.log("Delete all nets - ", deleteNets);
             // CREATING NET AND PERFORMANCE OF THE PLAYER            
 
             let i, j, temporary, chunk = 4, netNo = 1, k = 0;
             const allNetsIds = new Array();
 
-            // console.log("random performances - ", randomPerformance);
             for (i = 0, j = randomPerformance.length; i < j; i += chunk) {
                 temporary = randomPerformance.slice(i, i + chunk);
-                // console.log("Temporary - ",temporary);
 
 
                 const newNet = new Net({
@@ -510,10 +443,8 @@ router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res
                 for (let k of temporary) {
                     netPerformanceIds.push(k);
                 }
-                // console.log("net performances IDs - ", netPerformanceIds);
 
                 const updateNet = await Net.findByIdAndUpdate({ _id: net._id }, { performance: netPerformanceIds }, { new: true });
-                // console.log("Update net - ", updateNet);
 
 
 
@@ -521,9 +452,6 @@ router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res
                 netNo++;
                 k++;
             }
-            // console.log("All nets ids - ", allNetsIds);
-            // performances: allPerformanceIds, left: allLeftedPerFormance
-            // console.log({ performances: allPerformanceIds, left: allLeftedPerformance, nets: allNetsIds });
             // UPDATE NETS AND ROUND 
             const updateRound = await Round.findOneAndUpdate(
                 { event: eventID, no: roundNum },
@@ -531,7 +459,6 @@ router.post('/random-assign-net/:eventID/:roundNum', ensureAuth, async (req, res
             );
 
 
-            // console.log("Updated round - ", updateRound);
 
 
 
@@ -560,47 +487,70 @@ router.post('/pack-assign-net/:eventID/:roundNum', ensureAuth, async (req, res, 
         const { performances, leftedPerformance } = req.body;
         const roundNum = parseInt(req.params.roundNum);
         const { eventID } = req.params;
-        // console.log(req.body);
-        if (roundNum < 2) return res.status(200).json({ msg: "You can't pack assign in first round" });
 
-        // console.log("All performances - ", performances);
+
+        if (roundNum < 2) return res.status(200).json({ msg: "You can't pack assign in first round" }); // IF THE TURNAMENT IS NOT REACHED OVER 1 THIS WILL RETURN FROM HERE
+
+
+
         const findPreviousRound = await Round.findOne({ event: req.params.eventID, no: roundNum - 1 }).populate({ path: "nets", populate: { path: "performance" } });
-        // console.log(findPreviousRound.nets[findPreviousRound.nets.length - 1].performance);
-        // return res.status(200).json({ net: findPreviousRound });
-        const findRound = await Round.findOne({ event: req.params.eventID, no: roundNum });
+        const findThisRound = await Round.findOne({ event: req.params.eventID, no: roundNum });
 
-        const allPerformanceIds = [];
-        for (let per of performances) {
-            allPerformanceIds.push(per._id);
+
+
+
+
+
+
+
+
+        // FIND WHO PLAYED IN THE LAST NET OF ALL PREVIOUS ROUNDS
+        const allPreviousRounds = await Round.find({ event: eventID, no: { $lt: roundNum } }).populate({ path: "nets" });
+
+        const allPreviousLastNets = []
+        for (let n = 0; n < allPreviousRounds.length; n++) {
+            // const bar = [...foo].pop();
+            const lastNet = [...allPreviousRounds[n].nets].pop();
+            allPreviousLastNets.push(lastNet);
         }
-        const allLeftedPerFormance = [];
-        for (let lp of leftedPerformance) {
-            allLeftedPerFormance.push(lp._id);
+
+
+
+        const tempAllLastNetsIds = [];
+        for (let m = 0; m < allPreviousLastNets.length; m++) {
+            for (let o = 0; o < allPreviousLastNets[m].performance.length; o++) {
+                tempAllLastNetsIds.push(allPreviousLastNets[m].performance[o]);
+            }
         }
+
+
+        const allLastNetsIds = [...new Set(tempAllLastNetsIds)]; // ALL LAST NETS OF ALL PREVIOUS ROUND - SOME PROBLEM HERE TO REMOVE DUPLICATE
+
+
+
+
+        // CONVERT ARRAY OF OBJECT TO ONLY OBJECT 
+        const allPerformanceIds = objectToIds(performances);
+        const allLeftedPerformance = objectToIds(leftedPerformance);
+        // console.log({ allLeftedPerformance, leftedPerformance });
+
+
         const findPerformances = await Performance.find({ _id: { $in: allPerformanceIds } }).populate({ path: "participant", select: "firstname lastname" });
 
-        function findAbsent(longArr, shortArr) {
-            return longArr.filter(function (el) {
-                return !shortArr.find(ass => ass === el);
-            });
-        }
+
 
 
         // CREATING NET AND PERFORMANCE OF THE PLAYER 
         const allNetsIds = [];
 
-        // console.log("Found rounds - ", findRound);
-        if (!findRound || findRound === null) {
+
+        if (!findThisRound || findThisRound === null) {
             // CREATE NEW ROUND DOCUMENT 
-            // console.log("No Round - create new one");
-
-
-
 
             let ranking = findPerformances;
 
+            // CREATE RANKING 
             if (roundNum === 2) {
-                // console.log("Round 2");
                 ranking = findPerformances.sort(rankingRound1);
             } else if (roundNum === 3) {
                 ranking = findPerformances.sort(rankingRound2);
@@ -612,77 +562,142 @@ router.post('/pack-assign-net/:eventID/:roundNum', ensureAuth, async (req, res, 
 
 
 
-
-
-
-
-
-
-
-
             // ALGORITHM START
-            const rankingIds = ranking.map(a => a._id);
-            let j = ranking.length, temporary, chunk = 4, netNo = 1,
-                netOffset = 2, offseted = false, runtime = 1; floorMaxRuntime = Math.floor(j / chunk),
-                    maxRuntime = Math.ceil(j / chunk), modulas = j % chunk;
+            // CONVERT OBJECT OF ARRAY TO ID OF ARRAY 
+            let rankingIds = objectToIds(ranking);
+
+            // DECLARING VARIABLES 
+            let j = ranking.length,
+                w = 0, // SLICING ELEMENTS FROM ARRAY IF STUCK PERFORMANCE IS MORE THAN 4
+                hasLastShortElement = true,
+                shortTempLen = null,
+                temporary, // THIS WILL HOLD 4 NET WHICH WILL BE ASSIGNED TO THE NET
+                fillLastNet = false, // IN THE LAST NET THIS fillLastNet WILL BE TRUE
+                runtime = 1; // EVERY TIME WE ASSIGN A NET WE NEED TO INCREASE 1 RUNTIME
 
 
+            const chunk = 4, // BASICALLY 4 PEOPLE WILL BE IN A NET
+                floorMaxRuntime = Math.floor(j / chunk), //  IF WE GET FRACTION AFTER DIVISION WE WILL GET FLOOR VALUE 
+                maxRuntime = Math.ceil(j / chunk), // IF WE GET FRACTION AFTER DIVISION WE WILL GET HEIGHT VALUE OF THAT FRACTION
+                modulas = j % chunk; // ALL PERFORMANCE % CHUNK = MODULAS / REMENANT (15 % 4 = 3) 
+
+
+            // FIND LAST NET OF PREVIOUS ROUND
             const previousRankingLastNet = findPreviousRound.nets[findPreviousRound.nets.length - 1].performance;
-            const previousRankingLastNetIds = previousRankingLastNet.map(a => a._id);
+            const previousRankingLastNetIds = objectToIds(previousRankingLastNet); // CONVERT ARRAY OF OBJECTS TO ARRAY OF IDS
 
 
+            // FIND LAST TWO NET OF THIS ROUND 
             const lastTwoNetOfThisRound = ranking.slice(floorMaxRuntime * chunk - chunk);
-            const lastTwoNetOfThisRoundIds = lastTwoNetOfThisRound.map(a => a._id);
+            const lastTwoNetOfThisRoundIds = objectToIds(lastTwoNetOfThisRound);
+
+            // ✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨ 
+            // IF STUCK PERFORMANCE IS MORE THAN LAST 2 NET THEN DEVIDE THE ARRAY / IN FIRST HALF 
+            // THERE WILL BE ALL STUCK PERFORMANCE AND IN SEND HALF 
+            // THERE WILL BE ONLY THOSE WHO HASN'T PAY ANY LAST NET GAME THEN SLICE ONE BY ONE
+            // PROBLEM ONLY CHECKING FOR 7 ELEMENTS, BUT ALL LAST NETS IDS COULD BE MORE THAN 7
+            // console.log({ allLastNetsIds: [...new Set([...allLastNetsIds])], lastTwoNetOfThisRoundIds });
+            // FIND PLAYERS WHO WHERE IN THE LAST NET PREVIOUSLY AND THEY ARE ALSO IN THE LAST NET IN THIS ROUND 
+            let stuckPerformances = findCommon(allLastNetsIds, lastTwoNetOfThisRoundIds);
+            let netOffset = Math.ceil(stuckPerformances.length / chunk) + 1; // LAST TWO NEED WILL BE SEPERATED BY THIS
 
 
+            // NET OFFSET CAN'T BE LESS THAN TWO, BECAUSE WE ATLEAST WANT TO SET LAST TWO NET 
+            netOffset < 2 ? netOffset = 2 : netOffset = netOffset;
+            // console.log({ stuckPerformances, netOffset });
 
-            const stuckPerformances = [];
-
-            for (let i = 0; i < lastTwoNetOfThisRoundIds.length; i++) {
-                for (let k = 0; k < previousRankingLastNetIds.length; k++) {
-                    if (lastTwoNetOfThisRoundIds[i].toString() === previousRankingLastNetIds[k].toString()) {
-                        // console.log("Matching - ", lastTwoNetOfThisRoundIds[i].toString() === previousRankingLastNetIds[k].toString());
-                        stuckPerformances.push(lastTwoNetOfThisRoundIds[i]);
-                    }
-                }
+            let tooManyStuck = false;
+            if (allLastNetsIds.length > lastTwoNetOfThisRoundIds.length) {
+                tooManyStuck = true;
+                const getStuckFromRanking = findCommon([...rankingIds], [...allLastNetsIds]);
+                const nonStuck = findAbsent([...rankingIds], [...getStuckFromRanking]);
+                rankingIds = [...getStuckFromRanking, ...nonStuck];
+            } else {
+                tooManyStuck = false;
             }
-            // console.log("stuckPerformances - ", stuckPerformances);
 
             const stuck = stuckPerformances.length;
             const assignedToTemp = [];
 
+            // BY THIS FOR LOOP EVERY FOUR PERFORMANCE WILL BE ASSIGNED TO A NET 
             for (let i = 0; i < j; i += chunk) {
-                temporary = [];
-                if (modulas !== 0 && stuck > 0) {
-                    if (runtime > maxRuntime - netOffset) {
-                        if (!offseted) {
-                            // FOUR PEOPLE NET - PUSH TEMP PEOPLE 
-                            for (let s = 0; s < stuck; s++) {
-                                const findNetItem = rankingIds.find(r => r === stuckPerformances[s]);
-                                temporary.push(findNetItem);
+                temporary = []; // JUST FOR REFRESHING THE ARRAY SO IT WOULDN'T HAVE ANY ITEM
+
+
+
+                if (tooManyStuck) {
+                    temporary = rankingIds.slice(i, chunk + i);
+                } else {
+                    // IF LAST NET HAS MORE THAN ZERO AND STUCK PERFORMANCE LIST OF THIS ROUND IS GRATER THAN ZERO  
+                    if (modulas !== 0 && stuck > 0) {
+                        // CHECK WE ARE IN LAST TWO NET / PACK
+                        if (runtime > maxRuntime - netOffset) {
+
+                            // IF THE PLAYERS WHO IS BEEN ASSIGNED IN LAST NET CHECK IF THEY EVER PLAYED IN LAST NET OF ANY ROUND 
+                            // IF THEY PLAYED IN LAST ROUND ASSIGN THEM AFTER LAST NET OF PREVIOUS ROUND 
+                            if (!fillLastNet) {
+                                if (stuck > chunk) {
+                                    for (let s = 0; s < chunk; s++) {
+                                        try {
+                                            const findNetItem = rankingIds.find(r => r.toString() === stuckPerformances[w].toString());
+                                            temporary.push(findNetItem);
+                                            w++;
+                                        } catch (undefinedErr) {
+                                            // console.log(undefinedErr);
+                                        }
+                                    }
+                                    if (temporary.length < chunk) {
+                                        const rankTemp = findAbsent(rankingIds, assignedToTemp);
+                                        if (hasLastShortElement) {
+                                            shortTempLen = chunk - temporary.length;
+                                            hasLastShortElement = false;
+                                        }
+                                        // PUSH FROM RANK - HERE I NEED TO SOLVE
+                                        for (let l = 0; l < shortTempLen; l++) {
+                                            temporary.push(rankTemp[l]);
+                                        }
+                                    }
+
+
+                                } else {
+                                    // FIRST NET OF THE PACK 
+                                    // FOUR PEOPLE NET - PUSH TEMP PEOPLE 
+                                    for (let s = 0; s < stuck; s++) {
+                                        const findNetItem = rankingIds.find(r => r.toString() === stuckPerformances[s].toString());
+                                        temporary.push(findNetItem);
+                                    }
+
+                                    // CHECK HERE 
+
+                                    const rankTemp = findAbsent(rankingIds.slice(i), temporary);
+                                    // PUSH FROM RANK - HERE I NEED TO SOLVE
+                                    for (let l = 0; l < chunk - stuck; l++) {
+                                        temporary.push(rankTemp[l]);
+                                    }
+
+                                }
+                            } else {
+                                // LAST NET OF THE PACK 
+                                temporary = findAbsent(rankingIds, assignedToTemp);
+                                // const foundCommon = findCommon(stuckPerformances, temporary);
+                                // console.log({ stuckPerformances, temporary });
                             }
-                            const rankTemp = findAbsent(rankingIds.slice(i), temporary);
-                            // PUSH FROM RANK - HERE I NEED TO SOLVE
-                            for (let l = 0; l < chunk - stuck; l++) {
-                                temporary.push(rankTemp[l]);
-                            }
-                            offseted = true; // REST OF THE PEOPLE WILL BE IN ABSENT
                         } else {
-                            temporary = findAbsent(rankingIds, assignedToTemp);
+                            temporary = rankingIds.slice(i, chunk + i);
                         }
                     } else {
                         temporary = rankingIds.slice(i, chunk + i);
                     }
-                } else {
-                    temporary = rankingIds.slice(i, chunk + i);
                 }
+
+
                 assignedToTemp.push(...temporary);
 
 
 
 
                 const newNet = new Net({
-                    sl: netNo,
+                    sl: runtime,
                     performance: temporary,
                     event: req.params.eventID,
                 });
@@ -690,7 +705,10 @@ router.post('/pack-assign-net/:eventID/:roundNum', ensureAuth, async (req, res, 
                 const net = await newNet.save();
                 allNetsIds.push(net._id);
 
-                netNo++;
+
+                if (i === j - (modulas + chunk)) {
+                    fillLastNet = true;
+                }
                 runtime++;
             }
 
@@ -702,13 +720,13 @@ router.post('/pack-assign-net/:eventID/:roundNum', ensureAuth, async (req, res, 
                 event: req.params.eventID,
                 performances: assignedToTemp,
                 nets: allNetsIds,
-                left: allLeftedPerFormance
+                left: allLeftedPerformance
             });
-            // console.log("New Round - ", new_round);
-            // console.log("Round Num - ", roundNum);
+
+
             const round = await new_round.save();
             const updateNetRound = await Net.updateMany({ _id: { $in: allNetsIds } }, { round: round._id }, { new: true });
-
+            // ALGORITHM ENDS HERE 
 
         } else {
             // UPDATE EXISTING ROUND OR RESORT OR REASSIGN
@@ -730,87 +748,162 @@ router.post('/pack-assign-net/:eventID/:roundNum', ensureAuth, async (req, res, 
 
 
 
-            const deleteNets = await Net.deleteMany({ event: eventID, round: findRound._id });
+            const deleteNets = await Net.deleteMany({ event: eventID, round: findThisRound._id });
 
-
-
-            // CREATING NET AND PERFORMANCE OF THE PLAYER            
 
 
             // ALGORITHM START
-            const rankingIds = ranking.map(a => a._id);
-            let j = ranking.length, temporary, chunk = 4, netNo = 1,
-                netOffset = 2, offseted = false, runtime = 1; floorMaxRuntime = Math.floor(j / chunk),
-                    maxRuntime = Math.ceil(j / chunk), modulas = j % chunk;
+            // CONVERT OBJECT OF ARRAY TO ID OF ARRAY 
+            let rankingIds = objectToIds(ranking);
+
+            // DECLARING VARIABLES 
+            let j = ranking.length,
+                w = 0, // SLICING ELEMENTS FROM ARRAY IF STUCK PERFORMANCE IS MORE THAN 4
+                hasLastShortElement = true,
+                shortTempLen = null,
+                temporary, // THIS WILL HOLD 4 NET WHICH WILL BE ASSIGNED TO THE NET
+                fillLastNet = false, // IN THE LAST NET THIS fillLastNet WILL BE TRUE
+                runtime = 1; // EVERY TIME WE ASSIGN A NET WE NEED TO INCREASE 1 RUNTIME
 
 
+            const chunk = 4, // BASICALLY 4 PEOPLE WILL BE IN A NET
+                floorMaxRuntime = Math.floor(j / chunk), //  IF WE GET FRACTION AFTER DIVISION WE WILL GET FLOOR VALUE 
+                maxRuntime = Math.ceil(j / chunk), // IF WE GET FRACTION AFTER DIVISION WE WILL GET HEIGHT VALUE OF THAT FRACTION
+                modulas = j % chunk; // ALL PERFORMANCE % CHUNK = MODULAS / REMENANT (15 % 4 = 3) 
+
+
+            // FIND LAST NET OF PREVIOUS ROUND
             const previousRankingLastNet = findPreviousRound.nets[findPreviousRound.nets.length - 1].performance;
-            const previousRankingLastNetIds = previousRankingLastNet.map(a => a._id);
+            const previousRankingLastNetIds = objectToIds(previousRankingLastNet); // CONVERT ARRAY OF OBJECTS TO ARRAY OF IDS
 
 
+            // FIND LAST TWO NET OF THIS ROUND 
             const lastTwoNetOfThisRound = ranking.slice(floorMaxRuntime * chunk - chunk);
-            const lastTwoNetOfThisRoundIds = lastTwoNetOfThisRound.map(a => a._id);
+            const lastTwoNetOfThisRoundIds = objectToIds(lastTwoNetOfThisRound);
+
+            // IF STUCK PERFORMANCE IS MORE THAN LAST 2 NET THEN DEVIDE THE ARRAY / IN FIRST HALF 
+            // THERE WILL BE ALL STUCK PERFORMANCE AND IN SEND HALF 
+            // THERE WILL BE ONLY THOSE WHO HASN'T PAY ANY LAST NET GAME THEN SLICE ONE BY ONE
+            // PROBLEM ONLY CHECKING FOR 7 ELEMENTS, BUT ALL LAST NETS IDS COULD BE MORE THAN 7
+            // console.log({ allLastNetsIds: [...new Set([...allLastNetsIds])], lastTwoNetOfThisRoundIds });
+            // FIND PLAYERS WHO WHERE IN THE LAST NET PREVIOUSLY AND THEY ARE ALSO IN THE LAST NET IN THIS ROUND 
+            let stuckPerformances = findCommon(allLastNetsIds, lastTwoNetOfThisRoundIds);
+            let netOffset = Math.ceil(stuckPerformances.length / chunk) + 1; // LAST TWO NEED WILL BE SEPERATED BY THIS
 
 
+            // NET OFFSET CAN'T BE LESS THAN TWO, BECAUSE WE ATLEAST WANT TO SET LAST TWO NET 
+            netOffset < 2 ? netOffset = 2 : netOffset = netOffset;
+            // console.log({ stuckPerformances, netOffset });
 
-            const stuckPerformances = [];
-
-            for (let i = 0; i < lastTwoNetOfThisRoundIds.length; i++) {
-                for (let k = 0; k < previousRankingLastNetIds.length; k++) {
-                    if (lastTwoNetOfThisRoundIds[i].toString() === previousRankingLastNetIds[k].toString()) {
-                        // console.log("Matching - ", lastTwoNetOfThisRoundIds[i].toString() === previousRankingLastNetIds[k].toString());
-                        stuckPerformances.push(lastTwoNetOfThisRoundIds[i]);
-                    }
-                }
+            let tooManyStuck = false;
+            if (allLastNetsIds.length > lastTwoNetOfThisRoundIds.length) {
+                tooManyStuck = true;
+                const getStuckFromRanking = findCommon([...rankingIds], [...allLastNetsIds]);
+                const nonStuck = findAbsent([...rankingIds], [...getStuckFromRanking]);
+                rankingIds = [...getStuckFromRanking, ...nonStuck];
+            } else {
+                tooManyStuck = false;
             }
-            // console.log("stuckPerformances - ", stuckPerformances);
 
             const stuck = stuckPerformances.length;
             const assignedToTemp = [];
 
+
+
+
+
+            // BY THIS FOR LOOP EVERY FOUR PERFORMANCE WILL BE ASSIGNED TO A NET 
             for (let i = 0; i < j; i += chunk) {
-                temporary = [];
-                if (modulas !== 0 && stuck > 0) {
-                    if (runtime > maxRuntime - netOffset) {
-                        if (!offseted) {
-                            // FOUR PEOPLE NET - PUSH TEMP PEOPLE 
-                            for (let s = 0; s < stuck; s++) {
-                                const findNetItem = rankingIds.find(r => r === stuckPerformances[s]);
-                                temporary.push(findNetItem);
+                temporary = []; // JUST FOR REFRESHING THE ARRAY SO IT WOULDN'T HAVE ANY ITEM
+
+
+
+                if (tooManyStuck) {
+                    temporary = rankingIds.slice(i, chunk + i);
+                } else {
+                    // IF LAST NET HAS MORE THAN ZERO AND STUCK PERFORMANCE LIST OF THIS ROUND IS GRATER THAN ZERO  
+                    if (modulas !== 0 && stuck > 0) {
+                        // CHECK WE ARE IN LAST TWO NET / PACK
+                        if (runtime > maxRuntime - netOffset) {
+
+                            // IF THE PLAYERS WHO IS BEEN ASSIGNED IN LAST NET CHECK IF THEY EVER PLAYED IN LAST NET OF ANY ROUND 
+                            // IF THEY PLAYED IN LAST ROUND ASSIGN THEM AFTER LAST NET OF PREVIOUS ROUND 
+                            if (!fillLastNet) {
+                                if (stuck > chunk) {
+                                    for (let s = 0; s < chunk; s++) {
+                                        try {
+                                            const findNetItem = rankingIds.find(r => r.toString() === stuckPerformances[w].toString());
+                                            temporary.push(findNetItem);
+                                            w++;
+                                        } catch (undefinedErr) {
+                                            // console.log(undefinedErr);
+                                        }
+                                    }
+                                    if (temporary.length < chunk) {
+                                        const rankTemp = findAbsent(rankingIds, assignedToTemp);
+                                        if (hasLastShortElement) {
+                                            shortTempLen = chunk - temporary.length;
+                                            hasLastShortElement = false;
+                                        }
+                                        // PUSH FROM RANK - HERE I NEED TO SOLVE
+                                        for (let l = 0; l < shortTempLen; l++) {
+                                            temporary.push(rankTemp[l]);
+                                        }
+                                    }
+
+
+                                } else {
+                                    // FIRST NET OF THE PACK 
+                                    // FOUR PEOPLE NET - PUSH TEMP PEOPLE 
+                                    for (let s = 0; s < stuck; s++) {
+                                        const findNetItem = rankingIds.find(r => r.toString() === stuckPerformances[s].toString());
+                                        temporary.push(findNetItem);
+                                    }
+
+                                    // CHECK HERE 
+
+                                    const rankTemp = findAbsent(rankingIds.slice(i), temporary);
+                                    // PUSH FROM RANK - HERE I NEED TO SOLVE
+                                    for (let l = 0; l < chunk - stuck; l++) {
+                                        temporary.push(rankTemp[l]);
+                                    }
+
+                                }
+                            } else {
+                                // LAST NET OF THE PACK 
+                                temporary = findAbsent(rankingIds, assignedToTemp);
+                                // const foundCommon = findCommon(stuckPerformances, temporary);
+                                // console.log({ stuckPerformances, temporary });
                             }
-                            const rankTemp = findAbsent(rankingIds.slice(i), temporary);
-                            // PUSH FROM RANK - HERE I NEED TO SOLVE
-                            for (let l = 0; l < chunk - stuck; l++) {
-                                temporary.push(rankTemp[l]);
-                            }
-                            offseted = true; // REST OF THE PEOPLE WILL BE IN ABSENT
                         } else {
-                            temporary = findAbsent(rankingIds, assignedToTemp);
+                            temporary = rankingIds.slice(i, chunk + i);
                         }
                     } else {
                         temporary = rankingIds.slice(i, chunk + i);
                     }
-                } else {
-                    temporary = rankingIds.slice(i, chunk + i);
                 }
+
+
                 assignedToTemp.push(...temporary);
 
 
 
 
-
                 const newNet = new Net({
-                    sl: netNo,
-                    event: eventID,
-                    round: findRound._id,
-                    performance: netPerformanceIds
+                    sl: runtime,
+                    performance: temporary,
+                    event: req.params.eventID,
                 });
+
                 const net = await newNet.save();
                 allNetsIds.push(net._id);
 
-                netNo++;
-            }
 
+                if (i === j - (modulas + chunk)) {
+                    fillLastNet = true;
+                }
+                runtime++;
+            }
 
             // console.log("All nets ids - ", allNetsIds);
 
@@ -839,6 +932,28 @@ router.post('/pack-assign-net/:eventID/:roundNum', ensureAuth, async (req, res, 
 
 
 
+// CHECK WHICH ELEMENTS OF AN ARRAY IS ABSENT IN ANOTHER ARRAY 
+function findAbsent(longArr, shortArr) {
+    return longArr.filter(function (el) {
+        return !shortArr.find(ass => ass === el);
+    });
+}
+
+
+function findCommon(longArr, shortArr) {
+    return longArr.filter(function (el) {
+        return shortArr.find(ass => ass.toString() === el.toString());
+    });
+}
+
+
+function objectToIds(selectedObjectArr) {
+    const newArr = [];
+    for (let i = 0; i < selectedObjectArr.length; i++) {
+        newArr.push(selectedObjectArr[i]._id);
+    }
+    return newArr;
+}
 
 
 

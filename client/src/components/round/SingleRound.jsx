@@ -256,18 +256,23 @@ function SingleRound(props) {
         // handleNetShow(e, true);
 
         setIsLoading(true);
-        // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
-        const requestOptions = {
-            method: 'POST',
-            headers: { "Content-Type": 'application/json' },
-            credentials: "include",
-            body: JSON.stringify({ performances, leftedPerformance })
-        };
-        // console.log(props.eventID);
+        try {
 
-        const response = await fetch(`${hostname}/api/net/assign-net/${props.eventID}/${roundNum}`, requestOptions);
-        console.log("Initialize net - ", response);
-        props.updateNets(true);
+            // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
+            const requestOptions = {
+                method: 'POST',
+                headers: { "Content-Type": 'application/json' },
+                credentials: "include",
+                body: JSON.stringify({ performances, leftedPerformance })
+            };
+            // console.log(props.eventID);
+
+            const response = await fetch(`${hostname}/api/net/assign-net/${props.eventID}/${roundNum}`, requestOptions);
+            console.log("Initialize net - ", response);
+            props.updateNets(true);
+        } catch (error) {
+            console.log(error);
+        }
         setIsLoading(false);
     }
     // console.log(props.nets);
@@ -280,18 +285,23 @@ function SingleRound(props) {
         // console.log("random");
         // console.log({ performances, leftedPerformance });
         setIsLoading(true);
-        // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
-        const requestOptions = {
-            method: 'POST',
-            headers: { "Content-Type": 'application/json' },
-            credentials: "include",
-            body: JSON.stringify({ performances, leftedPerformance })
-        };
-        // console.log(props.eventID);
+        try {
 
-        const response = await fetch(`${hostname}/api/net/random-assign-net/${props.eventID}/${roundNum}`, requestOptions);
-        console.log("Random assign net - ", response);
-        props.updateNets(true);
+            // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
+            const requestOptions = {
+                method: 'POST',
+                headers: { "Content-Type": 'application/json' },
+                credentials: "include",
+                body: JSON.stringify({ performances, leftedPerformance })
+            };
+            // console.log(props.eventID);
+
+            const response = await fetch(`${hostname}/api/net/random-assign-net/${props.eventID}/${roundNum}`, requestOptions);
+            console.log("Random assign net - ", response);
+            props.updateNets(true);
+        } catch (error) {
+            console.log(error);
+        }
         setIsLoading(false);
     }
 
@@ -302,20 +312,25 @@ function SingleRound(props) {
         // console.log("random");
         // console.log({ performances, leftedPerformance });
         setIsLoading(true);
-        // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
+        try {
 
-        const requestOptions = {
-            method: 'POST',
-            headers: { "Content-Type": 'application/json' },
-            credentials: "include",
-            body: JSON.stringify({ performances, leftedPerformance })
-        };
-        // // console.log(props.eventID);
+            // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
 
-        const response = await fetch(`${hostname}/api/net/pack-assign-net/${props.eventID}/${roundNum}`, requestOptions);
+            const requestOptions = {
+                method: 'POST',
+                headers: { "Content-Type": 'application/json' },
+                credentials: "include",
+                body: JSON.stringify({ performances, leftedPerformance })
+            };
+            // // console.log(props.eventID);
 
-        console.log("Pack assign net - ", response);
-        props.updateNets(true);
+            const response = await fetch(`${hostname}/api/net/pack-assign-net/${props.eventID}/${roundNum}`, requestOptions);
+
+            console.log("Pack assign net - ", response);
+            props.updateNets(true);
+        } catch (error) {
+            console.log(error);
+        }
         setIsLoading(false);
     }
 
