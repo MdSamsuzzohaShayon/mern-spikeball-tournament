@@ -1,5 +1,6 @@
-export const hostname = "http://localhost:8000";
+// export const hostname = "http://localhost:8000";
 // export const hostname = "http://18.216.248.251";
+export const hostname = "https://nodejs-spikeball-backend-service.onrender.com";
 
 export const POINT = "point", POINT_DIFFERENTIAL = "pointDeferential", SCORE = "score", NO_SCORE = "noScore", EXTRA_POINT = "extraPoint";
 

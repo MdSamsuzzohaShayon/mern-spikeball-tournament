@@ -44,31 +44,31 @@ router.post('/register',
             const errArr = allErr.concat(valErrs.errors);
             return res.status(400).json({ errors: errArr });
         }
-        Admin.findOne({ email }, (err, emailResult) => {
-            if (err) throw err;
-            if (emailResult) {
-                allErr.push({ msg: "Email already exist" });
-                return res.status(400).json({ errors: allErr });
-            } else {
-                // SAVE ADMIN 
-                bcrypt.genSalt(10, (saltErr, salt) => {
-                    bcrypt.hash(password, salt, (hashErr, hash) => {
-                        // const newAdmin = new Admin({ name: username, email, role, password: hash });
-                        // newAdmin.save();
-                        // console.log(username, email, role, password, hash);
-                        Admin.create({ name: username, email, role: SUPER, password: hash }, (err, docs) => {
-                            if (err) throw err;
-                            return res.status(201).json({ admin: docs });
-                        })
+        if (req.user?.role && req.user.role === SUPER) {
+            Admin.findOne({ email }, (err, emailResult) => {
+                if (err) throw err;
+                if (emailResult) {
+                    allErr.push({ msg: "Email already exist" });
+                    return res.status(400).json({ errors: allErr });
+                } else {
+                    // SAVE ADMIN 
+                    bcrypt.genSalt(10, (saltErr, salt) => {
+                        bcrypt.hash(password, salt, (hashErr, hash) => {
+                            // const newAdmin = new Admin({ name: username, email, role, password: hash });
+                            // newAdmin.save();
+                            // console.log(username, email, role, password, hash);
+                            Admin.create({ name: username, email, role: GENERAL, password: hash }, (err, docs) => {
+                                if (err) throw err;
+                                return res.status(201).json({ admin: docs });
+                            })
+                        });
                     });
-                });
-            }
-        });
-        // if (req.user?.role && req.user.role === SUPER) {
-        // } else {
-        //     allErr.push({ msg: "You are not a super user" });
-        //     return res.status(400).json({ errors: allErr });
-        // }
+                }
+            });
+        } else {
+            allErr.push({ msg: "You are not a super user" });
+            return res.status(400).json({ errors: allErr });
+        }
     });
 
 

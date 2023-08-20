@@ -15,7 +15,8 @@ function Login(props) {
             {props.success !== ""? (<div className="alert alert-success" role="alert"> {props.success} </div>): null}
             <form className="login-admin">
                 <h2 className="text-primary">Login</h2>
-
+                <p>Email: admin@email.com</p>
+                <p>Password: admin</p>
                 <div className="mb-3">
                     <label className="form-label">Email</label>
                     <input type="email" name="loginEmail" className="form-control" placeholder="name@example.com" onChange={props.handleChange} />
