@@ -243,3 +243,9 @@ __https://www.loom.com/share/85d3c6ffea4f4f0cbe7f02b73e2769f7__
         width: 50%;
     }
 </style>
+
+
+### Deployment
+ - Setup environment variables
+ - Create a super user on the database
+ - Remove dot env setup for lambda or similar services

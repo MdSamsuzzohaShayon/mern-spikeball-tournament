@@ -15,6 +15,7 @@ const eventRoute = require('./routes/event');
 const performanceRoute = require('./routes/performance');
 const netRoute = require('./routes/net');
 const roundRoute = require('./routes/round');
+const connectDB = require('./config/mongodb');
 
 
 
