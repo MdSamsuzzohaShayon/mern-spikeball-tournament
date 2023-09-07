@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from "react-bootstrap";
 import { hostname } from '../../utils/global';
 
@@ -10,6 +10,7 @@ function AddParticipant(props) {
     const [show, setShow] = useState(false);
     const [participant, setPartitipant] = useState({});
     const [errors, setErrors] = useState([]);
+    const [accessToken, setAccessToken] = useState(null);
 
 
 
@@ -36,9 +37,9 @@ function AddParticipant(props) {
         try {
             const options = {
                 method: "POST",
-                credentials: 'include',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
                 },
                 body: JSON.stringify(participant),
                 signal: controller.signal
@@ -71,9 +72,12 @@ function AddParticipant(props) {
     };
 
 
-    // useEffect(() => {
-    //     return () => controller?.abort();
-    // });
+    useEffect(()=>{
+        const findAT = window.localStorage.getItem('accessToken');
+        if (findAT) {
+            setAccessToken(findAT);
+        }
+    },[]);
 
 
 

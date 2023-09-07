@@ -5,15 +5,7 @@ import { playersPoint, playersPointDifferential } from '../../utils/allPerformer
 
 
 function RoundTable(props) {
-
-    // const [isLoading, setIsLoading] = useState(false);
     const { nets } = props.round;
-
-
-
-
-
-
 
     // ⛏️⛏️ THIS IS MAIN RETURN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     return (
@@ -32,26 +24,18 @@ function RoundTable(props) {
                                 </tr>
                                 <tr className="header-group-2">
                                     <th scope="col">Net</th>
+                                    
+                                    <th scope="col">Team</th>
+                                    <th scope="col">point</th>
+                                    <th scope="col">point deferential</th>
 
                                     <th scope="col">Team</th>
                                     <th scope="col">point</th>
                                     <th scope="col">point deferential</th>
 
-
                                     <th scope="col">Team</th>
                                     <th scope="col">point</th>
                                     <th scope="col">point deferential</th>
-
-
-                                    <th scope="col">Team</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point deferential</th>
-
-                                    {/* AVERAGE  */}
-                                    {/* <th scope="col">Rank</th>
-                                    <th scope="col">Participant</th>
-                                    <th scope="col">point</th>
-                                    <th scope="col">point deferential</th> */}
                                 </tr>
                             </thead>
                             <tbody>

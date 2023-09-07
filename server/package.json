@@ -27,8 +27,8 @@
     "express-session": "^1.17.3",
     "express-validator": "^7.0.1",
     "formidable": "^1.2.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^5.13.7",
-    "passport": "^0.6.0",
-    "passport-local": "^1.0.0"
+    "passport": "^0.6.0"
   }
 }

@@ -1,15 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Point from './Point';
 import RoundTable from './RoundTable';
 
 function Round(props) {
-
-    // console.log("Props - ",props);
-    // if()
-    useEffect(() => {
-        console.log("Component did mount [Round.jsx]");
-        // console.log(props);
-    }, []);
 
     return (
         <div className="Round">

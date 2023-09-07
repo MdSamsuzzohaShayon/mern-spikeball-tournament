@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Loader from '../elements/Loader';
 import { hostname } from '../../utils/global';
 
 const ExportField = (props) => {
     const [filename, setFilename] = useState("default");
     const [isLoading, setIsLoading] = useState(false);
+    const [accessToken, setAccessToken] = useState(null);
 
 
     const changeFilename = (e) => {
@@ -24,8 +25,10 @@ const ExportField = (props) => {
             // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
             const requestOptions = {
                 method: 'POST',
-                headers: { "Content-Type": 'application/json' },
-                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
                 body: JSON.stringify({ filename })
             };
             // console.log(props.eventID);
@@ -58,6 +61,13 @@ const ExportField = (props) => {
             console.log(error);
         }
     }
+
+    useEffect(()=>{
+        const findAT = window.localStorage.getItem('accessToken');
+        if (findAT) {
+            setAccessToken(findAT);
+        }
+    },[]);
 
     return (
         <div className="ExportField">

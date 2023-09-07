@@ -11,7 +11,7 @@ const EventList = (props) => {
     const [show, setShow] = useState(false);
     const [event, setEvent] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState();
+    const [accessToken, setAccessToken] = useState(null);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -22,12 +22,13 @@ const EventList = (props) => {
     const createAnEvent = async () => {
         try {
             setIsLoading(true);
+            if (!accessToken) return null;
             // http://localhost:4000/api/admin/dashboard/participant
             const response = await fetch(`${hostname}/api/event`, {
                 method: "POST",
-                credentials: 'include',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
                 },
                 body: JSON.stringify(event)
             });
@@ -71,7 +72,10 @@ const EventList = (props) => {
         e.preventDefault();
         try {
             setIsLoading(true);
-            const response = await fetch(`${hostname}/api/event/${id}`, { method: "DELETE", credentials: "include" });
+            const response = await fetch(`${hostname}/api/event/${id}`, { method: "DELETE", headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            } });
             props.updateList(true);
             setIsLoading(false);
             console.log("Delete event - ", response);
@@ -86,7 +90,6 @@ const EventList = (props) => {
     const listenKeypress = async e => {
         // e.preventDefault();
         if (e.key === 'Enter' && !e.repeat) {
-            console.log("Event - ", event);
             await createAnEvent();
             props.updateList(true);
         }
@@ -94,10 +97,9 @@ const EventList = (props) => {
 
 
     useEffect(() => {
-        if (localStorage.getItem('user')) {
-            setIsAuthenticated(true);
-        } else {
-            setIsAuthenticated(false);
+        const findAT = window.localStorage.getItem('accessToken');
+        if (findAT) {
+            setAccessToken(findAT);
         }
     }, []);
 
@@ -120,7 +122,7 @@ const EventList = (props) => {
     return (
         <div className="EventList ml-2">
             <h2 className="h2">All EventList</h2>
-            {isAuthenticated && (
+            {accessToken && (
                 <div className="create-new-event mb-2">
                     <Button variant="primary" onClick={handleShow}>  Create new event</Button>
                     <Modal show={show} onHide={handleClose}>
@@ -158,7 +160,7 @@ const EventList = (props) => {
                             <th scope="col">Title</th>
                             <th scope="col">Date</th>
                             <th scope="col">Details </th>
-                            {isAuthenticated && <th scope="col">Handle</th>}
+                            {accessToken && <th scope="col">Handle</th>}
                         </tr>
                     </thead>
                     <tbody>

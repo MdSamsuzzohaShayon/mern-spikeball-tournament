@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 
 
@@ -78,18 +78,45 @@ router.post('/register',
 
 
 /* ⛏️⛏️ LOGIN USERS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/login',
-    passport.authenticate('local'),
-    function (req, res) {
-        // If this function gets called, authentication was successful.
-        // `req.user` contains the authenticated user.
-        // console.log("User - ", req.user);
-        res.status(200).json({ user: sendUser(req.user) });
+router.post('/login', check('email').notEmpty(), check('password').notEmpty(), async (req,res)=>{
+    const errors = validationResult(req);
+  // console.log(errors);
+  if (!errors.isEmpty()) {
+    return res.status(406).json({ error: JSON.stringify(errors.array()) });
+  }
+
+  const { email, password } = req.body;
+
+  try {
+    const userExist = await Admin.findOne({  email  });
+    if (!userExist) return res.status(404).json({ msg: "Admin doesn't exist" });
+
+    const isPasswordCorrect = await bcrypt.compare(password, userExist.password);
+    if (!isPasswordCorrect) {
+      return res.status(406).json({ msg: 'Invalid credentials' });
+    }
+
+    const userDetailResponse = {
+      email: userExist.email,
+      id: userExist.id,
+      role: userExist.role,
+      name: userExist.name,
+    };
+    const accessToken = jwt.sign(userDetailResponse, process.env.JWT_SECRET, {
+      expiresIn: '1h',
     });
+
+    return res.status(200).json({ msg: 'Logged in successfully', accessToken });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: 'Something went wrong', err });
+  }
+});
+
 
 
 router.get('/list', ensureAuth, async (req, res, next) => {
-    // console.log(req.user.role);
+    console.log("Admin role ",req.userRole);
     try {
         const admin = await Admin.find();
         const newAdmins = admin.map((a, i) => {

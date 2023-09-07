@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import jwt_decode from "jwt-decode";
+
 import Loader from '../elements/Loader';
 import { hostname } from "../../utils/global";
 import { Navigate } from 'react-router-dom';
@@ -6,7 +8,7 @@ import { Button, Modal } from 'react-bootstrap';
 
 const AdminList = (props) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState();
+    const [accessToken, setAccessToken] = useState(null);
     const [adminList, setAdminList] = useState([]);
     const [isSuperuser, setIsSuperuser] = useState();
     const [newAdmin, setNewAdmin] = useState();
@@ -23,30 +25,32 @@ const AdminList = (props) => {
     const getAllAdmins = async () => {
         try {
             setIsLoading(true);
-            const response = await fetch(`${hostname}/api/admin/list`, { method: "GET", credentials: "include" });
+            const response = await fetch(`${hostname}/api/admin/list`, { method: "GET", headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            } });
             console.log("Get single event [AdminList.jsx] - ", response);
-            const text = await response.text();
-            const jsonResponse = await JSON.parse(text);
-            // console.log(jsonResponse);
+            const jsonResponse = await response.json()
             setAdminList(jsonResponse.admin);
-            setIsLoading(false);
         } catch (error) {
             console.log(error);
+        }finally{
+            setIsLoading(false);
         }
     }
 
     useEffect(() => {
-        if (localStorage.getItem('user')) {
-            setIsAuthenticated(true);
-            if (JSON.parse(localStorage.getItem('user')).role === "SUPER") {
+        const findAT = window.localStorage.getItem('accessToken');
+        if (findAT) {
+            setAccessToken(findAT);
+            const decoredToken = jwt_decode(findAT);
+            if (decoredToken.role === "SUPER") {
                 setIsSuperuser(true);
             } else {
                 setIsSuperuser(false);
             }
-        } else {
-            setIsAuthenticated(false);
+            getAllAdmins();
         }
-        getAllAdmins();
     }, []);
 
 
@@ -110,7 +114,10 @@ const AdminList = (props) => {
         // console.log(adminID);
         setIsLoading(true);
         try {
-            const response = await fetch(`${hostname}/api/admin/delete/${adminID}`, { method: "DELETE", credentials: "include" });
+            const response = await fetch(`${hostname}/api/admin/delete/${adminID}`, { method: "DELETE", headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            } });
             console.log("delete admin [AdminList.jsx] - ", response);
             const text = await response.text();
             const jsonResponse = await JSON.parse(text);
@@ -126,7 +133,7 @@ const AdminList = (props) => {
 
 
 
-    if (localStorage.getItem('user')) {
+    if (window.localStorage.getItem('accessToken')) {
         return (
             <div className="AdminList">
                 {isLoading === true ? <Loader /> : (<React.Fragment>

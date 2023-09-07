@@ -49,7 +49,6 @@ class Admin extends Component {
             // console.log(this.state);
             const response = await fetch(`${hostname}/api/admin/login`, {
                 method: "POST",
-                credentials: 'include',
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -58,42 +57,29 @@ class Admin extends Component {
                     password: this.state.loginPassword
                 })
             });
-            this.setState({ isLoading: false });
 
             if (response.status === 200) {
-                const textRes = await response.text();
-                const jsonRes = await JSON.parse(textRes);
-                // console.log("Json - ", jsonRes);
-                if (jsonRes.user) {
-                    this.setState({
-                        errors: [],
-                        success: "Login successfull"
-                    });
-                    this.props.authValidation(true);
-                    localStorage.setItem("user", JSON.stringify(jsonRes.user));
-                    // REDIRECT FROM  HERE TO DASHBOARD
-                    this.props.navigateToTarget('/admin/dashboard');
-                }
-
-                // console.log("Login success - ", response);
-
-                // this.setState({
-                //     errors: [],
-                //     success: "Login successfull"
-                // });
-
-            }
-
-            if (response.status === 400 || response.status === 401) {
+                const {accessToken} = await response.json();
+                window.localStorage.setItem('accessToken', accessToken);
                 this.setState({
-                    errors: [...this.state.errors, { msg: "Your email or password is invalid" }],
+                    errors: [],
+                    success: "Login successfull"
+                });
+                this.props.authValidation(true);
+                // REDIRECT FROM  HERE TO DASHBOARD
+                this.props.navigateToTarget('/admin/dashboard');
+            }else{
+                this.setState({
+                    errors: [...this.state.errors, { msg: "Your email or password is not correct" }],
                     success: "",
                 });
                 this.props.authValidation(false);
-
             }
+
         } catch (error) {
             console.log(error);
+        } finally{
+            this.setState({ isLoading: false });
         }
     }
 
@@ -105,7 +91,7 @@ class Admin extends Component {
 
 
     render() {
-        if (localStorage.getItem('user')) {
+        if (window.localStorage.getItem('accessToken')) {
             return <Navigate to="/admin/dashboard" />;
         } else {
             return (

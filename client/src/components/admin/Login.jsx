@@ -1,4 +1,5 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
 
 function Login(props) {
     const errorList = props.errors.map((err, idx)=>(
@@ -6,8 +7,7 @@ function Login(props) {
             {err.msg}
         </div>
     ));
-    // const errorList = [{msg: "null"}]
-    // console.log(props.errors);
+    if (window.localStorage.getItem('accessToken')) return <Navigate to="/admin/dashboard" /> ; 
     return (
         <div className="Login"  >
             {/* ⛏️⛏️ LOGIN ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */}
@@ -15,7 +15,7 @@ function Login(props) {
             {props.success !== ""? (<div className="alert alert-success" role="alert"> {props.success} </div>): null}
             <form className="login-admin">
                 <h2 className="text-primary">Login</h2>
-                <p>Email: admin@email.com</p>
+                <p>Email: admin@example.com</p>
                 <p>Password: admin</p>
                 <div className="mb-3">
                     <label className="form-label">Email</label>

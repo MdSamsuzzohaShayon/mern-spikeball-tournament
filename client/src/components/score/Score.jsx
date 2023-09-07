@@ -13,7 +13,6 @@ class Score extends Component {
         this.is_mounted = false;
         this.state = {
             currentEventID: this.props.params.id,
-            // currentEventID: this.props.match.params.id,
             isLoading: false,
             round1: [],
             round2: [],
@@ -29,7 +28,9 @@ class Score extends Component {
 
             activeItem: 1,
             allRound: [],
-            game: [1, 2, 3]
+            game: [1, 2, 3],
+
+            accessToken: null
         }
 
 
@@ -45,8 +46,10 @@ class Score extends Component {
         try {
             const requestOptions = {
                 method: 'GET',
-                headers: { "Content-Type": 'application/json' },
-                credentials: "include"
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.accessToken}`
+                },
             };
 
             this.setState({ isLoading: true });
@@ -54,18 +57,13 @@ class Score extends Component {
             console.log("Get nets from round with ranking - ", response);
             const text = await response.text();
             const jsonRes = await JSON.parse(text);
-            // console.log("JSON--------------------");
-            // console.log(jsonRes);
             if (jsonRes.round1 && jsonRes.round1.length > 0) this.setState({ round1: jsonRes.round1 });
             if (jsonRes.round2 && jsonRes.round2.length > 0) this.setState({ round2: jsonRes.round2 });
             if (jsonRes.round3 && jsonRes.round3.length > 0) this.setState({ round3: jsonRes.round3 });
             if (jsonRes.round4 && jsonRes.round4.length > 0) this.setState({ round4: jsonRes.round4 });
             if (jsonRes.round5 && jsonRes.round5.length > 0) this.setState({ round5: jsonRes.round5 });
 
-
             if (jsonRes.allPerformances && jsonRes.allPerformances.length > 0) this.setState({ allRank: jsonRes.allPerformances });
-            // console.log("jsonRes.allPerformances - ", jsonRes.allPerformances);
-
 
             // CHECK FOR INITIAL NET 
             this.setState({ isLoading: false });
@@ -76,15 +74,15 @@ class Score extends Component {
 
     }
 
-
-
     // ⛏️⛏️ GET ALL NETS FROM A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     findRound = async (r) => {
         try {
             const requestOptions = {
                 method: 'GET',
-                headers: { "Content-Type": 'application/json' },
-                credentials: "include"
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.accessToken}`
+                },
             };
             this.setState({ isLoading: true });
 
@@ -92,46 +90,26 @@ class Score extends Component {
             console.log("Get nets from round - ", response);
             const text = await response.text();
             const jsonRes = await JSON.parse(text);
-            // console.log(r);
-            // console.log("JSON - find round");
-            // console.log(jsonRes);
 
             // CHECK FOR INITIAL NET 
             if (jsonRes.findRound) {
                 this.setState({ allRound: jsonRes.findRound })
             }
-
             this.setState({ isLoading: false });
-            // console.log("Loading - ",isLoading);
         } catch (error) {
             console.log(error);
         }
 
     }
 
-
-
-
-
-
-    // componentDidUpdate(){
-    //     console.log(this.state.pp);
-    // }
-
-
-
-
-
-
     componentDidMount() {
-        // console.log(this.props);
         this.is_mounted = true;
         this.findRankingRound();
         this.findRound(this.state.activeItem);
-        // if (!this.props.admin) {
-        //     // console.log("Active item - ", this.state.activeItem);
-
-        // }
+        const findAT = window.localStorage.getItem('accessToken');
+        if (findAT) {
+            this.setState({accessToken: findAT});
+        }
     }
 
 
@@ -141,15 +119,11 @@ class Score extends Component {
 
 
     activeItemHandler(e, item) {
-        // console.log(e);
-        // console.log(item);
         e.preventDefault();
-        // setActiveItem(item);
         if (!this.props.admin) {
             this.findRound(item);
         }
         this.setState({ activeItem: item })
-        // findRankingRound(item);
         if (item === 1) {
             this.setState({ game: [1, 2, 3] });
         } else if (item === 2) {
@@ -163,18 +137,13 @@ class Score extends Component {
         }
     }
 
-
-
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
     showTabContent = () => {
-        // console.log("Loading - ", isLoading);
         switch (this.state.activeItem) {
             case 1:
                 if (this.state.isLoading) {
-                    // console.log("Loading (true) - ", isLoading);
                     return <Loader />;
                 } else {
-                    // console.log("Loading(false) - ", isLoading);
                     return (<div className="tab-pane fade show active" >
                         <Round public={this.props.admin} roundNum={this.state.activeItem} pp={this.state.round1} round={this.state.allRound} game={this.state.game} />
                     </div>);
@@ -217,9 +186,6 @@ class Score extends Component {
         }
     }
 
-
-
-
     render() {
         const one = 1, two = 2, three = 3, four = 4, five = 5;
         return (
@@ -231,72 +197,17 @@ class Score extends Component {
                             <Point roundNum={5} pp={this.state.allRank} roundwise={false} />
                         </div>
 
-
-
-
-
-
-
-
-
                         <nav className="nav nav-pills">
-                            <a className="nav-link active" className={this.state.activeItem === one ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, one)}>Round 1</a>
-                            <a className="nav-link active" className={this.state.activeItem === two ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, two)}>Round 2</a>
-                            <a className="nav-link active" className={this.state.activeItem === three ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, three)}>Round 3</a>
-                            <a className="nav-link active" className={this.state.activeItem === four ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, four)}>Round 4</a>
-                            <a className="nav-link active" className={this.state.activeItem === five ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, five)}>Round 5</a>
+                            <a className={this.state.activeItem === one ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, one)}>Round 1</a>
+                            <a className={this.state.activeItem === two ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, two)}>Round 2</a>
+                            <a className={this.state.activeItem === three ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, three)}>Round 3</a>
+                            <a className={this.state.activeItem === four ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, four)}>Round 4</a>
+                            <a className={this.state.activeItem === five ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, five)}>Round 5</a>
                             {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
                         </nav>
                         <div className="tab-content" >
                             {this.showTabContent()}
                         </div>
-
-
-
-
-
-
-
-
-                        {/* <div className="row">
-                        {this.state.round1 && this.state.round1.length > 1 && (
-                            <div className="col-md-6">
-                                <div className="roundwise-ranking">
-                                    <h2 className="h2">Round 1</h2>
-                                    <Point roundNum={1} pp={this.state.round1} />
-                                </div>
-                            </div>
-                        )}
-                        {this.state.round2 && this.state.round2.length > 1 && (
-                            <div className="col-md-6">
-                                <div className="roundwise-ranking">
-                                    <h2 className="h2">Round 2</h2>
-                                    <Point roundNum={2} pp={this.state.round2} />
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                    <div className="row">
-                        {this.state.round3 && this.state.round3.length > 1 && (
-                            <div className="col-md-6">
-                                <div className="roundwise-ranking">
-                                    <h2 className="h2">Round 3</h2>
-                                    <Point roundNum={3} pp={this.state.round3} />
-                                </div>
-                            </div>
-                        )}
-
-                        {this.state.round4 && this.state.round4.length > 1 && (
-                            <div className="col-md-6">
-                                <div className="roundwise-ranking">
-                                    <h2 className="h2">Round 4</h2>
-                                    <Point roundNum={4} pp={this.state.round4} />
-                                </div>
-                            </div>
-                        )}
-
-                    </div>
-                 */}
                     </div>)}
                 </div>
             </div>

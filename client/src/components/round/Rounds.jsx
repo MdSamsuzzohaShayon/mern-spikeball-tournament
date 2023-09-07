@@ -10,27 +10,19 @@ import "../../style/Rounds.css";
 const Rounds = (props) => {
     const [roundNum, setRoundNum] = useState(1);
     const [incomepleteMessage, setIncomepleteMessage] = useState(null);
-    // const [round, setRound] = useState(1);
     const [initialize, setInitialize] = useState(false);
     const [round, setRounds] = useState([]);
     const [leftRound, setLeftRound] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [performances, setPerformances] = useState([]);
     const [rankPerformanceInNet, setRankPerformanceInNet] = useState([]);
-    // const [reassignToNet, setReassignToNet] = useState(false);
     const [incompleteErr, setIncompleteErr] = useState([]);
+    const [accessToken, setAccessToken] = useState(null);
 
     const activeItemHandler = (e, item) => {
         e.preventDefault();
-        // console.log(round);
-        // console.log(item);
-        // setRound(item);
-        // console.log("findRound round 1");
-
-
         // CHECK ALL GAMES IS BEEN COMPLETED 
         const { complete, incomplete } = checkRoundCompleted(roundNum, round.nets);
-
         if (item <= 5) {
             if (item > roundNum) {
                 if (incomplete.length > 0) {
@@ -48,21 +40,11 @@ const Rounds = (props) => {
         }
     }
 
-
     const incompleteNetNoSMS = (netNo) => {
-        // console.log(netNo);
         let sms = '';
         netNo.forEach(nn => sms = sms + " " + nn + ", ");
         return sms;
     }
-
-
-
-
-
-
-
-
 
     // ⛏️⛏️ GET ALL NETS FROM A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const findRound = async (r) => {
@@ -70,19 +52,16 @@ const Rounds = (props) => {
         try {
             const requestOptions = {
                 method: 'GET',
-                headers: { "Content-Type": 'application/json' },
-                credentials: "include"
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
             };
-            // console.log(props.eventID);
             setIsLoading(true);
-            // console.log("Loading - ",isLoading);
-            // console.log(r);
             const response = await fetch(`${hostname}/api/round/get-single-round/${props.eventID}/${r}`, requestOptions);
             console.log("Get nets from round - ", response);
             const text = await response.text();
             const jsonRes = await JSON.parse(text);
-            // console.log("JSON");
-            // console.log(jsonRes);
             if (jsonRes.performances.length > 0) {
                 setPerformances(jsonRes.performances);
             }
@@ -104,22 +83,18 @@ const Rounds = (props) => {
             }
 
             setIsLoading(false);
-            // console.log("Loading - ",isLoading);
         } catch (error) {
             console.log(error);
         }
 
     }
-
-
-
-
-
     useEffect(() => {
         findRound(roundNum);
+        const findAT = window.localStorage.getItem('accessToken');
+        if (findAT) {
+            setAccessToken(findAT);
+        }
     }, []);
-
-
 
     useEffect(() => {
         // ERROR MESSAGE WILL DISAPPAIR AFTER 3 SECOND 
@@ -133,24 +108,12 @@ const Rounds = (props) => {
         }
         return () => clearTimeout(timer);
     }, [incompleteErr]);
-
-
-
     const updateFindNets = (update) => {
-        // console.log("findRound from update event");
         if (update) findRound(roundNum);
     }
 
-
-
-    // {incompleteErr.length > 0 && <div className="alert alert-danger">Please complete all games in net {incompleteNetNoSMS(incompleteErr)} to go to next round</div>}
-
-
-
-
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
     const showTabContent = () => {
-        // console.log("Loading - ", isLoading);
         switch (roundNum) {
             case 1:
                 if (isLoading) {
@@ -254,11 +217,11 @@ const Rounds = (props) => {
     return (
         <div className="Rounds">
             <nav className="nav nav-pills bg-dark">
-                <a className="nav-link active" className={roundNum === 1 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 1)}>Round 1</a>
-                <a className="nav-link active" className={roundNum === 2 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 2)}>Round 2</a>
-                <a className="nav-link active" className={roundNum === 3 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 3)}>Round 3</a>
-                <a className="nav-link active" className={roundNum === 4 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 4)}>Round 4</a>
-                <a className="nav-link active" className={roundNum === 5 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 5)}>Round 5</a>
+                <a className={roundNum === 1 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 1)}>Round 1</a>
+                <a className={roundNum === 2 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 2)}>Round 2</a>
+                <a className={roundNum === 3 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 3)}>Round 3</a>
+                <a className={roundNum === 4 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 4)}>Round 4</a>
+                <a className={roundNum === 5 ? "nav-link active" : "nav-link"} onClick={e => activeItemHandler(e, 5)}>Round 5</a>
                 {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
             </nav>
             <div className="tab-content" >

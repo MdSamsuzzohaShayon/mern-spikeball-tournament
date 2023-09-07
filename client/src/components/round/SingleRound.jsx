@@ -9,7 +9,6 @@ import { handleScoreChange, handleExtraWinningPointChange } from '../../utils/in
 import { playersExtraPoint, playersPoint, playersPointDifferential, playersScore } from '../../utils/allPerformers';
 import { arrangingPerformer, serializePerformer } from "../../utils/arrangePerformer";
 import { tabKeyFocusChange } from '../../utils/helpers';
-// import { rankingRound1, rankingRound2, rankingRound3, rankingRound4, rankingRound5 } from "../../utils/ranking";
 
 import { Modal, Button } from 'react-bootstrap';
 
@@ -21,49 +20,26 @@ const RANK_ASSIGN = "RANK_ASSIGN", RANDOM_ASSIGN = "RANDOM_ASSIGN", PACK_ASSIGN 
 function SingleRound(props) {
     const { nets } = props.round;
     const { roundNum, rankPerformanceInNet } = props;
-    // console.log("Found Round");
-    // console.log(nets);
-
-
 
     const [isLoading, setIsLoading] = useState(false);
-
-
     const [updateScore, setUpdateScore] = useState([]);
-
-
-
     const [performances, setPerformances] = useState([]); // PARTICIPANTS
     const [showPerformances, setShowPerformances] = useState(true);
     const [leftedPerformance, setLeftedPerformance] = useState([]);
-
-
-    // const [assignNet, setAssignNet] = useState(false);
     const [assignType, setAssignType] = useState(null);
-
-
     // SMS ON ASSIGN NET 
     const [openSMS, setOpenSMS] = useState(false);
     const [negativeSMS, setNegativeSMS] = useState(false);
-
     // MODAL 
     const [assignNetShow, setAssignNetShow] = useState(false);
-    const handleNetClose = (e, update) => {
-        // console.log("Update - ", update);
-        try {
+    const [accessToken, setAccessToken] = useState(null);
 
-            // e.preventDefault();
-            // console.log("UPdate - ", update);
+
+    const handleNetClose = (e, update) => {
+        try {
             setOpenSMS(true);
             if (update === true) {
                 setNegativeSMS(false);
-                // if (randomNet === true) {
-                //     randomAssign();
-                // } else {
-                //     assignNetHandler();
-                // }
-
-
                 switch (assignType) {
                     case RANK_ASSIGN:
                         assignNetHandler();
@@ -77,7 +53,6 @@ function SingleRound(props) {
                     default:
                         break;
                 }
-
             } else {
                 setNegativeSMS(true);
             }
@@ -96,76 +71,41 @@ function SingleRound(props) {
     };
 
 
-
-
-
-
-
-
-
-
-
-
     const listener = e => {
         if (e.code === "Enter" || e.code === "NumpadEnter") {
-            // e.preventDefault();
-            // console.log("Enter key was pressed. Run your function.");
             handleUpdate(e);
-            // callMyFunction();
         }
     };
-
-
-
-
-
 
 
     // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
     // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     useEffect(() => {
         // STYLE GOT POINT 
-
-
-        console.log("Component did mount [SingleRound.jsx]");
-        // console.log(props);
-
-        // console.log(props.performances);
         setPerformances([...props.performances]);
         // IF THIS IS NOT INITIALIZEABLE
         setLeftedPerformance(props.leftRound);
-        // if (!props.initialize) {
-        // }
-        // console.log(leftedPerformance);
         if (props.round.length === 0) {
-            // getAllPerformance();
         } else {
             setShowPerformances(false);
-            // setPerformances([]);
         }
         setTimeout(() => {
             tabKeyFocusChange();
         }, 1000);
-        // setUpdateScore([]);
+        const findAT = window.localStorage.getItem('accessToken');
+        if (findAT) {
+            setAccessToken(findAT);
+        }
     }, []);
+
 
     useEffect(() => {
         document.addEventListener("keydown", listener);
-        // // window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
-        // // alert("hi");
-        // if (winningExtraPoint.length > 0 || updateScore.length > 0) {
-        //     window.addEventListener('beforeunload', beforeUnloadListener, { capture: true });
-        // }
         return () => {
             console.log("Component unmount [SingleRound.jsx]");
             document.removeEventListener("keydown", listener);
-            // window.addEventListener('unload', beforeUnloadListener, { capture: true });
         };
     });
-    // useLayoutEffect(() => {
-    //     tabKeyFocusChange();
-    // }, []);
-
 
 
     useEffect(() => {
@@ -180,30 +120,11 @@ function SingleRound(props) {
     }, [assignNetShow, openSMS, negativeSMS])
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // ⛏️⛏️ SET LIST FOR WHO LEFT THE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const leftNet = (e, pId) => {
-        // console.log(e);
-        // console.log(pId);
         e.preventDefault();
         setPerformances(performances.filter(p => p._id !== pId));
         setLeftedPerformance((prevState) => {
-            // console.log(prevState);
             if (leftedPerformance) {
                 return [...leftedPerformance, ...performances.filter(p => p._id === pId)]
             } else {
@@ -215,16 +136,11 @@ function SingleRound(props) {
 
     const recoverLeftedPerformance = (e, pId) => {
         e.preventDefault();
-        // console.log("Pid - ", pId);
         setPerformances((prevState => [...prevState, ...leftedPerformance.filter((p, i) => p._id === pId)]));
         setLeftedPerformance((prevState) => {
-            // console.log("Previous state - ", prevState);
-            // console.log("New State - ", newState);
             return [...prevState.filter((p, i) => p._id !== pId)]
         });
     }
-
-
 
 
 
@@ -248,12 +164,8 @@ function SingleRound(props) {
     };
 
 
-
-
     // ⛏️⛏️ INITIALIZE TO NEW NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const assignNetHandler = async () => {
-        // console.log("Initialize nets");
-        // handleNetShow(e, true);
 
         setIsLoading(true);
         try {
@@ -261,11 +173,12 @@ function SingleRound(props) {
             // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
             const requestOptions = {
                 method: 'POST',
-                headers: { "Content-Type": 'application/json' },
-                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
                 body: JSON.stringify({ performances, leftedPerformance })
             };
-            // console.log(props.eventID);
 
             const response = await fetch(`${hostname}/api/net/assign-net/${props.eventID}/${roundNum}`, requestOptions);
             console.log("Initialize net - ", response);
@@ -275,26 +188,22 @@ function SingleRound(props) {
         }
         setIsLoading(false);
     }
-    // console.log(props.nets);
-
 
 
 
     const randomAssign = async () => {
-        // e.preventDefault();
-        // console.log("random");
-        // console.log({ performances, leftedPerformance });
         setIsLoading(true);
         try {
 
             // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
             const requestOptions = {
                 method: 'POST',
-                headers: { "Content-Type": 'application/json' },
-                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
                 body: JSON.stringify({ performances, leftedPerformance })
             };
-            // console.log(props.eventID);
 
             const response = await fetch(`${hostname}/api/net/random-assign-net/${props.eventID}/${roundNum}`, requestOptions);
             console.log("Random assign net - ", response);
@@ -308,9 +217,6 @@ function SingleRound(props) {
 
 
     const packAssign = async () => {
-        // e.preventDefault();
-        // console.log("random");
-        // console.log({ performances, leftedPerformance });
         setIsLoading(true);
         try {
 
@@ -318,15 +224,13 @@ function SingleRound(props) {
 
             const requestOptions = {
                 method: 'POST',
-                headers: { "Content-Type": 'application/json' },
-                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
                 body: JSON.stringify({ performances, leftedPerformance })
             };
-            // // console.log(props.eventID);
-
             const response = await fetch(`${hostname}/api/net/pack-assign-net/${props.eventID}/${roundNum}`, requestOptions);
-
-            console.log("Pack assign net - ", response);
             props.updateNets(true);
         } catch (error) {
             console.log(error);
@@ -335,27 +239,18 @@ function SingleRound(props) {
     }
 
 
-
-
-
-
-
     // ⛏️⛏️ UPDATE GAME POINT AND POINT DIFERENTIAL ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
             const requestOptions = {
                 method: 'PUT',
-                headers: { "Content-Type": 'application/json' },
-                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
                 body: JSON.stringify({ updateScore })
             };
-            // console.log(props.eventID);
-
-
-            // console.log(props.round._id);
-
-
             const response = await fetch(`${hostname}/api/performance/update-performance/${props.eventID}/${roundNum}`, requestOptions);
             console.log("Update - ", response);
             setUpdateScore([]);
@@ -364,8 +259,6 @@ function SingleRound(props) {
             console.log(error);
         }
     }
-
-
 
 
     const handleNextRound = async (e) => {
@@ -378,35 +271,13 @@ function SingleRound(props) {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const toggleGameParticipant = (e) => {
         e.preventDefault();
         setShowPerformances(prevState => !prevState);
     }
 
 
-
-
-
-
-    {/* <button onClick={handleUpdate} onKeyPress={handleKeyPress} className="btn btn-primary sticky-top align-items-start justify-content-start">Submit</button> */ }
-
-
     const showMessage = () => {
-        // {assignNetShow === false && <div className="alert alert-success">You can't reassign once the score is inputed</div> }
         if (assignNetShow === false && openSMS === true) {
             if (negativeSMS === true) {
                 return <div className="alert alert-danger">You can't reassign once the score is inputed</div>;
@@ -429,7 +300,6 @@ function SingleRound(props) {
                             <button className="btn btn-primary" onClick={e => handleNetShow(e, RANDOM_ASSIGN)} >Random Assign</button>
                         </React.Fragment> : <React.Fragment>
                             <button className="btn btn-primary" onClick={e => handleNetShow(e, RANK_ASSIGN)} >Rank Assign</button>
-                            {/* {!props.initialize && <button className="btn btn-primary" onClick={e => handleNetShow(e, false)} >Rank Assign</button>} */}
                             <button className="btn btn-primary" onClick={e => handleNetShow(e, RANDOM_ASSIGN)} >Random Assign</button>
                             {roundNum > 1 && <button className="btn btn-primary" onClick={e => handleNetShow(e, PACK_ASSIGN)} >Pack Assign</button>}
                         </React.Fragment>}
@@ -442,8 +312,6 @@ function SingleRound(props) {
                 </div>
 
                 {showMessage()}
-
-
 
                 <Modal show={assignNetShow} onHide={handleNetClose}>
                     <Modal.Header closeButton>
@@ -459,14 +327,7 @@ function SingleRound(props) {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-
-
             </div>
-
-
-
-
-
 
             {showPerformances ? (<React.Fragment>
                 {isLoading ? <Loader /> : (<React.Fragment>
@@ -511,9 +372,6 @@ function SingleRound(props) {
                 {!props.initialize && <div className="submit-btn-wrap">
                     <div className="submit-btn">
                         <button onClick={handleUpdate} className="btn btn-primary">Submit</button>
-                        {/* <div className="btn-group">
-                            <button onClick={handleNextRound} className="btn btn-primary">Next Round</button>
-                        </div> */}
                     </div>
                 </div>}
 
@@ -538,25 +396,18 @@ function SingleRound(props) {
 
                                                 <th scope="col">Team</th>
                                                 <th scope="col">Score</th>
-                                                {/* <th scope="col"><button type="button" className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent" data-bs-toggle="tooltip" data-bs-placement="top" title="Winning point" onClick={e => e.preventDefault()}>W/P</button></th> */}
                                                 <th scope="col">Point</th>
                                                 <th scope="col">point differential</th>
-
 
                                                 <th scope="col">Team</th>
                                                 <th scope="col">Score</th>
                                                 <th scope="col">Point</th>
                                                 <th scope="col">point differential</th>
 
-
                                                 <th scope="col">Team</th>
                                                 <th scope="col">Score</th>
                                                 <th scope="col">Point</th>
                                                 <th scope="col">point differential</th>
-
-
-
-
 
                                                 <th scope="col">Participant</th>
                                                 <th scope="col">point</th>
@@ -568,51 +419,25 @@ function SingleRound(props) {
                                             {nets && nets.map((net, i) => (
                                                 <tr key={i} className="horizontal-border">
                                                     <th scope="row">Net {net.sl || i + 1}</th>
-                                                    {/* {console.log(net)} */}
                                                     <td >{playersExtraPoint(net, handleExtraWinningPointChange, roundNum, updateScore, setUpdateScore, net.wp)} </td>
-                                                    {/* {console.log("net performance - ", net.performance)} */}
-
                                                     <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT_DIFFERENTIAL, roundNum)} </td>
                                                     {/* SCORE  */}
                                                     <td >{playersScore(net, props.game[0], SCORE, 1, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
                                                     <td >{playersPoint(net, props.game[0], POINT, 1, roundNum)} </td>
-
                                                     <td>{playersPointDifferential(net, props.game[0], POINT_DIFFERENTIAL, 1, roundNum)}</td>
-
-
-
-
-
-
-
                                                     <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT_DIFFERENTIAL, roundNum)} </td>
                                                     {/* SCORE  */}
                                                     <td >{playersScore(net, props.game[1], SCORE, 2, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
                                                     <td >{playersPoint(net, props.game[1], POINT, 2, roundNum)} </td>
                                                     <td>{playersPointDifferential(net, props.game[1], POINT_DIFFERENTIAL, 2, roundNum)}</td>
-
-
-
-
-
-
                                                     <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT_DIFFERENTIAL, roundNum)} </td>
                                                     {/* SCORE  */}
                                                     <td >{playersScore(net, props.game[2], SCORE, 3, handleScoreChange, roundNum, updateScore, setUpdateScore)} </td>
                                                     <td >{playersPoint(net, props.game[2], POINT, 3, roundNum)} </td>
                                                     <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, roundNum)}</td>
-
-
-
-
-
-
                                                     <td> {serializePerformer(rankPerformanceInNet[i])} </td>
                                                     <td >  {getTotalPPD(rankPerformanceInNet[i], POINT, roundNum)} </td>
                                                     <td >{getTotalPPD(rankPerformanceInNet[i], POINT_DIFFERENTIAL, roundNum)} </td>
-
-
-
                                                 </tr>
                                             ))}
                                         </tbody>

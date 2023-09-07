@@ -27,8 +27,10 @@ class SingleEvent extends Component {
                 date: null
             },
             participants: "",
-            isLoading: false
+            isLoading: false,
+            accessToken : null
         };
+        // const [accessToken, setAccessToken] = useState(null);
 
         this.clickItemHandler = this.clickItemHandler.bind(this);
         this.showAllNavItem = this.showAllNavItem.bind(this);
@@ -39,10 +41,11 @@ class SingleEvent extends Component {
 
 
     async componentDidMount() {
-        console.log("Event auth - ", this.props.isAuthenticated);
-        // console.log("Event admin component mounted - ",this.props);
-        // console.log("Event admin component mounted - ", this.props?.params?.id);
-        // {this.state.currentEvent.title}
+        const findAT = window.localStorage.getItem('accessToken');
+        if (findAT) {
+            this.setState({accessToken: findAT})
+        }
+
         this.is_mounted = true;
         await this.getSingleEvent(this.props.params.id);
         this.setState({ currentEventID: this.props.params.id });
@@ -60,15 +63,13 @@ class SingleEvent extends Component {
     // ⛏️⛏️ GET AN EVENT WITH DETAILS - AFTER GETTING SINGLE EVENT REDIRECT TO EVENT ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     async getSingleEvent(id) {
         try {
-            // console.log("IDDDDDDDDDDDDDDDDDDDD- ",id);
-            // console.log(participants);
             this.setState({ isLoading: true });
             const response = await fetch(`${hostname}/api/event/${id}`, { method: "GET", credentials: "include" });
             console.log("Get single event [SingleEvent.jsx] - ", response);
             const text = await response.text();
             const jsonResponse = await JSON.parse(text);
             // console.log(jsonResponse);
-            if (this.is_mounted == true) {
+            if (this.is_mounted === true) {
                 this.setState({ currentEvent: jsonResponse.events });
                 // console.log(jsonResponse);
             }
@@ -138,6 +139,7 @@ class SingleEvent extends Component {
                             updateEvent={this.updateEvent}
                             participants={this.state.currentEvent.participants}
                             eventID={this.state.currentEventID}
+                            accessToken={this.state.accessToken}
                         />
                     </div>);
                 }
@@ -145,19 +147,19 @@ class SingleEvent extends Component {
                 if (this.state.isLoading) {
                     return (<Loader />);
                 } else {
-                    return (<div className="tab-pane fade show active" ><Rounds eventID={this.state.currentEventID} /></div>);
+                    return (<div className="tab-pane fade show active" ><Rounds accessToken={this.state.accessToken} eventID={this.state.currentEventID} /></div>);
                 }
             case "score":
                 if (this.state.isLoading) {
                     return (<Loader />);
                 } else {
-                    return (<div className="tab-pane fade show active score-board" ><Score admin={true} /></div>);
+                    return (<div className="tab-pane fade show active score-board" ><Score accessToken={this.state.accessToken} admin={true} /></div>);
                 }
             case "export":
                 if (this.state.isLoading) {
                     return (<Loader />);
                 } else {
-                    return (<div className="tab-pane fade show active score-board" ><ExportField eventID={this.state.currentEventID} /></div>);
+                    return (<div className="tab-pane fade show active score-board" ><ExportField accessToken={this.state.accessToken} eventID={this.state.currentEventID} /></div>);
                 }
             default:
                 return (<div className="tab-pane fade show active" >Event overview</div>);
@@ -178,7 +180,7 @@ class SingleEvent extends Component {
 
 
     render() {
-        if (localStorage.getItem('user')) {
+        if (window.localStorage.getItem('accessToken')) {
             // /admin/dashboard/event/:id
             if (this.state.isLoading) {
                 return <Loader />

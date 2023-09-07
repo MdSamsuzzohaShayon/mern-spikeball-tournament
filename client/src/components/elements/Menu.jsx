@@ -11,27 +11,8 @@ const Menu = (props) => {
     /* ⛏️⛏️ LOGOUT EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
     const handleLogout = async () => {
 
-        try {
-            const response = await fetch(`${hostname}/api/admin/logout`, {
-                method: "GET",
-                credentials: 'include',
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-
-            if (response.status === 200) {
-                // const text = await response.text();
-                // console.log(JSON.parse(text));
-                // history.push('/admin');
-                localStorage.removeItem('user');
-                navigate('/admin');
-
-                // return <Redirect to="/admin/dashboard" /> ;
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        window.localStorage.removeItem('accessToken');
+        navigate('/admin');
     }
     return (
         <div className="Navbar">
@@ -55,7 +36,7 @@ const Menu = (props) => {
                         <Nav>
                             <Link className="nav-link" to="/home">Home</Link>
                             <Link className="nav-link" to="/admin">Admin</Link>
-                            {localStorage.getItem('user') ? (<li className="nav-item"><button className="btn btn-danger" onClick={handleLogout}>Logout</button></li>) : null}
+                            {window.localStorage.getItem('accessToken') ? (<li className="nav-item"><button className="btn btn-danger" onClick={handleLogout}>Logout</button></li>) : null}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

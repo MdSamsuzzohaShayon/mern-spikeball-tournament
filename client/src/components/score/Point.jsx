@@ -5,8 +5,6 @@ import { getRankingNumber } from '../../utils/tptd';
 
 
 const Point = (props) => {
-    // console.log(props);
-
     const addWithRound = (roundNum, p, roundwise) => {
         if (roundwise === true) {
             switch (roundNum) {
@@ -14,8 +12,6 @@ const Point = (props) => {
                     return (<React.Fragment>
                         {Math.sign(round1Total(p)) === -1 ? <td className="text-danger">dd {round1Total(p).toFixed(2)}</td> : <td className="text-success"> {round1Total(p).toFixed(2)}</td>}
                         {Math.sign(round1TD(p)) === -1 ? <td className="text-danger"> {round1TD(p).toFixed(2)}</td> : <td className="text-success"> {round1TD(p).toFixed(2)}</td>}
-                        {/* <td> {round1Total(p)}</td> */}
-                        {/* <td>{round1TD(p)}</td> */}
                     </React.Fragment>);
                 case 2:
                     return (<React.Fragment>
@@ -50,7 +46,6 @@ const Point = (props) => {
 
     }
 
-    // console.log(assendingPerformance);
     return (
         <React.Fragment>
             <table className="table table-bordered table-striped table-hover">
