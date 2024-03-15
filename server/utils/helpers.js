@@ -31,10 +31,12 @@ module.exports.replaceKeys = (object, eventID) => {
 }
 
 
-
+module.exports.swapArrayItem = (ary, a, b) => {
+    [ary[a], ary[b]] = [ary[b], ary[a]];
+}
 
 module.exports.findRound = async (eventID, roundNum, Round) => {
-    const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15";
+    const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15 pre_rank";
     const round = await Round.findOne({ event: eventID, no: roundNum })
         .populate([{
             path: "nets",

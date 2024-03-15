@@ -83,6 +83,7 @@ router.post('/:eventID',
                     payment_method,
                     event: req.params.eventID
                 });
+
                 const participant = await new_participant.save();
                 const event = await Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: participant._id } }, { new: true });
                 const new_performance = new Performance({
@@ -262,7 +263,7 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
 
 
 
-                const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15";
+                const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15 pre_rank";
                 const findNet = await Net.findOneAndUpdate({ _id: us.netID }, { wp: us.wp })
                     .populate({
                         path: "performance",

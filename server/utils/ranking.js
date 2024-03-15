@@ -1,3 +1,7 @@
+const Net = require("../models/Net");
+const Round = require("../models/Round");
+const { findRound } = require("./helpers");
+
 function addR1(ab) {
     let pointA = 0;
     // console.log("Game 1 undefined - ", ab);
@@ -150,63 +154,26 @@ function pdtR5(ab) {
 
 
 
-
-module.exports.rankingRound1 = (a, b) => {
-    let pointA = 0, pointB = 0;
-    // console.log("Round 1 t p a - ", addR1(a));
-    // console.log("Round 1 t p b - ", addR1(b));
-    pointA = addR1(a);
-    pointB = addR1(b);
-    if (pointA > pointB) {
-        return -1;
-    }
-    if (pointB > pointA) {
-        return 1
-    }
-    if (pointA == pointB) {
-        let pdta = 0, pdtb = 0;
-        pdta = pdtR1(a);
-        pdtb = pdtR1(b);
-        if (pdta > pdtb) {
-            return -1;
-        }
-        if (pdta < pdtb) {
-            return 1;
-        }
-        return 0;
-
-    }
-    return 0;
+/**
+ * sort performances by their pre rank
+ * performance rankings before round 1.
+ */
+module.exports.sortByPreRank = (p1, p2) => {
+    return p1.pre_rank > p2.pre_rank ? 1 : -1;
+    //return `${padNum(p1.pre_rank)}` < `${padNum(p2.pre_rank)}`;
 }
 
-
-module.exports.rankingRound2 = (a, b) => {
-
-    let pointA = 0, pointB = 0;
-    pointA = addR1(a) + addR2(a);
-    pointB = addR1(b) + addR2(b);
-    // console.log(pointB);
-    if (pointA > pointB) {
-        return -1;
-    }
-    if (pointB > pointA) {
-        return 1
-    }
-    if (pointA == pointB) {
-        let pdta = 0, pdtb = 0;
-        pdta = pdtR1(a) + pdtR2(a);
-        pdtb = pdtR1(b) + pdtR2(b);
-        if (pdta > pdtb) {
-            return -1;
-        }
-        if (pdta < pdtb) {
-            return 1;
-        }
-        return 0;
-
-    }
-    return 0;
+/**
+ * sort performances by their point
+ * @param {*} a performance
+ * @param {*} b performance
+ */
+module.exports.rankingRound1Ind = (a, b) => {
+    if (addR1(a) != addR1(b)) return addR1(a) < addR1(b) ? 1 : -1;
+    if (pdtR1(a) != pdtR1(b)) return pdtR1(a) < pdtR1(b) ? 1 : -1;
+    return a.pre_rank > b.pre_rank ? 1 : -1;
 }
+module.exports.sortByPoints = this.rankingRound1Ind;
 
 
 
@@ -446,13 +413,18 @@ module.exports.wholeRanking = (a, b) => {
 
 
 
-
+/**
+ * 
+ * @param {performances in each net} rankPerformanceInNet 
+ * @param {number} roundNum 
+ * @returns 
+ */
 module.exports.netRanking = (rankPerformanceInNet, roundNum) => {
     const netRank = [];
     for (let i = 0; i < rankPerformanceInNet.length; i++) {
         if (roundNum === 1) {
             // console.log("ROund - 1");
-            netRank.push(rankPerformanceInNet[i].performance.sort(this.rankingRound1));
+            netRank.push(rankPerformanceInNet[i].performance.sort(this.rankingRound1Ind));
             // console.log("Sorted - ", roundNum);
         } else if (roundNum === 2) {
             // console.log("Sorted - ", roundNum);
@@ -469,30 +441,37 @@ module.exports.netRanking = (rankPerformanceInNet, roundNum) => {
 }
 
 
+function padNum(num = 0, size = 4) {
+    return num.toString().padStart(size, "0");
+}
 
-
-module.exports.roundwiseRanking = (performance, roundNum) => {
+module.exports.roundwiseRanking = async (performance, roundNum, eventID) => {
     if (roundNum === 1) {
-        performance.sort(this.rankingRound1);
+        performance.sort(this.sortByPreRank);
     } else if (roundNum === 2) {
-        performance.sort(this.rankingRound2);
-    } else if (roundNum === 3) {
-        performance.sort(this.rankingRound3);
-    } else if (roundNum === 4) {
-        performance.sort(this.rankingRound4);
-    } else if (roundNum === 5) {
-        performance.sort(this.rankingRound5);
-    }
+        performance.sort(this.sortByPoints);
+    } else if (roundNum >= 3 && roundNum <= 6) {
+        /**
+         * it was already sorted in the previous round.
+         */
 
+        const previousRound = await findRound(eventID, roundNum - 1, Round);
+        if (previousRound) {
+            const allNetsIds = previousRound.nets.map(n => n._id);
+            const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15 pre_rank";
+            // console.log(allNetsIds);
+            const findNets = await Net.find({ _id: { $in: allNetsIds } }).populate({
+                path: "performance", select, populate: {
+                    path: "participant",
+                    select: "firstname lastname"
+                }
+            });
+            // console.log(nets);
+            rankPrevNets = this.netRanking(findNets, parseInt(roundNum - 1));
+
+            return rankPrevNets.flat();
+        }
+    }
 
     return performance;
 }
-
-
-
-
-
-
-
-
-

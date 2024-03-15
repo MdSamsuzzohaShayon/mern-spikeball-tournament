@@ -54,6 +54,10 @@ const performanceSchema = new Schema({
         default: 1,
         max: 15,
         min: 1
+    },
+    pre_rank: {
+        type: Number,
+        default: 0,
     }
     // nested: {
     //     stuff: {
