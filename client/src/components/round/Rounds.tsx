@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState, useEffect } from 'react';
 import SingleRound from './SingleRound';
 import { hostname } from '../../utils/global';

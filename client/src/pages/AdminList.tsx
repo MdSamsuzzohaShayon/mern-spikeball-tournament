@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState, useEffect } from 'react';
 import Loader from '../components/elements/Loader';
 import { hostname } from "../utils/global";

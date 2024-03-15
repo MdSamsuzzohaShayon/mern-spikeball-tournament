@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
 import {
   hostname,

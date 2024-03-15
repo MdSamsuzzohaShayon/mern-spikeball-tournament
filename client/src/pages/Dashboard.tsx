@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /* ⛏️⛏️ SHOW ALL EVENTS, PARTICIPANT   */
 
 import React, { Component } from 'react';

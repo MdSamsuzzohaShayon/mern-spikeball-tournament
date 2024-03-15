@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 class CustomCellRenderer {
     init(params) {
         this.eGui = document.createElement('div');

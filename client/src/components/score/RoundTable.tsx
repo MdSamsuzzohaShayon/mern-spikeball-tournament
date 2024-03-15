@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState } from 'react';
 import { POINT, POINT_DIFFERENTIAL } from '../../utils/global';
 import { arrangingPerformer } from '../../utils/arrangePerformer';

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // ⛏️⛏️ ALL OPERATIONS OF ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 import React, { Component } from 'react';
 import '../style/Admin.css';

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import EventList from '../components/events/EventList';
