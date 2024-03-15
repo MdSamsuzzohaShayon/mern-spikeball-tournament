@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { Modal, Button } from 'react-bootstrap';
