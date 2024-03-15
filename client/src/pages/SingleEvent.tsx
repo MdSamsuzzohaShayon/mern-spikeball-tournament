@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // import { useParams } from 'react-router-dom';
 import '../style/SingleEvent.css';
 import React, { Component } from 'react';

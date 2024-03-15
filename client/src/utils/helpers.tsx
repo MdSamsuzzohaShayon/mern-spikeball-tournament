@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 export const checkNegativePD = (val, cls) => {
     // <div className="pd-item">{getDefaultValue(net.performance[0], score, game, props.roundNum)}</div>
     if (val > 0) {

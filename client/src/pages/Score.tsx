@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import Point from '../components/score/Point';

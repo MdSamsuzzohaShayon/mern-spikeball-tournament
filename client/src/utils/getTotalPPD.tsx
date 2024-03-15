@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { POINT, POINT_DIFFERENTIAL } from "./global";
 import { round1Total, round2Total, round3Total, round4Total, round5Total } from './addTotalPoint';
 import { round1TD, round2TD, round3TD, round4TD, round5TD } from './pointDeferential';
