@@ -5,8 +5,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 
-
-
 const { sendUser, replaceKeys } = require('../utils/helpers');
 const { ensureAuth, ensureGuast } = require('../config/auth');
 
@@ -16,19 +14,10 @@ const Admin = require('../models/Admin');
 const Event = require('../models/Event');
 
 
-
-
-
-
-
-
-
-
-
 // curl --location -X POST 'http://localhost:4000/api/admin/register' -H 'Content-Type: application/json' -H 'Cookie: connect.sid=s%3AzL3n82ulv33g6ZGI9JI866DTawUrP9sX.u13Y%2Fn7Sf0XJLRNB7%2Bxw7RTwpVqeRIQkeiPG%2BkIY2iE' --data-raw '{ "email": "ronaldo@mutd.com", "username": "Ronaldo",  "password": "Ronaldo1234" }'
-/* ⛏️⛏️ ALL ROUTES WILL BE PROTECTED EXCEPT LOGIN ROUTE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
+/* ⛏️⛏️ ALL ROUTES WILL BE PROTECTED EXCEPT LOGIN ROUTE  */
 router.post('/register',
-    // ensureAuth,
+    ensureAuth,
     check('username', "Must input a name").notEmpty(),
     // username must be an email
     check('email', "Email must not empty and a valid email").notEmpty().isEmail(),
@@ -37,14 +26,14 @@ router.post('/register',
     // check('role', "You must select a role").notEmpty(),
     (req, res, next) => {
         const allErr = new Array();
-        // console.log(req.body);
-        const { email, username, password } = req.body;
-        const valErrs = validationResult(req);
-        if (!valErrs.isEmpty()) {
-            const errArr = allErr.concat(valErrs.errors);
-            return res.status(400).json({ errors: errArr });
-        }
-        if (req.user?.role && req.user.role === SUPER) {
+        if (req.userRole === SUPER) {
+            // console.log(req.body);
+            const { email, username, password } = req.body;
+            const valErrs = validationResult(req);
+            if (!valErrs.isEmpty()) {
+                const errArr = allErr.concat(valErrs.errors);
+                return res.status(400).json({ errors: errArr });
+            }
             Admin.findOne({ email }, (err, emailResult) => {
                 if (err) throw err;
                 if (emailResult) {
@@ -71,16 +60,10 @@ router.post('/register',
         }
     });
 
-
-
-
-
-
-
 /* ⛏️⛏️ LOGIN USERS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.post('/login', check('email').notEmpty(), check('password').notEmpty(), async (req,res)=>{
     const errors = validationResult(req);
-  // console.log(errors);
+  // https://github.com/MdSamsuzzohaShayon/mern-spikeball-tournament/blob/master/server/routes/admin.js
   if (!errors.isEmpty()) {
     return res.status(406).json({ error: JSON.stringify(errors.array()) });
   }
@@ -97,8 +80,8 @@ router.post('/login', check('email').notEmpty(), check('password').notEmpty(), a
     }
 
     const userDetailResponse = {
+        _id: userExist._id,
       email: userExist.email,
-      id: userExist.id,
       role: userExist.role,
       name: userExist.name,
     };
@@ -106,7 +89,7 @@ router.post('/login', check('email').notEmpty(), check('password').notEmpty(), a
       expiresIn: '1h',
     });
 
-    return res.status(200).json({ msg: 'Logged in successfully', accessToken });
+    return res.status(200).json({ msg: 'Logged in successfully', accessToken, user: userDetailResponse });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msg: 'Something went wrong', err });
@@ -114,9 +97,8 @@ router.post('/login', check('email').notEmpty(), check('password').notEmpty(), a
 });
 
 
-
 router.get('/list', ensureAuth, async (req, res, next) => {
-    console.log("Admin role ",req.userRole);
+    // console.log(req.userRole);
     try {
         const admin = await Admin.find();
         const newAdmins = admin.map((a, i) => {
@@ -127,9 +109,6 @@ router.get('/list', ensureAuth, async (req, res, next) => {
                 email: a.email
             }
         });
-        // for (let index = 0; index < admin.length; index++) {
-        //     newAdmins.push({})
-        // }
         res.status(200).json({ admin: newAdmins });
     } catch (error) {
         console.log(error);
@@ -139,7 +118,7 @@ router.get('/list', ensureAuth, async (req, res, next) => {
 router.delete("/delete/:adminID", ensureAuth, async (req, res, next) => {
     const errors = [];
     // console.log(req.params.adminID , req.user._id);
-    if (req.user.role === SUPER) {
+    if (req.userRole === SUPER) {
         if (req.params.adminID === req.user._id) {
             errors.push("Can't delete a super user");
             res.status(400).json({ errors });
@@ -161,7 +140,7 @@ router.delete("/delete/:adminID", ensureAuth, async (req, res, next) => {
 /* ⛏️⛏️ LOGOUT USERS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.get('/logout', ensureAuth, (req, res) => {
     req.session.destroy(null);
-    req.logout();
+    req.logout(function(err){});
     // console.log(req.user);
     res.status(200).json({ user: null });
 });

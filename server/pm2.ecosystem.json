@@ -1,0 +1,25 @@
+{
+    "apps": [
+        {
+            "name": "BackendAPI",
+            "script": "/home/alex/mern-spikeball-tournament/server/app.js",
+            "watch": true,
+            "ignore_watch": [
+                "node_modules",
+                "logs"
+            ],
+            "exec_mode": "cluster",
+            "instances": "max",
+            "max_memory_restart": "1G",
+            "autorestart": true,
+            "restart_delay": 3000,
+            "log_date_format": "YYYY-MM-DD HH:mm:ss",
+            "merge_logs": true,
+            "error_file": "logs/error.log",
+            "out_file": "logs/out.log",
+            "env": {
+                "NODE_ENV": "production"
+            }
+        }
+    ]
+}

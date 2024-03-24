@@ -56,10 +56,6 @@ try {
 }
 */
 
-
-
-
-
 // ⛏️⛏️ GET SINGLE ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
     const { eventID, roundNum } = req.params;
@@ -85,7 +81,7 @@ router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
             for (let i = 0; i < roundExist.nets.length; i++) {
                 allNetsIds.push(roundExist.nets[i]._id);
             }
-            const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15";
+            const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15 pre_rank";
             // console.log(allNetsIds);
             const findNets = await Net.find({ _id: { $in: allNetsIds } }).populate({
                 path: "performance", select, populate: {
@@ -98,25 +94,11 @@ router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
             // const netRank = roundExist.nets[0].performance.sort(rankingRound1);
             // console.log(rankNets);
         } else {
-            // IF ROUND IS NOT EXIST SHOW PERFORMANCES, LETF NETS FROM PREVIOUS ROUND 
-            // AT FIRST CHECK PREVIOUS ROUND - IS THERE ANY PERFORMANCES AND LEFT NETS
-            const previousRound = await findRound(eventID, roundNum - 1, Round);
-            // console.log("Round exist - ", previousRound);
-            // console.log("previous round - ",previousRound);
-            if (previousRound === null) {
-                performances = await Performance.find({ event: eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
-            } else {
-                performances = previousRound.performances;
-                leftRound = await Performance.find({ _id: { $in: previousRound.left } })
-                    .populate({
-                        path: "participant",
-                        select: "firstname lastname"
-                    });
-            }
+            performances = await Performance.find({ event: eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
         }
 
         if (performances !== null) {
-            performances = roundwiseRanking(performances, parseInt(roundNum));
+            performances = await roundwiseRanking(performances, parseInt(roundNum), eventID);
         }
 
 
@@ -136,14 +118,27 @@ router.get('/get-single-round/:eventID/:roundNum', async (req, res, next) => {
 // ⛏️⛏️ ASSIGN PLAYER TO THE NET - CREATE CREATE MORE NET ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.get('/ranking/:eventID', async (req, res, next) => {
     try {
-        const performance = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" });
+        const { eventID } = req.params;
+        const rounds = {};
+        for (let i = 1; i <= 5; i++) {
+            const round = await findRound(eventID, i, Round);
+            let performances = null;
+            if (round) {
+                rounds[`round${i}NR`] = round;
+                performances = round.performances;
+		performances = await roundwiseRanking(performances, i, eventID);
+		rounds[`round${i}`] = performances;
+            }
+        }
+        const allPerformances = await roundwiseRanking([], 6, eventID);
+        /* const performance = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" });
         const allPerformances = performance.sort(wholeRanking);
 
 
 
         const rounds = await Round.find({ event: req.params.eventID }).populate({
             path: 'performances',
-            select: 'participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15',
+            select: 'participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15 pre_rank',
             populate: {
                 path: "participant",
                 select: "firstname lastname"
@@ -212,10 +207,11 @@ router.get('/ranking/:eventID', async (req, res, next) => {
             round5NR = round5Slice;
 
         }
+ */
 
 
-
-        res.status(201).json({ msg: "rank performance and inatilize performance", allPerformances, round1, round2, round3, round4, round5, round1NR, round2NR, round3NR, round4NR, round5NR })
+        //res.status(201).json({ msg: "rank performance and inatilize performance", allPerformances, round1, round2, round3, round4, round5, round1NR, round2NR, round3NR, round4NR, round5NR })
+        res.status(201).json({ msg: "rank performance and inatilize performance", allPerformances, ...rounds })
 
     } catch (error) {
         console.log(error);
