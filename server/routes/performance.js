@@ -1,5 +1,5 @@
 const express = require('express');
-const formidable = require('formidable');
+const { formidable } = require('formidable');
 const csv = require('csvtojson');
 // const fsPromise = require('fs').promises;
 const fs = require('fs');
@@ -60,7 +60,6 @@ router.post('/:eventID',
     ensureAuth,
     check('firstname', "Firstname must not empty").notEmpty(),
     check('lastname', "Lastname must not empty").notEmpty(),
-    check('city', "City must not empty").notEmpty(),
     async (req, res, next) => {
         const valErrs = validationResult(req);
 
@@ -85,13 +84,15 @@ router.post('/:eventID',
                 });
 
                 const participant = await new_participant.save();
-                const event = await Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: participant._id } }, { new: true });
                 const new_performance = new Performance({
                     participant: participant._id,
                     event: req.params.eventID
                 });
 
-                const performance = await new_performance.save();
+                const [createEvent, performance] = await Promise.all([
+                    Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: participant._id } }, { new: true }),
+                    new_performance.save(),
+                ]);
 
                 res.status(200).json({ msg: 'Create partipipant and referancing to event', participant, performance });
             } catch (error) {
@@ -115,132 +116,58 @@ router.post('/:eventID',
 
 
 /* ⛏️⛏️ CREATE MULTIPLE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-router.post('/multiple/:eventID', ensureAuth, (req, res, next) => {
-
-
+router.post('/multiple/:eventID', ensureAuth, async (req, res, next) => {
     const form = formidable({ multiples: false });
 
-    form.parse(req, async (err, fields, files) => {
-        if (err) {
-            next(err);
-            return;
+    try {
+        const { fields, files } = await new Promise((resolve, reject) => {
+            form.parse(req, (err, fields, files) => {
+                if (err) reject(err);
+                else resolve({ fields, files });
+            });
+        });
+
+        // Check if file exists before parsing it
+        if (!fs.existsSync(files.file[0].filepath)) {
+            throw new Error("CSV file does not exist at the specified path.");
         }
 
 
-        csv()
-            .fromFile(files.file.path)
-            .then((jsonObj) => {
-                // const exampleObj = {
-                //     'First Name': 'Kaitlin',
-                //     'Last Name': 'Ro',
-                //     Email: 'kaitlinro1@gmail.com',
-                //     'Mobile Number': '+12089714339',
-                //     Gender: 'Female',
-                //     Birthdate: '02/15/1995',
-                //     'Total Amount': '12.0',
-                //     'Outstanding Balance': '0.0',
-                //     Status: 'Spot Reserved',
-                //     Payment: 'Paid',
-                //     City: 'Rexburg',
-                // }
+        const jsonObj = await csv().fromFile(files.file[0].filepath);
 
+        const errors = [];
+        const allParticipant = [];
+        let msg = null;
+        for (let obj of jsonObj) {
+            const newParticipant = replaceKeys(obj, req.params.eventID);
+            if (newParticipant.firstname && newParticipant.lastname && newParticipant.city) {
+                allParticipant.push(newParticipant);
+            } else {
+                msg = "Some participant doesn't have firstname, lastname, or city; those are not included";
+            }
+        }
+        if (msg) errors.push({ msg });
 
-                // // console.log("JSON OBJECT");
-                // console.log("JSON OBJECT - ", jsonObj);
+        let participants = [];
+        if (errors.length === 0) {
+            participants = await Participant.insertMany(allParticipant);
+            const performanceList = participants.map(participant => ({ participant: participant._id, event: req.params.eventID }));
+            await Performance.insertMany(performanceList);
+            for (let participant of participants) {
+                await Event.findByIdAndUpdate(
+                    { _id: req.params.eventID },
+                    { $push: { participants: participant._id } },
+                    { new: true }
+                );
+            }
+        }
 
-
-                const errors = [];
-                const allParticipant = [];
-                let msg = null;
-                for (let obj of jsonObj) {
-                    const newParticipant = replaceKeys(obj, req.params.eventID);
-                    if (newParticipant.firstname && newParticipant.lastname && newParticipant.city) {
-                        allParticipant.push(newParticipant);
-                    } else {
-                        msg = "Some participant doesn't has firstname, lastname or city those are not included"
-                        // errors.push({ errType: "missing_fields", msg: "Some participant doesn't has firstname, lastname or city those are not included" });
-                    }
-                }
-                if (msg) errors.push({ msg });
-
-                // console.log("All Participant - ", allParticipant);
-
-
-
-                if (errors.length > 0) {
-                    // console.log("No errors");
-                    Participant.insertMany(allParticipant).then(function (participant) {
-                        // console.log(allParticipant);
-                        // console.log("Has errors");
-                        // console.log("Data inserted", participant);  // Success
-                        const performanceList = [];
-                        for (let per of participant) {
-                            performanceList.push({ participant: per._id, event: req.params.eventID });
-                        }
-                        // console.log("insert many performance - ");
-                        Performance.insertMany(performanceList).then(p => {
-                            console.log("Inserted all performance - ");
-                        });
-
-                        participant.forEach((p, i) => {
-                            // console.log(p._id);
-                            Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: p._id } }, { new: true }).then((data) => {
-                                // console.log(data);
-                            }).catch(eventErr => {
-                                console.log(eventErr);
-                            });
-                        });
-
-
-
-                        res.json({ errors, eventID: req.params.eventID, files: participant });
-                    }).catch(function (error) {
-                        console.log(error)      // Failure
-                    });
-                } else {
-                    // console.log("Has errors");
-                    Participant.insertMany(allParticipant).then(function (participant) {
-                        // console.log(participant);
-                        const performanceList = [];
-                        for (let per of participant) {
-                            performanceList.push({ participant: per._id, event: req.params.eventID });
-                        }
-                        // console.log("insert many performance - ");
-                        Performance.insertMany(performanceList).then(p => {
-                            console.log("Inserted all performance - ");
-                        });
-                        // console.log("Data inserted", participant)  // Success
-                        participant.forEach((p, i) => {
-                            Event.findByIdAndUpdate({ _id: req.params.eventID }, { $push: { participants: p._id } }, { new: true }).then((data) => {
-                                // console.log(data);
-                            }).catch(eventErr => {
-                                console.log(eventErr);
-                            });
-                        });
-
-                        res.json({ msg: "All participant added successfully", eventID: req.params.eventID, files: participant });
-                    }).catch(function (error) {
-                        console.log(error)      // Failure
-                    });
-                }
-
-
-                // Function call
-            });
-
-    });
-
-    // const newParticipant = new Participant({
-    //     name: name,
-    //     address: address
-    // });
-    // const participant = await newParticipant.save();
-    // const event = await Event.findByIdAndUpdate({ _id: eventID }, { $push: { participants: participant._id } }, { new: true });
-    // res.status(200).json({ msg: 'Create partipipant and referancing to event', participant, event });
+        res.json({ errors, eventID: req.params.eventID, files: participants });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
 });
-
-
-
 
 
 // ⛏️⛏️ UPDATE ALL PERFORMANCE OF A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
@@ -381,11 +308,6 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
 
 
 
-
-
-
-
-
 router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
     try {
 
@@ -447,20 +369,10 @@ router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
 
 
 
-
-
-
-
-
-
-// doc.subdocs.push({ _id: 4815162342 })
-// doc.subdocs.pull({ _id: 4815162342 }) // removed
 /* ⛏️⛏️ DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.delete('/:id', ensureAuth, async (req, res, next) => {
     try {
-        // console.log(participant);
-        // console.log("DELETE parformance");
-        if (req.user.role === SUPER) {
+        if (req.userRole=== SUPER) {
             const participant = await Participant.findByIdAndDelete(req.params.id);
             const performance = await Performance.findOneAndDelete({ participant: req.params.id });
             const event = await Event.findOneAndUpdate({ participants: participant._id }, { $pull: { participants: participant._id } }, { new: true });
@@ -468,40 +380,17 @@ router.delete('/:id', ensureAuth, async (req, res, next) => {
         } else {
             res.status(200).json({ msg: 'Only super user are able to delete any perticipant' });
         }
-        // console.log(performance);
-        // { $pull: { templates: { _id: templateid } } },
     } catch (error) {
         res.json(error)
     }
 });
 
 
-/* ⛏️⛏️ UPDATE EVENTS OR ADD PARTICIPANTS TO AN EVENTS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
-/*
-router.get('/dashboard/participant', async (req, res, next) => {
-    try {
-        const participant = await Participant.find();
-        res.status(200).json({ participant });
-    } catch (error) {
-        res.json(error);
-    }
-});
-*/
-
-
-
-
-
-
-
 // ⛏️⛏️ GET ALL PERFORMANCES OF ALL NETS OF A SINGLE EVENT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
 router.get('/get-performance/:eventID/:roundNum', async (req, res, next) => {
-    // console.log(req.params.roundNum);
-    // console.log("Get performance");
     try {
         const performances = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" }).exec();
-        const rankingPerformance = performances.sort(wholeRanking)
-        // console.log(performances.length);
+        const rankingPerformance = performances.sort(wholeRanking);
         res.status(200).json({ msg: 'Get all performance of an event', rankingPerformance });
     } catch (error) {
         console.log(error);

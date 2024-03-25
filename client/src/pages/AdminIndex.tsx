@@ -79,7 +79,10 @@ class LoginPage extends Component {
 
 
     componentDidMount(): void {
-        if (localStorage.getItem('token')) {
+        const token = localStorage.getItem('token');
+        console.log({token});
+        
+        if (token && token !== '') {
             return this.props.navigateToTarget("/admin/dashboard");
         }
     }
@@ -89,6 +92,7 @@ class LoginPage extends Component {
 
 
     render() {
+        if(localStorage.getItem('token')) return <Navigate to={"/admin/dashboard"} />;
         return (
             <div className="AdminIndex">
                 {this.state.isLoading ? <Loader /> : (<React.Fragment>

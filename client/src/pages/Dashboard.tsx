@@ -57,12 +57,9 @@ export class Dashboard extends Component {
     componentDidMount() {
         this.isMountedValue = true;
         this.getAllEvents();
-
-        if(!localStorage.getItem('token')){
-            this.props.navigateToTarget("/admin");
-        }
-
     }
+
+    
     updateList = (update) => { if (update) this.getAllEvents() };
 
 
@@ -76,7 +73,10 @@ export class Dashboard extends Component {
     }
 
     render() {
+
+        if(!localStorage.getItem('token')) return <Navigate to={"/admin"} />;
         return (
+            
             <div className="Dashboard">
                 <div className="container">
                     <br />

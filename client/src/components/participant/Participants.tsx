@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { Button, Modal } from "react-bootstrap";
-import Loader from '../elements/Loader';
 import ModalElement from '../elements/ModalElement';
 
 const Participants = (props) => {
@@ -78,15 +77,12 @@ const Participants = (props) => {
             ...participant,
             [evt.target.name]: evt.target.value
         });
-        // console.log(participant);
     }
 
     // ⛏️⛏️DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
     const deleteParticipant = async (e, id) => {
         e.preventDefault();
         try {
-            // console.log("HIT. ", id);
-            // console.log(JSON.parse(localStorage.getItem('user')));
             const checkUser = JSON.parse(localStorage.getItem('user'));
             if (checkUser.role === "SUPER") {
                 const token = localStorage.getItem("token");
@@ -105,7 +101,6 @@ const Participants = (props) => {
             } else {
                 // SHOW ERROR YOU CAN DELETE ANY PARTICIPANT 
                 setErrorList(prevState => [...prevState, { msg: "Only super admin is able to delete any participant." }]);
-                // console.log(errorList);
             }
 
         } catch (error) {
@@ -129,7 +124,6 @@ const Participants = (props) => {
     // ⛏️⛏️ ON CHANGE EVENT AND SET VALUE FOR A FILE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     function handleCsvChange(e) {
         e.preventDefault();
-        // console.log("E - ",  e.target.files[0]);
         setSelectedFile(e.target.files[0]);
     }
 
@@ -142,14 +136,10 @@ const Participants = (props) => {
             const token = localStorage.getItem("token");
             const formData = new FormData();
             formData.append('file', selectedFile);
-            for (let k of formData.entries()) {
-                console.log(k);
-            }
-
             const options = {
                 method: "POST",
                 body: formData,
-                Headers: {
+                headers: {
                     "Authorization": `Bearer ${token}`
                 }
             };
@@ -279,7 +269,7 @@ const Participants = (props) => {
                                     </select>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="city">City*</label>
+                                    <label htmlFor="city">City</label>
                                     <input type="text" className="form-control" id="city" name="city" onChange={handleChange} placeholder="Enter Your City" />
                                 </div>
 
