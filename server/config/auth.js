@@ -24,6 +24,5 @@ module.exports = {
       },
     ensureGuast: (req, res, next) => {
         next(); // PASS
-
     }
 }

@@ -13,62 +13,53 @@ const updateSG = (gameNum, gameSPPD, wp) => {
 
 
 
+function gameCheck(i, gameNum, gameObj) {
+    const specGame = `game${gameNum}`;
+    if (findNet.performance[i][specGame]) {
+        if (findNet.performance[i][specGame].pointDeferential > 0) {
+            performancesIds.push(findNet.performance[i]._id);
+            performances.push(findNet.performance[i]);
+            gameObj[specGame] = updateSG(gameNum, findNet.performance[i][specGame], wp);
+        }else{
+            performancesIds.push(findNet.performance[i]._id);
+            performances.push(findNet.performance[i]);
+            gameObj[specGame] = updateSG(gameNum, findNet.performance[i][specGame], 0);
+        }
+    }
+}
+
 module.exports.updateOnlyPoint = async (findNet, roundNum, wp) => {
-    const performancesIds = [];
-    const performances = [];
     for (let i = 0; i < findNet.performance.length; i++) {
         if (roundNum === 1) {
             const gameObj = new Object();
             gameCheck(i, 1, gameObj);
             gameCheck(i, 2, gameObj);
             gameCheck(i, 3, gameObj);
-            // console.log(gameObj);
             const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
         }else if (roundNum === 2) {
             const gameObj = new Object();
             gameCheck(i, 4, gameObj);
             gameCheck(i, 5, gameObj);
             gameCheck(i, 6, gameObj);
-            // console.log(gameObj);
             const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
         }else if (roundNum === 3) {
             const gameObj = new Object();
             gameCheck(i, 7, gameObj);
             gameCheck(i, 8, gameObj);
             gameCheck(i, 9, gameObj);
-            console.log("Performance - ",findNet.performance[i]);
-            console.log("Game obj - ",gameObj);
             const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
         }else if (roundNum === 4) {
             const gameObj = new Object();
             gameCheck(i, 10, gameObj);
             gameCheck(i, 11, gameObj);
             gameCheck(i, 12, gameObj);
-            // console.log(gameObj);
             const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
         }else if (roundNum === 5) {
             const gameObj = new Object();
             gameCheck(i, 13, gameObj);
             gameCheck(i, 14, gameObj);
             gameCheck(i, 15, gameObj);
-            // console.log(gameObj);
             const updatedPerformance = await Performance.updateOne({ _id: findNet.performance[i]._id }, gameObj);
-        }
-    }
-    // console.log(performancesIds);
-
-    function gameCheck(i, gameNum, gameObj) {
-        const specGame = `game${gameNum}`;
-        if (findNet.performance[i][specGame]) {
-            if (findNet.performance[i][specGame].pointDeferential > 0) {
-                performancesIds.push(findNet.performance[i]._id);
-                performances.push(findNet.performance[i]);
-                gameObj[specGame] = updateSG(gameNum, findNet.performance[i][specGame], wp);
-            }else{
-                performancesIds.push(findNet.performance[i]._id);
-                performances.push(findNet.performance[i]);
-                gameObj[specGame] = updateSG(gameNum, findNet.performance[i][specGame], 0);
-            }
         }
     }
 }
@@ -77,13 +68,6 @@ module.exports.updateOnlyPoint = async (findNet, roundNum, wp) => {
 
 // us, round, team1Score, t1p, t1pd, us.netID
 module.exports.updatedPerformance = (ut, roundNum, score, tp, tpd, netID) => {
-    // console.log("Update performace - ", ut);
-    // window[gameSpec] = new Object();
-    // window[gameSpec].score = score;
-    // window[gameSpec].point = tp;
-    // window[gameSpec].pointDeferential = tpd;
-    // return { gameSpec: window[gameSpec] }
-    // console.log("Total point ",tp);
     if (roundNum == 1) {
         switch (ut.game) {
             case 1:

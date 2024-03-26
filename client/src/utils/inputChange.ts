@@ -1,3 +1,4 @@
+import { ITeam, IUpdateScore } from '../types';
 import { SCORE } from './global';
 
 
@@ -31,16 +32,10 @@ const handleExtraWinningPointChange = (e, netID, roundNum, updateScore, setUpdat
 
 
 // e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore
-const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, updateScore, setUpdateScore, individual) => {
+const handleScoreUpdate = (e, game, netID, scoreType, team, oponent, firstTeam, updateScore, setUpdateScore, individual) => {
+    let scoreToUpdate = structuredClone(updateScore);
     // THIS IS NOT EXTRA POINT 
     if (scoreType === SCORE) {
-        // console.log("Update team - ", updateScore);
-        // console.log("-----------😱😱Score😱😱----------------");
-        // console.log("Game of round - ", game);
-        // console.log("Team - ",team);
-        // console.log("Oponent team - ", oponent);
-        // console.log("inputChange.js line 30 - ",updateScore);
-
         const findNet = updateScore.find((elm, i) => elm.netID === netID);
 
         // A NET THAT HAS LESS THAN 4 PLAYERS 
@@ -53,8 +48,8 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
 
                     // UPDATE TEAM AND GAME 
                     if (findNetGame) {
-                        const findPlayerGame =  updateScore.find((elm, i) => elm.netID === netID && elm.game === game && team[0] === elm.team1.players[0]);
-                        if(findPlayerGame){
+                        const findPlayerGame = updateScore.find((elm, i) => elm.netID === netID && elm.game === game && team[0] === elm.team1.players[0]);
+                        if (findPlayerGame) {
                             // UPDATE EXISTING GAME 
                             updateScore.forEach((up, i) => {
                                 if (up.team1.players[0] === team[0] && up.netID === netID && up.game === game) {
@@ -65,8 +60,8 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
                                 //     singlePlayerRecord(score, findNet.wp);
                                 // }
                             });
-                        }else{
-                            singlePlayerRecord(score, findNet.wp); 
+                        } else {
+                            singlePlayerRecord(score, findNet.wp);
                         }
 
                     } else {
@@ -178,8 +173,7 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
 
 
     function singlePlayerRecord(score, wp) {
-        setUpdateScore(oldState => [...oldState,
-        {
+        scoreToUpdate = [...updateScore, {
             team1: {
                 players: [team[0]],
                 score
@@ -188,7 +182,9 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
             game,
             wp,
             netID
-        }]);
+        }];
+        setUpdateScore(scoreToUpdate);
+
     }
 
     function updateSpecificGame(ft, us, nID, g, t, e) {
@@ -237,8 +233,8 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
 
 
     function createNewRecord(team1Players, team2Players, teamScore, oponentScore, wp) {
-        setUpdateScore(oldState => [...oldState,
-        {
+
+        scoreToUpdate = [...updateScore, {
             team1: {
                 players: team1Players,
                 score: teamScore
@@ -250,32 +246,15 @@ const handleScoreChange = (e, game, netID, scoreType, team, oponent, firstTeam, 
             game,
             wp,
             netID
-        }]);
+        }]
+        setUpdateScore(scoreToUpdate);
     }
 
-    /*
-    function createNewRecord( score, oponentScore) {
-        setUpdateScore(oldState => [...oldState,
-        {
-            team1: {
-                players: [team[0], team[1]],
-                score
-            },
-            team2: {
-                players: [oponent[0], oponent[1]],
-                score: oponentScore,
-            },
-            game,
-            wp: null,
-            netID
-        }]);
-    }
-    */
-
+    return scoreToUpdate;
 }
 
 
-export { handleScoreChange, handleExtraWinningPointChange };
+export { handleScoreUpdate, handleExtraWinningPointChange };
 
 
 

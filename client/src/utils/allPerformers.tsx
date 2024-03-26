@@ -136,7 +136,6 @@ const playersPointDifferential = (net, game, scoreType, gor, roundNum) => {
 
 
 
-// net, props.game[0], SCORE, 1, handleScoreChange, getDefaultValue, props
 // gor= GAME OF ROUND 
 const playersScore = (net, game, scoreType, gor, handleScoreChange, roundNum, updateScore, setUpdateScore) => {
 
@@ -149,6 +148,7 @@ const playersScore = (net, game, scoreType, gor, handleScoreChange, roundNum, up
         return (<div className="player-score d-flex flex-column">
             <div className="two-p-input two-p-i-1">
                 <input className="form-control input-score" type="text"
+                    // onChange={e => handleScoreChange(e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore, false)}
                     onChange={e => handleScoreChange(e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore, false)}
                     defaultValue={t1p1default} />
             </div>
@@ -171,37 +171,16 @@ const playersScore = (net, game, scoreType, gor, handleScoreChange, roundNum, up
                         className="form-control input-score-no-net"
                         defaultValue={getDefaultValue(p, scoreType, game, roundNum)}
                         style={{ width: "80px" }} name={net.sl}
-                        // e, game, netID, scoreType, team, oponent, updateScore, setUpdateScore
                         onChange={e => handleScoreChange(e, game, net._id, scoreType, [p._id], null, null, updateScore, setUpdateScore, true)}
                     />
                 </div>
             )))} </div>);
         } else {
-            // console.log("player 1 - ", net.performance[0]._id);
-            // console.log("player 2 - ", net.performance[1]._id);
-            // console.log("player 3 - ", net.performance[2]._id);
-            // console.log("player 4 - ", net.performance[3]._id);
 
             if (gor === 1) {
                 // 1ST & 4TH VS 2ND & 3RD 
                 let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 return returnScore(one, four, two, three);
-                // const team1 = [net.performance[0]._id, net.performance[3]._id];
-                // const team2 = [net.performance[1]._id, net.performance[2]._id];
-                // return (<div className="player-score d-flex flex-column">
-                //     <div className="two-p-input two-p-i-1">
-                //         <input className="form-control" type="text"
-                //             onChange={e => handleScoreChange(e, game, net._id, scoreType, team1, team2, true, updateScore, setUpdateScore, false)}
-                //             defaultValue={getDefaultValue(net.performance[0], scoreType, game, roundNum)} />
-                //     </div>
-                //     <div className="line"></div>
-
-                //     <div className="two-p-input two-p-i-2">
-                //         <input className="form-control" type="text"
-                //             onChange={e => handleScoreChange(e, game, net._id, scoreType, team2, team1, false, updateScore, setUpdateScore, false)}
-                //             defaultValue={getDefaultValue(net.performance[1], scoreType, game, roundNum)} />
-                //     </div>
-                // </div>);
             }
 
 

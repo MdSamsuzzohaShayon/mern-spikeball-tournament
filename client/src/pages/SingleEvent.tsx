@@ -160,12 +160,9 @@ class SingleEvent extends Component {
         if (this.state.isLoading) {
             return <Loader />
         } else {
-            // console.log(this.state.currentEvent);
             if (this.state.currentEventID) {
                 return (
                     <div className="SingleEvent">
-                        {/* Event admin ID: {this.state.currentEventID} */}
-                        {/* {console.log("Event -")} */}
                         <div className="Overview">
                             <div className="d-flex align-items-start dashboard-nav container-fluid">
                                 <div className="nav nav-pills dashboard-nav-items bg-dark text-center">
@@ -183,7 +180,6 @@ class SingleEvent extends Component {
                                     {this.showAllNavItem()}
                                 </div>
                             </div>
-                            {/* <button className="btn btn-danger" onClick={handleLogout}>Logout</button> */}
                         </div>
                     </div>
                 );

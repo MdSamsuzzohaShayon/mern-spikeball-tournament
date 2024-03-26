@@ -307,6 +307,107 @@ router.put('/update-performance/:eventID/:roundNum', ensureAuth, async (req, res
 });
 
 
+// ⛏️⛏️ UPDATE A SINGLE PERFORMANCE OF A ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
+router.put('/update-single/:roundNum', ensureAuth, async (req, res, next) => {
+    try {
+        const { winningPoint, myTeam, opTeam, gameNum, netID, score } = req.body;
+        const roundNum = parseInt(req.params.roundNum, 10);
+
+        const currWP = winningPoint || 1;
+
+        // ===== Find and populate net =====
+        const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15 pre_rank";
+        const netExist = await Net.findOne({ _id: netID })
+            .populate({
+                path: "performance",
+                select,
+                populate: {
+                    path: "participant",
+                    select: "firstname lastname"
+                }
+            });
+        if (!netExist) return res.status(404).json({ msg: "Net does not exist" });
+        const updatePromises = [];
+
+        //  ===== Update performance and winning points in net =====
+        if (currWP) {
+            updatePromises.push(Net.updateOne({ _id: netID }, { wp: currWP }));
+        }
+
+        // ===== Update Performances =====
+        const gameKey = `game${gameNum}`;
+        const netPerformances = [...netExist.performance];
+        const myTeamP1 = netPerformances.find(performance => performance._id.toString() === myTeam[0].toString());
+        const myGameObj = { score, point: currWP, pointDeferential: myTeamP1.pointDeferential };
+        
+        if (opTeam && opTeam.length > 0) {
+            const opTeamP1 = netExist.performance.find(performance => performance._id.toString() === opTeam[0].toString());
+            const opGameObj = { score: opTeamP1[gameKey].score, point: 0, pointDeferential: opTeamP1.pointDeferential };
+            if(!opGameObj.score || myGameObj.score > opGameObj.score){
+                myGameObj.point = currWP;
+                opGameObj.point = 0;
+                myGameObj.pointDeferential = myGameObj.score - (opGameObj.score || 0);
+                opGameObj.pointDeferential = -(myGameObj.score - (opGameObj.score || 0));
+            }else{
+                myGameObj.point = 0;
+                opGameObj.point = currWP;
+                myGameObj.pointDeferential = (opGameObj.score || 0) - myGameObj.score;
+                opGameObj.pointDeferential = -((opGameObj.score || 0) - myGameObj.score);
+            }
+            updatePromises.push(Performance.updateMany({ _id: { $in: opTeam } }, { $set: { [gameKey]: opGameObj } }))
+        };
+        updatePromises.push(Performance.updateMany({ _id: { $in: myTeam } }, { $set: { [gameKey]: myGameObj } }));
+
+        await Promise.all(updatePromises);
+        res.status(200).json({ msg: "Updated score successfully" });
+    } catch (error) {
+        next(error);
+    }
+});
+
+async function updateWinningPointOnly(winningPoint, netID, roundNum) {
+    const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15 pre_rank";
+    const findNet = await Net.findOneAndUpdate({ _id: netID }, { wp: winningPoint })
+        .populate({
+            path: "performance",
+            select,
+            populate: {
+                path: "participant",
+                select: "firstname lastname"
+            }
+        });
+
+    await updateOnlyPoint(findNet, roundNum, winningPoint);
+}
+
+async function updateSinglePlayerPerformance(playerData, netID, roundNum) {
+    let team1Score = playerData.score || 0;
+    let t1p = team1Score > 0 ? playerData.score : 0;
+    let t1pd = team1Score;
+
+    const singlePlayer = await Performance.updateOne({ _id: playerData.players[0] }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, netID) });
+}
+
+async function updateTeamPerformance(team1, team2, game, netID, roundNum) {
+    let team1Score = team1.score || getScoreFromDoc(game, await Performance.findById(team1.players[0]));
+    let team2Score = team2.score || getScoreFromDoc(game, await Performance.findById(team2.players[0]));
+
+    let t1pd = team1Score - team2Score;
+    let t2pd = team2Score - team1Score;
+
+    let t1p = 0, t2p = 0;
+    if (t1pd > t2pd) {
+        t1p = winningPoint;
+    } else if (t1pd < t2pd) {
+        t2p = winningPoint;
+    }
+
+    const netUpdate = await Net.findOneAndUpdate({ _id: netID }, { wp: winningPoint });
+    const updateTeam1 = await Performance.updateMany({ _id: { $in: team1.players } }, { $set: updatedPerformance(us, roundNum, team1Score, t1p, t1pd, netID) });
+    const updateTeam2 = await Performance.updateMany({ _id: { $in: team2.players } }, { $set: updatedPerformance(us, roundNum, team2Score, t2p, t2pd, netID) });
+
+}
+
 
 router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
     try {
@@ -372,7 +473,7 @@ router.post('/exports/:eventID', ensureAuth, async (req, res, next) => {
 /* ⛏️⛏️ DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
 router.delete('/:id', ensureAuth, async (req, res, next) => {
     try {
-        if (req.userRole=== SUPER) {
+        if (req.userRole === SUPER) {
             const participant = await Participant.findByIdAndDelete(req.params.id);
             const performance = await Performance.findOneAndDelete({ participant: req.params.id });
             const event = await Event.findOneAndUpdate({ participants: participant._id }, { $pull: { participants: participant._id } }, { new: true });

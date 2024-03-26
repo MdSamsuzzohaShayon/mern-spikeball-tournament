@@ -2,7 +2,6 @@
 
 ### Requirements
  - https://www.loom.com/share/008366a881eb491789055ac2bf89193a
- - Ranking image is not showing
  - Ranking should be updated immidiatly 
  - Leaving a player is not showing properly
  - When anyone left, he should be shown left for all next rounds 

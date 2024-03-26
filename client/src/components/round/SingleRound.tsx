@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, { useRef, useState, useEffect } from "react";
 import {
   hostname,
@@ -8,33 +6,19 @@ import {
   SCORE,
 } from "../../utils/global";
 import Loader from "../elements/Loader";
-import { getTotalPPD } from "../../utils/getTotalPPD";
 import AddParticipant from "../participant/AddParticipant";
 import {
   getTotalPointOfARound,
   getTDRound,
 } from "../../utils/tptd";
 import { showLiftedPefrormance } from "../../utils/performance";
-import {
-  handleScoreChange,
-  handleExtraWinningPointChange,
-} from "../../utils/inputChange";
-import {
-  playersExtraPoint,
-  playersPoint,
-  playersPointDifferential,
-  playersScore,
-} from "../../utils/allPerformers";
-import {
-  arrangingPerformer,
-  serializePerformer,
-} from "../../utils/arrangePerformer";
 import { tabKeyFocusChange } from "../../utils/helpers";
 import { AgGridReact } from "ag-grid-react";
 import { Modal, Button, ToastBody } from "react-bootstrap";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import CustomCellRenderer from "./CustomCellRenderer";
+import NetOfARound from "./NetOfARound";
 
 const RANK_ASSIGN = "RANK_ASSIGN",
   PRERANK_ASSIGN = "PRERANK_ASSIGN",
@@ -103,7 +87,7 @@ function SingleRound(props) {
     // STYLE GOT POINT
 
     const t = localStorage.getItem("token");
-    if(t){
+    if (t) {
       setToken(t);
     }
     setPerformances([...props.performances]);
@@ -126,7 +110,7 @@ function SingleRound(props) {
     };
   });
 
-  
+
   useEffect(() => {
     let timer;
     if (openSMS === true) {
@@ -227,7 +211,7 @@ function SingleRound(props) {
       // http://localhost:4000/api/event/assign-initial-net/611c978ef047ea50e9798039
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json",  "Authorization": `Bearer ${token}` },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ performances: result, leftedPerformance }),
       };
       const assignUrls = [
@@ -240,8 +224,7 @@ function SingleRound(props) {
       console.log(props.eventID);
 
       const response = await fetch(
-        `${hostname}/api/net/${assignUrls[roundNum - 1]}/${
-          props.eventID
+        `${hostname}/api/net/${assignUrls[roundNum - 1]}/${props.eventID
         }/${roundNum}`,
         requestOptions
       );
@@ -260,7 +243,7 @@ function SingleRound(props) {
 
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json",  "Authorization": `Bearer ${token}` },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ performances, leftedPerformance }),
       };
 
@@ -283,7 +266,7 @@ function SingleRound(props) {
     try {
       const requestOptions = {
         method: "PUT",
-        headers: { "Content-Type": "application/json",  "Authorization": `Bearer ${token}` },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ updateScore }),
       };
       const response = await fetch(
@@ -373,7 +356,7 @@ function SingleRound(props) {
       );
       rowData.push(row);
     });
-    
+
     return rowData;
   };
 
@@ -384,6 +367,7 @@ function SingleRound(props) {
     "1 Up 1 Down",
     "1 Up 1 Down",
   ];
+  
 
 
   // ⛏️⛏️ THIS IS MAIN RETURN
@@ -392,15 +376,15 @@ function SingleRound(props) {
       <div className="all-btns-message-modal">
         <div className="rank-n-group my-3 w-full">
           <div>
-              <button
-                className="btn btn-primary"
-                disabled={!showPerformances}
-                onClick={(e) => {
-                  Assign();
-                }}
-              >
-                {assignBtnNames[roundNum - 1]}
-              </button>
+            <button
+              className="btn btn-primary"
+              disabled={!showPerformances}
+              onClick={(e) => {
+                Assign();
+              }}
+            >
+              {assignBtnNames[roundNum - 1]}
+            </button>
           </div>
 
           <div className="btn-group">
@@ -493,7 +477,7 @@ function SingleRound(props) {
           {!props.initialize && (
             <div className="submit-btn-wrap">
               <div className="submit-btn">
-                <button onClick={handleUpdate} className="btn btn-primary">
+                <button onClick={handleUpdate} type="button" className="btn btn-primary">
                   Submit
                 </button>
               </div>
@@ -504,224 +488,7 @@ function SingleRound(props) {
             <Loader />
           ) : (
             <div className="nets-table-wrapper">
-              <div className="show-all-nets">
-                {!props.initialize && (
-                  <React.Fragment>
-                    {/* PLAYER GAME, SCORE, POINT, POINT DIFFRENTIAL  */}
-                    <div className="table-responsive-lg net-table">
-                      <table className="table table-striped table-bordered">
-                        <thead className="table-dark">
-                          <tr className="header-group-1">
-                            <th colSpan="2" scope="colgroup"></th>
-                            <th colSpan="4" scope="colgroup">
-                              Game {props.game[0]}
-                            </th>
-                            <th colSpan="4" scope="colgroup">
-                              Game {props.game[1]}
-                            </th>
-                            <th colSpan="4" scope="colgroup">
-                              Game {props.game[2]}
-                            </th>
-                            <th colSpan="3" scope="colgroup">
-                              Total
-                            </th>
-                          </tr>
-                          <tr className="header-group-2">
-                            <th scope="col">Net</th>
-                            <th>
-                              <button
-                                type="button"
-                                className="btn btn-secondary p-0 m-0 bg-transparent text-white border-0 btn-outline-transparent"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="top"
-                                title="Winning point"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                W/P
-                              </button>
-                            </th>
-                            <th scope="col">Team</th>
-                            <th scope="col">Score</th>
-                            <th scope="col">Point</th>
-                            <th scope="col">point differential</th>
-                            <th scope="col">Team</th>
-                            <th scope="col">Score</th>
-                            <th scope="col">Point</th>
-                            <th scope="col">point differential</th>
-                            <th scope="col">Team</th>
-                            <th scope="col">Score</th>
-                            <th scope="col">Point</th>
-                            <th scope="col">point differential</th>
-                            <th scope="col">Participant</th>
-                            <th scope="col">point</th>
-                            <th scope="col">point differential</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {nets &&
-                            nets.map((net, i) => (
-                              <tr key={i} className="horizontal-border">
-                                <th scope="row">Net {net.sl || i + 1}</th>
-                                <td>
-                                  {playersExtraPoint(
-                                    net,
-                                    handleExtraWinningPointChange,
-                                    roundNum,
-                                    updateScore,
-                                    setUpdateScore,
-                                    net.wp
-                                  )}
-                                </td>
-
-                                <td>
-                                  {arrangingPerformer(
-                                    net.performance,
-                                    1,
-                                    props.game[0],
-                                    POINT_DIFFERENTIAL,
-                                    roundNum
-                                  )}
-                                </td>
-                                {/* SCORE  */}
-                                <td>
-                                  {playersScore(
-                                    net,
-                                    props.game[0],
-                                    SCORE,
-                                    1,
-                                    handleScoreChange,
-                                    roundNum,
-                                    updateScore,
-                                    setUpdateScore
-                                  )}
-                                </td>
-                                <td>
-                                  {playersPoint(
-                                    net,
-                                    props.game[0],
-                                    POINT,
-                                    1,
-                                    roundNum
-                                  )}
-                                </td>
-                                <td>
-                                  {playersPointDifferential(
-                                    net,
-                                    props.game[0],
-                                    POINT_DIFFERENTIAL,
-                                    1,
-                                    roundNum
-                                  )}
-                                </td>
-                                <td>
-                                  {arrangingPerformer(
-                                    net.performance,
-                                    2,
-                                    props.game[1],
-                                    POINT_DIFFERENTIAL,
-                                    roundNum
-                                  )}
-                                </td>
-                                {/* SCORE  */}
-                                <td>
-                                  {playersScore(
-                                    net,
-                                    props.game[1],
-                                    SCORE,
-                                    2,
-                                    handleScoreChange,
-                                    roundNum,
-                                    updateScore,
-                                    setUpdateScore
-                                  )}
-                                </td>
-                                <td>
-                                  {playersPoint(
-                                    net,
-                                    props.game[1],
-                                    POINT,
-                                    2,
-                                    roundNum
-                                  )}
-                                </td>
-                                <td>
-                                  {playersPointDifferential(
-                                    net,
-                                    props.game[1],
-                                    POINT_DIFFERENTIAL,
-                                    2,
-                                    roundNum
-                                  )}
-                                </td>
-                                <td>
-                                  {arrangingPerformer(
-                                    net.performance,
-                                    3,
-                                    props.game[2],
-                                    POINT_DIFFERENTIAL,
-                                    roundNum
-                                  )}
-                                </td>
-                                {/* SCORE  */}
-                                <td>
-                                  {playersScore(
-                                    net,
-                                    props.game[2],
-                                    SCORE,
-                                    3,
-                                    handleScoreChange,
-                                    roundNum,
-                                    updateScore,
-                                    setUpdateScore
-                                  )}
-                                </td>
-                                <td>
-                                  {playersPoint(
-                                    net,
-                                    props.game[2],
-                                    POINT,
-                                    3,
-                                    roundNum
-                                  )}
-                                </td>
-                                <td>
-                                  {playersPointDifferential(
-                                    net,
-                                    props.game[2],
-                                    POINT_DIFFERENTIAL,
-                                    3,
-                                    roundNum
-                                  )}
-                                </td>
-                                <td>
-                                  
-                                  {serializePerformer(
-                                    rankPerformanceInNet[i]
-                                  )}
-                                </td>
-                                <td>
-                                  
-                                  {getTotalPPD(
-                                    rankPerformanceInNet[i],
-                                    POINT,
-                                    roundNum
-                                  )}
-                                </td>
-                                <td>
-                                  {getTotalPPD(
-                                    rankPerformanceInNet[i],
-                                    POINT_DIFFERENTIAL,
-                                    roundNum
-                                  )}
-                                </td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </React.Fragment>
-                )}
-              </div>
+              <NetOfARound game={props.game} nets={nets} roundNum={roundNum} updateScore={updateScore} rankPerformanceInNet={rankPerformanceInNet} setUpdateScore={setUpdateScore} token={token} eventID={props.eventID} />
             </div>
           )}
           {roundNum <= 4 && (
@@ -732,7 +499,7 @@ function SingleRound(props) {
                 </div>
               )}
               <div className="text-md-center">
-                
+
                 <button onClick={handleNextRound} className="btn btn-warning">
                   Next Round
                 </button>

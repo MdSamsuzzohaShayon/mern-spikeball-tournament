@@ -90,11 +90,6 @@ export const arrangingPerformer = (performer, gor, game, scoreType, roundNum) =>
 
 // ⛏️⛏️ CHOOSING WHO WILL PLAY AGAINEST WHO ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 export const serializePerformer = (performers) => {
-    // console.log("Game of round - ",gor);
-    console.log("Performers - ", performers);
-
-
-
     if (performers.length < 4) {
         return (
             <div className="net-less-four-total">
