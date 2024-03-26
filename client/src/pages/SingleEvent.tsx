@@ -10,7 +10,7 @@ import Loader from '../components/elements/Loader';
 import { formattedDate } from '../utils/helpers';
 import { IParticipant } from '../types';
 
-interface SingleEventProps extends WithRouterProps {
+interface ISingleEventProps extends WithRouterProps {
     params: {
         id: string;
     };
@@ -29,10 +29,10 @@ interface ISingleEventState {
     isLoading: boolean;
 }
 
-class SingleEvent extends Component<SingleEventProps, ISingleEventState> {
+class SingleEvent extends Component<ISingleEventProps, ISingleEventState> {
     private is_mounted: boolean = false;
 
-    constructor(props: SingleEventProps) {
+    constructor(props) {
         super(props);
         this.state = {
             currentEventID: null,

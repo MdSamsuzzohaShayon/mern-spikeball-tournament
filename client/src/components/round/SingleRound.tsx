@@ -24,6 +24,17 @@ const RANK_ASSIGN = "RANK_ASSIGN",
   PRERANK_ASSIGN = "PRERANK_ASSIGN",
   PACK_ASSIGN = "PACK_ASSIGN";
 
+
+
+interface IProcessRow {
+  _id: string;
+  Name: string;
+  Ranking: number; //getRankingNumber(index, performances, roundNum);
+  Point: string;
+  "Point Diffential": string;
+  Action: React.ReactNode;
+}
+
 function SingleRound(props) {
   const { nets } = props.round;
   const { roundNum, rankPerformanceInNet } = props;
@@ -301,25 +312,26 @@ function SingleRound(props) {
   };
 
   const processPerformanceData = (data) => {
-    let rowData = [];
+    const rowData: IProcessRow[] = [];
     data.forEach((one, index) => {
-      let row = {};
-      row._id = one._id;
-      row.Name = `${one.participant.firstname} ${one.participant.lastname}`;
-      row.Ranking = index + 1; //getRankingNumber(index, performances, roundNum);
-      row.Point = getTotalPointOfARound(one, roundNum)
-        ? getTotalPointOfARound(one, roundNum).toFixed(2)
-        : "";
-      row["Point Diffential"] = getTDRound(one, roundNum)
-        ? Math.sign(getTDRound(one, roundNum)) === -1
-          ? getTDRound(one, roundNum).toFixed(2)
-          : getTDRound(one, roundNum).toFixed(2)
-        : "";
-      row.Action = (
-        <button className="btn btn-danger" onClick={(e) => leftNet(e, one._id)}>
-          Left
-        </button>
-      );
+      const row: IProcessRow = {
+        _id: one._id,
+        Name: `${one.participant.firstname} ${one.participant.lastname}`,
+        Ranking: index + 1, //getRankingNumber(index, performances, roundNum),
+        Point: getTotalPointOfARound(one, roundNum)
+          ? getTotalPointOfARound(one, roundNum).toFixed(2)
+          : "",
+        "Point Diffential": getTDRound(one, roundNum)
+          ? Math.sign(getTDRound(one, roundNum)) === -1
+            ? getTDRound(one, roundNum).toFixed(2)
+            : getTDRound(one, roundNum).toFixed(2)
+          : "",
+        Action: (
+          <button className="btn btn-danger" onClick={(e) => leftNet(e, one._id)}>
+            Left
+          </button>
+        ),
+      };
       rowData.push(row);
     });
 
@@ -333,7 +345,7 @@ function SingleRound(props) {
     "1 Up 1 Down",
     "1 Up 1 Down",
   ];
-  
+
 
 
   // ⛏️⛏️ THIS IS MAIN RETURN

@@ -3,14 +3,6 @@ import Point from './Point';
 import RoundTable from './RoundTable';
 
 function Round(props) {
-
-    // console.log("Props - ",props);
-    // if()
-    useEffect(() => {
-        console.log("Component did mount [Round.jsx]");
-        // console.log(props);
-    }, []);
-
     return (
         <div className="Round">
             {props.pp.length > 0 ? (<React.Fragment>
@@ -24,13 +16,11 @@ function Round(props) {
                         </div>
                     )}
                 </div>
-                {/* {!props.public && ()} */}
                 <div className="row">
                     <h3>Match-up</h3>
                     <RoundTable game={props.game} round={props.round} roundNum={props.roundNum} />
                 </div>
             </React.Fragment>) : (<div className="row">Round is not assigned yet</div>)}
-
 
         </div>
     )

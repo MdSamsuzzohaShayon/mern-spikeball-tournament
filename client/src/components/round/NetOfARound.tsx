@@ -1,11 +1,14 @@
 import React from 'react';
 import { POINT, POINT_DIFFERENTIAL, SCORE, hostname, } from "../../utils/global";
-import { handleScoreUpdate, handleExtraWinningPointChange, } from "../../utils/inputChange";
-import { playersExtraPoint, playersPoint, playersPointDifferential, playersScore, } from "../../utils/allPerformers";
-import { arrangingPerformer, serializePerformer, } from "../../utils/arrangePerformer";
 import { getTotalPPD } from "../../utils/getTotalPPD";
 import { INet, IUpdateScore } from '../../types';
 import TeamScoreInput from '../score/TeamScoreInput';
+import WinningPointInput from '../score/WinningPointInput';
+import { handleRequestUnauthenticated } from '../../utils/auth';
+import PlayersPointField from '../score/PlayerPointField';
+import PerformerSerializer from '../participant/PerformerSerializer';
+import PlayersPointDifferential from '../participant/PlayersPointDifferential';
+import ArrangePerformer from '../participant/ArrangePerformer';
 
 interface INetOfARound {
     game: number[];
@@ -18,13 +21,34 @@ interface INetOfARound {
 
 function NetOfARound(props: INetOfARound) {
 
+    const handleSingleScoreUpdate = async (innerGN: number | null, netID: string, winningPoint: number | null,  score?: number, myTeam?: string[], opTeam?: string[]) => {
+        try {
+            const token = localStorage.getItem("token");
+            const requestOptions = {
+                method: "PUT",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                // { winningPoint, myTeam, opTeam, gameNum, netID, score } 
+                body: JSON.stringify({ winningPoint, myTeam, opTeam, gameNum: innerGN, netID, score }),
+            };
+            const response = await fetch(
+                `${hostname}/api/performance/update-single/${props.roundNum}`,
+                requestOptions
+            );
+            handleRequestUnauthenticated(response);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     return (
-        <div className="show-all-nets">
+        <div className="show-all-nets row">
             {/* PLAYER GAME, SCORE, POINT, POINT DIFFRENTIAL  */}
             <div className="table-responsive-lg net-table">
                 <table className="table table-striped table-bordered">
-                    <thead className="table-dark">
-                        <tr className="header-group-1">
+                    <thead className="table-dark text-capitalize">
+                        <tr className="header-group-1 ">
                             <th colSpan={2} scope="colgroup"></th>
                             <th colSpan={4} scope="colgroup">
                                 Game {props.game[0]}
@@ -67,26 +91,26 @@ function NetOfARound(props: INetOfARound) {
                             props.nets.map((net, i) => (
                                 <tr key={i} className="horizontal-border">
                                     <th scope="row">Net {net.sl || i + 1}</th>
-                                    <td> {playersExtraPoint(net, handleExtraWinningPointChange, props.roundNum, net.wp)}</td>
+                                    <td> <WinningPointInput defaultValue={net.wp} roundNum={props.roundNum} netID={net._id} handleScoreUpdate={handleSingleScoreUpdate} /></td>
 
-                                    <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT_DIFFERENTIAL, props.roundNum)}</td>
-                                    <td><TeamScoreInput key={`tsi-1`} net={net} gameNum={props.game[0]} gor={1} roundNum={props.roundNum} scoreType={SCORE} /></td>
-                                    <td>{playersPoint(net, props.game[0], POINT, 1, props.roundNum)} </td>
-                                    <td>{playersPointDifferential(net, props.game[0], POINT_DIFFERENTIAL, 1, props.roundNum)}</td>
+                                    <td><ArrangePerformer key={`ap-1`} gameNum={props.game[0]} gor={1} performer={net.performance} /></td>
+                                    <td><TeamScoreInput key={`tsi-1`} net={net} gameNum={props.game[0]} gor={1} scoreType={SCORE} handleScoreUpdate={handleSingleScoreUpdate} /></td>
+                                    <td><PlayersPointField key={`ppf-1`} gameNum={props.game[0]} gor={1} net={net} /> </td>
+                                    <td><PlayersPointDifferential key={`ppd-1`} gameNum={props.game[0]} gor={1} net={net}/></td>
 
-                                    <td>{arrangingPerformer(net.performance, 2, props.game[1], POINT_DIFFERENTIAL, props.roundNum)} </td>
-                                    <td><TeamScoreInput key={`tsi-2`} net={net} gameNum={props.game[1]} gor={2} roundNum={props.roundNum} scoreType={SCORE} /></td>
-                                    <td>{playersPoint(net, props.game[1], POINT, 2, props.roundNum)}</td>
-                                    <td>{playersPointDifferential(net, props.game[1], POINT_DIFFERENTIAL, 2, props.roundNum)}</td>
-
-
-                                    <td>{arrangingPerformer(net.performance, 3, props.game[2], POINT_DIFFERENTIAL, props.roundNum)}</td>
-                                    <td><TeamScoreInput key={`tsi-3`} net={net} gameNum={props.game[2]} gor={1} roundNum={props.roundNum} scoreType={SCORE} /></td>
-                                    <td> {playersPoint(net, props.game[2], POINT, 3, props.roundNum)}</td>
-                                    <td>{playersPointDifferential(net, props.game[2], POINT_DIFFERENTIAL, 3, props.roundNum)}</td>
+                                    <td><ArrangePerformer key={`ap-2`} gameNum={props.game[1]} gor={2} performer={net.performance} /></td>
+                                    <td><TeamScoreInput key={`tsi-2`} net={net} gameNum={props.game[1]} gor={2} scoreType={SCORE} handleScoreUpdate={handleSingleScoreUpdate} /></td>
+                                    <td><PlayersPointField key={`ppf-2`} gameNum={props.game[1]} gor={2} net={net} /> </td>
+                                    <td><PlayersPointDifferential key={`ppd-2`} gameNum={props.game[1]} gor={2} net={net}/></td>
 
 
-                                    <td> {serializePerformer(props.rankPerformanceInNet[i])}</td>
+                                    <td><ArrangePerformer key={`ap-3`} gameNum={props.game[2]} gor={3} performer={net.performance} /></td>
+                                    <td><TeamScoreInput key={`tsi-3`} net={net} gameNum={props.game[2]} gor={3} scoreType={SCORE} handleScoreUpdate={handleSingleScoreUpdate} /></td>
+                                    <td><PlayersPointField key={`ppf-3`} gameNum={props.game[2]} gor={3} net={net} /> </td>
+                                    <td><PlayersPointDifferential key={`ppd-3`} gameNum={props.game[2]} gor={3} net={net}/></td>
+
+
+                                    <td> <PerformerSerializer performers={props.rankPerformanceInNet[i]} /></td>
                                     <td>{getTotalPPD(props.rankPerformanceInNet[i], POINT, props.roundNum)}</td>
                                     <td>{getTotalPPD(props.rankPerformanceInNet[i], POINT_DIFFERENTIAL, props.roundNum)}
                                     </td>
