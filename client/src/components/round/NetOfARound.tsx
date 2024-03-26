@@ -11,8 +11,6 @@ interface INetOfARound {
     game: number[];
     nets: INet[];
     roundNum: number;
-    updateScore: IUpdateScore[];
-    setUpdateScore: React.ReducerAction<React.SetStateAction<any>>;
     rankPerformanceInNet: any;
     token: string;
     eventID: string;
@@ -69,10 +67,9 @@ function NetOfARound(props: INetOfARound) {
                             props.nets.map((net, i) => (
                                 <tr key={i} className="horizontal-border">
                                     <th scope="row">Net {net.sl || i + 1}</th>
-                                    <td> {playersExtraPoint(net, handleExtraWinningPointChange, props.roundNum, props.updateScore, props.setUpdateScore, net.wp)}</td>
+                                    <td> {playersExtraPoint(net, handleExtraWinningPointChange, props.roundNum, net.wp)}</td>
 
                                     <td>{arrangingPerformer(net.performance, 1, props.game[0], POINT_DIFFERENTIAL, props.roundNum)}</td>
-                                    {/* <td>{playersScore(net, props.game[0], SCORE, 1, handleScoreChange, props.roundNum, props.updateScore, props.setUpdateScore)}</td> */}
                                     <td><TeamScoreInput key={`tsi-1`} net={net} gameNum={props.game[0]} gor={1} roundNum={props.roundNum} scoreType={SCORE} /></td>
                                     <td>{playersPoint(net, props.game[0], POINT, 1, props.roundNum)} </td>
                                     <td>{playersPointDifferential(net, props.game[0], POINT_DIFFERENTIAL, 1, props.roundNum)}</td>

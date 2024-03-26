@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { Button, Modal } from "react-bootstrap";
-import ModalElement from '../elements/ModalElement';
+import { IParticipant } from '../../types';
+import ParticipantList from './ParticipantList';
 
 const Participants = (props) => {
 
-
-
-    const [show, setShow] = useState(false);
-    const [csvShow, setCsvShow] = useState(false);
-    const [participant, setPartitipant] = useState({});
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [show, setShow] = useState<boolean>(false);
+    const [csvShow, setCsvShow] = useState<boolean>(false);
+    const [participant, setPartitipant] = useState<Partial<IParticipant>>({});
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [errorList, setErrorList] = useState([]);
     const handleClose = () => {
         setErrorList([]);
         setShow(false)
     };
+
+    // ===== Toggle Events =====
     const handleShow = () => setShow(true);
     const handleCsvClose = () => setCsvShow(false);
     const handleCsvShow = () => setCsvShow(true);
@@ -40,35 +41,19 @@ const Participants = (props) => {
             console.log("Add participant & performance [Participants.jsx] - ", response);
             const text = await response.text();
             const jsonRes = JSON.parse(text);
-            // console.log(jsonRes.errors.length);
             if (jsonRes.errors) {
                 if (jsonRes.errors.length >= 1) {
                     setErrorList([...jsonRes.errors]);
                 }
             } else {
-                // console.log(jsonRes);
                 props.updateEvent(true);
                 setShow(false);
-                // if (response.status = 200) {
-                // } 
-                console.log("Status - ", response.status);
                 setPartitipant({});
             }
-
-
-            console.log(participant);
-
-            // console.log(jsonRes.errors);
-
         } catch (error) {
             console.log(error);
         }
     };
-
-
-
-
-
 
 
     // ⛏️⛏️GETTING INPUT VALUE ON CHANGING ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
@@ -77,35 +62,6 @@ const Participants = (props) => {
             ...participant,
             [evt.target.name]: evt.target.value
         });
-    }
-
-    // ⛏️⛏️DELETE PARTICIPANT ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-    const deleteParticipant = async (e, id) => {
-        e.preventDefault();
-        try {
-            const checkUser = JSON.parse(localStorage.getItem('user'));
-            if (checkUser.role === "SUPER") {
-                const token = localStorage.getItem("token");
-                // http://localhost:4000/api/admin/dashboard/participant
-                const response = await fetch(`${hostname}/api/performance/${id}`, {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json", 
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-                if (response.status === 200) {
-                    console.log("Delete participant [Participant.jsx] - ", response);
-                    props.updateEvent(true);
-                }
-            } else {
-                // SHOW ERROR YOU CAN DELETE ANY PARTICIPANT 
-                setErrorList(prevState => [...prevState, { msg: "Only super admin is able to delete any participant." }]);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
     }
 
 
@@ -131,7 +87,6 @@ const Participants = (props) => {
     // ⛏️⛏️ SUBMIT FILE TO THE DATABASE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
     async function submitCsvUpload(e) {
         e.preventDefault();
-        // console.log(participant);
         try {
             const token = localStorage.getItem("token");
             const formData = new FormData();
@@ -145,7 +100,6 @@ const Participants = (props) => {
             };
             // http://localhost:4000/api/admin/dashboard/participant
             const response = await fetch(`${hostname}/api/performance/multiple/${props.eventID}`, options);
-            console.log("Upload multiple participant[Participant.jsx] - ", response);
             const text = await response.text();
             const json = JSON.parse(text);
             // console.log(json);
@@ -167,56 +121,8 @@ const Participants = (props) => {
     if (props.participants) {
         return (
             <div className="Participants">
-                <h2 className="h2">{props.event.title}</h2>
-
-
-
-                {props.participants.length > 0 && (
-                    <div className="table-responsive">
-                        <table className="table table-bordered table-hover participant-table">
-                            <thead className="bg-dark text-light">
-                                <tr>
-                                    <th scope="col">SL</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Cell</th>
-                                    <th scope="col">Birthdate</th>
-                                    <th scope="col">Payment Amount</th>
-                                    <th scope="col">Payment Method</th>
-                                    <th scope="col">City</th>
-                                    <th scope="col">Handle</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {props.participants.map((p, i) => (
-                                    <tr key={i}>
-                                        <td >{i + 1}</td>
-                                        <td>{p.firstname + " " + p.lastname}</td>
-                                        <td>{p.email}</td>
-                                        <td>{p.cell}</td>
-                                        <td>{p.birthdate}</td>
-                                        <td>{p.payment_amount}</td>
-                                        <td>{p.payment_method}</td>
-                                        <td>{p.city}</td>
-                                        {/* <td><button className="btn btn-danger" onClick={e => deleteParticipant(e, p._id)}>Delete</button></td> */}
-                                        <td>
-                                            <ModalElement
-                                                btnColor="danger"
-                                                openBtn="Delete"
-                                                modalTitle="Alert"
-                                                modalBody={<div>If you have sorted them in a round, please mark them as "left" rather than delete!</div>}
-                                                failureBtn="Cancel"
-                                                successBtn="Yes"
-                                                successModal={e => deleteParticipant(e, p._id)}
-                                            />
-                                        </td>
-
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                <h2 className="h2">Participants</h2>
+                {props.participants.length > 0 && <ParticipantList participants={props.participants} setErrorList={setErrorList} updateEvent={props.updateEvent} />}
 
 
                 <div className="upload-single-participant">
@@ -234,7 +140,7 @@ const Participants = (props) => {
                         </Modal.Header>
                         <Modal.Body>
                             {errorList && [...new Set(errorList)].map((e, i) => <p key={i} className="text-danger">{e.msg}</p>)}
-                            {/* // firstname,lastname,email,cell,birthdate,city, eventID */}
+
                             <form>
                                 <div className="form-group">
                                     <label htmlFor="firstname">First Name*</label>

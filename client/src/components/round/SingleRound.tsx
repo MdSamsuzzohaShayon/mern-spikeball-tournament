@@ -30,7 +30,6 @@ function SingleRound(props) {
 
   const [parent, setParent] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [updateScore, setUpdateScore] = useState([]);
   const [performances, setPerformances] = useState([]); // PARTICIPANTS
   const [showPerformances, setShowPerformances] = useState(true);
   const [leftedPerformance, setLeftedPerformance] = useState([]);
@@ -75,12 +74,6 @@ function SingleRound(props) {
   };
 
 
-  const listener = (e) => {
-    if (e.code === "Enter" || e.code === "NumpadEnter") {
-      handleUpdate(e);
-    }
-  };
-
   // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   // ⛏️⛏️ SETTING DEFAULT VALUE AND UNMOUNT
   useEffect(() => {
@@ -102,13 +95,6 @@ function SingleRound(props) {
     }, 1000);
   }, []);
 
-  useEffect(() => {
-    document.addEventListener("keydown", listener);
-    return () => {
-      console.log("Component unmount [SingleRound.jsx]");
-      document.removeEventListener("keydown", listener);
-    };
-  });
 
 
   useEffect(() => {
@@ -260,26 +246,6 @@ function SingleRound(props) {
     setIsLoading(false);
   };
 
-  // ⛏️⛏️ UPDATE GAME POINT AND POINT DIFERENTIAL
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify({ updateScore }),
-      };
-      const response = await fetch(
-        `${hostname}/api/performance/update-performance/${props.eventID}/${roundNum}`,
-        requestOptions
-      );
-      console.log("Update - ", response);
-      setUpdateScore([]);
-      props.updateNets(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleNextRound = async (e) => {
     e.preventDefault();
@@ -474,21 +440,11 @@ function SingleRound(props) {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          {!props.initialize && (
-            <div className="submit-btn-wrap">
-              <div className="submit-btn">
-                <button onClick={handleUpdate} type="button" className="btn btn-primary">
-                  Submit
-                </button>
-              </div>
-            </div>
-          )}
-
           {isLoading ? (
             <Loader />
           ) : (
             <div className="nets-table-wrapper">
-              <NetOfARound game={props.game} nets={nets} roundNum={roundNum} updateScore={updateScore} rankPerformanceInNet={rankPerformanceInNet} setUpdateScore={setUpdateScore} token={token} eventID={props.eventID} />
+              <NetOfARound game={props.game} nets={nets} roundNum={roundNum} rankPerformanceInNet={rankPerformanceInNet} token={token} eventID={props.eventID} />
             </div>
           )}
           {roundNum <= 4 && (

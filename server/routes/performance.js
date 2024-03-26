@@ -313,7 +313,6 @@ router.put('/update-single/:roundNum', ensureAuth, async (req, res, next) => {
         const { winningPoint, myTeam, opTeam, gameNum, netID, score } = req.body;
         const roundNum = parseInt(req.params.roundNum, 10);
 
-        const currWP = winningPoint || 1;
 
         // ===== Find and populate net =====
         const select = "participant net game1 game2 game3 game4 game5 game6 game7 game8 game9 game10 game11 game12 game13 game14 game15 pre_rank";
@@ -328,27 +327,30 @@ router.put('/update-single/:roundNum', ensureAuth, async (req, res, next) => {
             });
         if (!netExist) return res.status(404).json({ msg: "Net does not exist" });
         const updatePromises = [];
+        const currWP = winningPoint || netExist.wp;
 
         //  ===== Update performance and winning points in net =====
         if (currWP) {
             updatePromises.push(Net.updateOne({ _id: netID }, { wp: currWP }));
         }
 
+
+
         // ===== Update Performances =====
         const gameKey = `game${gameNum}`;
         const netPerformances = [...netExist.performance];
         const myTeamP1 = netPerformances.find(performance => performance._id.toString() === myTeam[0].toString());
         const myGameObj = { score, point: currWP, pointDeferential: myTeamP1.pointDeferential };
-        
+
         if (opTeam && opTeam.length > 0) {
             const opTeamP1 = netExist.performance.find(performance => performance._id.toString() === opTeam[0].toString());
-            const opGameObj = { score: opTeamP1[gameKey].score, point: 0, pointDeferential: opTeamP1.pointDeferential };
-            if(!opGameObj.score || myGameObj.score > opGameObj.score){
+            const opGameObj = { score: (opTeamP1[gameKey]?.score || 0), point: 0, pointDeferential: opTeamP1.pointDeferential };
+            if (!opGameObj.score || myGameObj.score > opGameObj.score) {
                 myGameObj.point = currWP;
                 opGameObj.point = 0;
                 myGameObj.pointDeferential = myGameObj.score - (opGameObj.score || 0);
                 opGameObj.pointDeferential = -(myGameObj.score - (opGameObj.score || 0));
-            }else{
+            } else {
                 myGameObj.point = 0;
                 opGameObj.point = currWP;
                 myGameObj.pointDeferential = (opGameObj.score || 0) - myGameObj.score;

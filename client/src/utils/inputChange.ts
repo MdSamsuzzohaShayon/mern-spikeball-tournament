@@ -4,29 +4,29 @@ import { SCORE } from './global';
 
 
 // e, net._id, winningExtraPoint, setWinningExtraPoint
-const handleExtraWinningPointChange = (e, netID, roundNum, updateScore, setUpdateScore) => {
+const handleExtraWinningPointChange = (e, netID, roundNum,) => {
     const wp = parseFloat(e.target.value);
 
 
-    const findNet = updateScore.find((elm, i) => elm.netID === netID);
-    if (findNet) {
-        // UPDATE EXISTING NET 
-        updateScore.forEach((up, i) => {
-            if (up.netID === netID) {
-                up.wp = wp;
-            }
-        });
-    } else {
-        // CREATE NEW RECORD 
-        setUpdateScore(oldState => [...oldState,
-        {
-            team1: null,
-            team2: null,
-            game: null,
-            wp: null,
-            netID
-        }]);
-    }
+    // const findNet = updateScore.find((elm, i) => elm.netID === netID);
+    // if (findNet) {
+    //     // UPDATE EXISTING NET 
+    //     updateScore.forEach((up, i) => {
+    //         if (up.netID === netID) {
+    //             up.wp = wp;
+    //         }
+    //     });
+    // } else {
+    //     // CREATE NEW RECORD 
+    //     setUpdateScore(oldState => [...oldState,
+    //     {
+    //         team1: null,
+    //         team2: null,
+    //         game: null,
+    //         wp: null,
+    //         netID
+    //     }]);
+    // }
 }
 
 

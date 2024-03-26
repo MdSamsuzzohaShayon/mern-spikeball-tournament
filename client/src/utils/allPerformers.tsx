@@ -4,31 +4,14 @@ import { POINT, POINT_DIFFERENTIAL, SCORE } from './global';
 import getDefaultValue from './defaultValue';
 // gor = GAME OF ROUND 
 // ⛏️⛏️ INPUT FIELD FOR ALL PARTICIPANT OR PERFORMANCE  ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-// net, handleExtraWinningPointChange, roundNum, updateScore, setUpdateScore
-const playersExtraPoint = (net, handleExtraWinningPointChange, roundNum, updateScore, setUpdateScore, defaultValue) => {
-    // console.log("Nets - ",net);
-    // console.log("s - ", scoreType);
-    // console.log(props.round);
-    // console.log("Game - ", game, props.game);
-
-
-
-    // return (
-    //     <div className="extra d-flex mt-3 short-net-player" >
-    //         <img src='/icon/extra.svg' alt="img" onClick={e => addExtra(e, net._id)} className="extra-icon" />
-    //         <input type="text" style={{ display: showInput(net._id) }}
-    //             onChange={e => handleExtraWinningPointChange(e, net._id, winningExtraPoint, setWinningExtraPoint)} className="extra-input form-control"
-    //         />
-    //     </div>
-    // );
-
+const playersExtraPoint = (net, handleExtraWinningPointChange, roundNum, defaultValue) => {
 
     return (
         <input
             type="text"
             className="form-control winning-point"
             defaultValue={defaultValue.toFixed(2)}
-            onChange={e => handleExtraWinningPointChange(e, net._id, roundNum, updateScore, setUpdateScore)}
+            onChange={e => handleExtraWinningPointChange(e, net._id, roundNum)}
         />
     );
 }

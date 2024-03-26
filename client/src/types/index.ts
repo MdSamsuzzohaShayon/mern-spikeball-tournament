@@ -1,10 +1,17 @@
 /**
  * For MongoDB Model
  */
+
 export interface IParticipant {
     _id: string;
     firstname: string;
     lastname: string;
+    email?:string;
+    cell?:string;
+    birthdate?:string;
+    payment_amount?:string;
+    payment_method?:string;
+    city?:string;
 }
 
 export interface IPerformance {
@@ -18,6 +25,14 @@ export interface INet {
     sl: number;
     wp: number;
 }
+
+export interface IEvent {
+    _id: string;
+    title: string;
+    date: string;
+    participants: IParticipant[];
+}
+
 
 
 /**
@@ -37,4 +52,8 @@ export interface IUpdateScore{
     netID: string;
     team1: ITeam;
     team2: ITeam;
+}
+
+export interface IError{
+    msg: string;
 }

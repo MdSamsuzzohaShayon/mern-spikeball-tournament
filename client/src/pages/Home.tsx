@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import EventList from '../components/events/EventList';
 import Menu from '../components/elements/Menu';
-// import icon from "/icon/extra.svg";
 
 
 class Home extends Component {
@@ -25,18 +24,12 @@ class Home extends Component {
             const options = { method: "GET"};
             this.setState({ isLoading: true });
             const response = await fetch(`${hostname}/api/event`, options);
-            // console.log("Getting all event - ",response);
             const text = await response.text();
-            // console.log("Text - ", text);
             const jsonResponse = await JSON.parse(text);
-            // console.log(jsonResponse);
             this.setState({
                 eventList: jsonResponse.events,
                 isLoading: false
             });
-
-
-            // console.log("JSON - ", jsonResponse.events);
         } catch (error) {
             console.log(error);
         }
@@ -45,7 +38,6 @@ class Home extends Component {
 
 
     getEventID(id) {
-        console.log("Event ID - ", id);
         // this.setState({ currentEventID: id });
         // this.getSingleEvent();
     }
@@ -53,20 +45,6 @@ class Home extends Component {
 
     async componentDidMount() {
         this.getAllEvents();
-
-        // console.log("JSON - ", this.state.eventList);
-        // https://github.com/MdSamsuzzohaShayon/mern-graphql-events-booking/blob/8_optamize_bugfix_chart/frontend/src/pages/Events.jsx
-        // try {
-        //     const response = await fetch(`${hostname}/api/home`);
-        //     const result = await response.text();
-        //     this.setState({
-        //         eventList: result
-        //     });
-        //     console.log(result);
-        // } catch (error) {
-        //     console.log(error);
-        // }
-
     }
 
     render() {
@@ -79,7 +57,6 @@ class Home extends Component {
                         pullEventID={this.getEventID}
                         eventList={this.state.eventList}
                         pageFor="home" />
-                    {/* <Events isLoading={this.state.isLoading} pullEventID={this.getEventID} eventList={this.state.eventList} /> */}
                 </div>
             </div>
         )
