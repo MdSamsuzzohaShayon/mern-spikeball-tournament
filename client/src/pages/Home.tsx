@@ -1,85 +1,67 @@
-// @ts-nocheck
-
 import React, { Component } from 'react';
-import { hostname } from '../utils/global';
 import EventList from '../components/events/EventList';
 import Menu from '../components/elements/Menu';
-// import icon from "/icon/extra.svg";
+import { IEvent } from '../types';
+import { getAllEvents } from '../utils/handleRequests/event';
 
+interface IHomeState {
+    eventList: IEvent[];
+    isAuthenticated: boolean;
+    isLoading: boolean;
+}
 
-class Home extends Component {
-    constructor(props) {
+interface IHomeProps {
+    // Define props here if there are any
+}
+
+class Home extends Component<IHomeProps, IHomeState> {
+    constructor(props: IHomeProps) {
         super(props);
         this.state = {
             eventList: [],
             isAuthenticated: false,
             isLoading: false
         };
-        this.getAllEvents = this.getAllEvents.bind(this);
         this.getEventID = this.getEventID.bind(this);
+        this.updateList = this.updateList.bind(this);
     }
 
-    // ⛏️⛏️ FETCH ALL EVENTS 
-    async getAllEvents() {
-        try {
-            const options = { method: "GET"};
-            this.setState({ isLoading: true });
-            const response = await fetch(`${hostname}/api/event`, options);
-            // console.log("Getting all event - ",response);
-            const text = await response.text();
-            // console.log("Text - ", text);
-            const jsonResponse = await JSON.parse(text);
-            // console.log(jsonResponse);
-            this.setState({
-                eventList: jsonResponse.events,
-                isLoading: false
-            });
 
+    getEventID(id: string) {
+        // this.setState({ currentEventID: id });
+        // this.getSingleEvent();
+        console.log(id);
+    }
 
-            // console.log("JSON - ", jsonResponse.events);
-        } catch (error) {
-            console.log(error);
+    async updateList(update: boolean) {
+        if (update) {
+            const eList = await getAllEvents();
+            this.setState({eventList: eList});
         }
     }
 
-
-
-    getEventID(id) {
-        console.log("Event ID - ", id);
-        // this.setState({ currentEventID: id });
-        // this.getSingleEvent();
-    }
-
+        
 
     async componentDidMount() {
-        this.getAllEvents();
-
-        // console.log("JSON - ", this.state.eventList);
-        // https://github.com/MdSamsuzzohaShayon/mern-graphql-events-booking/blob/8_optamize_bugfix_chart/frontend/src/pages/Events.jsx
-        // try {
-        //     const response = await fetch(`${hostname}/api/home`);
-        //     const result = await response.text();
-        //     this.setState({
-        //         eventList: result
-        //     });
-        //     console.log(result);
-        // } catch (error) {
-        //     console.log(error);
-        // }
-
+        (async ()=>{
+            const eList = await getAllEvents();
+            this.setState({eventList: eList});
+        })()
     }
 
     render() {
         return (
             <div className="Home">
                 <Menu />
-                <i className="bi bi-plus-lg"></i>            
+                <i className="bi bi-plus-lg"></i>
                 <div className="container mt-3">
-                    <EventList isLoading={this.state.isLoading}
+                    <EventList
+                        isLoading={this.state.isLoading}
                         pullEventID={this.getEventID}
+                        updateList={this.updateList}
                         eventList={this.state.eventList}
-                        pageFor="home" />
-                    {/* <Events isLoading={this.state.isLoading} pullEventID={this.getEventID} eventList={this.state.eventList} /> */}
+                        pageFor="home"
+                    />
                 </div>
             </div>
         )

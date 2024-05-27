@@ -1,33 +1,28 @@
-// @ts-nocheck
-
 import React, { useState, useEffect } from 'react';
 import SingleRound from './SingleRound';
 import { hostname } from '../../utils/global';
 import { checkRoundCompleted } from '../../utils/helpers';
 import Loader from '../elements/Loader';
 import "../../style/Rounds.css";
+import { IPerformance, IRound } from '../../types';
 
+interface IRoundsProps{
+    eventID: string;
+}
 
-
-const Rounds = (props) => {
-    const [roundNum, setRoundNum] = useState(1);
-    const [incomepleteMessage, setIncomepleteMessage] = useState(null);
-    // const [round, setRound] = useState(1);
-    const [initialize, setInitialize] = useState(false);
-    const [round, setRounds] = useState([]);
+const Rounds = ({eventID}: IRoundsProps) => {
+    const [roundNum, setRoundNum] = useState<number>(1);
+    const [incomepleteMessage, setIncomepleteMessage] = useState<string | null>(null);
+    const [initialize, setInitialize] = useState<boolean>(false);
+    const [round, setRounds] = useState<IRound[]>([]);
     const [leftRound, setLeftRound] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [performances, setPerformances] = useState([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [performances, setPerformances] = useState<IPerformance[]>([]);
     const [rankPerformanceInNet, setRankPerformanceInNet] = useState([]);
-    // const [reassignToNet, setReassignToNet] = useState(false);
     const [incompleteErr, setIncompleteErr] = useState([]);
 
     const activeItemHandler = (e, item) => {
         e.preventDefault();
-        // console.log(round);
-        // console.log(item);
-        // setRound(item);
-        // console.log("findRound round 1");
 
 
         // CHECK ALL GAMES IS BEEN COMPLETED 
@@ -74,16 +69,11 @@ const Rounds = (props) => {
                 method: 'GET',
                 headers: { "Content-Type": 'application/json' },
             };
-            // console.log(props.eventID);
             setIsLoading(true);
-            // console.log("Loading - ",isLoading);
-            // console.log(r);
-            const response = await fetch(`${hostname}/api/round/get-single-round/${props.eventID}/${r}`, requestOptions);
+            const response = await fetch(`${hostname}/api/round/get-single-round/${eventID}/${r}`, requestOptions);
             console.log("Get nets from round - ", response);
             const text = await response.text();
             const jsonRes = await JSON.parse(text);
-            // console.log("JSON");
-            // console.log(jsonRes);
             if (jsonRes.performances.length > 0) {
                 setPerformances(jsonRes.performances);
             }
@@ -104,16 +94,19 @@ const Rounds = (props) => {
                 setInitialize(true);
             }
 
-            setIsLoading(false);
-            // console.log("Loading - ",isLoading);
         } catch (error) {
             console.log(error);
+        }finally{
+            setIsLoading(false);
         }
 
     }
 
 
 
+    const refetchFunc=async ()=>{
+        // await findRound(roundNum);
+    }
 
 
     useEffect(() => {
@@ -138,20 +131,12 @@ const Rounds = (props) => {
 
 
     const updateFindNets = (update) => {
-        // console.log("findRound from update event");
         if (update) findRound(roundNum);
     }
 
 
-
-    // {incompleteErr.length > 0 && <div className="alert alert-danger">Please complete all games in net {incompleteNetNoSMS(incompleteErr)} to go to next round</div>}
-
-
-
-
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖  */
     const showTabContent = () => {
-        // console.log("Loading - ", isLoading);
         switch (roundNum) {
             case 1:
                 if (isLoading) {
@@ -169,7 +154,8 @@ const Rounds = (props) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[1, 2, 3]}
-                            eventID={props.eventID} />
+                            refetchFunc={refetchFunc}
+                            eventID={eventID} />
                     </div>);
                 }
             case 2:
@@ -189,7 +175,8 @@ const Rounds = (props) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[4, 5, 6]}
-                            eventID={props.eventID} />
+                            refetchFunc={refetchFunc}
+                            eventID={eventID} />
                     </div>);
                 }
             case 3:
@@ -208,7 +195,8 @@ const Rounds = (props) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[7, 8, 9]}
-                            eventID={props.eventID} />
+                            refetchFunc={refetchFunc}
+                            eventID={eventID} />
                     </div>);
                 }
             case 4:
@@ -227,7 +215,8 @@ const Rounds = (props) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[10, 11, 12]}
-                            eventID={props.eventID} />
+                            refetchFunc={refetchFunc}
+                            eventID={eventID} />
                     </div>);
                 }
             case 5:
@@ -245,7 +234,8 @@ const Rounds = (props) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[13, 14, 15]}
-                            eventID={props.eventID} />
+                            refetchFunc={refetchFunc}
+                            eventID={eventID} />
                     </div>);
                 }
                 case 6:
@@ -263,7 +253,7 @@ const Rounds = (props) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[16, 17, 18]}
-                            eventID={props.eventID} />
+                            eventID={eventID} />
                     </div>);
                 }
             default:
@@ -290,3 +280,14 @@ const Rounds = (props) => {
 
 
 export default Rounds;
+
+
+
+
+
+
+
+
+
+
+

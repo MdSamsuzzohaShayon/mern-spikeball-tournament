@@ -1,19 +1,41 @@
-// @ts-nocheck
-
 import React, { Component } from 'react';
 import { hostname } from '../utils/global';
 import Point from '../components/score/Point';
 import Round from '../components/score/Round';
 import Loader from '../components/elements/Loader';
-import withRouter from '../HOC/withRouter';
+import withRouter, { WithRouterProps } from '../HOC/withRouter';
 import "../style/Score.css";
 import Menu from '../components/elements/Menu';
+import { IPerformance, IRound } from '../types';
 
 
-class Score extends Component {
+interface IScoreProps extends WithRouterProps {
+    params: {
+        id: string;
+    };
+    admin: boolean;
+}
+
+interface IScoreState {
+    currentEventID: string;
+    isLoading: boolean;
+    round1: IPerformance[];
+    round2: IPerformance[];
+    round3: IPerformance[];
+    round4: IPerformance[];
+    round5: IPerformance[];
+
+    allRank: IPerformance[];
+
+    activeItem: number;
+    allRound: IRound[];
+    game: number[];
+}
+
+class Score extends Component<IScoreProps, IScoreState> {
+    private is_mounted: boolean = false;
     constructor(props) {
         super(props);
-        this.is_mounted = false;
         this.state = {
             currentEventID: this.props.params.id,
             // currentEventID: this.props.match.params.id,
@@ -23,11 +45,7 @@ class Score extends Component {
             round3: [],
             round4: [],
             round5: [],
-            round1NR: [],
-            round2NR: [],
-            round3NR: [],
-            round4NR: [],
-            round5NR: [],
+            
             allRank: [],
 
             activeItem: 1,
@@ -54,21 +72,17 @@ class Score extends Component {
 
             this.setState({ isLoading: true });
             const response = await fetch(`${hostname}/api/round/ranking/${this.state.currentEventID}`, requestOptions);
-            console.log("Get nets from round with ranking - ", response);
             const text = await response.text();
             const jsonRes = await JSON.parse(text);
-            // console.log("JSON--------------------");
-            // console.log(jsonRes);
             for (let i = 1; i <= 5; i++) {
+                // @ts-ignore
                 if (jsonRes[`round${i}`]) this.setState({ [`round${i}`]: jsonRes[`round${i}`] });
+                // @ts-ignore
                 if (jsonRes[`round${i}NR`]) this.setState({ [`round${i}NR`]: jsonRes[`round${i}NR`] });
             }
 
 
             if (jsonRes.allPerformances && jsonRes.allPerformances.length > 0) this.setState({ allRank: jsonRes.allPerformances });
-            // console.log("jsonRes.allPerformances - ", jsonRes.allPerformances);
-
-
             // CHECK FOR INITIAL NET 
             this.setState({ isLoading: false });
 
@@ -86,44 +100,29 @@ class Score extends Component {
             const token = localStorage.getItem('toekn');
             const requestOptions = {
                 method: 'GET',
-                headers: { "Content-Type": 'application/json', "Authorization": `Bearer ${token}`  },
+                headers: { "Content-Type": 'application/json', "Authorization": `Bearer ${token}` },
             };
             this.setState({ isLoading: true });
 
             const response = await fetch(`${hostname}/api/round/get-single-round/${this.state.currentEventID}/${r}`, requestOptions);
-            console.log("Get nets from round - ", response);
             const text = await response.text();
             const jsonRes = await JSON.parse(text);
-            // console.log(r);
-            // console.log("JSON - find round");
-            // console.log(jsonRes);
-
             // CHECK FOR INITIAL NET 
             if (jsonRes.findRound) {
                 this.setState({ allRound: jsonRes.findRound })
             }
 
             this.setState({ isLoading: false });
-            // console.log("Loading - ",isLoading);
         } catch (error) {
             console.log(error);
         }
 
     }
 
-    // componentDidUpdate(){
-    //     console.log(this.state.pp);
-    // }
-
     componentDidMount() {
-        // console.log(this.props);
         this.is_mounted = true;
         this.findRankingRound();
         this.findRound(this.state.activeItem);
-        // if (!this.props.admin) {
-        //     // console.log("Active item - ", this.state.activeItem);
-
-        // }
     }
 
 
@@ -133,15 +132,11 @@ class Score extends Component {
 
 
     activeItemHandler(e, item) {
-        // console.log(e);
-        // console.log(item);
         e.preventDefault();
-        // setActiveItem(item);
         if (!this.props.admin) {
             this.findRound(item);
         }
         this.setState({ activeItem: item, allRound: this.state[`round${item}NR`] });
-        // findRankingRound(item);
         if (item === 1) {
             this.setState({ game: [1, 2, 3] });
         } else if (item === 2) {
@@ -159,14 +154,11 @@ class Score extends Component {
 
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS */
     showTabContent = () => {
-        // console.log("Loading - ", isLoading);
         switch (this.state.activeItem) {
             case 1:
                 if (this.state.isLoading) {
-                    // console.log("Loading (true) - ", isLoading);
                     return <Loader />;
                 } else {
-                    // console.log("Loading(false) - ", isLoading);
                     return (<div className="tab-pane fade show active" >
                         <Round public={this.props.admin} roundNum={this.state.activeItem} pp={this.state.round1} round={this.state.allRound} game={this.state.game} />
                     </div>);
@@ -224,62 +216,15 @@ class Score extends Component {
                             <Point roundNum={5} pp={this.state.allRank} roundwise={false} />
                         </div>
                         <nav className="nav nav-pills">
-                            {/* <a className="nav-link active" className={this.state.activeItem === one ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, one)}>Round 1</a>
-                            <a className="nav-link active" className={this.state.activeItem === two ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, two)}>Round 2</a>
-                            <a className="nav-link active" className={this.state.activeItem === three ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, three)}>Round 3</a>
-                            <a className="nav-link active" className={this.state.activeItem === four ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, four)}>Round 4</a>
-                            <a className="nav-link active" className={this.state.activeItem === five ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, five)}>Round 5</a> */}
-
                             <a className={this.state.activeItem === one ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, one)}>Round 1</a>
                             <a className={this.state.activeItem === two ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, two)}>Round 2</a>
                             <a className={this.state.activeItem === three ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, three)}>Round 3</a>
                             <a className={this.state.activeItem === four ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, four)}>Round 4</a>
                             <a className={this.state.activeItem === five ? "nav-link active" : "nav-link"} onClick={e => this.activeItemHandler(e, five)}>Round 5</a>
-
-                            {/* <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
                         </nav>
                         <div className="tab-content" >
                             {this.showTabContent()}
                         </div>
-                        {/* <div className="row">
-                        {this.state.round1 && this.state.round1.length > 1 && (
-                            <div className="col-md-6">
-                                <div className="roundwise-ranking">
-                                    <h2 className="h2">Round 1</h2>
-                                    <Point roundNum={1} pp={this.state.round1} />
-                                </div>
-                            </div>
-                        )}
-                        {this.state.round2 && this.state.round2.length > 1 && (
-                            <div className="col-md-6">
-                                <div className="roundwise-ranking">
-                                    <h2 className="h2">Round 2</h2>
-                                    <Point roundNum={2} pp={this.state.round2} />
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                    <div className="row">
-                        {this.state.round3 && this.state.round3.length > 1 && (
-                            <div className="col-md-6">
-                                <div className="roundwise-ranking">
-                                    <h2 className="h2">Round 3</h2>
-                                    <Point roundNum={3} pp={this.state.round3} />
-                                </div>
-                            </div>
-                        )}
-
-                        {this.state.round4 && this.state.round4.length > 1 && (
-                            <div className="col-md-6">
-                                <div className="roundwise-ranking">
-                                    <h2 className="h2">Round 4</h2>
-                                    <Point roundNum={4} pp={this.state.round4} />
-                                </div>
-                            </div>
-                        )}
-
-                    </div>
-                 */}
                     </div>)}
                 </div>
             </div>

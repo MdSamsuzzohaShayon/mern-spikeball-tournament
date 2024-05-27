@@ -84,7 +84,7 @@ const AdminList = (props) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "authorization": `bearer ${token}`
+                    "authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     username: newAdmin?.username,
@@ -93,20 +93,16 @@ const AdminList = (props) => {
                 })
             };
             const response = await fetch(`${hostname}/api/admin/register`, options);
-            console.log("create admin [AdminList.jsx] - ", response);
             const jsonResponse = await response.json();
-            // console.log(jsonResponse.errors);
             if (jsonResponse?.errors?.length > 0) {
                 setErrors(jsonResponse.errors);
             }
             getAllAdmins();
             setNewAdmin({});
-            // setAdminList(jsonResponse.admin);
             setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
-        // console.log("E - ", e);
         setIsLoading(false);
     }
 
@@ -114,14 +110,15 @@ const AdminList = (props) => {
 
     const handleDelete = async (e, adminID) => {
         e.preventDefault();
-        // console.log(adminID);
         setIsLoading(true);
         try {
-            const response = await fetch(`${hostname}/api/admin/delete/${adminID}`, { method: "DELETE" });
-            console.log("delete admin [AdminList.jsx] - ", response);
-            const text = await response.text();
-            const jsonResponse = await JSON.parse(text);
-            console.log(jsonResponse);
+            const token = localStorage.getItem('token');
+            const options = { 
+                method: "DELETE", headers: {
+                "authorization": `Bearer ${token}`
+                }
+            };
+            await fetch(`${hostname}/api/admin/delete/${adminID}`, options );
             getAllAdmins();
         } catch (error) {
             console.log(error);

@@ -1,24 +1,39 @@
-// @ts-nocheck
-
-// import { useParams } from 'react-router-dom';
 import '../style/SingleEvent.css';
 import React, { Component } from 'react';
-// import { withRouter } from "react-router";
-// import { useParams } from "react-router-dom";
-import withRouter from '../HOC/withRouter';
-import { hostname } from '../utils/global';
+import withRouter, { WithRouterProps } from '../HOC/withRouter';
 import Participants from '../components/participant/Participants';
 import Rounds from '../components/round/Rounds'
 import Score from "./Score";
 import ExportField from '../components/export/ExportField';
 import Loader from '../components/elements/Loader';
-import { Navigate } from 'react-router-dom';
 import { formattedDate } from '../utils/helpers';
+import { IParticipant } from '../types';
+import { getSingleEvent } from '../utils/handleRequests/event';
 
-class SingleEvent extends Component {
+interface ISingleEventProps extends WithRouterProps {
+    params: {
+        id: string;
+    };
+    navigateToTarget: (target: string) => void;
+}
+
+interface ISingleEventState {
+    currentEventID: string | null;
+    activeTab: string;
+    currentEvent: {
+        title: string | null;
+        participants: IParticipant[];
+        date: string | null;
+    };
+    participants: string; // You should define a type for participants
+    isLoading: boolean;
+}
+
+class SingleEvent extends Component<ISingleEventProps, ISingleEventState> {
+    private is_mounted: boolean = false;
+
     constructor(props) {
         super(props);
-        this.is_mounted = false;
         this.state = {
             currentEventID: null,
             activeTab: 'event',
@@ -33,18 +48,20 @@ class SingleEvent extends Component {
 
         this.clickItemHandler = this.clickItemHandler.bind(this);
         this.showAllNavItem = this.showAllNavItem.bind(this);
-        this.getSingleEvent = this.getSingleEvent.bind(this);
         this.updateEvent = this.updateEvent.bind(this);
     }
 
 
 
     async componentDidMount() {
-        if(!localStorage.getItem('token')){
+        if (!localStorage.getItem('token')) {
             this.props.navigateToTarget("/admin");
-        }else{
+        } else {
             this.is_mounted = true;
-            await this.getSingleEvent(this.props.params.id);
+            (async ()=>{
+                const fetchedEvent = await getSingleEvent(this.props.params.id);
+                if(fetchedEvent)this.setState({currentEvent: fetchedEvent});
+            })()
             this.setState({ currentEventID: this.props.params.id });
             document.title = "Spikers Scramble - " + this.state.currentEvent.title;
         }
@@ -52,26 +69,6 @@ class SingleEvent extends Component {
     }
 
 
-    // ⛏️⛏️ GET AN EVENT WITH DETAILS - AFTER GETTING SINGLE EVENT REDIRECT TO EVENT ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-    async getSingleEvent(id) {
-        try {
-            // console.log("IDDDDDDDDDDDDDDDDDDDD- ",id);
-            // console.log(participants);
-            this.setState({ isLoading: true });
-            const response = await fetch(`${hostname}/api/event/${id}`, { method: "GET" });
-            console.log("Get single event [SingleEvent.jsx] - ", response);
-            const text = await response.text();
-            const jsonResponse = await JSON.parse(text);
-            // console.log(jsonResponse);
-            if (this.is_mounted == true) {
-                this.setState({ currentEvent: jsonResponse.events });
-                // console.log(jsonResponse);
-            }
-            this.setState({ isLoading: false });
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
 
 
@@ -83,7 +80,12 @@ class SingleEvent extends Component {
     }
 
     // ⛏️⛏️ FETCH EVERYTIME WEHN WE MADE CHANGE ON DATABASE
-    updateEvent = (update) => { if (update) this.getSingleEvent(this.state.currentEventID) };
+    updateEvent = async (update) => { 
+        if (update) {
+            const fetcheedEvent = await getSingleEvent(this.state.currentEventID) 
+            if(fetcheedEvent)this.setState({currentEvent: fetcheedEvent});
+        }
+        };
 
 
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS  */
@@ -160,16 +162,13 @@ class SingleEvent extends Component {
         if (this.state.isLoading) {
             return <Loader />
         } else {
-            // console.log(this.state.currentEvent);
             if (this.state.currentEventID) {
                 return (
                     <div className="SingleEvent">
-                        {/* Event admin ID: {this.state.currentEventID} */}
-                        {/* {console.log("Event -")} */}
                         <div className="Overview">
                             <div className="d-flex align-items-start dashboard-nav container-fluid">
                                 <div className="nav nav-pills dashboard-nav-items bg-dark text-center">
-                                    <h3 className="text-secondary nav-link" >{this.state.currentEvent.title}</h3>
+                                    <h3 className="text-secondary nav-link text-uppercase" >{this.state.currentEvent.title}</h3>
                                     <br />
                                     <div className="nv-btns-list">
                                         <button className={this.state.activeTab === "event" ? "nav-link active" : "nav-link"} onClick={e => this.clickItemHandler(e, "event")} >Events</button>
@@ -183,7 +182,6 @@ class SingleEvent extends Component {
                                     {this.showAllNavItem()}
                                 </div>
                             </div>
-                            {/* <button className="btn btn-danger" onClick={handleLogout}>Logout</button> */}
                         </div>
                     </div>
                 );

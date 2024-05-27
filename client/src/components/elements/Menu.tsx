@@ -41,7 +41,7 @@ const Menu = (props) => {
                         <Nav>
                             <Link className="nav-link" to="/home">Home</Link>
                             <Link className="nav-link" to="/admin">Admin</Link>
-                            {localStorage.getItem('user') ? (<li className="nav-item"><button className="btn btn-danger" onClick={handleLogout}>Logout</button></li>) : null}
+                            {localStorage.getItem('user') && (<li className="nav-item"><button className="btn btn-danger" onClick={handleLogout}>Logout</button></li>)}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

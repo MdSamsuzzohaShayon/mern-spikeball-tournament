@@ -8,7 +8,7 @@ if (NODE_ENV === "production") {
 }
 
 
-export const POINT = "point", POINT_DIFFERENTIAL = "pointDeferential", SCORE = "score", NO_SCORE = "noScore", EXTRA_POINT = "extraPoint";
+export const POINT: string = "point", POINT_DIFFERENTIAL: string = "pointDeferential", SCORE: string = "score", NO_SCORE: string = "noScore", EXTRA_POINT: string = "extraPoint";
 
 
 export { hostname };

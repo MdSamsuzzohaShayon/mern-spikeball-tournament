@@ -10,7 +10,6 @@ pm2 save
 rm -rf mern-spikeball-tournament
 git clone git@github.com:MdSamsuzzohaShayon/mern-spikeball-tournament.git
 cd /home/alex/mern-spikeball-tournament
-git switch development
 cd server
 npm install
 nano config/.env
@@ -28,5 +27,5 @@ npm run build
 ls
 sudo rm -rf /var/www/youthspikersleague.com
 sudo cp -R dist /var/www/youthspikersleague.com
-cp /home/alex/mern-spikeball-tournament/apache/var/www/youthspikersleague.com/.htaccess /var/www/youthspikersleague.com/.htaccess
+sudo cp /home/alex/mern-spikeball-tournament/apache/var/www/youthspikersleague.com/.htaccess /var/www/youthspikersleague.com/.htaccess
 ls -la /var/www/youthspikersleague.com

@@ -3,8 +3,6 @@ import { roundwiseTotalPD } from "./pointDeferential";
 // import equal from '/icon/equal_math_sign_icon.svg';
 
 export const getTotalPointOfARound = (p, rn) => {
-  // console.log(p);
-  // console.log(rn);
   /**
    * temperary update.
    */
@@ -82,9 +80,7 @@ export const getTDRound = (p, rn) => {
 
 export const getRankingNumber = (index, pList, rn) => {
   let cell = null;
-  // const nextPlayerTotal = getTotalPointOfARound(pList[index + 1], rn);
-  // const nextPlayerTD = getTDRound(pList[index + 1], rn);
-  // console.log(rn);
+
   const previousPlayerTotal = getTotalPointOfARound(pList[index - 1], rn);
   const previousPlayerTD = getTDRound(pList[index - 1], rn);
 
@@ -99,24 +95,6 @@ export const getRankingNumber = (index, pList, rn) => {
       <div>{index + 1}</div>
     </>
   );
-  /* 
-        if (currentPlyerTotal === nextPlayerTotal && currentPlyerPD === nextPlayerTD) {
-            cell = <><div>{index + 1}</div><div><img src="/icon/equal_math_sign_icon.svg" className="equal-icon" alt="image" /></div></>;
-        } else {
-            if (currentPlyerTotal === previousPlayerTotal && currentPlyerPD === previousPlayerTD) {
-                // cell = `${index + 1} = `;
-                cell = <><div>{index + 1}</div><div><img src="/icon/equal_math_sign_icon.svg" className="equal-icon"  alt="image" /></div></>;
-            } else {
-                // cell = `<div>${index + 1}</div>`;
-                cell = <><div>{index + 1}</div></>;
-            }
-        }
-     */
-  // else if (currentPlyerTotal === previousPlayerTotal && currentPlyerPD === previousPlayerTD) {
-  //     i =  index ;
-  // } else {
-  //     i = index + 1;
-  // }
   return (
     <div className="rank-num d-flex w-full justify-content-between">{cell}</div>
   );

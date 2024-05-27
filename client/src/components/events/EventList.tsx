@@ -1,11 +1,11 @@
-// @ts-nocheck
-
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { Modal, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Loader from '../elements/Loader';
-import {formattedDate} from '../../utils/helpers';
+// import {formattedDate} from '../../utils/helpers';
+import EventRow from './EventRow';
+import { handleRequestUnauthenticated } from '../../utils/auth';
 
 
 const EventList = (props) => {
@@ -13,7 +13,7 @@ const EventList = (props) => {
     const [show, setShow] = useState(false);
     const [event, setEvent] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState();
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -32,7 +32,7 @@ const EventList = (props) => {
                 },
                 body: JSON.stringify(event)
             });
-            console.log("Create An Event - ", response);
+            handleRequestUnauthenticated(response);
             setEvent({});
             setShow(false);
             setIsLoading(false);
@@ -52,22 +52,6 @@ const EventList = (props) => {
             [e.target.name]: e.target.value
         });
         // console.log(event);
-    }
-
-    // ⛏️⛏️ DELETE AN EVENT 
-    const deleteEvent = async (e, id) => {
-        e.preventDefault();
-        try {
-            setIsLoading(true);
-            const token = localStorage.getItem("token");
-            const response = await fetch(`${hostname}/api/event/${id}`, { method: "DELETE", headers: {"authorization": `bearer ${token}`} });
-            props.updateList(true);
-            setIsLoading(false);
-            console.log("Delete event - ", response);
-        } catch (error) {
-            console.log(error);
-        }
-
     }
 
     const listenKeypress = async e => {
@@ -101,7 +85,7 @@ const EventList = (props) => {
         <div className="EventList ml-2">
             <h2 className="h2">All EventList</h2>
             {isAuthenticated && (
-                <div className="create-new-event mb-2">
+                <div className="create-new-event mb-2 ">
                     <Button variant="primary" onClick={handleShow}>  Create new event</Button>
                     <Modal show={show} onHide={handleClose}>
                         <Modal.Header closeButton>
@@ -138,17 +122,11 @@ const EventList = (props) => {
                             <th scope="col">Title</th>
                             <th scope="col">Date</th>
                             <th scope="col">Details </th>
-                            {isAuthenticated && <th scope="col">Handle</th>}
+                            {isAuthenticated && props.pageFor !== 'home' && <th scope="col">Handle</th>}
                         </tr>
                     </thead>
                     <tbody>
-                        {props.eventList && props.eventList.map((pe, index) => (
-                            <tr key={index}>
-                                <th >{pe.title}</th>
-                                <td>{formattedDate(pe.date)}</td>
-                                <td>{props.pageFor !== "home" ? <Link to={`/admin/dashboard/event/${pe._id}`} className='text-white btn btn-primary'>Edit Details</Link> : <Link to={`/event/${pe._id}`} className="btn btn-primary">View Details</Link>}</td>
-                                {props.pageFor !== "home" && <td><button className="btn btn-danger" onClick={e => deleteEvent(e, pe._id)} >Delete</button></td>}
-                            </tr>)
+                        {props.eventList && props.eventList.map((pe, index) => (<EventRow key={index} event={pe} pageFor={props.pageFor} updateList={props.updateList} setIsLoading={setIsLoading} />)
                         )}
                     </tbody>
                 </table>

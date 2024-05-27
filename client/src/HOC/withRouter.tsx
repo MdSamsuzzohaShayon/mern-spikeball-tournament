@@ -1,18 +1,19 @@
 import { useParams } from 'react-router-dom';
-import React from 'react'
+import React from 'react';
 
-const withRouter = WrappedComponent => props => {
-    const params = useParams();
-    // etc... other react-router-dom v6 hooks
+// Define the WithRouterProps interface properly
+export interface WithRouterProps {
+  params: Record<string, string>;
+  // Add other properties if necessary
+}
 
-    return (
-        <WrappedComponent
-            {...props}
-            params={params}
-        // etc...
-        />
-    );
+const withRouter = <P extends object>(
+  WrappedComponent: React.ComponentType<P & WithRouterProps>
+) => (props: P) => {
+  const params = useParams<Record<string, string>>();
+  // etc... other react-router-dom v6 hooks
+
+  return <WrappedComponent {...props} params={params} />;
 };
 
-
-export default withRouter;
+export default withRouter ;

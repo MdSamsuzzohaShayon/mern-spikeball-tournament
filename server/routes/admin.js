@@ -98,7 +98,6 @@ router.post('/login', check('email').notEmpty(), check('password').notEmpty(), a
 
 
 router.get('/list', ensureAuth, async (req, res, next) => {
-    // console.log(req.userRole);
     try {
         const admin = await Admin.find();
         const newAdmins = admin.map((a, i) => {
@@ -117,9 +116,8 @@ router.get('/list', ensureAuth, async (req, res, next) => {
 
 router.delete("/delete/:adminID", ensureAuth, async (req, res, next) => {
     const errors = [];
-    // console.log(req.params.adminID , req.user._id);
     if (req.userRole === SUPER) {
-        if (req.params.adminID === req.user._id) {
+        if (req.params.adminID === req.userId) {
             errors.push("Can't delete a super user");
             res.status(400).json({ errors });
         } else {
