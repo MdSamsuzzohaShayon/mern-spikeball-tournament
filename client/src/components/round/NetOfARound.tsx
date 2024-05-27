@@ -1,7 +1,7 @@
 import React from 'react';
 import { POINT, POINT_DIFFERENTIAL, SCORE, hostname, } from "../../utils/global";
 import { getTotalPPD } from "../../utils/getTotalPPD";
-import { INet, IUpdateScore } from '../../types';
+import { INet, IPerformance } from '../../types';
 import TeamScoreInput from '../score/TeamScoreInput';
 import WinningPointInput from '../score/WinningPointInput';
 import { handleRequestUnauthenticated } from '../../utils/auth';
@@ -17,6 +17,7 @@ interface INetOfARound {
     rankPerformanceInNet: any;
     token: string;
     eventID: string;
+    refetchFunc?: ()=> void;
 }
 
 function NetOfARound(props: INetOfARound) {
@@ -35,6 +36,8 @@ function NetOfARound(props: INetOfARound) {
                 requestOptions
             );
             handleRequestUnauthenticated(response);
+            if(props.refetchFunc) await props.refetchFunc();
+            
 
         } catch (error) {
             console.log(error);

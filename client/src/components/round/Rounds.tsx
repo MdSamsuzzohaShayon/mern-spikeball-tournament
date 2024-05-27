@@ -104,6 +104,9 @@ const Rounds = ({eventID}: IRoundsProps) => {
 
 
 
+    const refetchFunc=async ()=>{
+        // await findRound(roundNum);
+    }
 
 
     useEffect(() => {
@@ -151,6 +154,7 @@ const Rounds = ({eventID}: IRoundsProps) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[1, 2, 3]}
+                            refetchFunc={refetchFunc}
                             eventID={eventID} />
                     </div>);
                 }
@@ -171,6 +175,7 @@ const Rounds = ({eventID}: IRoundsProps) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[4, 5, 6]}
+                            refetchFunc={refetchFunc}
                             eventID={eventID} />
                     </div>);
                 }
@@ -190,6 +195,7 @@ const Rounds = ({eventID}: IRoundsProps) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[7, 8, 9]}
+                            refetchFunc={refetchFunc}
                             eventID={eventID} />
                     </div>);
                 }
@@ -209,6 +215,7 @@ const Rounds = ({eventID}: IRoundsProps) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[10, 11, 12]}
+                            refetchFunc={refetchFunc}
                             eventID={eventID} />
                     </div>);
                 }
@@ -227,6 +234,7 @@ const Rounds = ({eventID}: IRoundsProps) => {
                             updateNets={updateFindNets}
                             leftRound={leftRound}
                             game={[13, 14, 15]}
+                            refetchFunc={refetchFunc}
                             eventID={eventID} />
                     </div>);
                 }

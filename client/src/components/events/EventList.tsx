@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { hostname } from '../../utils/global';
 import { Modal, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Loader from '../elements/Loader';
-import {formattedDate} from '../../utils/helpers';
+// import {formattedDate} from '../../utils/helpers';
 import EventRow from './EventRow';
 import { handleRequestUnauthenticated } from '../../utils/auth';
 
@@ -85,7 +85,7 @@ const EventList = (props) => {
         <div className="EventList ml-2">
             <h2 className="h2">All EventList</h2>
             {isAuthenticated && (
-                <div className="create-new-event mb-2">
+                <div className="create-new-event mb-2 ">
                     <Button variant="primary" onClick={handleShow}>  Create new event</Button>
                     <Modal show={show} onHide={handleClose}>
                         <Modal.Header closeButton>

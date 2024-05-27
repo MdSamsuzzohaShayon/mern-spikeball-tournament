@@ -29,21 +29,6 @@ const excelCell = require('../utils/excelCell');
 const router = express.Router();
 
 
-
-
-
-// router.get('/findteam', async (req, res, next) => {
-//     //         // const { player1, player2 } = req.body;
-//     //         // // [0]['61750e90f27635275693d7cc', '61750e90f27635275693d7d2']
-//     //         // // [0]['61750e90f27635275693d7cd', '61750e90f27635275693d7d1']
-//     //         // console.log(req.body);
-
-//     const performance1 = await Performance.findById('61750e90f27635275693d7cc').populate({ path: "participant", select: "firstname lastname" });
-//     const performance2 = await Performance.findById('61750e90f27635275693d7d2').populate({ path: "participant", select: "firstname lastname" });
-//     res.status(200).json({ request: 'Success', performance1, performance2 });
-// });
-
-
 router.get('/:eventID', async (req, res, next) => {
     const allPerformance = await Performance.find({ event: req.params.eventID }).populate({ path: "participant", select: "firstname lastname" });
     res.status(200).json({ performances: allPerformance });
@@ -337,12 +322,12 @@ router.put('/update-single/:roundNum', ensureAuth, async (req, res, next) => {
 
 
         // ===== Update Performances =====
-        if(gameNum && myTeam){
+        if (gameNum && myTeam) {
             const gameKey = `game${gameNum}`;
             const netPerformances = [...netExist.performance];
             const myTeamP1 = netPerformances.find(performance => performance._id.toString() === myTeam[0].toString());
             const myGameObj = { score, point: currWP, pointDeferential: myTeamP1.pointDeferential || score };
-    
+
             if (opTeam && opTeam.length > 0) {
                 const opTeamP1 = netExist.performance.find(performance => performance._id.toString() === opTeam[0].toString());
                 const opGameObj = { score: (opTeamP1[gameKey]?.score || 0), point: 0, pointDeferential: opTeamP1.pointDeferential };
@@ -352,10 +337,17 @@ router.put('/update-single/:roundNum', ensureAuth, async (req, res, next) => {
                     myGameObj.pointDeferential = myGameObj.score - (opGameObj.score || 0);
                     opGameObj.pointDeferential = -(myGameObj.score - (opGameObj.score || 0));
                 } else {
-                    myGameObj.point = 0;
-                    opGameObj.point = currWP;
-                    myGameObj.pointDeferential = (opGameObj.score || 0) - myGameObj.score;
-                    opGameObj.pointDeferential = -((opGameObj.score || 0) - myGameObj.score);
+                    if (myGameObj.score > opGameObj.score) {
+                        myGameObj.point = 0;
+                        opGameObj.point = currWP;
+                        myGameObj.pointDeferential = (opGameObj.score || 0) - myGameObj.score;
+                        opGameObj.pointDeferential = -((opGameObj.score || 0) - myGameObj.score);
+                    } else if (myGameObj.score < opGameObj.score) {
+                        myGameObj.point = currWP;
+                        opGameObj.point = 0;
+                        myGameObj.pointDeferential = -((opGameObj.score || 0) - myGameObj.score);
+                        opGameObj.pointDeferential = (opGameObj.score || 0) - myGameObj.score;
+                    }
                 }
                 updatePromises.push(Performance.updateMany({ _id: { $in: opTeam } }, { $set: { [gameKey]: opGameObj } }))
             };

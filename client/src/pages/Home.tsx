@@ -1,62 +1,67 @@
-// @ts-nocheck
-
 import React, { Component } from 'react';
-import { hostname } from '../utils/global';
 import EventList from '../components/events/EventList';
 import Menu from '../components/elements/Menu';
+import { IEvent } from '../types';
+import { getAllEvents } from '../utils/handleRequests/event';
 
+interface IHomeState {
+    eventList: IEvent[];
+    isAuthenticated: boolean;
+    isLoading: boolean;
+}
 
-class Home extends Component {
-    constructor(props) {
+interface IHomeProps {
+    // Define props here if there are any
+}
+
+class Home extends Component<IHomeProps, IHomeState> {
+    constructor(props: IHomeProps) {
         super(props);
         this.state = {
             eventList: [],
             isAuthenticated: false,
             isLoading: false
         };
-        this.getAllEvents = this.getAllEvents.bind(this);
         this.getEventID = this.getEventID.bind(this);
+        this.updateList = this.updateList.bind(this);
     }
 
-    // ⛏️⛏️ FETCH ALL EVENTS 
-    async getAllEvents() {
-        try {
-            const options = { method: "GET"};
-            this.setState({ isLoading: true });
-            const response = await fetch(`${hostname}/api/event`, options);
-            const text = await response.text();
-            const jsonResponse = await JSON.parse(text);
-            this.setState({
-                eventList: jsonResponse.events,
-                isLoading: false
-            });
-        } catch (error) {
-            console.log(error);
+
+    getEventID(id: string) {
+        // this.setState({ currentEventID: id });
+        // this.getSingleEvent();
+        console.log(id);
+    }
+
+    async updateList(update: boolean) {
+        if (update) {
+            const eList = await getAllEvents();
+            this.setState({eventList: eList});
         }
     }
 
-
-
-    getEventID(id) {
-        // this.setState({ currentEventID: id });
-        // this.getSingleEvent();
-    }
-
+        
 
     async componentDidMount() {
-        this.getAllEvents();
+        (async ()=>{
+            const eList = await getAllEvents();
+            this.setState({eventList: eList});
+        })()
     }
 
     render() {
         return (
             <div className="Home">
                 <Menu />
-                <i className="bi bi-plus-lg"></i>            
+                <i className="bi bi-plus-lg"></i>
                 <div className="container mt-3">
-                    <EventList isLoading={this.state.isLoading}
+                    <EventList
+                        isLoading={this.state.isLoading}
                         pullEventID={this.getEventID}
+                        updateList={this.updateList}
                         eventList={this.state.eventList}
-                        pageFor="home" />
+                        pageFor="home"
+                    />
                 </div>
             </div>
         )

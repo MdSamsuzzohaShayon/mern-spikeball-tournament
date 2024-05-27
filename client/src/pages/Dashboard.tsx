@@ -1,19 +1,31 @@
-// @ts-nocheck
-
-/* ⛏️⛏️ SHOW ALL EVENTS, PARTICIPANT   */
+/* ⛏️⛏️ SHOW ALL EVENTS, PARTICIPANT */
 
 import React, { Component } from 'react';
-import { hostname } from '../utils/global';
 import EventList from '../components/events/EventList';
 import { Navigate } from 'react-router-dom';
 import "../style/Dashboard.css";
 import { Link } from 'react-router-dom';
 import withNavigate from '../HOC/withNavigate';
+import { getAllEvents } from '../utils/handleRequests/event';
+import { IEvent } from '../types';
 
-export class Dashboard extends Component {
-    constructor(props) {
+
+interface IDashboardState {
+    activeTab: string;
+    eventList: IEvent[];
+    isLoading: boolean;
+}
+
+interface IDashboardProps {
+    navigate: (path: string) => void;
+    // Add other props here if necessary
+}
+
+export class Dashboard extends Component<IDashboardProps, IDashboardState> {
+    private isMountedValue: boolean;
+
+    constructor(props: IDashboardProps) {
         super(props);
-
 
         this.isMountedValue = false;
         this.state = {
@@ -22,61 +34,37 @@ export class Dashboard extends Component {
             isLoading: false,
         };
 
-        // this.getSingleEvent = this.getSingleEvent.bind(this);
-        this.getAllEvents = this.getAllEvents.bind(this);
         this.updateList = this.updateList.bind(this);
-    }
-
-    // ⛏️⛏️ FETCH ALL EVENTS 
-    async getAllEvents() {
-        try {
-            this.setState({ isLoading: true });
-           
-            const response = await fetch(`${hostname}/api/event`, { method: "GET"});
-            console.log("Get all events [Dashboard.jsx] - ", response);
-            const text = await response.text();
-            // console.log(text);
-            const jsonResponse = await JSON.parse(text);
-            // console.log(jsonResponse);
-            if (this.isMountedValue) {
-                this.setState({
-                    eventList: jsonResponse.events,
-                    isLoading: false
-                });
-            }
-
-            // console.log("JSON - ", jsonResponse.events);
-        } catch (error) {
-            console.log(error);
-        }
-        // if (this.props.isAuthenticated) {
-        // }
     }
 
 
     componentDidMount() {
         this.isMountedValue = true;
-        this.getAllEvents();
+        // this.getAllEvents();
+        (async ()=>{
+            const eList = await getAllEvents();
+            this.setState({eventList: eList});
+        })()
     }
 
-    
-    updateList = (update) => { if (update) this.getAllEvents() };
-
+    async updateList(update: boolean) {
+        if (update) {
+            const eList = await getAllEvents();
+            this.setState({eventList: eList});
+        }
+    }
 
     componentWillUnmount() {
         this.isMountedValue = false;
-        // console.log("Unmounted- ", this.props.isAuthenticated);
         this.setState({
-            currentEvent: null,
             eventList: []
         });
     }
 
     render() {
-
-        if(!localStorage.getItem('token')) return <Navigate to={"/admin"} />;
+        if (!localStorage.getItem('token')) return <Navigate to={"/admin"} />;
+        
         return (
-            
             <div className="Dashboard">
                 <div className="container">
                     <br />
@@ -87,14 +75,11 @@ export class Dashboard extends Component {
                         isLoading={this.state.isLoading}
                         updateList={this.updateList}
                         eventList={this.state.eventList}
-                        pageFor="dashobard" />
+                        pageFor="dashboard" />
                 </div>
             </div>
         );
     }
 }
-
-
-
 
 export default withNavigate(Dashboard);

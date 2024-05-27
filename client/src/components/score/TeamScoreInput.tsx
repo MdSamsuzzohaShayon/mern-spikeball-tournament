@@ -35,8 +35,6 @@ const TeamScoreInput = ({ net, gameNum, scoreType, gor, handleScoreUpdate }: ITe
     }
 
     const returnScore = (t1p1: IPerformance, t1p2: IPerformance, t2p1: IPerformance, t2p2: IPerformance) => {
-        console.log(t1p1);
-
         const team1 = [t1p1._id, t1p2._id], team2 = [t2p1._id, t2p2._id];
         const t1p1default = t1p1[gameKey]?.score ? t1p1[gameKey]?.score : '';
         const t2p1default = t2p1[gameKey]?.score ? t2p1[gameKey]?.score : '';
@@ -79,15 +77,15 @@ const TeamScoreInput = ({ net, gameNum, scoreType, gor, handleScoreUpdate }: ITe
         } else {
             if (gor === 1) {
                 // 1ST & 4TH VS 2ND & 3RD 
-                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+                const one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 return returnScore(one, four, two, three);
             } else if (gor === 2) {
                 // 1ST & 2ND VS 3RD & 4TH 
-                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+                const one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 return returnScore(one, two, three, four);
             } else if (gor === 3) {
                 // 1ST & 3RD VS 2ND & 4TH 
-                let one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
+                const one = net.performance[0], two = net.performance[1], three = net.performance[2], four = net.performance[3];
                 return returnScore(one, three, two, four);
             }
         }

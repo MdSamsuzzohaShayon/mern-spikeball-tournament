@@ -1,7 +1,6 @@
 import '../style/SingleEvent.css';
 import React, { Component } from 'react';
 import withRouter, { WithRouterProps } from '../HOC/withRouter';
-import { hostname } from '../utils/global';
 import Participants from '../components/participant/Participants';
 import Rounds from '../components/round/Rounds'
 import Score from "./Score";
@@ -9,6 +8,7 @@ import ExportField from '../components/export/ExportField';
 import Loader from '../components/elements/Loader';
 import { formattedDate } from '../utils/helpers';
 import { IParticipant } from '../types';
+import { getSingleEvent } from '../utils/handleRequests/event';
 
 interface ISingleEventProps extends WithRouterProps {
     params: {
@@ -48,7 +48,6 @@ class SingleEvent extends Component<ISingleEventProps, ISingleEventState> {
 
         this.clickItemHandler = this.clickItemHandler.bind(this);
         this.showAllNavItem = this.showAllNavItem.bind(this);
-        this.getSingleEvent = this.getSingleEvent.bind(this);
         this.updateEvent = this.updateEvent.bind(this);
     }
 
@@ -59,7 +58,10 @@ class SingleEvent extends Component<ISingleEventProps, ISingleEventState> {
             this.props.navigateToTarget("/admin");
         } else {
             this.is_mounted = true;
-            await this.getSingleEvent(this.props.params.id);
+            (async ()=>{
+                const fetchedEvent = await getSingleEvent(this.props.params.id);
+                if(fetchedEvent)this.setState({currentEvent: fetchedEvent});
+            })()
             this.setState({ currentEventID: this.props.params.id });
             document.title = "Spikers Scramble - " + this.state.currentEvent.title;
         }
@@ -67,22 +69,6 @@ class SingleEvent extends Component<ISingleEventProps, ISingleEventState> {
     }
 
 
-    // ⛏️⛏️ GET AN EVENT WITH DETAILS - AFTER GETTING SINGLE EVENT REDIRECT TO EVENT ADMIN ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-    async getSingleEvent(id) {
-        try {
-            this.setState({ isLoading: true });
-            const response = await fetch(`${hostname}/api/event/${id}`, { method: "GET" });
-            console.log("Get single event [SingleEvent.jsx] - ", response);
-            const text = await response.text();
-            const jsonResponse = await JSON.parse(text);
-            if (this.is_mounted == true) {
-                this.setState({ currentEvent: jsonResponse.events });
-            }
-            this.setState({ isLoading: false });
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
 
 
@@ -94,7 +80,12 @@ class SingleEvent extends Component<ISingleEventProps, ISingleEventState> {
     }
 
     // ⛏️⛏️ FETCH EVERYTIME WEHN WE MADE CHANGE ON DATABASE
-    updateEvent = (update) => { if (update) this.getSingleEvent(this.state.currentEventID) };
+    updateEvent = async (update) => { 
+        if (update) {
+            const fetcheedEvent = await getSingleEvent(this.state.currentEventID) 
+            if(fetcheedEvent)this.setState({currentEvent: fetcheedEvent});
+        }
+        };
 
 
     /* ⛏️⛏️ SHOW COMPONENT WITH CONDITIONS  */

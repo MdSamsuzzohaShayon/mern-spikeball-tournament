@@ -1,8 +1,7 @@
-// @ts-nocheck
-
 import { POINT, POINT_DIFFERENTIAL } from "./global";
 import { round1Total, round2Total, round3Total, round4Total, round5Total } from './addTotalPoint';
 import { round1TD, round2TD, round3TD, round4TD, round5TD } from './pointDeferential';
+import { IPerformance } from "../types";
 
 // ⛏️⛏️ GET TOTAL POINT AND DIFERENTIAL FOR THIS ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 export const getTotal = (net, round, score) => {
@@ -153,17 +152,7 @@ export const getTotal = (net, round, score) => {
 
 
 // ⛏️⛏️ GET TOTAL POINT AND DIFERENTIAL FOR THIS ROUND ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
-export const getTotalPPD = (performance, score, roundNum) => {
-    // console.log(net.performance.length);
-    // console.log("Round - ", round);
-    // console.log("net - ", net);
-
-    // const totalPoint = (p) => {
-    //     return <div className="total">{round5Total(p)}</div>
-    // }
-    // const totalPD = (p) => {
-    //     return <div className="total">{round5TD(p)}</div>;
-    // }
+export const getTotalPPD = (performance: IPerformance, score: string, roundNum: number) => {
 
 
     const returnPointSpecificRound = (per, specificRound) => {

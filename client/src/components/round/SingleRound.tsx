@@ -39,7 +39,7 @@ function SingleRound(props) {
   const { nets } = props.round;
   const { roundNum, rankPerformanceInNet } = props;
 
-  const [parent, setParent] = useState(null);
+  // const [parent, setParent] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [performances, setPerformances] = useState([]); // PARTICIPANTS
   const [showPerformances, setShowPerformances] = useState(true);
@@ -97,8 +97,7 @@ function SingleRound(props) {
     setPerformances([...props.performances]);
     // IF THIS IS NOT INITIALIZEABLE
     setLeftedPerformance(props.leftRound);
-    if (props.round.length === 0) {
-    } else {
+    if (props.round.length !== 0) {
       setShowPerformances(false);
     }
     setTimeout(() => {
@@ -189,7 +188,7 @@ function SingleRound(props) {
 
 
   const Assign = async () => {
-    let result = [];
+    const result = [];
     console.log("Game Rule");
     const { api, columnApi } = gridRef.current || {};
     if (api == null || columnApi == null) {
@@ -199,8 +198,8 @@ function SingleRound(props) {
     //access the Grid API
     const data = api?.getModel()?.rowsToDisplay;
     data.forEach((node) => {
-      let rowNode = node?.data;
-      let rowData = performances.find((one) => one?._id === rowNode?._id);
+      const rowNode = node?.data;
+      const rowData = performances.find((one) => one?._id === rowNode?._id);
       result.push(rowData);
     });
     setIsLoading(true);
@@ -456,7 +455,8 @@ function SingleRound(props) {
             <Loader />
           ) : (
             <div className="nets-table-wrapper">
-              <NetOfARound game={props.game} nets={nets} roundNum={roundNum} rankPerformanceInNet={rankPerformanceInNet} token={token} eventID={props.eventID} />
+              <NetOfARound game={props.game} nets={nets} roundNum={roundNum} rankPerformanceInNet={rankPerformanceInNet} 
+              token={token} eventID={props.eventID} refetchFunc={props.refetchFunc} />
             </div>
           )}
           {roundNum <= 4 && (
@@ -467,7 +467,6 @@ function SingleRound(props) {
                 </div>
               )}
               <div className="text-md-center">
-
                 <button onClick={handleNextRound} className="btn btn-warning">
                   Next Round
                 </button>
@@ -482,9 +481,6 @@ function SingleRound(props) {
       <br />
     </div>
   );
-  function handleDragEnd({ over }) {
-    setParent(over ? over.id : null);
-  }
 }
 
 export default SingleRound;
