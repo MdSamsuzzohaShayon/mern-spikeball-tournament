@@ -17,7 +17,7 @@ const roundRoute = require('./routes/round');
 const adminGenerator = require('./config/adminGenerator');
 
 // ⛏️⛏️ MONGO DB DATABASE ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖ 
-mongoose.connect("mongodb://127.0.0.1:27017/scrumble-db", { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false }, (err) => {
+mongoose.connect(process.env.MONGO_LOCAL_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false }, (err) => {
     if (err) throw err;
     console.log("Database is connected successfully ");
 });

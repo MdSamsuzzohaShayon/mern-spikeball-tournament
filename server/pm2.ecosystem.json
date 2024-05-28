@@ -1,8 +1,8 @@
 {
     "apps": [
         {
-            "name": "BackendAPI",
-            "script": "/home/alex/mern-spikeball-tournament/server/app.js",
+            "name": "Scramble_BackendAPI",
+            "script": "/home/shayon/youthspikersleague.com/server/app.js",
             "watch": true,
             "ignore_watch": [
                 "node_modules",
