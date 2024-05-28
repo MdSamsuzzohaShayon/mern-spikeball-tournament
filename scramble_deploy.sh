@@ -4,6 +4,8 @@
 # Delete previous server
 pm2 stop Scramble_BackendAPI
 pm2 delete Scramble_BackendAPI
+rm -rf /home/shayon/youthspikersleague.com
+sudo rm -rf  /var/www/youthspikersleague.com
 
 # Clone and setup repository
 git clone git@github.com:MdSamsuzzohaShayon/mern-spikeball-tournament.git
@@ -26,6 +28,6 @@ cd /home/shayon/youthspikersleague.com/client
 npm install
 nano src/utils/global.ts
 npm run build
-sudo rm -rf  /var/www/youthspikersleague.com
 sudo mkdir /var/www/youthspikersleague.com
 sudo cp -r dist/* /var/www/youthspikersleague.com
+rm -rf node_modules
