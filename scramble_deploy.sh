@@ -19,7 +19,6 @@ nano config/.env
 pm2 start app.js --name Scramble_BackendAPI
 pm2 save
 sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u shayon --hp /home/shayon
-curl http://localhost:9000/api/home
 
 # Setup frontend
 cd /home/shayon/youthspikersleague.com/client
@@ -31,3 +30,6 @@ npm run build
 sudo mkdir /var/www/youthspikersleague.com
 sudo cp -r dist/* /var/www/youthspikersleague.com
 rm -rf node_modules
+
+# Test
+curl http://localhost:9000/api/home
