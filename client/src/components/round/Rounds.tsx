@@ -105,7 +105,7 @@ const Rounds = ({eventID}: IRoundsProps) => {
 
 
     const refetchFunc=async ()=>{
-        // await findRound(roundNum);
+        await findRound(roundNum);
     }
 
 
