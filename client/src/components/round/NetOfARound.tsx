@@ -36,7 +36,7 @@ function NetOfARound(props: INetOfARound) {
                 requestOptions
             );
             handleRequestUnauthenticated(response);
-            if(props.refetchFunc) await props.refetchFunc();
+            // if(props.refetchFunc) await props.refetchFunc();
             
 
         } catch (error) {

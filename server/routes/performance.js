@@ -338,13 +338,13 @@ router.put('/update-single/:roundNum', ensureAuth, async (req, res, next) => {
                     opGameObj.pointDeferential = -(myGameObj.score - (opGameObj.score || 0));
                 } else {
                     if (myGameObj.score > opGameObj.score) {
-                        myGameObj.point = 0;
-                        opGameObj.point = currWP;
+                        myGameObj.point = currWP;
+                        opGameObj.point = 0;
                         myGameObj.pointDeferential = (opGameObj.score || 0) - myGameObj.score;
                         opGameObj.pointDeferential = -((opGameObj.score || 0) - myGameObj.score);
                     } else if (myGameObj.score < opGameObj.score) {
-                        myGameObj.point = currWP;
-                        opGameObj.point = 0;
+                        myGameObj.point = 0;
+                        opGameObj.point = currWP;
                         myGameObj.pointDeferential = -((opGameObj.score || 0) - myGameObj.score);
                         opGameObj.pointDeferential = (opGameObj.score || 0) - myGameObj.score;
                     }

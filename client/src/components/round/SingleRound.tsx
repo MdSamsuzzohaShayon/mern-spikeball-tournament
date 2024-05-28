@@ -163,6 +163,11 @@ function SingleRound(props) {
     }
   };
 
+  const handleUpdateRound=async (e: React.SyntheticEvent)=>{
+    e.preventDefault();
+    if(props.refetchFunc) await props.refetchFunc();
+  }
+
   // ⛏️⛏️ INITIALIZE TO NEW NET
   const assignNetHandler = async () => {
     setIsLoading(true);
@@ -467,8 +472,11 @@ function SingleRound(props) {
                 </div>
               )}
               <div className="text-md-center">
-                <button onClick={handleNextRound} className="btn btn-warning">
+                <button onClick={handleNextRound} type="button" className="btn btn-warning">
                   Next Round
+                </button>
+                <button onClick={handleUpdateRound} type="button" className="btn btn-success">
+                  Submit
                 </button>
               </div>
             </>
