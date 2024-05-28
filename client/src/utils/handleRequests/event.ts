@@ -2,7 +2,7 @@ import { IEvent } from "../../types";
 import { hostname } from "../global";
 
 interface IEventResponse {
-    event: IEvent;
+    events: IEvent;
 }
 
 export async function getAllEvents(): Promise<IEvent[]> {
@@ -34,7 +34,7 @@ export async function getSingleEvent(id: string): Promise<IEvent | null> {
         }
 
         const jsonResponse: IEventResponse = await response.json();
-        return jsonResponse.event;
+        return jsonResponse.events;
     } catch (error) {
         console.error("Error fetching event:", error);
         return null;
