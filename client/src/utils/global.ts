@@ -4,7 +4,7 @@ const NODE_ENV: string = "development";
 let hostname = "http://localhost:4000";
 
 if (NODE_ENV === "production") {
-   hostname = "https://youthspikersleague.com/api";
+   hostname = "https://youthspikersleague.com";
 }
 
 
