@@ -115,6 +115,9 @@ const Participants = (props) => {
 
 
 
+    console.log(props.participants);
+    
+
 
 
 

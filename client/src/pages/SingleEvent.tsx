@@ -83,7 +83,9 @@ class SingleEvent extends Component<ISingleEventProps, ISingleEventState> {
     updateEvent = async (update) => { 
         if (update) {
             const fetcheedEvent = await getSingleEvent(this.state.currentEventID) 
-            if(fetcheedEvent)this.setState({currentEvent: fetcheedEvent});
+            if(fetcheedEvent){
+                this.setState({currentEvent: fetcheedEvent});
+            }
         }
         };
 
