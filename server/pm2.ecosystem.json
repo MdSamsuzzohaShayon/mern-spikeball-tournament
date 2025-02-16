@@ -1,25 +1,81 @@
 {
     "apps": [
-        {
-            "name": "Scramble_BackendAPI",
-            "script": "/home/shayon/youthspikersleague.com/server/app.js",
-            "watch": true,
-            "ignore_watch": [
-                "node_modules",
-                "logs"
-            ],
-            "exec_mode": "cluster",
-            "instances": "max",
-            "max_memory_restart": "1G",
-            "autorestart": true,
-            "restart_delay": 3000,
-            "log_date_format": "YYYY-MM-DD HH:mm:ss",
-            "merge_logs": true,
-            "error_file": "logs/error.log",
-            "out_file": "logs/out.log",
-            "env": {
-                "NODE_ENV": "production"
-            }
+      {
+        "name": "Scramble_BackendAPI_9001",
+        "script": "/home/shayon/youthspikersleague.com/server/app.js",
+        "watch": true,
+        "ignore_watch": ["node_modules", "logs"],
+        "exec_mode": "fork",
+        "instances": 1,
+        "max_memory_restart": "1G",
+        "autorestart": true,
+        "restart_delay": 3000,
+        "log_date_format": "YYYY-MM-DD HH:mm:ss",
+        "merge_logs": true,
+        "error_file": "logs/error.log",
+        "out_file": "logs/out.log",
+        "env": {
+          "NODE_ENV": "production",
+          "PORT": 9001
         }
+      },
+      {
+        "name": "Scramble_BackendAPI_9002",
+        "script": "/home/shayon/youthspikersleague.com/server/app.js",
+        "watch": true,
+        "ignore_watch": ["node_modules", "logs"],
+        "exec_mode": "fork",
+        "instances": 1,
+        "max_memory_restart": "1G",
+        "autorestart": true,
+        "restart_delay": 3000,
+        "log_date_format": "YYYY-MM-DD HH:mm:ss",
+        "merge_logs": true,
+        "error_file": "logs/error.log",
+        "out_file": "logs/out.log",
+        "env": {
+          "NODE_ENV": "production",
+          "PORT": 9002
+        }
+      },
+      {
+        "name": "Scramble_BackendAPI_9003",
+        "script": "/home/shayon/youthspikersleague.com/server/app.js",
+        "watch": true,
+        "ignore_watch": ["node_modules", "logs"],
+        "exec_mode": "fork",
+        "instances": 1,
+        "max_memory_restart": "1G",
+        "autorestart": true,
+        "restart_delay": 3000,
+        "log_date_format": "YYYY-MM-DD HH:mm:ss",
+        "merge_logs": true,
+        "error_file": "logs/error.log",
+        "out_file": "logs/out.log",
+        "env": {
+          "NODE_ENV": "production",
+          "PORT": 9003
+        }
+      },
+      {
+        "name": "Scramble_BackendAPI_9004",
+        "script": "/home/shayon/youthspikersleague.com/server/app.js",
+        "watch": true,
+        "ignore_watch": ["node_modules", "logs"],
+        "exec_mode": "fork",
+        "instances": 1,
+        "max_memory_restart": "1G",
+        "autorestart": true,
+        "restart_delay": 3000,
+        "log_date_format": "YYYY-MM-DD HH:mm:ss",
+        "merge_logs": true,
+        "error_file": "logs/error.log",
+        "out_file": "logs/out.log",
+        "env": {
+          "NODE_ENV": "production",
+          "PORT": 9004
+        }
+      }
     ]
-}
+  }
+  
