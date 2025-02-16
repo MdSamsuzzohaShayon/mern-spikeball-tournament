@@ -23,18 +23,6 @@ echo "Deleted all previous files for the website"
 git clone git@github.com:MdSamsuzzohaShayon/mern-spikeball-tournament.git
 mv mern-spikeball-tournament youthspikersleague.com
 
-# Setup backend
-cd /home/shayon/youthspikersleague.com/server
-npm install
-cat config/.env.example
-nano config/.env
-pm2 start pm2.ecosystem.json
-pm2 save
-sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u shayon --hp /home/shayon
-pm2 show Scramble_BackendAPI_9001
-pm2 show Scramble_BackendAPI_9002
-pm2 show Scramble_BackendAPI_9003
-pm2 show Scramble_BackendAPI_9004
 
 # Setup frontend
 cd /home/shayon/youthspikersleague.com/client
@@ -46,6 +34,21 @@ npm run build
 sudo mkdir /var/www/youthspikersleague.com
 sudo cp -r dist/* /var/www/youthspikersleague.com
 rm -rf node_modules
+sudo systemctl restart apache2
+
+# Setup backend
+cd /home/shayon/youthspikersleague.com/server
+npm install
+cat config/.env.example
+nano config/.env
+pm2 start pm2.ecosystem.json
+pm2 save
+sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u shayon --hp /home/shayon
+pm2 show Scramble_BackendAPI_9001
+pm2 show Scramble_BackendAPI_9002
+pm2 show Scramble_BackendAPI_9003
+
+
 
 # Test
 curl --location 'https://youthspikersleague.com/api/home'
